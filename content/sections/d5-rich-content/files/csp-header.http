@@ -1,0 +1,12 @@
+# Rollout: report, inventory, then enforce
+Content-Security-Policy-Report-Only:
+  require-trusted-types-for 'script';
+  trusted-types cms-html dompurify;
+  report-to csp
+Reporting-Endpoints: csp="/csp-reports"
+
+# Enforcement, after the inventory
+Content-Security-Policy:
+  require-trusted-types-for 'script';
+  trusted-types cms-html dompurify;
+  report-to csp

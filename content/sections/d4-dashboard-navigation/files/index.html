@@ -1,0 +1,37 @@
+<!doctype html>
+<title>Open orders</title>
+<link rel="stylesheet" href="/app.css">
+<header class="toolbar">
+  <nav aria-label="Orders">
+    <a href="/orders">All orders</a>
+    <a href="/orders/418">Order 418</a>
+    <a href="/orders/419">Order 419</a>
+  </nav>
+  <form action="/orders" method="get">
+    <label for="status">Status</label>
+    <select id="status" name="status">
+      <option>Open</option>
+      <option>Shipped</option>
+    </select>
+    <button>Apply</button>
+  </form>
+</header>
+<main id="content" tabindex="-1">
+  <h1>Open orders</h1>
+  <ol class="order-list">
+    <!-- server-rendered order rows -->
+  </ol>
+</main>
+<aside class="demo-panel"
+  aria-label="Demo instrumentation">
+  <dl>
+    <dt>Address</dt><dd id="s-url"></dd>
+    <dt>Title</dt><dd id="s-title"></dd>
+    <dt>Focus</dt><dd id="s-focus"></dd>
+    <dt>Scroll</dt><dd id="s-scroll"></dd>
+  </dl>
+  <ol id="request-log"></ol>
+</aside>
+<script src="/demo/log.js"></script>
+<script type="module"
+  src="/app.js"></script>

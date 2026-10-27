@@ -23,3 +23,14 @@ export function demoCode(id: string, files: { file: string; lang: CodeLang }[]):
     return entry;
   });
 }
+
+const SECTIONS_DIR = path.join(process.cwd(), "content", "sections");
+
+/**
+ * Source of one code file of a demo section (v3), read from content/sections/<id>/files/<file> when
+ * accessed, so edits show in dev without touching the section module. Returns the text with its
+ * trailing newline removed, as the code panel and the native composer expect.
+ */
+export function sectionFile(sectionId: string, file: string): string {
+  return readFileSync(path.join(SECTIONS_DIR, sectionId, "files", file), "utf8").replace(/\n$/, "");
+}

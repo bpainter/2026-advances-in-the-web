@@ -1,0 +1,24 @@
+body { margin: 0;
+  font: 1rem/1.5 system-ui, sans-serif;
+  display: grid;
+  grid-template-columns: 1fr 18rem; }
+.toolbar { grid-column: 1;
+  position: sticky; top: 0;
+  display: flex; gap: 1.5rem;
+  padding: 1rem; background: #fff;
+  border-block-end: 1px solid #C9CFDB; }
+main { grid-column: 1; padding: 1rem; }
+main:focus { outline: none; }
+main:focus-visible {
+  outline: 2px solid #0C62FB; }
+.demo-panel { grid-column: 2;
+  grid-row: 1 / span 2;
+  position: sticky; top: 0;
+  align-self: start; padding: 1rem;
+  font: 0.8rem/1.4 ui-monospace,
+    monospace; background: #F2F4F8; }
+@media (prefers-reduced-motion:
+  no-preference) {
+  .order-list a { transition:
+    background-color 0.15s; }
+}

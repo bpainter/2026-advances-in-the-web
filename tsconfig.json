@@ -36,7 +36,10 @@
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "content/demos/**/*.js"
+    "content/.generated/**",
+    "content/demos/**/*.js",
+    "content/sections/**/files/**",
+    "demos/**",
+    "node_modules"
   ]
 }

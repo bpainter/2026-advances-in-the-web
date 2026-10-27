@@ -1,0 +1,32 @@
+import "server-only";
+import type { BuildManifest, DemoFolder } from "./types";
+import { folder as d01 } from "@/demos/01-layered-ui/build";
+import { folder as d02 } from "@/demos/02-container-card/build";
+import { folder as d03 } from "@/demos/03-content-sized-form/build";
+import { folder as d04 } from "@/demos/04-navigation-api/build";
+import { folder as d05 } from "@/demos/05-trusted-types/build";
+import { folder as d07 } from "@/demos/07-package-workflow/build";
+import { folder as d08 } from "@/demos/08-fast-follows/build";
+import { folder as d09 } from "@/demos/09-vite-8/build";
+import { folder as d10 } from "@/demos/10-delete/build";
+
+export { nativeBuild, folderBuild, manifestDefaults, BASE_SANDBOX, FORMS_SANDBOX } from "./build-helpers";
+
+/** Every demo folder the frame routes can serve, keyed by folder name. */
+export const DEMO_FOLDERS: Record<string, DemoFolder> = Object.fromEntries([d01, d02, d03, d04, d05, d07, d08, d09, d10].map((f) => [f.demo, f]));
+
+export function demoFolder(demo: string): DemoFolder | undefined {
+  return DEMO_FOLDERS[demo];
+}
+
+/** The manifest behind a `Frame.route` such as /demos/01-layered-ui/native, or null for other origins. */
+export function manifestFor(route: string): BuildManifest | null {
+  const m = /^\/demos\/([\w-]+)\/(today|native|static|terminal)/.exec(route);
+  if (!m) return null;
+  return DEMO_FOLDERS[m[1]]?.builds[m[2] as "today"]?.manifest ?? null;
+}
+
+/** All extra routes across demo folders, for the root-level handlers. */
+export function allExtraRoutes() {
+  return Object.values(DEMO_FOLDERS).flatMap((f) => f.routes ?? []);
+}

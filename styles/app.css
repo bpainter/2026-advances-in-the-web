@@ -32,11 +32,7 @@
 @import "./components/stage.css";
 @import "./components/slide.css";
 @import "./components/item-list.css";
-@import "./components/demo-split.css";
-@import "./components/demo.css";
 @import "./components/code.css";
-@import "./components/support.css";
-@import "./components/fallback-card.css";
 @import "./components/slide-image.css";
 @import "./components/wordmark.css";
 @import "./components/statement.css";
@@ -52,8 +48,7 @@
 @import "./components/image-led.css";
 @import "./components/close.css";
 @import "./components/designed.css";
-@import "./components/demo-grid.css";
-@import "./components/terminal.css";
+@import "./components/page.css";
 @import "./components/audience.css";
 @import "./components/speaker.css";
 @import "./components/reader-controls.css";

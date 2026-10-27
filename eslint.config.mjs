@@ -12,7 +12,7 @@ const config = [
     },
   },
   {
-    ignores: [".next/**", "node_modules/**", "content/.generated/**", "content/demos/**/*.js", "lib/demo-bridge.js"],
+    ignores: [".next/**", "node_modules/**", "content/.generated/**", "demos/**/*.js", "public/runtime/**", "content/.generated/**"],
   },
 ];
 

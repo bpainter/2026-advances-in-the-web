@@ -41,10 +41,9 @@ function stateFromUrl(writer: string, fallbackSlideId: string): PresenterState {
     writer,
     slideId: q.get("s") ?? fallbackSlideId,
     stepIndex: Number.isFinite(step) ? step : 0,
-    cellIndex: null,
-    view: null,
-    liveMode: false,
     blank: false,
+    handsOn: false,
+    live: false,
     startedAt: null,
     pausedAt: null,
   };
@@ -69,10 +68,9 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
     writer,
     slideId: initialSlideId,
     stepIndex: 0,
-    cellIndex: null,
-    view: null,
-    liveMode: false,
     blank: false,
+    handsOn: false,
+    live: false,
     startedAt: null,
     pausedAt: null,
   }));
@@ -108,7 +106,7 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
         // Take the peer's timer and counters, but move both windows to the URL's slide.
         claimed = true;
         const fromUrl = stateFromUrl(writer, initialSlide);
-        const next: PresenterState = { ...incoming, slideId: urlSlide, stepIndex: fromUrl.stepIndex, cellIndex: null, view: null, liveMode: false, seq: incoming.seq + 1, writer };
+        const next: PresenterState = { ...incoming, slideId: urlSlide, stepIndex: fromUrl.stepIndex, seq: incoming.seq + 1, writer };
         stateRef.current = next;
         setState(next);
         sync.send({ type: "state", state: next });

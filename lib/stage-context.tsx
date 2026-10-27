@@ -1,32 +1,35 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import type { DemoView } from "@/content/schema";
+import type { StepResult } from "@/lib/engine/frame";
 
-export type DemoStatus = "loading" | "ready" | "error" | "fallback";
+export type DemoStatus = "loading" | "ready" | "error";
+
+export interface Playback {
+  isPlaying: () => boolean;
+  finish: () => void;
+}
 
 export interface StageState {
   stepIndex: number;
   stepCount: number;
-  view: DemoView;
-  /** demo-grid: the enlarged cell, else null. */
-  cellIndex: number | null;
-  /** terminal: true while the recording is hidden for a live terminal (`l`). */
-  liveMode: boolean;
-  /** Increments on `r`; DemoFrame remounts its iframe. */
+  /** Steps stop playing; the speaker's keyboard and pointer reach the demo (PRD Part A, 7). */
+  handsOn: boolean;
+  /** Terminal pages: the recording is hidden for a real terminal. */
+  live: boolean;
+  /** Increments on `r`; the page frame remounts and replays the current step. */
   reloadToken: number;
-  /** Increments on Enter; DemoFrame focuses its iframe. */
-  focusToken: number;
-  /** Set by `x`; cleared by `r`. */
-  showFallback: boolean;
+  rehearsal: boolean;
   demoStatus: Record<string, DemoStatus>;
+  /** Last step result per page id, from the frame runtime. */
+  stepResults: Record<string, { stepId: string; result: StepResult }>;
   setStepIndex: (n: number) => void;
-  setView: (v: DemoView) => void;
-  setCellIndex: (n: number | null) => void;
-  setDemoStatus: (demoId: string, status: DemoStatus) => void;
-  /** Clicker keys forwarded from inside a demo iframe (demo:key). */
+  setDemoStatus: (pageId: string, status: DemoStatus) => void;
+  setStepResult: (pageId: string, stepId: string, result: StepResult) => void;
+  /** The page frame registers its playback so Next can finish a running step. */
+  registerPlayback: (p: Playback | null) => void;
+  /** Keys forwarded from inside a frame. */
   dispatchKey: (key: string, shiftKey: boolean) => void;
-  /** Called by DemoFrame on demo:escape to put focus back on the stage. */
   focusStage: () => void;
 }
 

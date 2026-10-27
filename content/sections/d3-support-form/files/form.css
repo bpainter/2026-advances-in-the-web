@@ -1,0 +1,20 @@
+.case-form { display: grid;
+  gap: 0.5rem; max-inline-size: 40rem;
+  font: 1rem/1.5 system-ui, sans-serif; }
+input, textarea { inline-size: 100%;
+  font: inherit; padding: 0.5rem;
+  box-sizing: border-box; }
+@supports (field-sizing: content) {
+  input, textarea {
+    field-sizing: content; }
+  input { inline-size: auto;
+    justify-self: start;
+    min-inline-size: 18ch;
+    max-inline-size: 100%; }
+  textarea { min-block-size: 6lh;
+    max-block-size: 18lh; }
+}
+#details-hint { margin: 0;
+  color: #4A5468; }
+:user-invalid {
+  outline: 2px solid #B42318; }

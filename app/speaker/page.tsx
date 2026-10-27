@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { bySlideId, neighbours, slides, deck } from "@/lib/content";
+import { bySlideId, neighbours, slides, deck, sections } from "@/lib/content";
 import { PresenterProvider } from "@/lib/presenter/context";
 import { SlidePage } from "@/components/stage/SlidePage";
 import { RenderedSlide } from "@/components/presenter/RenderedSlide";
@@ -27,6 +27,7 @@ export default async function SpeakerPage({ searchParams }: Props) {
         targetMinutes={deck.targetMinutes}
         lastCumulative={slides[slides.length - 1].timing.cumulative}
         rehearse={rehearse === "1"}
+        sectionPosition={slide.demoSection ? { n: sections.findIndex((s) => s.id === slide.demoSection!.id) + 1, of: sections.length } : undefined}
         current={<SlidePage slide={slide} mode="speaker-preview" embedded />}
         nextPreview={next ? <SlidePage slide={next} mode="speaker-preview" embedded passive /> : null}
       />

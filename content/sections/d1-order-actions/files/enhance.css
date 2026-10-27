@@ -1,0 +1,34 @@
+body { margin: 2rem; color: #0F1C41;
+  font: 1rem/1.5 system-ui, sans-serif; }
+.order { display: flex; gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border: 1px solid #C9CFDB; }
+button { font: inherit;
+  padding: 0.5rem 1rem; }
+[popover] { margin: 0; padding: 0.5rem;
+  inset: 7.5rem 3rem auto auto; }
+@supports (position-area: block-end) {
+  [popover] { inset: auto;
+    margin-block-start: 0.25rem;
+    position-area:
+      block-end span-inline-start; }
+}
+[popover]:popover-open {
+  box-shadow: 0 0.5rem 1.5rem
+    rgb(0 0 0 / 0.2); }
+dialog::backdrop {
+  background: rgb(0 0 0 / 0.45); }
+dialog:open { opacity: 1; }
+@media (prefers-reduced-motion:
+  no-preference) {
+  dialog { transition: opacity 0.2s,
+    display 0.2s allow-discrete,
+    overlay 0.2s allow-discrete; }
+  dialog:not(:open) { opacity: 0; }
+  @starting-style {
+    dialog:open { opacity: 0; }
+  }
+}
+#status:empty { display: none; }

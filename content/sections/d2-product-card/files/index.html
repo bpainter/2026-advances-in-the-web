@@ -1,0 +1,21 @@
+<link rel="stylesheet" href="card.css">
+<main class="page">
+  <div class="product-slot">
+    <article class="product-card">
+      <img src="shoe.avif" width="640"
+        height="480" alt="Black trail shoe">
+      <div class="info">
+        <h3 class="name">
+          Ridgeline Trail</h3>
+        <p class="price">$129</p>
+      </div>
+      <p class="stock">Only 3 left</p>
+      <form method="post" action="/order">
+        <input type="hidden" name="sku"
+          value="RT-129">
+        <button>Add to order</button>
+      </form>
+    </article>
+  </div>
+</main>
+<script src="app.js"></script>

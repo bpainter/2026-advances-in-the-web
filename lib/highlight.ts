@@ -6,7 +6,7 @@ import { createHighlighter, type Highlighter } from "shiki";
 import type { Element, ElementContent, Root } from "hast";
 import type { CodeFile, CodeLang } from "@/content/schema";
 
-const LANGS: Record<CodeLang, string> = { html: "html", css: "css", js: "javascript", ts: "typescript", bash: "bash" };
+const LANGS: Record<CodeLang, string> = { html: "html", css: "css", js: "javascript", ts: "typescript", tsx: "tsx", bash: "bash", http: "http", yaml: "yaml" };
 const THEME = "github-light";
 
 let highlighterPromise: Promise<Highlighter> | undefined;

@@ -1,3 +1,5 @@
+import type { DemoPage, DemoSection } from "./demo-schema";
+
 // Canonical slide schema. Field names are the contract between content (Part B) and the app (Part A).
 // The first block is SLIDE_SCHEMA.md verbatim; additions from PRD Part A section 9.4 follow.
 
@@ -17,13 +19,11 @@ export type Layout =
   | "table"          // compact data table (brand-blue header)
   | "chart"          // one chart (usage vs satisfaction, etc.)
   | "framework-grid" // 2x2 of short labels
-  | "demo-split"     // 70/30: live view left, stepped code right
-  | "demo-grid"      // 2x2 of small live demos (lightning round)
-  | "terminal"       // recorded or live terminal transcript, stepped
   | "image-led"      // full-bleed image, short headline bottom-left
   | "section"        // section divider: label + optional tier legend
   | "close"          // thank-you / contact
-  | "designed";      // a section exported from Claude Design (addition); see Slide.designed
+  | "designed"       // a section exported from Claude Design (addition); see Slide.designed
+  | "demo-page";     // one page of a demo section, schema v3 (addition); see Slide.page
 
 export type Tier = "baseline-widely" | "baseline-newly" | "two-engine" | "one-engine" | "none";
 
@@ -52,7 +52,7 @@ export interface CodeStep {
   target?: string;         // CSS selector in the demo document to spotlight at this step (addition)
 }
 
-export type CodeLang = "html" | "css" | "js" | "ts" | "bash";
+export type CodeLang = "html" | "css" | "js" | "ts" | "tsx" | "bash" | "http" | "yaml";
 
 export interface CodeFile {
   file: string;
@@ -129,6 +129,8 @@ export interface Slide {
   };
   demoView?: DemoView;     // default view for demo-split slides; default "half" (50/50); "split" is the 60/40 view
   designed?: { file: string }; // layout "designed": the section file under content/designed/ (addition)
+  page?: DemoPage;         // layout "demo-page": the page, from content/sections (addition)
+  demoSection?: DemoSection; // layout "demo-page": the page's section, for the badge, notes and citations (addition)
 }
 
 export interface Deck {

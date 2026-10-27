@@ -1,0 +1,12 @@
+body { margin: 2rem;
+  font: 1rem/1.6 system-ui, sans-serif; }
+.product { max-inline-size: 40rem; }
+#description img { max-inline-size: 100%; }
+.injected-banner { padding: 0.75rem;
+  background: #FEE4E2; color: #7A271A; }
+body[data-injected] .injected-banner {
+  display: block; }
+.demo-console { font: 0.8rem/1.4
+  ui-monospace, monospace;
+  background: #0F1C41; color: #fff;
+  padding: 1rem; list-style: none; }

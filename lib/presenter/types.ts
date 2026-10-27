@@ -1,5 +1,3 @@
-import type { DemoView } from "@/content/schema";
-
 export type DemoHealth = "loading" | "ready" | "error" | "fallback";
 
 /** Shared state of the two presenter windows (PRD Part A, section 5.1), plus the demo view and cell. */
@@ -8,10 +6,9 @@ export interface PresenterState {
   writer: string; // random id of the window that produced this state
   slideId: string;
   stepIndex: number; // 0-based; -1 means "the last step of this slide", resolved by the stage
-  cellIndex: number | null; // demo-grid: focused cell, else null
-  view: DemoView | null; // demo-split view; null means the slide's default
-  liveMode: boolean; // terminal: recording hidden
   blank: boolean;
+  handsOn: boolean; // steps stop playing; the speaker's keyboard and pointer reach the demo (Part A, 7)
+  live: boolean; // terminal pages: recording hidden for a real terminal
   startedAt: number | null; // epoch ms when the timer was started
   pausedAt: number | null; // epoch ms when paused, else null
 }

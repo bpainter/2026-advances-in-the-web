@@ -1,38 +1,45 @@
 import type { Slide } from "@/content/schema";
-import { slide as s01 } from "./01-title";
-import { slide as s02 } from "./02-the-mandate";
-import { slide as s03 } from "./03-three-reactions";
-import { slide as s04 } from "./04-two-perspectives";
-import { slide as s05 } from "./05-keep-humanity";
-import { slide as s06 } from "./06-open-web";
-import { slide as s07 } from "./07-what-we-cover";
-import { slide as s08 } from "./08-section-platform";
-import { slide as s09 } from "./09-popover-commands";
-import { slide as s10 } from "./10-anchor-positioning";
-import { slide as s11 } from "./11-details-accordion";
-import { slide as s12 } from "./12-field-sizing";
-import { slide as s13 } from "./13-colour-functions";
-import { slide as s14 } from "./14-sibling-index";
-import { slide as s15 } from "./15-view-transitions";
-import { slide as s16 } from "./16-es2026-console";
-import { slide as s17 } from "./17-scroll-driven";
-import { slide as s18 } from "./18-customizable-select";
-import { slide as s19 } from "./19-cross-document-transitions";
-import { slide as s20 } from "./20-chrome-only-round";
-import { slide as s21 } from "./21-section-frameworks";
-import { slide as s22 } from "./22-nextjs-own-words";
-import { slide as s23 } from "./23-usage-vs-satisfaction";
-import { slide as s24 } from "./24-section-delete";
-import { slide as s25 } from "./25-delete-this-quarter";
-import { slide as s26 } from "./26-not-yet-and-never";
-import { slide as s27 } from "./27-tooling";
-import { slide as s28 } from "./28-incident-timeline";
-import { slide as s29 } from "./29-four-answers";
-import { slide as s30 } from "./30-cooldowns";
-import { slide as s31 } from "./31-install-scripts";
-import { slide as s32 } from "./32-trusted-publishing";
-import { slide as s33 } from "./33-what-to-adopt";
-import { slide as s34 } from "./34-what-changed";
-import { slide as s35 } from "./35-people-to-follow";
+import type { DemoPage, DemoSection } from "@/content/demo-schema";
+import { sections } from "@/content/sections";
+import { slide as o1 } from "./01-title";
+import { slide as o2 } from "./02-the-mandate";
+import { slide as o3 } from "./03-three-reactions";
+import { slide as o4 } from "./04-two-perspectives";
+import { slide as o5 } from "./05-keep-humanity";
+import { slide as o6 } from "./06-open-web";
+import { slide as o7 } from "./07-what-we-cover";
+import { slide as c1 } from "./32-what-changed";
+import { slide as c2 } from "./33-people-to-follow";
 
-export const slides: Slide[] = [s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s25, s26, s27, s28, s29, s30, s31, s32, s33, s34, s35];
+const SECTION_OF: Record<DemoSection["id"], Slide["section"]> = {};
+
+function pageSlide(section: DemoSection, page: DemoPage): Slide {
+  return {
+    id: page.id,
+    index: 0,
+    section: SECTION_OF[section.id] ?? (section.id.startsWith("d") ? "platform-baseline" : section.id === "f2-caching" ? "frameworks" : section.id === "f3-package-trust" ? "package-managers" : "decide"),
+    layout: "demo-page",
+    title: page.title,
+    page,
+    demoSection: section,
+    citations: section.citations,
+    speakerNotes: page.notes.open,
+    timing: page.timing,
+    cutPriority: page.cutPriority,
+  };
+}
+
+/**
+ * The deck: the Claude Design opening, every page of the demo section in order (PRD Part A,
+ * section 1), and the Claude Design closing. Indexes are assigned here; the closing's cumulative
+ * timing continues from the last demo page.
+ */
+const opening = [o1, o2, o3, o4, o5, o6, o7];
+const pages = sections.flatMap((s) => s.pages.map((p) => pageSlide(s, p)));
+const closing = [c1, c2];
+
+let cumulative = 0;
+export const slides: Slide[] = [...opening, ...pages, ...closing].map((s, i) => {
+  cumulative = s.layout === "demo-page" ? s.timing.cumulative : cumulative + s.timing.minutes;
+  return { ...s, index: i + 1, timing: { minutes: s.timing.minutes, cumulative: Math.round(cumulative * 100) / 100 } };
+});

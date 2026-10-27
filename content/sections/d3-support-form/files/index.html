@@ -1,0 +1,15 @@
+<link rel="stylesheet" href="form.css">
+<form action="/cases" method="post"
+  class="case-form">
+  <label for="subject">Subject</label>
+  <input id="subject" name="subject"
+    required maxlength="120">
+  <label for="details">Details</label>
+  <p id="details-hint">Steps, order
+    number, and what you expected.</p>
+  <textarea id="details" name="details"
+    aria-describedby="details-hint"
+    rows="6" required></textarea>
+  <button>Open case</button>
+</form>
+<script type="module" src="app.js"></script>

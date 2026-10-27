@@ -1,0 +1,33 @@
+<link rel="stylesheet" href="enhance.css">
+<main class="orders">
+  <h1>Open orders</h1>
+  <div class="order" id="order-418">
+    <p>Order 418, awaiting shipment</p>
+    <button id="actions-418"
+      popovertarget="order-actions-418">
+      Actions
+    </button>
+    <div id="order-actions-418" popover>
+      <button commandfor="cancel-418"
+        command="show-modal">
+        Cancel order
+      </button>
+      <dialog id="cancel-418"
+        aria-labelledby="cancel-418-title">
+        <form method="dialog">
+          <h2 id="cancel-418-title">
+            Cancel order 418?
+          </h2>
+          <button value="cancel">
+            Keep order
+          </button>
+          <button value="confirm">
+            Cancel order
+          </button>
+        </form>
+      </dialog>
+    </div>
+  </div>
+  <p id="status" role="status"></p>
+</main>
+<script type="module" src="app.js"></script>

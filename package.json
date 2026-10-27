@@ -11,12 +11,15 @@
     "typecheck": "tsc --noEmit",
     "check": "node --conditions=react-server --import tsx scripts/validate.mts",
     "validate": "pnpm typecheck && pnpm lint && pnpm check --strict",
-    "walk": "node --conditions=react-server --import tsx scripts/walk-demos.mts"
+    "walk": "node --conditions=react-server --import tsx scripts/walk-demos.mts",
+    "meters": "node --conditions=react-server --import tsx scripts/meters.mts",
+    "extract:demos": "tsx scripts/extract-demo-prd.mts"
   },
   "dependencies": {
     "clsx": "2.1.1",
     "hast-util-from-html": "2.0.3",
     "hast-util-to-jsx-runtime": "2.3.6",
+    "linkedom": "0.18.12",
     "lucide-react": "1.61.0",
     "next": "16.4.3",
     "react": "19.3.1",

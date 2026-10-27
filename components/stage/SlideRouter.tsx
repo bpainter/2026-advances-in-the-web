@@ -1,7 +1,6 @@
 import type { Slide } from "@/content/schema";
 import type { Mode } from "@/lib/mode";
 import { ContentSlide } from "@/components/layouts/ContentSlide";
-import { DemoSplitSlide } from "@/components/layouts/DemoSplitSlide";
 import { TitleSlide } from "@/components/layouts/TitleSlide";
 import { StatementSlide } from "@/components/layouts/StatementSlide";
 import { StatSlide } from "@/components/layouts/StatSlide";
@@ -11,12 +10,11 @@ import { TimelineSlide } from "@/components/layouts/TimelineSlide";
 import { TableSlide } from "@/components/layouts/TableSlide";
 import { ChartSlide } from "@/components/layouts/ChartSlide";
 import { FrameworkGridSlide } from "@/components/layouts/FrameworkGridSlide";
-import { DemoGridSlide } from "@/components/layouts/DemoGridSlide";
-import { TerminalSlide } from "@/components/layouts/TerminalSlide";
 import { ImageLedSlide } from "@/components/layouts/ImageLedSlide";
 import { SectionSlide } from "@/components/layouts/SectionSlide";
 import { CloseSlide } from "@/components/layouts/CloseSlide";
 import { DesignedSlide } from "@/components/layouts/DesignedSlide";
+import { DemoPageSlide } from "@/components/page/DemoPageSlide";
 
 interface Props {
   slide: Slide;
@@ -47,12 +45,6 @@ export function SlideRouter(props: Props) {
       return <ChartSlide {...props} />;
     case "framework-grid":
       return <FrameworkGridSlide {...props} />;
-    case "demo-split":
-      return <DemoSplitSlide {...props} />;
-    case "demo-grid":
-      return <DemoGridSlide {...props} />;
-    case "terminal":
-      return <TerminalSlide {...props} />;
     case "image-led":
       return <ImageLedSlide {...props} />;
     case "section":
@@ -61,6 +53,8 @@ export function SlideRouter(props: Props) {
       return <CloseSlide {...props} />;
     case "designed":
       return <DesignedSlide {...props} />;
+    case "demo-page":
+      return <DemoPageSlide {...props} />;
     default: {
       const exhaustive: never = props.slide.layout;
       throw new Error(`Unhandled layout ${String(exhaustive)}`);

@@ -1,6 +1,0 @@
-/* The hand-rolled morph plays transforms from the top
-   left corner; the script measures the rest. */
-.product,
-.detail {
-  transform-origin: 0 0;
-}

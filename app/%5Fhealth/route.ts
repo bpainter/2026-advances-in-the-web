@@ -1,4 +1,4 @@
-import { allDemos, slides } from "@/lib/content";
+import { slides, sections } from "@/lib/content";
 
 export const dynamic = "force-static";
 
@@ -7,6 +7,6 @@ export function GET() {
     ok: true,
     build: process.env.NEXT_PUBLIC_BUILD_ID ?? "dev",
     slides: slides.length,
-    demos: allDemos().length,
+    pages: sections.reduce((n, s) => n + s.pages.length, 0),
   });
 }

@@ -408,3 +408,66 @@
   font-weight: var(--weight-bold);
   cursor: pointer;
 }
+
+/* Page notes */
+.speaker__eyebrow {
+  margin: 0 0 var(--space-1);
+  font-size: 0.6em;
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-chartreuse);
+}
+.speaker__proof {
+  margin: var(--space-2) 0 var(--space-3);
+  font-size: 0.75em;
+  color: rgb(255 255 255 / 0.75);
+}
+.speaker__cautions {
+  margin: var(--space-3) 0;
+  padding-left: 1.2em;
+  font-size: 0.8em;
+}
+.speaker__citations {
+  margin: var(--space-3) 0;
+  font-size: 0.6em;
+  color: rgb(255 255 255 / 0.7);
+}
+.speaker__citations a {
+  color: inherit;
+}
+.speaker__steps {
+  @apply flex flex-wrap list-none;
+  gap: var(--space-1);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+}
+.speaker__steps .speaker__button {
+  min-height: 28px;
+  padding: 0 var(--space-2);
+  font-size: 12px;
+}
+.speaker__steps .speaker__button[aria-current="true"] {
+  background: var(--color-chartreuse);
+  color: var(--color-navy);
+}
+.speaker__blank-eyebrow--hands {
+  left: auto;
+  right: var(--space-3);
+  background: var(--color-chartreuse);
+}
+.speaker__engines[data-health="error"] {
+  color: var(--color-coral);
+}
+.stage__rehearsal {
+  @apply fixed;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  margin: 0;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: rgb(0 0 0 / 0.8);
+  color: var(--color-white);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
