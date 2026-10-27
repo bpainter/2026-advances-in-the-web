@@ -134,7 +134,7 @@ export const section: DemoSection = {
           ],
           meter: {
             label: "JavaScript",
-            value: "computed at build",
+            value: "112 lines",
             source: "non-blank, non-comment lines in /demos/03-content-sized-form/today/*.js",
           },
           notes:
@@ -162,7 +162,7 @@ export const section: DemoSection = {
           height: 720,
         },
         flags: {
-          "field-sizing": true,
+          "enhance-css": true,
           "enhance-js": true,
         },
         hooks: ["reset", "formReset"],
@@ -229,7 +229,7 @@ export const section: DemoSection = {
           actions: [
             {
               type: "toggle",
-              flag: "field-sizing",
+              flag: "enhance-css",
               on: false,
             },
           ],
@@ -258,7 +258,7 @@ export const section: DemoSection = {
           actions: [
             {
               type: "toggle",
-              flag: "field-sizing",
+              flag: "enhance-css",
               on: true,
             },
             {
@@ -337,10 +337,10 @@ export const section: DemoSection = {
           height: 720,
         },
         flags: {
-          "field-sizing": true,
+          "enhance-css": true,
           "enhance-js": true,
         },
-        hooks: ["reset"],
+        hooks: ["reset", "submitted"],
         poster: "/posters/d3-code.png",
       },
       files: [
@@ -395,7 +395,7 @@ export const section: DemoSection = {
           actions: [
             {
               type: "toggle",
-              flag: "field-sizing",
+              flag: "enhance-css",
               on: false,
             },
             {
@@ -418,7 +418,7 @@ export const section: DemoSection = {
           actions: [
             {
               type: "toggle",
-              flag: "field-sizing",
+              flag: "enhance-css",
               on: true,
             },
             {
@@ -460,6 +460,10 @@ export const section: DemoSection = {
             {
               type: "click",
               target: ".case-form button",
+            },
+            {
+              type: "hook",
+              name: "submitted",
             },
             {
               type: "wait",
