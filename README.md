@@ -31,6 +31,34 @@ Open <http://localhost:3000>. `pnpm build && pnpm start` serves the same deck of
 `pnpm validate` runs typecheck, lint, `pnpm meters` and `pnpm check` (the content validator); `pnpm walk` drives
 every demo page in Playwright and asserts the frames' step results. See `docs/demo-engine.md`.
 
+## Framework demo apps (F2 caching)
+
+The caching demo's frames are two separate Next.js 16 apps, not frames of this app (PRD Part A,
+8.1 and 10.3): `demos/06-framework-cache/` runs with Cache Components on at
+<http://localhost:3106> (the `f2-now` and `f2-code` pages) and `demos/06-framework-cache-today/`
+runs with Cache Components off at <http://localhost:3107> (the `f2-today` page), because the old
+route segment configs throw once the flag is on. Each is its own pnpm project with the same
+pinned `next`, `react` and `react-dom` versions as this one; install them once with
+`pnpm --dir demos/06-framework-cache install` and `pnpm --dir demos/06-framework-cache-today install`.
+
+```bash
+pnpm dev:framework          # next dev on 3106 (rehearsal; the dev server adds a validation render)
+pnpm dev:framework-today    # next dev on 3107
+pnpm build:framework && pnpm start:framework              # talk day: one long-lived next start on 3106
+pnpm build:framework-today && pnpm start:framework-today  # talk day: next start on 3107
+```
+
+Both must be running before the F2 pages are opened; `use cache` is in-memory, so do not restart
+the now app between the F2 pages. Rehearse F2 with the built presenter (`pnpm build && pnpm start`)
+when the exact log rows matter: in `pnpm dev`, React Strict Mode mounts each frame twice and the
+twin frame's requests can interleave with the shown one's. The frame routes in content (`/framework/...` and
+`/framework-today/...`) resolve to those origins in `lib/frames/origins.ts`
+(`NEXT_PUBLIC_FRAMEWORK_ORIGIN` and `NEXT_PUBLIC_FRAMEWORK_TODAY_ORIGIN` override them). Each app
+serves `/products/ridgeline-trail` (with `?presenter=1` it loads the frame runtime from the demo
+origin and registers the hooks from `public/presenter.js`), `/__demo/log` (the request log as
+server-sent events) and `POST /__demo/reset`. The today app's meter is printed by
+`pnpm --dir demos/06-framework-cache-today count-cache-flags`.
+
 ## Keys
 
 | Key | Action |

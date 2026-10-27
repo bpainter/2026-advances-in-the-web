@@ -13,7 +13,13 @@
     "validate": "pnpm typecheck && pnpm lint && pnpm meters && pnpm check",
     "walk": "node --conditions=react-server --import tsx scripts/walk-demos.mts",
     "meters": "node --conditions=react-server --import tsx scripts/meters.mts",
-    "extract:demos": "tsx scripts/extract-demo-prd.mts"
+    "extract:demos": "tsx scripts/extract-demo-prd.mts",
+    "dev:framework": "pnpm --dir demos/06-framework-cache dev",
+    "build:framework": "pnpm --dir demos/06-framework-cache build",
+    "start:framework": "pnpm --dir demos/06-framework-cache start",
+    "dev:framework-today": "pnpm --dir demos/06-framework-cache-today dev",
+    "build:framework-today": "pnpm --dir demos/06-framework-cache-today build",
+    "start:framework-today": "pnpm --dir demos/06-framework-cache-today start"
   },
   "dependencies": {
     "clsx": "2.1.1",

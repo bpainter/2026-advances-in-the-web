@@ -76,6 +76,13 @@ export function Stage(props: Props) {
   const [helpOpen, setHelpOpen] = useState(false);
   const [gotoOpen, setGotoOpen] = useState(false);
   const [idle, setIdle] = useState(false);
+  // Stable handles for callbacks the page frame depends on: the presenter object and `perform`
+  // change on every store update, and a changed callback would remount the frame.
+  const presenterRef = useRef(presenter);
+  const performRef = useRef<(a: KeyAction) => void>(() => {});
+  useEffect(() => {
+    presenterRef.current = presenter;
+  }, [presenter]);
 
   // ----- state source: shared store in presenter windows, local otherwise -----
   const stepCount = steps.length;
@@ -106,9 +113,9 @@ export function Stage(props: Props) {
   const setDemoStatus = useCallback(
     (id: string, status: DemoStatus) => {
       setDemoStatusState((s) => (s[id] === status ? s : { ...s, [id]: status }));
-      if (shared && mode === "audience") presenter!.reportHealth(id, status);
+      if (shared && mode === "audience") presenterRef.current?.reportHealth(id, status);
     },
-    [shared, mode, presenter],
+    [shared, mode],
   );
   const setStepResult = useCallback((pageId: string, stepId: string, result: StepResult) => {
     setStepResults((s) => ({ ...s, [pageId]: { stepId, result } }));
@@ -308,6 +315,10 @@ export function Stage(props: Props) {
     [mode, stepsFirst, current, setStepIndex, patch, go, nextId, prevId, firstId, lastId, blank, handsOn, live, frameRoute, helpOpen, gotoOpen, presenter, toggleTimer],
   );
 
+  useEffect(() => {
+    performRef.current = perform;
+  }, [perform]);
+
   // The speaker window's controls drive the stage through the presenter store.
   useEffect(() => {
     if (!shared) return;
@@ -329,13 +340,10 @@ export function Stage(props: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [passive, perform, gotoOpen]);
 
-  const dispatchKey = useCallback(
-    (key: string, shiftKey: boolean) => {
-      const action = actionForKey({ key: key === "Space" ? " " : key, shiftKey, metaKey: false, ctrlKey: false, altKey: false });
-      if (action) perform(action);
-    },
-    [perform],
-  );
+  const dispatchKey = useCallback((key: string, shiftKey: boolean) => {
+    const action = actionForKey({ key: key === "Space" ? " " : key, shiftKey, metaKey: false, ctrlKey: false, altKey: false });
+    if (action) performRef.current(action);
+  }, []);
 
   const focusStage = useCallback(() => canvasRef.current?.focus({ preventScroll: true }), []);
 

@@ -1,0 +1,18 @@
+{
+  "products": [
+    {
+      "id": "ridgeline-trail",
+      "name": "Ridgeline Trail",
+      "copy": "A light trail runner with a lugged outsole for loose, rocky paths.",
+      "price": 149
+    }
+  ],
+  "inventory": {
+    "us": { "label": "US warehouse", "stock": { "ridgeline-trail": 14 } },
+    "eu": { "label": "EU warehouse", "stock": { "ridgeline-trail": 3 } }
+  },
+  "reservations": {
+    "agent-1": { "ridgeline-trail": 1 },
+    "agent-2": { "ridgeline-trail": 2 }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "f2-framework-cache-today",
+  "version": "0.1.0",
+  "private": true,
+  "description": "F2 caching demo, Cache Components off (presenter frame on port 3107)",
+  "scripts": {
+    "dev": "next dev -p 3107",
+    "build": "next build",
+    "start": "next start -p 3107",
+    "typecheck": "tsc --noEmit",
+    "count-cache-flags": "node scripts/count-cache-flags.mjs"
+  },
+  "dependencies": {
+    "next": "16.4.3",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "typescript": "5.9.3"
+  }
+}
