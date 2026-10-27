@@ -103,3 +103,18 @@
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
+
+/* Beat chip next to the step counter, only on demos with a legacy document. */
+.code__phase {
+  @apply inline-block;
+  margin-right: var(--space-3);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-slalom-blue);
+  color: var(--color-white);
+  font-size: var(--text-footnote);
+  font-weight: var(--weight-bold);
+}
+.code[data-phase="before"] .code__phase {
+  background: var(--color-dark-gray);
+}

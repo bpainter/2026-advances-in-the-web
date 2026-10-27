@@ -20,26 +20,32 @@ export interface ResolvedStep {
   lines: Set<number>;
   /** True when this step has no highlight of its own and shows the previous one dimmed. */
   dimmed: boolean;
+  /** Which file set the panel shows: the legacy document during "before" steps. */
+  phase: StepPhase;
 }
 
 /**
  * The file and lines the code panel shows at `stepIndex`. A step with `highlight: []` is a
- * live-view-only step; the panel keeps the previous highlight, dimmed. (PRD Part 0, canonical schema)
+ * live-view-only step; the panel keeps the previous highlight of the same phase, dimmed.
+ * "before" steps resolve against `demo.legacy.code`. (PRD Part 0, canonical schema; plan E3.3)
  */
 export function resolveStep(demo: Demo, stepIndex: number): ResolvedStep {
-  const firstFile = demo.code[0]?.file ?? "";
   const step = demo.steps[stepIndex];
-  if (!step) return { step: undefined, file: firstFile, lines: new Set(), dimmed: false };
+  const phase = step ? stepPhase(step) : "after";
+  const set = phase === "before" && demo.legacy ? demo.legacy.code : demo.code;
+  const firstFile = set[0]?.file ?? "";
+  if (!step) return { step: undefined, file: firstFile, lines: new Set(), dimmed: false, phase };
   if (step.highlight.length > 0) {
-    return { step, file: step.file ?? firstFile, lines: highlightSet(step.highlight), dimmed: false };
+    return { step, file: step.file ?? firstFile, lines: highlightSet(step.highlight), dimmed: false, phase };
   }
   for (let i = stepIndex - 1; i >= 0; i--) {
     const prev = demo.steps[i];
+    if (stepPhase(prev) !== phase && !(phase !== "before" && stepPhase(prev) !== "before")) continue;
     if (prev.highlight.length > 0) {
-      return { step, file: prev.file ?? firstFile, lines: highlightSet(prev.highlight), dimmed: true };
+      return { step, file: prev.file ?? firstFile, lines: highlightSet(prev.highlight), dimmed: true, phase };
     }
   }
-  return { step, file: step.file ?? firstFile, lines: new Set(), dimmed: false };
+  return { step, file: step.file ?? firstFile, lines: new Set(), dimmed: false, phase };
 }
 
 /** The beat a step belongs to; defaults to "code" for highlighted steps and "after" otherwise. */

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { Demo, Engine, Slide } from "@/content/schema";
+import { resolveLive } from "@/lib/steps";
 import { usePresenter } from "@/lib/presenter/context";
 import { SupportLabel } from "@/components/demo/SupportLabel";
 import { Timer } from "./Timer";
@@ -26,13 +27,14 @@ function demosOf(slide?: Slide): Demo[] {
   return slide.demo ? [slide.demo] : (slide.demos ?? []);
 }
 
-function standalonePath(demo: Demo): string {
+function standalonePath(demo: Demo, legacy = false): string {
+  if (legacy) return `/demos/${demo.id}/legacy`;
   return demo.live.kind === "route" && demo.live.src ? demo.live.src : `/demos/${demo.id}`;
 }
 
 /** Absolute URL for the clipboard; resolved at click time because the origin is only known in the browser. */
-function standaloneUrl(demo: Demo): string {
-  return new URL(standalonePath(demo), process.env.NEXT_PUBLIC_DECK_URL ?? window.location.origin).href;
+function standaloneUrl(demo: Demo, legacy = false): string {
+  return new URL(standalonePath(demo, legacy), process.env.NEXT_PUBLIC_DECK_URL ?? window.location.origin).href;
 }
 
 /** Speaker window layout (PRD 5.2): preview, status bar, next, notes, timing, demo health, controls. */
@@ -97,6 +99,10 @@ export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative,
   const steps = activeDemo?.steps ?? [];
   const stepIndex = state.stepIndex < 0 ? Math.max(steps.length - 1, 0) : Math.min(state.stepIndex, Math.max(steps.length - 1, 0));
   const step = steps[stepIndex];
+  const live = activeDemo ? resolveLive(activeDemo, stepIndex) : undefined;
+  const nextStep = steps[stepIndex + 1];
+  const nextAction = nextStep ? `${nextStep.caption}${nextStep.action ? ` · ${nextStep.action}` : ""}` : next ? `Next slide: ${next.index}. ${next.title}` : "End of deck";
+  const healthRows = [...demos, ...nextDemos].flatMap((d) => [{ demo: d, id: d.id }, ...(d.legacy ? [{ demo: d, id: `${d.id}:legacy` }] : [])]);
   const openAudience = () => window.open("/present", "deck-audience");
   const exportLog = () => {
     const blob = new Blob([localStorage.getItem(LOG_KEY) ?? "[]"], { type: "application/json" });
@@ -130,6 +136,8 @@ export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative,
           {steps.length > 0 ? (
             <span className="speaker__step">
               Step {stepIndex + 1} of {steps.length}
+              {live ? ` · ${live.phase === "before" ? "Today" : live.phase === "after" ? "Native" : "Code"}` : ""}
+              {live?.state ? ` · state: ${live.state}` : ""}
               {step ? `: ${step.caption}` : ""}
             </span>
           ) : null}
@@ -167,6 +175,9 @@ export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative,
           </div>
         </div>
         {step?.action ? <p className="speaker__action">{step.action}</p> : null}
+        <p className="speaker__next-press">
+          <span className="speaker__next-press-label">Next press</span> {nextAction}
+        </p>
         {slide.support ? <SupportLabel support={slide.support} /> : null}
         {slide.support?.note ? <p className="speaker__support-note">{slide.support.note}</p> : null}
         <p className="speaker__notes-text">{slide.speakerNotes}</p>
@@ -175,22 +186,26 @@ export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative,
 
       <section className="speaker__health" aria-label="Demo health">
         <ul className="speaker__chips">
-          {[...demos, ...nextDemos].map((d) => (
-            <li className="speaker__chip" key={d.id} data-status={demoHealth[d.id] ?? "loading"}>
-              <span className="speaker__chip-id">{d.id}</span>
-              <span className="speaker__chip-status">{d.code.some((f) => f.lang !== "bash") ? (demoHealth[d.id] ?? "no report") : "transcript"}</span>
-              {d.code.some((f) => f.lang !== "bash") ? (
-                <>
-                  <button type="button" className="speaker__button speaker__button--quiet" onClick={() => void navigator.clipboard?.writeText(standaloneUrl(d))}>
-                    Copy URL
-                  </button>
-                  <a className="speaker__button speaker__button--quiet" href={standalonePath(d)} target="_blank" rel="noopener">
-                    Open
-                  </a>
-                </>
-              ) : null}
-            </li>
-          ))}
+          {healthRows.map(({ demo: d, id }) => {
+            const legacy = id.endsWith(":legacy");
+            const frame = d.code.some((f) => f.lang !== "bash");
+            return (
+              <li className="speaker__chip" key={id} data-status={demoHealth[id] ?? "loading"}>
+                <span className="speaker__chip-id">{id}</span>
+                <span className="speaker__chip-status">{frame ? (demoHealth[id] ?? "no report") : "transcript"}</span>
+                {frame ? (
+                  <>
+                    <button type="button" className="speaker__button speaker__button--quiet" onClick={() => void navigator.clipboard?.writeText(standaloneUrl(d, legacy))}>
+                      Copy URL
+                    </button>
+                    <a className="speaker__button speaker__button--quiet" href={standalonePath(d, legacy)} target="_blank" rel="noopener">
+                      Open
+                    </a>
+                  </>
+                ) : null}
+              </li>
+            );
+          })}
           {demos.length + nextDemos.length === 0 ? <li className="speaker__chip">No demos on this or the next slide</li> : null}
         </ul>
         <p className="speaker__transport">

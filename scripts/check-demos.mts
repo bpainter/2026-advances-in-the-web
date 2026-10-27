@@ -11,7 +11,7 @@ const root = path.join(process.cwd(), "content", "demos");
 let problems = 0;
 
 for (const id of readdirSync(root)) {
-  if (only && id !== only) continue;
+  if (id.startsWith("_") || (only && id !== only)) continue;
   const demoTs = path.join(root, id, "demo.ts");
   if (!existsSync(demoTs)) continue;
   // Collapse whitespace so Prettier's multi-line arrays and captions still match the regexes.
@@ -26,7 +26,7 @@ for (const id of readdirSync(root)) {
       console.log(`  ! ${file}: ${wide.length} line(s) over ${MAX_COLS} cols: ${wide.map(([n, w]) => `${n}(${w})`).join(" ")}`);
     }
   }
-  const steps = [...src.matchAll(/\{\s*id: "(s\d+)",\s*(?:file: "([^"]+)",\s*)?highlight: (\[[^\]]*\]|\[\[[^\]]*\](?:,\s*\[[^\]]*\])*\]),\s*caption: "([^"]*)"/g)];
+  const steps = [...src.matchAll(/\{\s*id: "([a-z]\d+)",\s*(?:file: "([^"]+)",\s*)?highlight: (\[[^\]]*\]|\[\[[^\]]*\](?:,\s*\[[^\]]*\])*\]),\s*caption: "([^"]*)"/g)];
   for (const m of steps) {
     const [, sid, file, rawHl, caption] = m;
     const target = file ?? files[0]?.file;

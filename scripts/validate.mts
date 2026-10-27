@@ -75,7 +75,7 @@ function checkStep(demo: Demo, i: number, step: CodeStep, kind: "split" | "grid"
     for (const t of classes) if (!new RegExp(`class="[^"]*\\b${t}\\b`).test(html)) error(id, `target "${step.target}": no element with class "${t}" in the html`);
     for (const t of attrs) if (!new RegExp(`\\s${t}(=|\\s|>|/)`).test(html)) error(id, `target "${step.target}": attribute "${t}" never appears in the html`);
     if (!ids.length && !classes.length && !attrs.length && !/^[a-z][\w-]*$/i.test(step.target.trim())) warn(id, `target "${step.target}" has nothing the validator can check`);
-    if (phase !== "code") warn(id, `target on a "${phase}" step; spotlight is meant for code steps`);
+    if (phase === "after") warn(id, `target on an "after" step; spotlight is meant for code (or before) steps`);
   }
   if (kind !== "terminal") {
     const live = resolveLive(demo, i);

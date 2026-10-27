@@ -15,10 +15,11 @@ export async function DemoSplitSlide({ slide, total, mode }: Props) {
   const demo = slide.demo;
   if (!demo) throw new Error(`Slide ${slide.id} has layout demo-split but no demo`);
   const files = await renderCodeFiles(demo.code);
+  const legacyFiles = demo.legacy ? await renderCodeFiles(demo.legacy.code) : undefined;
   const subtitle = slide.body?.[0];
   return (
     <SlideShell slide={slide} total={total} mode={mode} headerExtra={subtitle ? <p className="slide__subtitle">{subtitle}</p> : null}>
-      <DemoSplitBody demo={demo} support={slide.support} files={files} slideTitle={slide.title} mode={mode} />
+      <DemoSplitBody demo={demo} support={slide.support} files={files} legacyFiles={legacyFiles} slideTitle={slide.title} mode={mode} />
     </SlideShell>
   );
 }

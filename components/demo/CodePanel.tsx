@@ -9,13 +9,16 @@ import { resolveStep } from "@/lib/steps";
 interface Props {
   demo: Demo;
   files: RenderedFile[];
+  /** Rendered `demo.legacy.code`; shown instead of `files` during "before" steps. */
+  legacyFiles?: RenderedFile[];
   stepIndex: number;
   mode: Mode;
 }
 
 /** Stepped code panel: file tabs, numbered lines, highlighted ranges, caption (PRD 7.4). */
-export function CodePanel({ demo, files, stepIndex, mode }: Props) {
+export function CodePanel({ demo, files: nativeFiles, legacyFiles, stepIndex, mode }: Props) {
   const resolved = resolveStep(demo, stepIndex);
+  const files = resolved.phase === "before" && legacyFiles ? legacyFiles : nativeFiles;
   // The step decides the tab; a reader may override it until the step changes.
   const [override, setOverride] = useState<{ step: number; file: string } | null>(null);
   const activeFile = override?.step === stepIndex ? override.file : resolved.file;
@@ -44,7 +47,7 @@ export function CodePanel({ demo, files, stepIndex, mode }: Props) {
   const tabsInteractive = mode !== "audience";
 
   return (
-    <section className="code" aria-label={`Code: ${file?.file ?? ""}`} data-step={resolved.step?.id} data-has-highlight={hasHighlight} data-dimmed={resolved.dimmed}>
+    <section className="code" aria-label={`Code: ${file?.file ?? ""}`} data-step={resolved.step?.id} data-phase={resolved.phase} data-has-highlight={hasHighlight} data-dimmed={resolved.dimmed}>
       {files.length > 1 ? (
         <div className="code__tabs" role="tablist" aria-label="Files">
           {files.map((f) => (
@@ -87,6 +90,7 @@ export function CodePanel({ demo, files, stepIndex, mode }: Props) {
         <p className="code__caption">
           <span>{resolved.step?.caption}</span>
           <span className="code__step">
+            {legacyFiles ? <span className="code__phase">{resolved.phase === "before" ? "Today" : "Native"}</span> : null}
             {stepIndex + 1} / {stepCount}
           </span>
         </p>

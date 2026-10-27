@@ -19,6 +19,10 @@ interface Props {
   zoom?: number;
   /** Frame title suffix, for grid cells ("Live demo 2 of 4: ..."). */
   frameTitle?: string;
+  /** "legacy" loads `/demos/[id]/legacy` (the "before" document) and reports health as `[id]:legacy`. */
+  variant?: "native" | "legacy";
+  /** False keeps the frame loaded but hidden (the other phase's document is showing). */
+  visible?: boolean;
 }
 
 type FromDemo =
@@ -35,14 +39,15 @@ function isFromDemo(data: unknown): data is FromDemo {
 }
 
 /** Sandboxed, route-served demo document in an iframe with the bridge protocol (PRD 7.2, 7.3). */
-export function DemoFrame({ demo, slideTitle, liveState, stepId, target, mode, zoom, frameTitle }: Props) {
+export function DemoFrame({ demo, slideTitle, liveState, stepId, target, mode, zoom, frameTitle, variant = "native", visible = true }: Props) {
   const { reloadToken, focusToken, showFallback, demoStatus, setDemoStatus, dispatchKey, focusStage } = useStage();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [focused, setFocused] = useState(false);
   // Remembers which load attempt failed before `demo:ready`; a reload (new token) clears it.
   const [failedToken, setFailedToken] = useState<number | null>(null);
   const failedBeforeReady = failedToken === reloadToken;
-  const status = demoStatus[demo.id] ?? "loading";
+  const healthId = variant === "legacy" ? `${demo.id}:legacy` : demo.id;
+  const status = demoStatus[healthId] ?? "loading";
   const ready = status === "ready";
 
   // Messages from the demo: only accept them from our own frame's window.
@@ -53,14 +58,14 @@ export function DemoFrame({ demo, slideTitle, liveState, stepId, target, mode, z
       const msg = event.data;
       switch (msg.type) {
         case "demo:ready":
-          setDemoStatus(demo.id, "ready");
+          setDemoStatus(healthId, "ready");
           frame.contentWindow?.postMessage({ type: "demo:reduceMotion", value: window.matchMedia("(prefers-reduced-motion: reduce)").matches }, "*");
           if (liveState) frame.contentWindow?.postMessage({ type: "demo:setState", state: liveState, stepId }, "*");
           frame.contentWindow?.postMessage({ type: "demo:highlight", selector: target ?? null }, "*");
           break;
         case "demo:error":
           if (!ready) setFailedToken(reloadToken);
-          setDemoStatus(demo.id, ready ? "error" : "fallback");
+          setDemoStatus(healthId, ready ? "error" : "fallback");
           break;
         case "demo:escape":
           focusStage();
@@ -76,7 +81,7 @@ export function DemoFrame({ demo, slideTitle, liveState, stepId, target, mode, z
     // The server-rendered iframe can finish loading before this listener exists; ask again.
     if (!ready) iframeRef.current?.contentWindow?.postMessage({ type: "demo:ping" }, "*");
     return () => window.removeEventListener("message", onMessage);
-  }, [demo.id, ready, reloadToken, liveState, stepId, target, setDemoStatus, dispatchKey, focusStage]);
+  }, [healthId, ready, reloadToken, liveState, stepId, target, setDemoStatus, dispatchKey, focusStage]);
 
   // Drive the live view on every step change (keyed on stepId, so a state the presenter changed by
   // hand is re-asserted even when two steps share one), then spotlight the step's target. The
@@ -92,8 +97,8 @@ export function DemoFrame({ demo, slideTitle, liveState, stepId, target, mode, z
 
   // Enter hands focus to the live view.
   useEffect(() => {
-    if (focusToken > 0) iframeRef.current?.focus();
-  }, [focusToken]);
+    if (focusToken > 0 && visible) iframeRef.current?.focus();
+  }, [focusToken, visible]);
 
   // Track whether the iframe holds focus (visible focus requirement, PRD 7.5).
   useEffect(() => {
@@ -126,11 +131,11 @@ export function DemoFrame({ demo, slideTitle, liveState, stepId, target, mode, z
   // Non-full-page demos are rendered at a smaller logical viewport and scaled up so they read from the back of the room.
   const zoomStyle = { "--demo-zoom": demo.zoom ?? zoom ?? 2 } as CSSProperties;
   // route-kind demos live at their own URL (real same-origin pages); composed demos at /demos/[id].
-  const src = demo.live.kind === "route" && demo.live.src ? demo.live.src : `/demos/${demo.id}`;
+  const src = variant === "legacy" ? `/demos/${demo.id}/legacy` : demo.live.kind === "route" && demo.live.src ? demo.live.src : `/demos/${demo.id}`;
 
   return (
-    <figure className="demo" data-demo-id={demo.id} data-status={status} style={zoomStyle}>
-      <div className="demo__viewport" data-focused={focused}>
+    <figure className="demo" data-demo-id={demo.id} data-variant={variant} data-status={status} data-visible={visible} aria-hidden={!visible} style={zoomStyle}>
+      <div className="demo__viewport" data-focused={focused && visible}>
         {external ? (
           <FallbackCard title={demo.wow} url={demo.live.src ?? demo.fallback} reason="external" />
         ) : fallback ? (
@@ -142,13 +147,13 @@ export function DemoFrame({ demo, slideTitle, liveState, stepId, target, mode, z
               ref={iframeRef}
               className="demo__frame"
               src={src}
-              title={frameTitle ?? `Live demo: ${slideTitle}`}
+              title={frameTitle ?? (variant === "legacy" ? `Today's version: ${slideTitle}` : `Live demo: ${slideTitle}`)}
               sandbox={demo.live.kind === "route" ? "allow-scripts allow-same-origin allow-forms" : "allow-scripts"}
               allow=""
               referrerPolicy="no-referrer"
               loading="eager"
               onLoad={(e) => e.currentTarget.contentWindow?.postMessage({ type: "demo:ping" }, "*")}
-              tabIndex={mode === "audience" ? -1 : 0}
+              tabIndex={mode === "audience" || !visible ? -1 : 0}
             />
             {status === "loading" ? <p className="demo__status">Loading demo…</p> : null}
           </>

@@ -42,16 +42,23 @@ function humanise(id: string): string {
   return id.replace(/-/g, " ").replace(/^\w/, (c) => c.toUpperCase());
 }
 
-/** Strips `<link rel="stylesheet" href="X">` and `<script src="X"></script>` for files the composer inlines. */
+/**
+ * Strips `<link rel="stylesheet" href="X">` and `<script src="X"></script>` for files the composer
+ * inlines. A legacy document under `legacy/` references its siblings by basename and shared files
+ * as `../card.css`, so any path ending in the file's basename counts.
+ */
 function stripLocalRefs(html: string, files: string[]): string {
   let out = html;
   for (const file of files) {
-    const f = file.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const base = file.split("/").pop() ?? file;
+    const f = `(?:[\\w./-]*/)?${base.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`;
     out = out.replace(new RegExp(`<link[^>]*href=["']${f}["'][^>]*>\\s*`, "gi"), "");
     out = out.replace(new RegExp(`<script[^>]*src=["']${f}["'][^>]*>\\s*</script>\\s*`, "gi"), "");
   }
   return out;
 }
+
+export type DemoVariant = "native" | "legacy";
 
 /** The html files a demo serves as pages; route-kind demos may have several. */
 export function demoPages(demo: Demo): string[] {
@@ -62,10 +69,12 @@ export function demoPages(demo: Demo): string[] {
  * Assembles a demo's `code` files into one standalone HTML document; `page` picks which html file
  * is the body when a demo has several. Deterministic. (PRD Part A, section 7.2)
  */
-export function composeDemo(demo: Demo, page?: string): string {
-  const htmlFiles = demo.code.filter((f) => f.lang === "html" && (!page || f.file === page)).slice(0, 1);
-  const cssFiles = demo.code.filter((f) => f.lang === "css");
-  const jsFiles = demo.code.filter((f) => f.lang === "js" || f.lang === "ts");
+export function composeDemo(demo: Demo, page?: string, variant: DemoVariant = "native"): string {
+  // The legacy variant is the same component driven by the old script (docs/demo-plan.md, E3.1).
+  const code = variant === "legacy" ? (demo.legacy?.code ?? []) : demo.code;
+  const htmlFiles = code.filter((f) => f.lang === "html" && (!page || f.file === page)).slice(0, 1);
+  const cssFiles = code.filter((f) => f.lang === "css");
+  const jsFiles = code.filter((f) => f.lang === "js" || f.lang === "ts");
   const inlined = [...cssFiles, ...jsFiles].map((f) => f.file);
 
   let body = stripLocalRefs(htmlFiles.map((f) => f.source).join("\n"), inlined);
@@ -97,17 +106,18 @@ export function composeDemo(demo: Demo, page?: string): string {
     .map((f) => `<script type="module" data-file="${escapeAttr(f.file)}">\n${f.source}\n</script>`)
     .join("\n");
 
+  const htmlAttrs = `data-demo-id="${escapeAttr(demo.id)}" data-variant="${variant}"`;
   if (/^\s*<!doctype/i.test(body)) {
     // Full document authored by the demo: inject our head content right after <head>.
     return body
-      .replace(/<html(\s[^>]*)?>/i, (m) => (m.includes("data-demo-id") ? m : m.replace(">", ` data-demo-id="${escapeAttr(demo.id)}">`)))
+      .replace(/<html(\s[^>]*)?>/i, (m) => (m.includes("data-demo-id") ? m : m.replace(">", ` ${htmlAttrs}>`)))
       .replace(/<head(\s[^>]*)?>/i, (m) => `${m}\n${injectedHead}`)
       .replace(/<\/body>/i, `${scripts}\n</body>`);
   }
 
   return [
     `<!doctype html>`,
-    `<html lang="en-CA" data-demo-id="${escapeAttr(demo.id)}">`,
+    `<html lang="en-CA" ${htmlAttrs}>`,
     `<head>`,
     injectedHead,
     `</head>`,

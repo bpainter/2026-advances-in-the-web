@@ -199,6 +199,22 @@
   font-weight: var(--weight-bold);
   color: var(--color-chartreuse);
 }
+.speaker__next-press {
+  margin: 0 0 var(--space-3);
+  font-size: 0.85em;
+  color: rgb(255 255 255 / 0.8);
+}
+.speaker__next-press-label {
+  @apply inline-block;
+  margin-right: var(--space-2);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 0.15);
+  font-size: 0.8em;
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-eyebrow);
+}
 .speaker__notes .support {
   margin-bottom: var(--space-3);
   font-size: 14px;

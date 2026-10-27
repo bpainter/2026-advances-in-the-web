@@ -10,6 +10,9 @@ Firefox and Safari on stage. These rules keep a demo working in both places.
   (or `script.js`). The html file is the body; css files are inlined as `<style>`, js files as
   `<script type="module">`, at the position of their `<link>`/`<script src>` tags, which the composer
   strips. Keep those tags in the html so the file reads as a real page.
+- `demo.legacy.code` lists the "before" document the same way, under `legacy/` (the html references
+  siblings by basename and shared files as `../card.css`). It is served at `/demos/[id]/legacy`
+  with the same bridge and CSP, and shown during `before` steps. See `docs/demo-template.md`.
 - Standard CSS and vanilla JS only. No Tailwind, no frameworks, no web fonts, no external requests
   (the demo CSP blocks them). Fonts: `system-ui`. Images: CSS shapes, gradients are banned on slides
   but allowed inside demos only when they are the point; prefer flat fills from the palette below.

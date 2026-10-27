@@ -6,7 +6,8 @@ Tailwind 4 behind `@apply` only (JSX carries semantic class names), Slalom desig
 The deck's 36 slides and 17 demos are loaded from the PRD (Part B), all 16 layouts render, and the
 presenter windows sync. Still to come: the print route and PDF export, fonts and generated images.
 The demo portion (clicker-driven steps, code-to-demo spotlight, the "before" beat) is planned in
-`docs/demo-plan.md`; milestone 0 (schema, effective state, spotlight, validator) is in.
+`docs/demo-plan.md`; `docs/demo-template.md` is the authoring guide. Milestones 0 and 1 are in:
+effective state, spotlight, validator, legacy "before" documents, the Playwright walk.
 
 ## Presenting
 
@@ -27,7 +28,10 @@ Open <http://localhost:3000>. `pnpm build && pnpm start` serves the same deck of
 
 `pnpm validate` runs typecheck, lint and `pnpm check` (the content validator in
 `scripts/validate.mts`: files, highlight ranges, 56-column limit, spotlight targets, state lists;
-`pnpm check <demo-id>` for one demo, `--strict` to fail on warnings).
+`pnpm check <demo-id>` for one demo, `--strict` to fail on warnings). `pnpm walk [slide-id]` drives
+every demo slide in a headless Chromium with the forward and back keys and asserts each step's
+state, spotlight and phase (`scripts/walk-demos.mts`; needs `pnpm dev` running;
+`--browser=webkit|firefox` after `npx playwright install webkit firefox`).
 
 ## Keys
 
@@ -85,8 +89,9 @@ sources keep a blank line between chunks; `steps[].highlight` line numbers count
 Each step's `liveState` is posted into the frame (`demo:setState`); a step without one inherits the
 nearest earlier state, so advance and retreat replay the same interactions. A step's `target`
 selector is spotlit inside the demo (`demo:highlight`, a blue outline) in every view but live-only.
-`phase` tags the beat (`before`, `after`, `code`); `demo.legacy` names the legacy document shown
-during `before` steps (milestone 1). See `docs/demo-contract.md`.
+`phase` tags the beat (`before`, `after`, `code`); `demo.legacy` lists the legacy document served at
+`/demos/[id]/legacy` and shown during `before` steps. Both frames stay mounted, so the switch never
+reloads. See `docs/demo-contract.md` and `docs/demo-template.md`.
 
 A window opened at a typed or linked `/present?s=<slide>` or `/speaker?s=<slide>` moves both
 windows to that slide; a reload resumes the shared state instead.

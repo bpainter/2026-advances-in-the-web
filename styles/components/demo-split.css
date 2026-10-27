@@ -25,6 +25,20 @@
   min-height: 0;
   min-width: 0;
 }
+/* A demo with a legacy document keeps both frames mounted; the step's phase picks the visible one. */
+.demo-split__live[data-stacked="true"] {
+  @apply relative;
+}
+.demo-split__live[data-stacked="true"] .demo {
+  @apply absolute;
+  inset: 0;
+  transition: opacity var(--dur-base) var(--ease-brand), visibility 0s linear;
+}
+.demo-split__live[data-stacked="true"] .demo[data-visible="false"] {
+  opacity: 0;
+  visibility: hidden;
+  transition-delay: 0s, var(--dur-base);
+}
 .demo-split[data-view="half"] {
   grid-template-columns: 1fr 1fr;
 }
