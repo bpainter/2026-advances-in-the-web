@@ -202,7 +202,10 @@
   // replay deterministically (PRD Part A, 10.1 and 15).
   async function settle(ms) {
     var deadline = Date.now() + Math.min(ms, 2000);
-    await sleep(0); // queued navigations (form submission, traversal) start in a task
+    // Queued work (a dialog's close event, form submission, traversal) starts on later tasks and
+    // its listeners may only then issue the request the authored wait covered; give it a short
+    // real pause before polling for work in flight.
+    await sleep(Math.min(ms, 120));
     while (Date.now() < deadline) {
       var busy = pendingFetches > 0;
       try {
