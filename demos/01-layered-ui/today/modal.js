@@ -90,15 +90,17 @@ export function createModal({ title, keepLabel, confirmLabel, onClose }) {
     hidePage();
     trap = createFocusTrap(modal, { initialFocus: keep });
     trap.activate();
-    // Capture phase: the modal is the top layer, so it answers Escape
-    // before any menu or page listener below it sees the key.
-    document.addEventListener("keydown", onDocumentKeydown, true);
+    // Window, capture phase: the modal is the top layer, so it answers
+    // Escape before any menu or page listener below it sees the key. (The
+    // frame runtime stops key propagation at the window in scripted mode,
+    // so a document listener would never see its dispatched Escape.)
+    window.addEventListener("keydown", onDocumentKeydown, true);
   }
 
   function close(reason = "dismiss", { restoreFocus = true } = {}) {
     if (!open) return;
     open = false;
-    document.removeEventListener("keydown", onDocumentKeydown, true);
+    window.removeEventListener("keydown", onDocumentKeydown, true);
     trap.deactivate();
     trap = null;
     showPage();

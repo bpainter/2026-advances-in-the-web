@@ -124,7 +124,9 @@ export function createMenu(button, { items, onSelect }) {
     position();
     button.setAttribute("aria-expanded", "true");
     document.addEventListener("pointerdown", onDocumentPointerDown);
-    document.addEventListener("keydown", onDocumentKeydown);
+    // Window, capture phase, for the same reason as the modal: keys must
+    // reach the menu even when a listener below stops them bubbling.
+    window.addEventListener("keydown", onDocumentKeydown, true);
     window.addEventListener("resize", position);
     window.addEventListener("scroll", position, true);
     setActive(0);
@@ -134,7 +136,7 @@ export function createMenu(button, { items, onSelect }) {
     if (!open) return;
     open = false;
     document.removeEventListener("pointerdown", onDocumentPointerDown);
-    document.removeEventListener("keydown", onDocumentKeydown);
+    window.removeEventListener("keydown", onDocumentKeydown, true);
     window.removeEventListener("resize", position);
     window.removeEventListener("scroll", position, true);
     const hadFocus = menu.contains(document.activeElement);

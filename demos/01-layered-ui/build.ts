@@ -1,5 +1,3 @@
-import { readFileSync } from "node:fs";
-import path from "node:path";
 import type { DemoFolder } from "@/lib/frames/types";
 import {
   folderBuild,
@@ -47,20 +45,6 @@ export const folder: DemoFolder = {
     ),
   },
   routes: [
-    {
-      // The native build's reset hook: instrumentation served beside the shown files without being one of them.
-      method: "GET",
-      path: "/demos/01-layered-ui/native/hooks.js",
-      handler: () =>
-        new Response(readFileSync(path.join(process.cwd(), "demos", "01-layered-ui", "native-extra", "hooks.js")), {
-          status: 200,
-          headers: {
-            "Content-Type": "text/javascript; charset=utf-8",
-            "X-Content-Type-Options": "nosniff",
-            "Cache-Control": "no-store",
-          },
-        }),
-    },
     {
       // The native build's one request; the order is restored by the frame's reset (a remount).
       method: "POST",

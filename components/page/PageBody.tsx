@@ -18,10 +18,12 @@ interface Props {
   slot: { width: number; height: number };
   /** Computed meter values by step id (scripts/meters.mts). */
   meters: Record<string, string | null>;
+  /** Poster path per step id, null when the file is not in public/. */
+  posters: Record<string, string | null>;
 }
 
 /** The body of a demo page: frame (live or poster on the speaker's preview), meter, and the code panel on code pages. */
-export function PageBody({ page, files, sandbox, sideEffects, mode, slot, meters }: Props) {
+export function PageBody({ page, files, sandbox, sideEffects, mode, slot, meters, posters }: Props) {
   const { stepIndex, setDemoStatus, setStepResult } = useStage();
   const step = page.steps[stepIndex];
   const meter = step?.meter;
@@ -29,13 +31,15 @@ export function PageBody({ page, files, sandbox, sideEffects, mode, slot, meters
   const onStepResult = useCallback((stepId: string, result: StepResult) => setStepResult(page.id, stepId, result), [page.id, setStepResult]);
 
   const preview = mode === "speaker-preview";
-  const poster = step?.poster ?? page.frame?.poster;
+  const poster = step ? posters[step.id] : null;
 
   return (
     <div className="page__body">
       <div className="page__frame">
         {!page.frame ? null : preview ? (
           <div className="page__poster" data-has-poster={Boolean(poster)}>
+            {/* A static poster, served from public/; next/image adds nothing for a preview. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             {poster ? <img className="page__poster-image" src={poster} alt="" /> : null}
             <p className="page__poster-label">{step ? step.label : page.title}</p>
           </div>

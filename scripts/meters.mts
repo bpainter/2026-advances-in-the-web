@@ -46,7 +46,12 @@ for (const section of sections) {
         out[step.meter.source] = step.meter.value;
         continue;
       }
-      const n = await countLines(path.join(root, m[1].replace(/^\//, "")));
+      const dir = path.join(root, m[1].replace(/^\//, ""));
+      if (!existsSync(dir)) {
+        console.log(`${section.id} ${page.id} ${step.id}: no build at ${m[1]} yet`);
+        continue;
+      }
+      const n = await countLines(dir);
       out[step.meter.source] = `${n} lines`;
       console.log(`${section.id} ${page.id} ${step.id}: ${n} lines`);
     }

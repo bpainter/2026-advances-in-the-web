@@ -179,10 +179,12 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
   // Unmount: drop every frame.
   useLayoutEffect(() => {
     const el = slotRef.current;
+    const gen = generation;
+    const cur = current;
     return () => {
-      generation.current++;
-      current.current?.handle.dispose();
-      current.current = null;
+      gen.current++;
+      cur.current?.handle.dispose();
+      cur.current = null;
       if (el) el.replaceChildren();
     };
   }, []);

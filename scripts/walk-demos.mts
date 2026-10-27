@@ -1,0 +1,122 @@
+/**
+ * Walks every demo page in the audience window with the forward and back keys and asserts what
+ * the frame runtime reported (PRD Part A, 16.1): every step reached, no runtime errors, every
+ * `assert` passing, and the same digest when a step is reached forward (animated) and backward
+ * (reset and replay).
+ *
+ *   pnpm walk [page-or-section-id] [--browser=chromium|webkit|firefox] [--headed]
+ *
+ * Needs `pnpm dev` at DECK_URL (default http://localhost:3000) with the demo origin reachable.
+ */
+import { chromium, firefox, webkit, type Browser, type Page } from "@playwright/test";
+import type { DemoPage, DemoSection } from "@/content/demo-schema";
+import { sections } from "@/lib/content";
+import type { StepResult } from "@/lib/engine/frame";
+
+const BASE = process.env.DECK_URL ?? "http://localhost:3000";
+const args = process.argv.slice(2);
+const only = args.find((a) => !a.startsWith("--"));
+const headed = args.includes("--headed");
+const browserName = (args.find((a) => a.startsWith("--browser="))?.slice(10) ?? "chromium") as "chromium" | "webkit" | "firefox";
+
+const failures: string[] = [];
+let checks = 0;
+const fail = (where: string, msg: string) => {
+  failures.push(`${where}: ${msg}`);
+  console.log(`    ✖ ${msg}`);
+};
+const pass = (msg: string) => {
+  checks++;
+  console.log(`    ✓ ${msg}`);
+};
+
+type Results = Record<string, StepResult>;
+
+async function results(page: Page): Promise<Results> {
+  return page.evaluate(() => (window as unknown as { __stepResults?: Results }).__stepResults ?? {});
+}
+
+async function waitForResult(page: Page, key: string, previous: StepResult | undefined, timeout = 8000): Promise<StepResult | null> {
+  const start = Date.now();
+  while (Date.now() - start < timeout) {
+    const r = (await results(page))[key];
+    if (r && r !== previous && (previous === undefined || r.digest !== previous.digest || r.ms !== previous.ms)) return r;
+    await page.waitForTimeout(60);
+  }
+  return null;
+}
+
+async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
+  const where = demoPage.id;
+  console.log(`\n== ${where} (${section.label}, ${demoPage.stage}, ${demoPage.steps.length} steps)`);
+  await page.goto(`${BASE}/present?s=${demoPage.id}`);
+  if (!demoPage.frame) {
+    pass(`${where}: no frame`);
+    return;
+  }
+  const forward: (string | null)[] = [];
+  let prev: StepResult | undefined;
+  for (let i = 0; i < demoPage.steps.length; i++) {
+    const step = demoPage.steps[i];
+    if (i > 0) await page.keyboard.press("ArrowRight");
+    const r = await waitForResult(page, `${demoPage.id}:${step.id}`, prev, i === 0 ? 15000 : 8000);
+    if (!r) {
+      fail(where, `${step.id}: no step result (frame not ready or the step did not finish)`);
+      forward.push(null);
+      continue;
+    }
+    prev = r;
+    const failed = r.asserts.filter((a) => a.stepId === step.id && !a.pass);
+    if (failed.length) fail(where, `${step.id}: ${failed.map((a) => `${a.target} ${a.expect} (got ${a.actual})`).join("; ")}`);
+    else pass(`${step.id} ${step.label}: ${r.asserts.filter((a) => a.stepId === step.id).length} assert(s) ok, ${r.ms}ms`);
+    forward.push(r.digest);
+  }
+  // Back: reset and replay must land on the same digest.
+  for (let i = demoPage.steps.length - 2; i >= 0; i--) {
+    const step = demoPage.steps[i];
+    await page.keyboard.press("ArrowLeft");
+    const r = await waitForResult(page, `${demoPage.id}:${step.id}`, prev, 8000);
+    if (!r) {
+      fail(where, `back ${step.id}: no step result`);
+      continue;
+    }
+    prev = r;
+    if (forward[i] && r.digest !== forward[i]) fail(where, `back ${step.id}: digest ${r.digest} differs from forward ${forward[i]}`);
+    else pass(`back ${step.id}: digest ${r.digest} matches`);
+  }
+}
+
+async function main() {
+  const health = await fetch(`${BASE}/_health`).catch(() => null);
+  if (!health?.ok) {
+    console.error(`No deck at ${BASE}. Start it with \`pnpm dev\` and run the walk again.`);
+    process.exit(2);
+  }
+  const launcher = { chromium, webkit, firefox }[browserName];
+  const browser: Browser = await launcher.launch({ headless: !headed });
+  const context = await browser.newContext({ viewport: { width: 1600, height: 900 } });
+  const page = await context.newPage();
+  page.on("pageerror", (err) => fail("page", `uncaught error: ${err.message}`));
+  page.on("console", (msg) => {
+    if (msg.type() === "error" && !/favicon/.test(msg.text())) console.log(`    console: ${msg.text().slice(0, 160)}`);
+  });
+
+  const targets = sections.flatMap((s) => s.pages.filter((p) => !only || p.id === only || s.id === only).map((p) => ({ s, p })));
+  if (targets.length === 0) {
+    console.error(only ? `No page or section "${only}"` : "No pages");
+    process.exit(2);
+  }
+  for (const { s, p } of targets) {
+    try {
+      await walkPage(page, s, p);
+    } catch (err) {
+      fail(p.id, `walk threw: ${err instanceof Error ? err.message : String(err)}`);
+    }
+  }
+  await browser.close();
+  console.log(`\n${browserName}: ${checks} check(s) passed, ${failures.length} failure(s)`);
+  for (const f of failures) console.log(`  ✖ ${f}`);
+  process.exit(failures.length ? 1 : 0);
+}
+
+void main();
