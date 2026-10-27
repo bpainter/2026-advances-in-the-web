@@ -1,5 +1,6 @@
 import "server-only";
 import type { BuildManifest, DemoFolder } from "./types";
+import { matchRoute } from "./routes";
 import { folder as d01 } from "@/demos/01-layered-ui/build";
 import { folder as d02 } from "@/demos/02-container-card/build";
 import { folder as d03 } from "@/demos/03-content-sized-form/build";
@@ -19,11 +20,20 @@ export function demoFolder(demo: string): DemoFolder | undefined {
   return DEMO_FOLDERS[demo];
 }
 
-/** The manifest behind a `Frame.route` such as /demos/01-layered-ui/native, or null for other origins. */
+/**
+ * The manifest behind a `Frame.route` such as /demos/01-layered-ui/native, or null for other
+ * origins. Native builds own root-level addresses (/orders, /cases; PRD Part A, 8.2): such a route
+ * resolves to the native build of the folder whose `routes` serve it.
+ */
 export function manifestFor(route: string): BuildManifest | null {
   const m = /^\/demos\/([\w-]+)\/(today|native|static|terminal)/.exec(route);
-  if (!m) return null;
-  return DEMO_FOLDERS[m[1]]?.builds[m[2] as "today"]?.manifest ?? null;
+  if (m) return DEMO_FOLDERS[m[1]]?.builds[m[2] as "today"]?.manifest ?? null;
+  if (route.startsWith("/framework")) return null;
+  const pathname = route.split("?")[0];
+  for (const f of Object.values(DEMO_FOLDERS)) {
+    if (f.builds.native && f.routes && matchRoute(f.routes, "GET", pathname)) return f.builds.native.manifest;
+  }
+  return null;
 }
 
 /** All extra routes across demo folders, for the root-level handlers. */

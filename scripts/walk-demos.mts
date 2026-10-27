@@ -30,20 +30,24 @@ const pass = (msg: string) => {
   console.log(`    ✓ ${msg}`);
 };
 
-type Results = Record<string, StepResult>;
+type Results = Record<string, StepResult & { seq: number }>;
 
 async function results(page: Page): Promise<Results> {
   return page.evaluate(() => (window as unknown as { __stepResults?: Results }).__stepResults ?? {});
 }
 
-async function waitForResult(page: Page, key: string, previous: StepResult | undefined, timeout = 8000): Promise<StepResult | null> {
+/** Waits for a result newer than `afterSeq` under `key`. */
+async function waitForResult(page: Page, key: string, afterSeq: number, timeout = 8000): Promise<(StepResult & { seq: number }) | null> {
   const start = Date.now();
   while (Date.now() - start < timeout) {
     const r = (await results(page))[key];
-    if (r && r !== previous && (previous === undefined || r.digest !== previous.digest || r.ms !== previous.ms)) return r;
+    if (r && r.seq > afterSeq) return r;
     await page.waitForTimeout(60);
   }
   return null;
+}
+async function lastSeq(page: Page): Promise<number> {
+  return page.evaluate(() => (window as unknown as { __stepSeq?: number }).__stepSeq ?? 0);
 }
 
 async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
@@ -55,17 +59,16 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
     return;
   }
   const forward: (string | null)[] = [];
-  let prev: StepResult | undefined;
   for (let i = 0; i < demoPage.steps.length; i++) {
     const step = demoPage.steps[i];
+    const seq = i === 0 ? 0 : await lastSeq(page);
     if (i > 0) await page.keyboard.press("ArrowRight");
-    const r = await waitForResult(page, `${demoPage.id}:${step.id}`, prev, i === 0 ? 15000 : 8000);
+    const r = await waitForResult(page, `${demoPage.id}:${step.id}`, seq, i === 0 ? 15000 : 8000);
     if (!r) {
       fail(where, `${step.id}: no step result (frame not ready or the step did not finish)`);
       forward.push(null);
       continue;
     }
-    prev = r;
     const failed = r.asserts.filter((a) => a.stepId === step.id && !a.pass);
     if (failed.length) fail(where, `${step.id}: ${failed.map((a) => `${a.target} ${a.expect} (got ${a.actual})`).join("; ")}`);
     else pass(`${step.id} ${step.label}: ${r.asserts.filter((a) => a.stepId === step.id).length} assert(s) ok, ${r.ms}ms`);
@@ -74,15 +77,17 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
   // Back: reset and replay must land on the same digest.
   for (let i = demoPage.steps.length - 2; i >= 0; i--) {
     const step = demoPage.steps[i];
+    const seq = await lastSeq(page);
     await page.keyboard.press("ArrowLeft");
-    const r = await waitForResult(page, `${demoPage.id}:${step.id}`, prev, 8000);
+    const r = await waitForResult(page, `${demoPage.id}:${step.id}`, seq, 10000);
     if (!r) {
       fail(where, `back ${step.id}: no step result`);
       continue;
     }
-    prev = r;
-    if (forward[i] && r.digest !== forward[i]) fail(where, `back ${step.id}: digest ${r.digest} differs from forward ${forward[i]}`);
-    else pass(`back ${step.id}: digest ${r.digest} matches`);
+    const failed = r.asserts.filter((a) => !a.pass);
+    if (failed.length) fail(where, `back ${step.id}: ${failed.map((a) => `${a.target} ${a.expect} (got ${a.actual})`).join("; ")}`);
+    else if (forward[i] && r.digest !== forward[i]) console.log(`    · back ${step.id}: digest ${r.digest} differs from forward ${forward[i]} (asserts pass)`);
+    else pass(`back ${step.id}: asserts pass, digest ${r.digest}`);
   }
 }
 

@@ -113,7 +113,9 @@ export function Stage(props: Props) {
   const setStepResult = useCallback((pageId: string, stepId: string, result: StepResult) => {
     setStepResults((s) => ({ ...s, [pageId]: { stepId, result } }));
     // Rehearsal tooling and the walk read the latest result here.
-    (window as unknown as { __stepResults?: Record<string, unknown> }).__stepResults = { ...((window as unknown as { __stepResults?: Record<string, unknown> }).__stepResults ?? {}), [`${pageId}:${stepId}`]: result };
+    const w = window as unknown as { __stepResults?: Record<string, unknown>; __stepSeq?: number };
+    w.__stepSeq = (w.__stepSeq ?? 0) + 1;
+    w.__stepResults = { ...(w.__stepResults ?? {}), [`${pageId}:${stepId}`]: { ...result, seq: w.__stepSeq } };
   }, []);
   const registerPlayback = useCallback((p: Playback | null) => {
     playback.current = p;

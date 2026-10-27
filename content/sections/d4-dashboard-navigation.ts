@@ -176,7 +176,7 @@ export const section: DemoSection = {
           ],
           meter: {
             label: "JavaScript",
-            value: "computed at build",
+            value: "134 lines",
             source: "non-blank, non-comment lines in /demos/04-navigation-api/today/*.js",
           },
           notes:
