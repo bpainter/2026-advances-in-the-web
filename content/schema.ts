@@ -35,6 +35,11 @@ export interface SupportLabel {
   note?: string;           // e.g. "webstatus.dev row is stale; do not cite"
 }
 
+/** Beat of the demo flow a step belongs to (addition): "before" shows the legacy document,
+ *  "after" plays an interaction in the native document, "code" highlights lines and spotlights
+ *  a target. Default: "code" when `highlight` is non-empty, else "after". */
+export type StepPhase = "before" | "after" | "code";
+
 export interface CodeStep {
   id: string;              // "s1", "s2"...
   highlight: number[] | [number, number][]; // line numbers or ranges in the active file
@@ -42,6 +47,8 @@ export interface CodeStep {
   caption: string;         // one short sentence shown under the code panel
   action?: string;         // what happens in the live view at this step
   liveState?: string;      // key the live view switches to, when the live view is state-driven
+  phase?: StepPhase;       // beat of the flow (addition); see StepPhase for the default
+  target?: string;         // CSS selector in the demo document to spotlight at this step (addition)
 }
 
 export type CodeLang = "html" | "css" | "js" | "ts" | "bash";
@@ -79,6 +86,7 @@ export interface Demo {
   transcript?: { line: number; delayMs?: number; typingMs?: number }[];
   viewport?: { width: number; height: number }; // default 1296 x 856
   zoom?: number;           // scale applied to the live frame; default 2. Use 1 for full-page website demos.
+  legacy?: { code: CodeFile[] }; // the same component driven by the old script, served at /demos/[id]/legacy and shown during "before" steps (addition)
 }
 
 export type Field = "white" | "navy" | "blue";

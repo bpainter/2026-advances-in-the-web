@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Demo, DemoView, SupportLabel as SupportLabelData } from "@/content/schema";
 import type { Mode } from "@/lib/mode";
 import type { RenderedFile } from "@/lib/highlight";
+import { resolveLive } from "@/lib/steps";
 import { useStage } from "@/lib/stage-context";
 import { DemoFrame } from "./DemoFrame";
 import { CodePanel } from "./CodePanel";
@@ -21,7 +22,7 @@ interface Props {
 /** The body of a demo slide in one of four views; 1 to 4 switch between them. `support` is kept for the speaker view. */
 export function DemoSplitBody({ demo, files, slideTitle, mode }: Props) {
   const { stepIndex, view } = useStage();
-  const step = demo.steps[stepIndex];
+  const live = resolveLive(demo, stepIndex);
   const [toast, setToast] = useState(false);
   const firstRender = useRef(true);
 
@@ -36,9 +37,10 @@ export function DemoSplitBody({ demo, files, slideTitle, mode }: Props) {
   }, [view]);
 
   return (
-    <div className="demo-split" data-view={view}>
+    <div className="demo-split" data-view={view} data-phase={live.phase}>
       <div className="demo-split__live">
-        <DemoFrame demo={demo} slideTitle={slideTitle} liveState={step?.liveState} stepId={step?.id} mode={mode} />
+        {/* Spotlight only next to code: the live-only view is the "look at the product" view (plan decision D3). */}
+        <DemoFrame demo={demo} slideTitle={slideTitle} liveState={live.state} stepId={live.stepId} target={view === "live" ? null : live.target} mode={mode} />
       </div>
       <section className="demo-split__code" aria-label="Code">
         <CodePanel demo={demo} files={files} stepIndex={stepIndex} mode={mode} />

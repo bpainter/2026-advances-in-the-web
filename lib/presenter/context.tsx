@@ -92,9 +92,27 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
   useEffect(() => {
     const initialSlide = firstSlideRef.current;
     let settled = false;
+    // A URL the presenter typed, followed or opened names the slide to show (`?s=`), and wins over
+    // whatever the other window holds. A reload or back/forward carries the mirrored URL of the
+    // state it had, so the live state wins there and the window resumes. (docs/demo-plan.md, E8.1)
+    const navType = (performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined)?.type;
+    const urlSlide = new URLSearchParams(window.location.search).get("s");
+    const urlWins = navType === "navigate" && urlSlide !== null;
+    let claimed = false;
     const accept = (incoming: PresenterState) => {
       if (!isNewer(incoming, stateRef.current)) return;
       settled = true;
+      if (urlWins && !claimed && urlSlide && incoming.slideId !== urlSlide) {
+        // Take the peer's timer and counters, but move both windows to the URL's slide.
+        claimed = true;
+        const fromUrl = stateFromUrl(writer, initialSlide);
+        const next: PresenterState = { ...incoming, slideId: urlSlide, stepIndex: fromUrl.stepIndex, cellIndex: null, view: null, liveMode: false, seq: incoming.seq + 1, writer };
+        stateRef.current = next;
+        setState(next);
+        sync.send({ type: "state", state: next });
+        return;
+      }
+      claimed = true;
       stateRef.current = incoming;
       setState(incoming);
     };
@@ -118,9 +136,8 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
       if (settled) return;
       const stored = sync.readStored();
       const fromUrl = stateFromUrl(writer, initialSlide);
-      // The URL wins when it names a slide explicitly; otherwise the last stored state.
-      const hasUrlSlide = new URLSearchParams(window.location.search).has("s");
-      const initial = stored && !hasUrlSlide ? { ...stored, writer } : fromUrl;
+      // No other window answered: a typed URL wins; a reload resumes the last stored state.
+      const initial = stored && !urlWins ? { ...stored, writer } : fromUrl;
       stateRef.current = initial;
       setState(initial);
     }, 300);

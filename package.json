@@ -8,7 +8,9 @@
     "build": "next build",
     "start": "next start -p 3000",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check": "node --conditions=react-server --import tsx scripts/validate.mts",
+    "validate": "pnpm typecheck && pnpm lint && pnpm check"
   },
   "dependencies": {
     "clsx": "2.1.1",

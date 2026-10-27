@@ -3,6 +3,7 @@
 import type { Demo } from "@/content/schema";
 import type { Mode } from "@/lib/mode";
 import type { RenderedFile } from "@/lib/highlight";
+import { resolveLive } from "@/lib/steps";
 import { useStage } from "@/lib/stage-context";
 import { DemoFrame } from "./DemoFrame";
 import { CodePanel } from "./CodePanel";
@@ -26,7 +27,8 @@ export function DemoGridBody({ cells, mode }: Props) {
     <ul className="demo-grid" data-focused={cellIndex === null ? "none" : String(cellIndex)}>
       {cells.map((cell, i) => {
         const enlarged = cellIndex === i;
-        const step = enlarged ? cell.demo.steps[stepIndex] : undefined;
+        // Only the enlarged cell is stepped; it shows its code, so it also gets the spotlight.
+        const live = enlarged ? resolveLive(cell.demo, stepIndex) : undefined;
         return (
           <li className="demo-grid__cell" key={cell.demo.id} data-enlarged={enlarged} data-hidden={cellIndex !== null && !enlarged}>
             <div className="demo-grid__live">
@@ -34,8 +36,9 @@ export function DemoGridBody({ cells, mode }: Props) {
                 demo={cell.demo}
                 slideTitle={cell.label}
                 frameTitle={`Live demo ${i + 1} of ${cells.length}: ${cell.demo.wow}`}
-                liveState={step?.liveState}
-                stepId={step?.id}
+                liveState={live?.state}
+                stepId={live?.stepId}
+                target={live?.target ?? null}
                 mode={mode}
                 zoom={enlarged ? (cell.demo.zoom ?? 2) : 1.25}
               />

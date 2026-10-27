@@ -34,6 +34,7 @@ export const demo: Demo = {
       caption: "Name the anchor.",
       action: "The tip sits above the Free shipping badge.",
       liveState: "top",
+      target: ".ship",
     },
     {
       id: "s2",
@@ -42,6 +43,7 @@ export const demo: Demo = {
       caption: "Attach the tip to it and put it on top. Fixed, so it never disturbs the card.",
       action: "Nothing moves yet; this is the resting position.",
       liveState: "top",
+      target: ".tip",
     },
     {
       id: "s3",
@@ -50,6 +52,7 @@ export const demo: Demo = {
       caption: "No room above? Flip below. No resize observer, no scroll listener.",
       action: "Scroll a little; when the badge nears the top edge the tip flips under it.",
       liveState: "top",
+      target: ".tip",
     },
     {
       id: "s4",
@@ -58,6 +61,7 @@ export const demo: Demo = {
       caption: "Any side is one keyword away. The slide swaps it to right span-bottom here.",
       action: "The tip moves beside the badge, over the image.",
       liveState: "right",
+      target: ".tip",
     },
     {
       id: "s5",
@@ -66,6 +70,7 @@ export const demo: Demo = {
       caption: "Standalone it is a real tooltip: hover or focus shows it. The stage keeps it open.",
       action: "Open /demos/anchor-positioning in a tab and hover the badge.",
       liveState: "top",
+      target: ".ship",
     },
   ],
   fork: [

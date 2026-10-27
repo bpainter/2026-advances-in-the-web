@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import type { DemoView } from "@/content/schema";
+import type { DemoView, StepPhase } from "@/content/schema";
 import type { Mode } from "@/lib/mode";
 import { actionForKey, isEditableTarget, VIEW_BY_DIGIT, type KeyAction } from "@/lib/keys";
 import { StageContext, type DemoStatus, type StageState } from "@/lib/stage-context";
@@ -24,7 +24,7 @@ interface Props {
   lastId: string;
   slideIds: string[];
   /** One step list per demo on the slide (one for demo-split and terminal, four for demo-grid). */
-  stepSets: { caption: string }[][];
+  stepSets: { caption: string; phase: StepPhase }[][];
   stepThrough: "steps-first" | "slide-only";
   demoIds: string[];
   kind: "split" | "grid" | "terminal" | "none";
@@ -168,7 +168,8 @@ export function Stage(props: Props) {
       window.history.replaceState(null, "", url);
     }
     if (stepCount > 0 && announcerRef.current) {
-      announcerRef.current.textContent = `Step ${stepIndex + 1} of ${stepCount}, ${steps[stepIndex]?.caption ?? ""}`;
+      const current = steps[stepIndex];
+      announcerRef.current.textContent = `Step ${stepIndex + 1} of ${stepCount}${current?.phase === "before" ? ", today" : ""}, ${current?.caption ?? ""}`;
     }
   }, [passive, shared, stepIndex, stepCount, steps]);
 

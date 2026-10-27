@@ -9,9 +9,11 @@ import { FallbackCard } from "./FallbackCard";
 interface Props {
   demo: Demo;
   slideTitle: string;
-  /** `liveState` of the current step, if any; posted to the demo through the bridge. */
+  /** Effective state of the current step (lib/steps resolveLive); posted to the demo through the bridge. */
   liveState?: string;
   stepId?: string;
+  /** Selector the current step spotlights inside the demo; null or undefined clears the spotlight. */
+  target?: string | null;
   mode: Mode;
   /** Scale override; defaults to `demo.zoom`, then 2. */
   zoom?: number;
@@ -22,6 +24,7 @@ interface Props {
 type FromDemo =
   | { type: "demo:ready"; id: string; supports: Record<string, boolean> }
   | { type: "demo:state"; state: string }
+  | { type: "demo:spotlight"; selector: string | null; count: number }
   | { type: "demo:error"; message: string }
   | { type: "demo:escape" }
   | { type: "demo:key"; key: string; shiftKey: boolean }
@@ -32,7 +35,7 @@ function isFromDemo(data: unknown): data is FromDemo {
 }
 
 /** Sandboxed, route-served demo document in an iframe with the bridge protocol (PRD 7.2, 7.3). */
-export function DemoFrame({ demo, slideTitle, liveState, stepId, mode, zoom, frameTitle }: Props) {
+export function DemoFrame({ demo, slideTitle, liveState, stepId, target, mode, zoom, frameTitle }: Props) {
   const { reloadToken, focusToken, showFallback, demoStatus, setDemoStatus, dispatchKey, focusStage } = useStage();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [focused, setFocused] = useState(false);
@@ -53,6 +56,7 @@ export function DemoFrame({ demo, slideTitle, liveState, stepId, mode, zoom, fra
           setDemoStatus(demo.id, "ready");
           frame.contentWindow?.postMessage({ type: "demo:reduceMotion", value: window.matchMedia("(prefers-reduced-motion: reduce)").matches }, "*");
           if (liveState) frame.contentWindow?.postMessage({ type: "demo:setState", state: liveState, stepId }, "*");
+          frame.contentWindow?.postMessage({ type: "demo:highlight", selector: target ?? null }, "*");
           break;
         case "demo:error":
           if (!ready) setFailedToken(reloadToken);
@@ -72,13 +76,19 @@ export function DemoFrame({ demo, slideTitle, liveState, stepId, mode, zoom, fra
     // The server-rendered iframe can finish loading before this listener exists; ask again.
     if (!ready) iframeRef.current?.contentWindow?.postMessage({ type: "demo:ping" }, "*");
     return () => window.removeEventListener("message", onMessage);
-  }, [demo.id, ready, reloadToken, liveState, stepId, setDemoStatus, dispatchKey, focusStage]);
+  }, [demo.id, ready, reloadToken, liveState, stepId, target, setDemoStatus, dispatchKey, focusStage]);
 
-  // Drive the live view when the step's liveState changes.
+  // Drive the live view on every step change (keyed on stepId, so a state the presenter changed by
+  // hand is re-asserted even when two steps share one), then spotlight the step's target. The
+  // spotlight goes second so it can name something the state just revealed.
   useEffect(() => {
     if (!ready || !liveState) return;
     iframeRef.current?.contentWindow?.postMessage({ type: "demo:setState", state: liveState, stepId }, "*");
   }, [ready, liveState, stepId]);
+  useEffect(() => {
+    if (!ready) return;
+    iframeRef.current?.contentWindow?.postMessage({ type: "demo:highlight", selector: target ?? null }, "*");
+  }, [ready, target, stepId]);
 
   // Enter hands focus to the live view.
   useEffect(() => {

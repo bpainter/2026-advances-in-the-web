@@ -26,6 +26,14 @@ const FONT_FACES = `
 @font-face { font-family: "Lora"; src: url("/fonts/Lora-Italic.woff2") format("woff2"); font-style: italic; font-display: swap; }
 `.trim();
 
+/** Spotlight for the element a code step targets (bridge `demo:highlight`); outline plus a short pulse, transform and opacity only. */
+const SPOTLIGHT_STYLE = `
+[data-spotlight] { outline: 3px solid #0C62FB; outline-offset: 4px; animation: demo-spotlight 240ms cubic-bezier(0.22, 1, 0.36, 1); }
+@keyframes demo-spotlight { from { opacity: 0.6; scale: 0.98; } to { opacity: 1; scale: 1; } }
+@media (prefers-reduced-motion: reduce) { [data-spotlight] { animation: none; } }
+html[data-reduced-motion="true"] [data-spotlight] { animation: none; }
+`.trim();
+
 function escapeAttr(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 }
@@ -81,6 +89,7 @@ export function composeDemo(demo: Demo, page?: string): string {
     `<style data-file="fonts">${FONT_FACES}</style>`,
     `<script>window.__DEMO_REQUIRES__ = ${requires};</script>`,
     `<script data-file="demo-bridge.js">${BRIDGE}</script>`,
+    `<style data-file="spotlight">${SPOTLIGHT_STYLE}</style>`,
     ...cssFiles.map((f) => `<style data-file="${escapeAttr(f.file)}">\n${f.source}\n</style>`),
   ].join("\n");
 

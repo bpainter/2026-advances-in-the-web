@@ -57,10 +57,28 @@ action. Every demo is a variation on that card so the audience sees one product 
 
 ## Hooks the stage uses
 
-- The slide can drive the demo through steps: `CodeStep.liveState` posts a string the bridge sets
+- The slide drives the demo through steps: `CodeStep.liveState` posts a string the bridge sets
   as `html[data-state="…"]` and dispatches a `demostate` CustomEvent on `document`. CSS-only
   demos react with `html[data-state="x"] .thing { … }`; JS demos add one listener. Keep any existing
   `liveState` values working, or update the step in `demo.ts` with them.
+- Every interaction the audience must see is a state. The presenter may have nothing but a
+  clicker, so no step may depend on hover, a click inside the frame or typing: where CSS cannot
+  do the job (`showPopover()`, `details.open`, `focus()`, typing, `scrollTo`, a view transition,
+  navigation) the `demostate` listener in `app.js` does it. A step with no `liveState` inherits
+  the nearest earlier one (the effective state), which is what makes retreat replay what advance
+  showed; the first step of a frame demo must declare one.
+- The stage re-posts `demo:setState` on every step change, including two steps with the same
+  state and a presenter double-press mid-animation, so listeners must be idempotent (setting the
+  current state again is a no-op) and must never throw while a transition is in flight.
+- `CodeStep.target` is a CSS selector inside the demo document. On code steps in the split, half
+  and code views the stage posts `demo:highlight { selector }`; the bridge marks matching elements
+  with `data-spotlight`, which the composer styles (blue outline, short pulse, reduced-motion aware).
+  Target only elements the step's state leaves visible; a closed popover or details is `display:
+  none` and the outline cannot show. The live-only view clears the spotlight.
+- `CodeStep.phase` names the beat: `before` (the legacy document in `legacy/`, shown while the
+  slide tells today's story), `after` (an interaction in the native document) or `code` (a
+  highlighted range with a target). The default is `code` for highlighted steps and `after` for
+  the rest. Order the steps before, after, code.
 - `Demo.requires` lists the feature checks the preflight page runs; keep them accurate.
 - The bridge forwards clicker keys and Escape; do not trap keyboard focus inside the demo.
 
@@ -68,4 +86,7 @@ action. Every demo is a variation on that card so the audience sees one product 
 
 `demo.ts` `steps[]` highlight line ranges in a named file with a caption and an on-stage action.
 After editing a source file, re-point every step at the new lines and keep the caption true to the
-code it points at. Run `npx tsx scripts/check-demos.mts <id>` and read the printed lines back.
+code it points at. Run `npx tsx scripts/check-demos.mts <id>` and read the printed lines back, then
+`pnpm check <id>` (errors on bad files, lines, targets and state lists; warns on demos that are
+not clicker-driven yet). Keep `phase` and `target` after `caption` in each step so the checker's
+matcher still finds the step.
