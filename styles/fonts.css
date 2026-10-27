@@ -1,26 +1,54 @@
 /*
-  Self-hosted brand faces. Not imported by app.css until the files exist in public/fonts/:
-    SlalomSans-Regular.woff2  SlalomSans-Bold.woff2  Lora-Italic.woff2
-  Drop them in, then add `@import "./fonts.css";` to styles/app.css.
+  Self-hosted brand faces from the Slalom design system (public/fonts/). "Slalom Sans" carries the
+  weights the deck's tokens use; the single-weight family names are what the designed slides
+  (content/designed/) name, as exported from Claude Design.
 */
 @font-face {
   font-family: "Slalom Sans";
-  src: url("/fonts/SlalomSans-Regular.woff2") format("woff2");
+  src: url("/fonts/SlalomSans-Regular.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Slalom Sans";
-  src: url("/fonts/SlalomSans-Bold.woff2") format("woff2");
+  src: url("/fonts/SlalomSans-Bold.otf") format("opentype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
+  font-family: "Slalom Sans";
+  src: url("/fonts/SlalomSans-Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
   font-family: "Lora";
-  src: url("/fonts/Lora-Italic.woff2") format("woff2");
+  src: url("/fonts/Lora-Italic.ttf") format("truetype");
   font-weight: 400;
   font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Slalom Sans Bold";
+  src: url("/fonts/SlalomSans-Bold.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Slalom Sans Black";
+  src: url("/fonts/SlalomSans-Black.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lora Italic";
+  src: url("/fonts/Lora-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
   font-display: swap;
 }

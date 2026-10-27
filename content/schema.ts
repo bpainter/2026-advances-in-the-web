@@ -22,7 +22,8 @@ export type Layout =
   | "terminal"       // recorded or live terminal transcript, stepped
   | "image-led"      // full-bleed image, short headline bottom-left
   | "section"        // section divider: label + optional tier legend
-  | "close";         // thank-you / contact
+  | "close"          // thank-you / contact
+  | "designed";      // a section exported from Claude Design (addition); see Slide.designed
 
 export type Tier = "baseline-widely" | "baseline-newly" | "two-engine" | "one-engine" | "none";
 
@@ -127,6 +128,7 @@ export interface Slide {
     axisNotes?: { label: string; y: number }[]; // labelled ticks on the y axis for points with no x value (addition)
   };
   demoView?: DemoView;     // default view for demo-split slides; default "split"
+  designed?: { file: string }; // layout "designed": the section file under content/designed/ (addition)
 }
 
 export interface Deck {

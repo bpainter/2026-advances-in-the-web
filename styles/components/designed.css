@@ -1,0 +1,47 @@
+/* Slides exported from Claude Design: a 1920 x 1080 section with inline styles, shown verbatim. */
+.slide--designed {
+  --slide-footer-fg: var(--color-mid-gray);
+  @apply relative block;
+  width: var(--stage-width);
+  height: var(--stage-height);
+  padding: 0;
+  overflow: hidden;
+}
+.designed > section {
+  @apply relative;
+  width: 1920px;
+  height: 1080px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+/* The Slides runtime zeroes margins and lets inline styles do the rest. */
+.designed h1,
+.designed h2,
+.designed h3,
+.designed p,
+.designed ul,
+.designed ol,
+.designed table {
+  margin: 0;
+}
+.designed ul,
+.designed ol {
+  padding-left: 1.2em;
+}
+.designed img,
+.designed svg {
+  @apply block;
+}
+.designed a {
+  color: inherit;
+}
+/* The deck footer floats over the design's bottom band. */
+.slide--designed .slide__footer {
+  @apply absolute;
+  left: var(--stage-gutter);
+  right: var(--stage-gutter);
+  bottom: var(--space-6);
+}
+.slide--designed[data-dark="true"] {
+  --slide-footer-fg: rgb(255 255 255 / 0.6);
+}

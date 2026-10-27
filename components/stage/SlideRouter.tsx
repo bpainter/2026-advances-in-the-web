@@ -16,6 +16,7 @@ import { TerminalSlide } from "@/components/layouts/TerminalSlide";
 import { ImageLedSlide } from "@/components/layouts/ImageLedSlide";
 import { SectionSlide } from "@/components/layouts/SectionSlide";
 import { CloseSlide } from "@/components/layouts/CloseSlide";
+import { DesignedSlide } from "@/components/layouts/DesignedSlide";
 
 interface Props {
   slide: Slide;
@@ -58,6 +59,8 @@ export function SlideRouter(props: Props) {
       return <SectionSlide {...props} />;
     case "close":
       return <CloseSlide {...props} />;
+    case "designed":
+      return <DesignedSlide {...props} />;
     default: {
       const exhaustive: never = props.slide.layout;
       throw new Error(`Unhandled layout ${String(exhaustive)}`);

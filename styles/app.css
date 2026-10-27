@@ -1,4 +1,5 @@
 @import "./theme.css";
+@import "./fonts.css";
 
 @layer base {
   html {
@@ -50,6 +51,7 @@
 @import "./components/legend.css";
 @import "./components/image-led.css";
 @import "./components/close.css";
+@import "./components/designed.css";
 @import "./components/demo-grid.css";
 @import "./components/terminal.css";
 @import "./components/audience.css";
