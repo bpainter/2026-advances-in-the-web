@@ -1,0 +1,93 @@
+<!-- prettier-ignore -->
+<link rel="stylesheet" href="styles.css">
+<!-- prettier-ignore -->
+<link rel="stylesheet" href="teaser.css">
+<main class="motion">
+  <section class="tiles" aria-label="Six features still in motion">
+    <article class="tile" id="tile-select" hidden>
+      <h2 class="tile__feature">Customizable select</h2>
+      <p class="tile__use">Branded pickers</p>
+      <p class="tile__wait">Baseline, selectedcontent</p>
+    </article>
+    <article class="tile" id="tile-anchor" hidden>
+      <h2 class="tile__feature">Anchor positioning</h2>
+      <p class="tile__use">Menus and tooltips</p>
+      <p class="tile__wait">Stable syntax</p>
+    </article>
+    <article class="tile" id="tile-grid-lanes" hidden>
+      <h2 class="tile__feature">Grid Lanes</h2>
+      <p class="tile__use">Masonry collections</p>
+      <p class="tile__wait">Final names, engines</p>
+    </article>
+    <article class="tile" id="tile-xdoc-vt" hidden>
+      <h2 class="tile__feature">Cross-document view transitions</h2>
+      <p class="tile__use">Page-to-page transitions</p>
+      <p class="tile__wait">Baseline status</p>
+    </article>
+    <article class="tile" id="tile-scroll-driven" hidden>
+      <h2 class="tile__feature">Scroll-driven animations</h2>
+      <p class="tile__use">Progress and reveals</p>
+      <p class="tile__wait">Stable timelines</p>
+    </article>
+    <article class="tile" id="tile-scoped-registries" hidden>
+      <h2 class="tile__feature">Scoped custom element registries</h2>
+      <p class="tile__use">Two component versions</p>
+      <p class="tile__wait">Cross-browser support</p>
+    </article>
+  </section>
+
+  <section class="teaser" id="teaser" hidden>
+    <h2 class="panel__title">One live teaser</h2>
+    <div class="teaser__stage">
+      <form id="variant">
+        <label for="color">Color</label>
+        <select id="color" name="color">
+          <button>
+            <selectedcontent></selectedcontent>
+          </button>
+          <option value="black">
+            <span class="swatch black"></span>
+            Black
+          </option>
+          <option value="moss">
+            <span class="swatch moss"></span>
+            Moss
+          </option>
+          <option value="sand">
+            <span class="swatch sand"></span>
+            Sand
+          </option>
+        </select>
+      </form>
+      <!-- Shown only when showPicker() is refused: a replica of the open picker (PRD F1 notes). -->
+      <figure class="replica" id="select-open-poster" hidden>
+        <div class="replica__picker" aria-hidden="true">
+          <div class="replica__option is-checked"><span class="swatch black"></span>Black</div>
+          <div class="replica__option"><span class="swatch moss"></span>Moss</div>
+          <div class="replica__option"><span class="swatch sand"></span>Sand</div>
+        </div>
+        <figcaption>Replica of the open picker. A real click opens the live one.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <figure class="poster" id="firefox-poster" hidden>
+    <h2 class="panel__title">Firefox</h2>
+    <div class="ff" aria-hidden="true">
+      <div class="ff__label">Color</div>
+      <div class="ff__select"><span>Black</span><span class="ff__arrow"></span></div>
+      <div class="ff__list">
+        <div class="ff__option is-active">Black</div>
+        <div class="ff__option">Moss</div>
+        <div class="ff__option">Sand</div>
+      </div>
+    </div>
+    <figcaption>
+      A normal select: the options keep their text, and the color still posts. (Replica of Firefox
+      153.)
+    </figcaption>
+  </figure>
+
+  <p class="rule" id="rule" hidden>Prototype. Verify. Promote.</p>
+</main>
+<script type="module" src="hooks.js"></script>

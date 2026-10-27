@@ -1,0 +1,24 @@
+{
+  "note": "One pull from the npm downloads API (last-week point counts). Re-run the week of the talk; counts include CI and agent installs, so compare ratios between rows. Sizes (esbuild) are not pulled yet.",
+  "pulledAt": "2026-10-27",
+  "source": "https://api.npmjs.org/downloads/point/last-week/<package>",
+  "window": { "start": "2026-10-20", "end": "2026-10-26" },
+  "packages": {
+    "@headlessui/react": { "weekly": 6414558 },
+    "@radix-ui/react-dialog": { "weekly": 61054730 },
+    "@radix-ui/react-popover": { "weekly": 46147778 },
+    "focus-trap": { "weekly": 6314521 },
+    "react-modal": { "weekly": 2457100 },
+    "react-container-query": { "weekly": 24141 },
+    "eqcss": { "weekly": 235 },
+    "autosize": { "weekly": 627712 },
+    "react-textarea-autosize": { "weekly": 7889371 },
+    "page": { "weekly": 25847 },
+    "dompurify": { "weekly": 63210252 },
+    "moment": { "weekly": 33726271 },
+    "dayjs": { "weekly": 69017372 },
+    "date-fns": { "weekly": 79685386 },
+    "luxon": { "weekly": 37519018 },
+    "@floating-ui/dom": { "weekly": 88569958 }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "note": "Not measured. pnpm measure:vite overwrites this file at rehearsal (median of five runs on the presenting laptop); values are never typed by hand and never taken from vendor posts. Null means not measured.",
+  "measuredAt": null,
+  "machine": null,
+  "node": null,
+  "existing": {
+    "vite": null,
+    "coldMs": null,
+    "warmMs": null,
+    "outputKb": null,
+    "warnings": null,
+    "failingPlugins": null
+  },
+  "vite8": {
+    "vite": null,
+    "coldMs": null,
+    "warmMs": null,
+    "outputKb": null,
+    "warnings": null,
+    "failingPlugins": null
+  }
+}

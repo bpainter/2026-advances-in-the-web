@@ -22,7 +22,7 @@ export const section: DemoSection = {
       title: "Still in motion",
       frame: {
         build: "static",
-        route: "/demos/08-fast-follows",
+        route: "/demos/08-fast-follows/static",
         viewport: {
           width: 1296,
           height: 856,
@@ -179,7 +179,7 @@ export const section: DemoSection = {
           notes:
             "Firefox does not support it yet. It gets a normal select, because every option keeps text, and the color still posts with the form. Safari 27.2 also added ::field-content on 26 October, one more sign the details are still moving.",
           ifKeyboard:
-            "If Firefox is on the laptop, open /demos/08-fast-follows/select there and show the plain select live instead of the poster.",
+            "If Firefox is on the laptop, open /demos/08-fast-follows/static/select there and show the plain select live instead of the poster.",
         },
         {
           id: "s7",

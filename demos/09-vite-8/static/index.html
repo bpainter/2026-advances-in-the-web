@@ -1,0 +1,48 @@
+<!-- prettier-ignore -->
+<link rel="stylesheet" href="styles.css">
+<main class="measure">
+  <header class="measure__head">
+    <h1 class="measure__title">Same repository, two builds</h1>
+    <p class="measure__meta" id="measure-meta">Not measured</p>
+  </header>
+  <table id="measure-table">
+    <thead>
+      <tr>
+        <th scope="col">Measure</th>
+        <th scope="col">
+          Existing setup <span class="version" id="v-existing">Not measured</span>
+        </th>
+        <th scope="col">Vite 8 <span class="version" id="v-vite8">Not measured</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr id="row-cold" hidden>
+        <th scope="row">Cold build</th>
+        <td data-cell="existing.coldMs">Not measured</td>
+        <td data-cell="vite8.coldMs">Not measured</td>
+      </tr>
+      <tr id="row-warm" hidden>
+        <th scope="row">Warm build</th>
+        <td data-cell="existing.warmMs">Not measured</td>
+        <td data-cell="vite8.warmMs">Not measured</td>
+      </tr>
+      <tr id="row-size" hidden>
+        <th scope="row">Output size</th>
+        <td data-cell="existing.outputKb">Not measured</td>
+        <td data-cell="vite8.outputKb">Not measured</td>
+      </tr>
+      <tr id="row-warnings" hidden>
+        <th scope="row">Warnings</th>
+        <td data-cell="existing.warnings">Not measured</td>
+        <td data-cell="vite8.warnings">Not measured</td>
+      </tr>
+      <tr id="row-plugins" hidden>
+        <th scope="row">Failing plugins</th>
+        <td data-cell="existing.failingPlugins">Not measured</td>
+        <td data-cell="vite8.failingPlugins">Not measured</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="measure__foot" id="measure-foot">Values arrive from pnpm measure:vite at rehearsal.</p>
+</main>
+<script type="module" src="measure.js"></script>

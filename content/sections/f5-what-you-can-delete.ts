@@ -15,7 +15,7 @@ export const section: DemoSection = {
       title: "What you can delete",
       frame: {
         build: "static",
-        route: "/demos/10-delete",
+        route: "/demos/10-delete/static",
         viewport: {
           width: 1296,
           height: 856,

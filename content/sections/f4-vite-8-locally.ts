@@ -21,7 +21,7 @@ export const section: DemoSection = {
       title: "Vite 8 locally",
       frame: {
         build: "static",
-        route: "/demos/09-vite-8",
+        route: "/demos/09-vite-8/static",
         viewport: {
           width: 1296,
           height: 856,
