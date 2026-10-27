@@ -797,6 +797,8 @@
   var FORWARD_ALWAYS = ["PageDown", "PageUp"];
   var FORWARD_SCRIPTED = ["ArrowRight", "ArrowLeft", " ", "b", ".", "f", "h", "l", "r", "t", "d", "F5"];
   function onKeydown(e) {
+    // The runtime's own dispatch(keydown) and hook-driven events are untrusted; let builds see them.
+    if (!e.isTrusted) return;
     var key = e.key;
     var inText = isTextControl(document.activeElement);
     var forward = FORWARD_ALWAYS.indexOf(key) !== -1 || (FORWARD_SCRIPTED.indexOf(key) !== -1 && (!handsOn || !inText));
