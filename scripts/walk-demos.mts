@@ -111,6 +111,11 @@ async function assertStep(page: Page, demo: Demo, i: number, from: number, where
     else fail(where, `${label}: target ${live.target} is spotlit but has no visible box`);
   }
   const errors = (await readLog(page)).slice(from).filter((e) => e.type === "demo:error");
+  if (process.env.WALK_DEBUG) {
+    const after = await page.evaluate(() => ({ step: document.querySelector(".code__step")?.textContent, url: location.search }));
+    const writes = (await readLog(page)).slice(from).filter((e) => e.type === "demo:write").map((e) => e.message);
+    console.log(`      after ${label}: ${JSON.stringify(after)} writes: ${writes.join(" | ")}`);
+  }
   for (const e of errors) fail(where, `${label}: demo:error ${e.message ?? ""}`);
 }
 
@@ -130,6 +135,11 @@ async function walkSteps(page: Page, demo: Demo, where: string, opts: { grid: bo
   for (let i = 0; i < n; i++) {
     const from = i === 0 ? 0 : (await readLog(page)).length;
     if (i > 0) await page.keyboard.press("ArrowRight");
+    if (process.env.WALK_DEBUG) {
+      const snap = await page.evaluate(() => ({ step: document.querySelector(".code__step")?.textContent, phase: document.querySelector(".demo-split")?.getAttribute("data-phase"), active: document.activeElement?.closest(".demo")?.getAttribute("data-variant") ?? document.activeElement?.tagName }));
+      const tail = (await readLog(page)).slice(from).map((e) => `${e.type.slice(5)}${e.state ? `=${e.state}` : ""}${e.stepId ? `/${e.stepId}` : ""}${e.variant ? `:${e.variant[0]}` : ""}${e.selector !== undefined ? `[${e.selector}=${e.count}]` : ""}${e.message ? `(${e.message})` : ""}`);
+      console.log(`      debug i=${i} url=${new URL(page.url()).searchParams.get("step")} ${JSON.stringify(snap)} log: ${tail.join(" ")}`);
+    }
     await assertStep(page, demo, i, from, where, opts);
   }
   // Back: the same states in reverse.
@@ -152,16 +162,31 @@ async function walkSteps(page: Page, demo: Demo, where: string, opts: { grid: bo
   else if (!opts.routeKind) pass(`${where}: no frame reloads during the walk`);
 }
 
+/** Fetches a slide's documents once so a dev-server compile never lands inside the timed walk. */
+async function warm(slide: Slide) {
+  const demos = slide.demo ? [slide.demo] : (slide.demos ?? []);
+  const urls = [`${BASE}/present?s=${slide.id}`];
+  for (const d of demos) {
+    if (!d.code.some((f) => f.lang !== "bash")) continue;
+    urls.push(d.live.kind === "route" && d.live.src ? `${BASE}${d.live.src}` : `${BASE}/demos/${d.id}`);
+    if (d.legacy) urls.push(`${BASE}/demos/${d.id}/legacy`);
+  }
+  await Promise.all(urls.map((u) => fetch(u).catch(() => null)));
+}
+
 async function walkSlide(page: Page, slide: Slide) {
   const where = `${slide.index} ${slide.id}`;
   console.log(`\n== ${where} (${slide.layout})`);
+  await warm(slide);
   await page.goto(`${BASE}/present?s=${slide.id}`);
   if (slide.layout === "terminal") {
     const n = slide.demo?.steps.length ?? 0;
+    // The stage's key handler exists once the presenter store has mirrored the URL.
+    await page.waitForFunction(() => new URL(location.href).searchParams.has("s"), undefined, { timeout: 10000 });
     for (let i = 1; i < n; i++) await page.keyboard.press("ArrowRight");
-    const url = new URL(page.url());
-    if (n <= 1 || url.searchParams.get("step") === String(n - 1)) pass(`${where}: transcript stepped to ${n}/${n}`);
-    else fail(where, `transcript did not reach step ${n}; URL step is ${url.searchParams.get("step")}`);
+    const reached = n <= 1 || (await page.waitForFunction((last) => new URL(location.href).searchParams.get("step") === String(last), n - 1, { timeout: 5000 }).then(() => true, () => false));
+    if (reached) pass(`${where}: transcript stepped to ${n}/${n}`);
+    else fail(where, `transcript did not reach step ${n}; URL step is ${new URL(page.url()).searchParams.get("step")}`);
     return;
   }
   if (slide.layout === "demo-split" && slide.demo) {
@@ -197,11 +222,19 @@ async function main() {
       const d = e.data as LogEntry | null;
       if (d && typeof d.type === "string" && d.type.startsWith("demo:")) window.__demoLog.push(d);
     });
+    // Every presenter write also goes out on the channel; record them next to the demo messages.
+    if (window === window.top) {
+      new BroadcastChannel("deck:dev").addEventListener("message", (e) => {
+        const m = e.data as { type: string; state?: { seq: number; stepIndex: number; slideId: string; writer: string } };
+        if (m?.type === "state" && m.state) window.__demoLog.push({ type: "demo:write", message: `seq${m.state.seq} step${m.state.stepIndex} ${m.state.slideId}` });
+      });
+    }
   });
   const page = await context.newPage();
   page.on("pageerror", (err) => fail("page", `uncaught error: ${err.message}`));
 
-  const targets = slides.filter((s) => (s.layout === "demo-split" || s.layout === "demo-grid" || s.layout === "terminal") && (!only || s.id === only));
+  const demoIds = (s: Slide) => (s.demo ? [s.demo.id] : (s.demos ?? []).map((d) => d.id));
+  const targets = slides.filter((s) => (s.layout === "demo-split" || s.layout === "demo-grid" || s.layout === "terminal") && (!only || s.id === only || demoIds(s).includes(only)));
   if (targets.length === 0) {
     console.error(only ? `No demo slide with id "${only}"` : "No demo slides");
     process.exit(2);

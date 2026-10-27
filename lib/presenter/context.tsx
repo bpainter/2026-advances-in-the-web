@@ -17,6 +17,8 @@ export interface Presenter {
   peers: number;
   demoHealth: Record<string, DemoHealth>;
   update: (patch: Partial<Omit<PresenterState, "seq" | "writer">>) => void;
+  /** The latest state, synchronously (ahead of the render that `state` reflects). */
+  getState: () => PresenterState;
   reportHealth: (demoId: string, status: DemoHealth) => void;
   /** The mounted stage registers its action handler so speaker controls can drive it. */
   registerPerform: (fn: ((action: KeyAction) => void) | null) => void;
@@ -149,6 +151,8 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
   }, [writer]);
 
   // Mirror state into the URL, and navigate when the state names a slide this page did not render.
+  // WebKit allows 100 replaceState calls per 10 s per page; a burst of presses past that only
+  // leaves the URL stale until the next change, so the error is swallowed.
   useEffect(() => {
     const url = new URL(window.location.href);
     url.searchParams.set("s", state.slideId);
@@ -157,7 +161,11 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
     if (state.slideId !== rendered) {
       router.replace(url.pathname + url.search);
     } else if (url.href !== window.location.href) {
-      window.history.replaceState(null, "", url);
+      try {
+        window.history.replaceState(null, "", url);
+      } catch {
+        /* quota exceeded */
+      }
     }
   }, [state.slideId, state.stepIndex, rendered, router]);
 
@@ -179,6 +187,8 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
     [writer],
   );
 
+  const getState = useCallback(() => stateRef.current, []);
+
   const registerPerform = useCallback<Presenter["registerPerform"]>((fn) => {
     performRef.current = fn;
   }, []);
@@ -196,8 +206,8 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
   }, [peerSeen, writer]);
 
   const value = useMemo<Presenter>(
-    () => ({ mode, state, writer, transport, peers, demoHealth, update, reportHealth, registerPerform, perform, setRenderedSlide: setRendered }),
-    [mode, state, writer, transport, peers, demoHealth, update, reportHealth, registerPerform, perform],
+    () => ({ mode, state, writer, transport, peers, demoHealth, update, getState, reportHealth, registerPerform, perform, setRenderedSlide: setRendered }),
+    [mode, state, writer, transport, peers, demoHealth, update, getState, reportHealth, registerPerform, perform],
   );
 
   return <PresenterContext.Provider value={value}>{children}</PresenterContext.Provider>;

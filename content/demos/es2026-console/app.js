@@ -30,8 +30,6 @@ const pairs = [
 ];
 
 const out = document.querySelector("#out");
-const sleep = (ms) =>
-  new Promise((r) => setTimeout(r, ms));
 
 const show = (v) =>
   v instanceof Set
@@ -60,9 +58,9 @@ function print(fn, kind) {
   out.append(li);
 }
 
+// All eight lines print at load; the stage reveals
+// them a pair at a time through html[data-state].
 for (const [before, after] of pairs) {
-  await sleep(250);
   print(before, "before");
-  await sleep(250);
   print(after, "after");
 }

@@ -1,36 +1,63 @@
-body { margin: 16px 56px;
-  font: 16px system-ui; }
+body {
+  margin: 16px 56px;
+  font: 16px system-ui;
+}
 
-.gallery { display: flex; gap: 12px;
-  padding: 0; list-style: none;
+.gallery {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  padding: 0;
+  list-style: none;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-marker-group: after;
-  anchor-name: --g; }
+  anchor-name: --g;
+}
 
-.gallery li { flex: 0 0 80%; height: 140px;
-  display: grid; place-items: center;
+.gallery li {
+  flex: 0 0 80%;
+  height: 140px;
+  display: grid;
+  place-items: center;
   scroll-snap-align: center;
   border-radius: 8px;
-  background: #0C62FB; color: #fff; }
+  background: #0c62fb;
+  color: #fff;
+}
 
 .gallery::scroll-button(*) {
-  position: fixed; position-anchor: --g;
-  font: inherit; padding: 6px 10px; }
+  position: fixed;
+  position-anchor: --g;
+  font: inherit;
+  padding: 6px 10px;
+}
 
 .gallery::scroll-button(left) {
-  content: "Prev"; position-area: left; }
+  content: "Prev";
+  position-area: left;
+}
 
 .gallery::scroll-button(right) {
-  content: "Next"; position-area: right; }
+  content: "Next";
+  position-area: right;
+}
 
 .gallery::scroll-marker-group {
-  display: flex; gap: 6px;
-  justify-content: center; padding: 8px; }
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  padding: 8px;
+}
 
 .gallery li::scroll-marker {
-  content: ""; width: 10px; height: 10px;
-  border-radius: 50%; background: #E6E6E6; }
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e6e6e6;
+}
 
 .gallery li::scroll-marker:target-current {
-  background: #0C62FB; }
+  background: #0c62fb;
+}

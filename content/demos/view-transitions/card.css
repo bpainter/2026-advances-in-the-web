@@ -35,6 +35,11 @@ body {
   text-decoration: none;
 }
 
+.sorts {
+  display: flex;
+  gap: 8px;
+}
+
 .btn {
   height: 40px;
   padding: 0 16px;

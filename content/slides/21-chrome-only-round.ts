@@ -9,6 +9,8 @@ export const slide: Slide = {
   index: 21,
   section: "platform-chrome-only",
   layout: "demo-grid",
+  // Steps belong to the enlarged cell (keys 1 to 4); in the grid itself the arrows still change slide.
+  stepThrough: "steps-first",
   title: "Chrome-only lightning round",
   eyebrow: "ONE-ENGINE · CHROME AND EDGE ONLY",
   body: ["One engine. Direction for prototypes, and nothing here is a production dependency."],

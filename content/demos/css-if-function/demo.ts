@@ -17,20 +17,27 @@ export const demo: Demo = {
       lang: "css",
     },
   ]),
+  // Grid cell: no legacy document and no "before" beat. Both states are CSS only.
+  liveStates: ["size-lg", "gap-16"],
   steps: [
     {
       id: "s1",
       file: "styles.css",
-      highlight: [[11, 14]],
-      caption: "if() with a style() query. The first match wins.",
-      action: "Toggle --size on a button in DevTools.",
+      highlight: [[19, 22]],
+      caption: "if() with a style() query reads --size on the button, and the first match wins.",
+      action: "Small picks up --size: lg from the state and grows to match Large.",
+      liveState: "size-lg",
+      target: ".btn:first-of-type",
     },
     {
       id: "s2",
       file: "styles.css",
       highlight: [[1, 3]],
-      caption: "@function is a real function with arguments. @mixin is in no browser yet.",
-      action: "Change the 8px and watch both buttons move.",
+      caption:
+        "@function is a real function with arguments, and var() inside it reads the element it is called on; @mixin is in no browser yet.",
+      action: "The unit doubles to 16px and both buttons gain padding; Small is small again.",
+      liveState: "gap-16",
+      target: ".btn",
     },
   ],
   fork: [

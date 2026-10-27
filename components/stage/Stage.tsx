@@ -69,6 +69,9 @@ export function Stage(props: Props) {
   const touched = useRef(false);
   const [scale, setScale] = useState(1);
   const [local, setLocal] = useState<LocalState>({ stepIndex: 0, view: defaultView, cellIndex: null, blank: false, liveMode: false });
+  // Mirror of `local`, written synchronously in `patch`, so two key presses in one task (clicker
+  // repeats, keys forwarded from a frame) both see the step the first one set.
+  const localRef = useRef(local);
   const [reloadToken, setReloadToken] = useState(0);
   const [focusToken, setFocusToken] = useState(0);
   const [showFallback, setShowFallback] = useState(false);
@@ -95,11 +98,22 @@ export function Stage(props: Props) {
     (p: Partial<LocalState>) => {
       touched.current = true;
       if (shared) presenter!.update(p);
-      else setLocal((l) => ({ ...l, ...p }));
+      else {
+        localRef.current = { ...localRef.current, ...p };
+        setLocal((l) => ({ ...l, ...p }));
+      }
     },
     [shared, presenter],
   );
-  const setStepIndex = useCallback((n: number) => patch({ stepIndex: Math.min(Math.max(n, 0), Math.max(stepCount - 1, 0)) }), [patch, stepCount]);
+  // The step and count as of the last write, ahead of the render (see `localRef`).
+  const current = useCallback(() => {
+    const s = shared ? presenter!.getState() : localRef.current;
+    const set = kind === "grid" ? s.cellIndex : 0;
+    const count = set === null ? 0 : (stepSets[set]?.length ?? 0);
+    const idx = s.stepIndex < 0 ? Math.max(count - 1, 0) : Math.min(s.stepIndex, Math.max(count - 1, 0));
+    return { stepIndex: idx, stepCount: count };
+  }, [shared, presenter, kind, stepSets]);
+  const setStepIndex = useCallback((n: number) => patch({ stepIndex: Math.min(Math.max(n, 0), Math.max(current().stepCount - 1, 0)) }), [patch, current]);
   const setView = useCallback((v: DemoView) => patch({ view: v }), [patch]);
   const setCellIndex = useCallback((n: number | null) => patch({ cellIndex: n, stepIndex: 0 }), [patch]);
   const setDemoStatus = useCallback(
@@ -138,6 +152,7 @@ export function Stage(props: Props) {
     if (shared || passive) return;
     const restored = stepFromUrl(stepCount);
     // The URL is the source of truth for the step (PRD 4.2); it is only readable after mount.
+    localRef.current = { ...localRef.current, stepIndex: restored };
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setLocal((l) => ({ ...l, stepIndex: restored }));
     const url = new URL(window.location.href);
@@ -226,14 +241,18 @@ export function Stage(props: Props) {
   const perform = useCallback(
     (action: KeyAction) => {
       switch (action.type) {
-        case "advance":
-          if (stepsFirst && stepIndex < stepCount - 1) setStepIndex(stepIndex + 1);
+        case "advance": {
+          const c = current();
+          if (stepsFirst && c.stepIndex < c.stepCount - 1) setStepIndex(c.stepIndex + 1);
           else go(nextId);
           break;
-        case "retreat":
-          if (stepsFirst && stepIndex > 0) setStepIndex(stepIndex - 1);
+        }
+        case "retreat": {
+          const c = current();
+          if (stepsFirst && c.stepIndex > 0) setStepIndex(c.stepIndex - 1);
           else go(prevId, "last");
           break;
+        }
         case "next-slide":
           go(nextId);
           break;
@@ -241,10 +260,10 @@ export function Stage(props: Props) {
           go(prevId);
           break;
         case "next-step":
-          setStepIndex(stepIndex + 1);
+          setStepIndex(current().stepIndex + 1);
           break;
         case "prev-step":
-          setStepIndex(stepIndex - 1);
+          setStepIndex(current().stepIndex - 1);
           break;
         case "first-slide":
           go(firstId);
@@ -300,7 +319,7 @@ export function Stage(props: Props) {
           break;
       }
     },
-    [stepsFirst, stepIndex, stepCount, setStepIndex, setView, setCellIndex, setDemoStatus, patch, go, nextId, prevId, firstId, lastId, demoId, blank, liveMode, helpOpen, gotoOpen, mode, kind, hasDemoViews, stepSets.length, presenter, toggleTimer],
+    [stepsFirst, current, setStepIndex, setView, setCellIndex, setDemoStatus, patch, go, nextId, prevId, firstId, lastId, demoId, blank, liveMode, helpOpen, gotoOpen, mode, kind, hasDemoViews, stepSets.length, presenter, toggleTimer],
   );
 
   // Speaker controls drive the stage through the provider.

@@ -1,0 +1,31 @@
+/* Every line is the old idiom, so every result is
+   grey. The stage reveals one line per state. */
+.lines samp {
+  color: #a9b1c6;
+}
+
+.lines li {
+  opacity: 0;
+  translate: 0 6px;
+  transition:
+    opacity 200ms var(--ease-out),
+    translate 200ms var(--ease-out);
+}
+
+html[data-state="line1"] .lines li:nth-child(1),
+html[data-state="line2"] .lines li:nth-child(-n + 2),
+html[data-state="all"] .lines li {
+  opacity: 1;
+  translate: 0 0;
+}
+
+html[data-state="all"] .lines li:nth-child(4) {
+  transition-delay: 160ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lines li {
+    transition-duration: 100ms;
+    translate: 0 0;
+  }
+}

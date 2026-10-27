@@ -32,7 +32,7 @@ export function SlidePage({ slide, mode, canonicalPath, embedded, passive }: Pro
       lastId={slides[slides.length - 1].id}
       slideIds={slides.map((s) => s.id)}
       stepSets={demos.map((d) => d.steps.map((s) => ({ caption: s.caption, phase: stepPhase(s) })))}
-      stepThrough={slide.stepThrough ?? (slide.demo ? "steps-first" : "slide-only")}
+      stepThrough={slide.stepThrough ?? (slide.demo || slide.demos?.length ? "steps-first" : "slide-only")}
       demoIds={demos.map((d) => d.id)}
       kind={slide.layout === "demo-split" ? "split" : slide.layout === "demo-grid" ? "grid" : slide.layout === "terminal" ? "terminal" : "none"}
       defaultView={slide.demoView ?? "split"}

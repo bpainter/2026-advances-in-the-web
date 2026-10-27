@@ -5,8 +5,14 @@ const shoes = [
   { id: 4, name: "Camp Slide", price: 60 },
 ];
 const view = document.querySelector("#view");
-const sort = document.querySelector("#sort");
-let asc = false;
+const byPrice = document.querySelector("#sort");
+const byName = document.querySelector("#name");
+const orders = {
+  desc: (a, b) => b.price - a.price,
+  asc: (a, b) => a.price - b.price,
+  name: (a, b) => a.name.localeCompare(b.name),
+};
+let order = "desc";
 
 // Each card keeps one name across both states.
 const card = (s) => `
@@ -34,27 +40,84 @@ function render(url) {
     : shoes.map(card).join("");
 }
 
+function setOrder(next) {
+  order = next;
+  shoes.sort(orders[next]);
+  byPrice.textContent =
+    next === "asc" ? "Price ↑" : "Price ↓";
+}
+
+// Firefox and Safari report a skipped transition's
+// ready promise as uncaught, so mute it here.
+function transition(update) {
+  const t = document.startViewTransition(update);
+  t.ready.catch(() => {});
+  return t;
+}
+
 // One line: wrap the DOM change in a view transition.
-sort.addEventListener("click", () => {
-  asc = !asc;
-  shoes.sort((a, b) =>
-    asc ? a.price - b.price : b.price - a.price,
-  );
-  sort.textContent = asc ? "Price ↑" : "Price ↓";
-  document.startViewTransition(() =>
-    render(location.href),
-  );
-});
+function sortBy(next) {
+  setOrder(next);
+  transition(() => render(location.href));
+}
+
+byPrice.addEventListener("click", () =>
+  sortBy(order === "desc" ? "asc" : "desc"),
+);
+byName.addEventListener("click", () => sortBy("name"));
 
 // The router: intercept the link, same transition.
 window.navigation?.addEventListener("navigate", (e) => {
   if (!e.canIntercept || e.hashChange) return;
   e.intercept({
     handler: () =>
-      document.startViewTransition(() =>
-        render(e.destination.url),
-      ).finished,
+      transition(() => render(e.destination.url))
+        .finished,
   });
 });
 
 render(location.href);
+
+// Stage hook: the slide's steps post a state and the
+// same sorts and navigations run without a click.
+let last = "";
+let timer = 0;
+
+function go(url) {
+  if (!window.navigation) {
+    history.pushState(null, "", url);
+    sortBy(order);
+    return;
+  }
+  const nav = navigation.navigate(url);
+  nav.committed.catch(() => {});
+  nav.finished.catch(() => {});
+}
+
+document.addEventListener("demostate", (e) => {
+  const state = e.detail.state;
+  const again = state === last;
+  last = state;
+  clearTimeout(timer);
+  const open = location.search.includes("id=");
+  if (state === "detail") {
+    if (!open) go("?id=2");
+    return;
+  }
+  if (state === "double" && again) return;
+  const next =
+    state === "names"
+      ? "name"
+      : state === "double"
+        ? "desc"
+        : "asc";
+  if (open) {
+    setOrder(next);
+    go("?");
+  } else if (next !== order) {
+    sortBy(next);
+  }
+  if (state === "double") {
+    timer = setTimeout(() => sortBy("asc"), 150);
+  }
+});
