@@ -3,11 +3,12 @@
 Presenter app for Bermon Painter's FITC Web Unleashed 2026 talk. Next.js App Router, TypeScript,
 Tailwind 4 behind `@apply` only (JSX carries semantic class names), Slalom design-system tokens.
 
-The deck's 36 slides and 17 demos are loaded from the PRD (Part B), all 16 layouts render, and the
-presenter windows sync. Still to come: the print route and PDF export, fonts and generated images.
-The demo portion (clicker-driven steps, code-to-demo spotlight, the "before" beat) is planned in
-`docs/demo-plan.md`; `docs/demo-template.md` is the authoring guide. Milestones 0 and 1 are in:
-effective state, spotlight, validator, legacy "before" documents, the Playwright walk.
+The deck's 35 slides and 17 demos load from `content/`, every layout renders, the presenter windows
+sync, and every demo plays from the clicker alone in three beats (today's script, the native way,
+the code) with the live view spotlit from the code panel. Still to come: the print route and PDF
+export, and generated images for the image-led layouts. The demo work followed `docs/demo-plan.md`
+(all milestones done); `docs/demo-template.md` is the authoring guide. The opening and closing
+slides were designed in Claude Design and render through the `designed` layout.
 
 ## Presenting
 
@@ -28,7 +29,7 @@ Open <http://localhost:3000>. `pnpm build && pnpm start` serves the same deck of
 
 `pnpm validate` runs typecheck, lint and `pnpm check` (the content validator in
 `scripts/validate.mts`: files, highlight ranges, 56-column limit, spotlight targets, state lists;
-`pnpm check <demo-id>` for one demo, `--strict` to fail on warnings). `pnpm walk [slide-id]` drives
+`pnpm check <demo-id>` for one demo; `pnpm validate` runs it with `--strict`). `pnpm walk [slide-id]` drives
 every demo slide in a headless Chromium with the forward and back keys and asserts each step's
 state, spotlight and phase (`scripts/walk-demos.mts`; needs `pnpm dev` running;
 `--browser=webkit|firefox` after `npx playwright install webkit firefox`).
@@ -72,8 +73,17 @@ state, spotlight and phase (`scripts/walk-demos.mts`; needs `pnpm dev` running;
 
 ## Fonts
 
-Slalom Sans and Lora are not in the repo. Drop the WOFF2 files into `public/fonts/` and add
-`@import "./fonts.css";` to `styles/app.css`. Until then the fallback stacks in `tokens.css` apply.
+Slalom Sans (Regular, Bold, Black) and Lora Italic are in `public/fonts/`, from the Slalom design
+system, and loaded by `styles/fonts.css`. The designed slides name the single-weight families
+("Slalom Sans Bold"); the rest of the deck uses "Slalom Sans" with weights.
+
+## Designed slides
+
+`layout: "designed"` renders a slide exported from Claude Design: one 1920 x 1080 `<section>` with
+inline styles in `content/designed/<file>.html`, named by `slide.designed.file`. `lib/designed.ts`
+parses it (no HTML injection) and the deck footer is laid over the bottom band. To update one,
+export the slide's section file from the Claude Design deck, rewrite `/_blob/<id>` image sources to
+`/images/design/<id>.png` (save the asset there), and replace the file.
 
 ## Demo views and size
 

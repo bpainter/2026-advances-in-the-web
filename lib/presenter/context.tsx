@@ -152,8 +152,9 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
   }, [writer]);
 
   // Mirror state into the URL, and navigate when the state names a slide this page did not render.
-  // WebKit allows 100 replaceState calls per 10 s per page; a burst of presses past that only
-  // leaves the URL stale until the next change, so the error is swallowed.
+  // The step mirror is throttled to one write per 250 ms (leading, then trailing): WebKit and
+  // Firefox rate-limit the history API per page, and a clicker burst would otherwise trip it.
+  const lastMirror = useRef(0);
   useEffect(() => {
     const url = new URL(window.location.href);
     url.searchParams.set("s", state.slideId);
@@ -161,13 +162,24 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
     else url.searchParams.delete("step");
     if (state.slideId !== rendered) {
       router.replace(url.pathname + url.search);
-    } else if (url.href !== window.location.href) {
+      return;
+    }
+    if (url.href === window.location.href) return;
+    const write = () => {
+      lastMirror.current = Date.now();
       try {
         window.history.replaceState(null, "", url);
       } catch {
-        /* quota exceeded */
+        /* rate limited: the next change catches up */
       }
+    };
+    const wait = 250 - (Date.now() - lastMirror.current);
+    if (wait <= 0) {
+      write();
+      return;
     }
+    const t = window.setTimeout(write, wait);
+    return () => window.clearTimeout(t);
   }, [state.slideId, state.stepIndex, rendered, router]);
 
   const update = useCallback<Presenter["update"]>(

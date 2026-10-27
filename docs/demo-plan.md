@@ -1,5 +1,10 @@
 # Demo delivery plan
 
+Status (2026-10-27): all milestones delivered. M0 and M1 as written; M2 and M3 converted all
+15 remaining demos (every step state-driven, targets on code steps, legacy documents on the eleven
+split slides); M4 ran `pnpm validate` strict and `pnpm walk` in Chromium, WebKit and Firefox. Open
+items from the RAID log are recorded in each demo's `gotcha`.
+
 Working plan for finishing the demo portion of the presenter app: one developer, one presenter.
 Grounded in the code as of 2026-10-27 and the Playwright audit of the same day. File paths are
 relative to the repo root. Sizes: S under half a day, M about a day, L two days or more.

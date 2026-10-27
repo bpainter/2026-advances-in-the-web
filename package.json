@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "check": "node --conditions=react-server --import tsx scripts/validate.mts",
-    "validate": "pnpm typecheck && pnpm lint && pnpm check",
+    "validate": "pnpm typecheck && pnpm lint && pnpm check --strict",
     "walk": "node --conditions=react-server --import tsx scripts/walk-demos.mts"
   },
   "dependencies": {
