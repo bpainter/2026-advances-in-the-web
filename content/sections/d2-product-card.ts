@@ -152,7 +152,7 @@ export const section: DemoSection = {
           ],
           meter: {
             label: "JavaScript",
-            value: "computed at build",
+            value: "125 lines",
             source: "non-blank, non-comment lines in /demos/02-container-card/today/*.js",
           },
           notes:
@@ -245,7 +245,7 @@ export const section: DemoSection = {
             {
               target: ".product-card",
               text: "Container query",
-              side: "top",
+              side: "right",
             },
           ],
           notes:
@@ -290,7 +290,7 @@ export const section: DemoSection = {
             {
               target: ".page",
               text: "Page narrowed",
-              side: "top",
+              side: "bottom",
             },
             {
               target: ".product-card",
@@ -355,7 +355,7 @@ export const section: DemoSection = {
             {
               target: ".product-card",
               text: "Stacks at 150%",
-              side: "top",
+              side: "right",
             },
           ],
           notes:
@@ -414,7 +414,7 @@ export const section: DemoSection = {
           height: 720,
         },
         flags: {
-          js: true,
+          "enhance-js": true,
         },
         hooks: ["reset", "setStock"],
         poster: "/posters/d2-code.png",
@@ -558,7 +558,7 @@ export const section: DemoSection = {
           actions: [
             {
               type: "toggle",
-              flag: "js",
+              flag: "enhance-js",
               on: false,
             },
             {

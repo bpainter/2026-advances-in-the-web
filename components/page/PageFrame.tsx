@@ -133,6 +133,9 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
     run.current?.cancel();
     run.current = null;
     const flags = flagsAt(page, stepIndex);
+    // A fresh document starts at its authored viewport; replayed resizes set it again.
+    setViewportWidth(null);
+    setViewportMs(0);
     const fresh = mount(flags, cur === null);
     fresh.watch(watchList, false);
     report(cur === null ? "loading" : status);
