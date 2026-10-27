@@ -34,7 +34,7 @@ function documentUrl(page: DemoPage, flags: Record<string, boolean>): { origin: 
  * document beneath, replays `s0..sN` instantly and swaps. Reloading toggles split a step.
  */
 export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, onStepResult }: Props) {
-  const { stepIndex, handsOn, reloadToken, registerPlayback, dispatchKey } = useStage();
+  const { stepIndex, handsOn, live, reloadToken, registerPlayback, dispatchKey } = useStage();
   const slotRef = useRef<HTMLDivElement>(null);
   const [handle, setHandle] = useState<FrameHandle | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
@@ -161,6 +161,11 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
     // `status` is read for the report only; it must not retrigger entry.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, stepIndex, handsOn, reloadToken, mount, show, report, onStepResult]);
+
+  // Terminal pages: `l` hides the recording for a real terminal.
+  useEffect(() => {
+    current.current?.handle.setLive(live);
+  }, [live, handle]);
 
   // Hands-on mode: tell the runtime and give the frame the keyboard.
   useEffect(() => {

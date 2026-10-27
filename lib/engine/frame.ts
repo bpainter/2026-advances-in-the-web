@@ -30,16 +30,23 @@ let nextRunId = 1;
 
 /** Handles keyed by the iframe's WindowProxy, which survives in-frame navigations. */
 const bySource = new Map<Window, FrameHandle>();
+/**
+ * Handles keyed by frame id: a message posted while a document unloads (`unloading` from
+ * `pagehide`) is delivered after its window is gone, with a null `source`, so it is routed by the
+ * id the runtime stamps on every message after `init`.
+ */
+const byId = new Map<string, FrameHandle>();
 let routerInstalled = false;
 
 function installRouter() {
   if (routerInstalled || typeof window === "undefined") return;
   routerInstalled = true;
   window.addEventListener("message", (e) => {
-    const frame = e.source ? bySource.get(e.source as Window) : undefined;
-    if (!frame || e.origin !== frame.expectedOrigin) return;
     const msg = parseFromRuntime(e.data);
     if (!msg) return;
+    let frame = e.source ? bySource.get(e.source as Window) : undefined;
+    if (!frame && !e.source && msg.frameId) frame = byId.get(msg.frameId);
+    if (!frame || e.origin !== frame.expectedOrigin) return;
     if (msg.frameId !== null && msg.frameId !== frame.id) return;
     frame.receive(msg);
   });
@@ -84,6 +91,7 @@ export class FrameHandle {
     this.opts = opts;
     this.expectedOrigin = opts.expectedOrigin;
     installRouter();
+    byId.set(this.id, this);
     if (iframe.contentWindow) bySource.set(iframe.contentWindow, this);
     iframe.addEventListener("load", () => {
       if (iframe.contentWindow) bySource.set(iframe.contentWindow, this);
@@ -202,6 +210,9 @@ export class FrameHandle {
   reset() {
     this.post({ v: 1, type: "reset", frameId: this.id });
   }
+  setLive(on: boolean) {
+    this.post({ v: 1, type: "set-live", frameId: this.id, on });
+  }
   watch(selectors: string[], live: boolean) {
     this.watched = selectors;
     this.live = live;
@@ -242,6 +253,7 @@ export class FrameHandle {
   }
 
   dispose() {
+    byId.delete(this.id);
     if (this.iframe.contentWindow) bySource.delete(this.iframe.contentWindow);
     this.run?.resolve({ asserts: [], digest: "", ms: 0, finished: false });
     this.run = null;

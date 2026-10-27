@@ -195,6 +195,27 @@
     };
   }
 
+  // Instant mode keeps no idle time, but a `wait` still lasts while the navigation or request the
+  // previous actions started is in flight (fetch, render, focus, scroll restoration), capped at
+  // the authored duration: a replay then settles the way the animated run did, and a wait that is
+  // shorter than a slow response still leaves that request in flight, so stale-request aborts
+  // replay deterministically (PRD Part A, 10.1 and 15).
+  async function settle(ms) {
+    var deadline = Date.now() + Math.min(ms, 2000);
+    await sleep(0); // queued navigations (form submission, traversal) start in a task
+    while (Date.now() < deadline) {
+      var busy = pendingFetches > 0;
+      try {
+        if (window.navigation && navigation.transition) busy = true;
+      } catch (e) {
+        /* none */
+      }
+      if (!busy) break;
+      await sleep(10);
+    }
+    await raf();
+  }
+
   async function quiescence() {
     var start = Date.now();
     while (pendingFetches > 0 && Date.now() - start < 1500) await sleep(20);
@@ -516,9 +537,21 @@
     return open.length ? open[open.length - 1] : null;
   }
 
-  function markUnloading() {
-    if (!run) return;
-    post({ type: "unloading", runId: run.runId, cursor: { step: run.cursor.step, action: run.cursor.action + 1 } });
+  // Back and Forward (PRD Part A, 3.3): navigation.back()/forward() where the API exists, else
+  // history. The traversal may be intercepted (same document; the run continues here) or load a
+  // document (`pagehide` posts `unloading` with the cursor), so nothing is announced up front.
+  // The API's promises reject when there is no entry to go to; that must not surface as an
+  // uncaught error.
+  function swallow(result) {
+    if (!result) return;
+    if (result.committed) result.committed.catch(function () {});
+    if (result.finished) result.finished.catch(function () {});
+    if (typeof result.catch === "function") result.catch(function () {});
+  }
+  function traverse(dir) {
+    if (window.navigation) swallow(dir === "back" ? navigation.back() : navigation.forward());
+    else if (dir === "back") history.back();
+    else history.forward();
   }
 
   async function exec(action, instant) {
@@ -568,12 +601,7 @@
           s.dispatchEvent(new Event("input", { bubbles: true }));
           s.dispatchEvent(new Event("change", { bubbles: true }));
         } else if (kind === "back" || kind === "forward") {
-          markUnloading();
-          if (window.navigation) {
-            if (kind === "back") navigation.back();
-            else navigation.forward();
-          } else if (kind === "back") history.back();
-          else history.forward();
+          traverse(kind);
           await sleep(instant ? 60 : 200);
         } else if (kind === "hook") {
           var hookName = /hook:([\w-]+)/.exec(String(action.via))[1];
@@ -636,15 +664,10 @@
         applyFlag(action.flag, action.on);
         return;
       case "navigate":
-        markUnloading();
         if (action.history) {
-          if (window.navigation) {
-            if (action.history === "back") navigation.back();
-            else navigation.forward();
-          } else if (action.history === "back") history.back();
-          else history.forward();
+          traverse(action.history);
         } else if (action.url) {
-          if (window.navigation) navigation.navigate(action.url);
+          if (window.navigation) swallow(navigation.navigate(action.url));
           else location.assign(action.url);
         }
         await sleep(instant ? 60 : 200);
@@ -682,6 +705,7 @@
         return;
       case "wait":
         if (!instant && !(run && run.finishing)) await sleep(action.ms);
+        else if (instant) await settle(action.ms);
         return;
       case "assert": {
         var result = evaluate(action.target, action.expect);
@@ -735,15 +759,16 @@
   async function runStep(msg) {
     if (run && run.playing) run.cancelled = true;
     var instant = msg.mode === "instant";
-    run = { runId: msg.runId, stepId: msg.stepId, instant: instant, cancelled: false, finishing: false, playing: true, cursor: { step: 0, action: msg.startAt || 0 } };
+    var r = { runId: msg.runId, stepId: msg.stepId, instant: instant, cancelled: false, finishing: false, playing: true, cursor: { step: 0, action: msg.startAt || 0 } };
+    run = r;
     activeUntil = Date.now() + 600;
     var started = performance.now();
     if (instant) enableInstant();
     try {
       for (var i = msg.startAt || 0; i < msg.actions.length; i++) {
-        if (run.cancelled) break;
-        run.cursor.action = i;
-        if (run.finishing) {
+        if (r.cancelled) break;
+        r.cursor.action = i;
+        if (r.finishing) {
           if (msg.actions[i].type === "wait") continue;
           await exec(msg.actions[i], true);
         } else {
@@ -757,39 +782,43 @@
         finishAnimations();
       }
     } catch (err) {
-      post({ type: "error", runId: run.runId, code: err.code || "exception", message: err.message || String(err), action: run.cursor.action, selector: err.selector });
+      if (!r.cancelled) post({ type: "error", runId: r.runId, code: err.code || "exception", message: err.message || String(err), action: r.cursor.action, selector: err.selector });
     }
-    if (instant) disableInstant();
-    run.playing = false;
+    if (instant && run === r) disableInstant();
+    r.playing = false;
+    if (r.cancelled) return; // a newer run owns the document now
     postRects(true);
-    post({ type: "step-done", runId: run.runId, stepId: run.stepId, asserts: asserts.slice(), digest: digest(), ms: Math.round(performance.now() - started), finished: !!run.finishing });
+    post({ type: "step-done", runId: r.runId, stepId: r.stepId, asserts: asserts.slice(), digest: digest(), ms: Math.round(performance.now() - started), finished: !!r.finishing });
   }
 
   async function replayTo(msg) {
     if (run && run.playing) run.cancelled = true;
-    run = { runId: msg.runId, stepId: "", instant: true, cancelled: false, finishing: false, playing: true, cursor: { step: msg.from ? msg.from.step : 0, action: 0 } };
+    var r = { runId: msg.runId, stepId: "", instant: true, cancelled: false, finishing: false, playing: true, cursor: { step: msg.from ? msg.from.step : 0, action: 0 } };
+    run = r;
     var started = performance.now();
     enableInstant();
     try {
       for (var s = msg.from ? msg.from.step : 0; s < msg.steps.length; s++) {
+        if (r.cancelled) break;
         var acts = msg.steps[s].actions;
-        run.stepId = msg.steps[s].stepId;
-        run.cursor.step = s;
+        r.stepId = msg.steps[s].stepId;
+        r.cursor.step = s;
         for (var a = s === (msg.from ? msg.from.step : 0) ? (msg.from ? msg.from.action : 0) : 0; a < acts.length; a++) {
-          run.cursor.action = a;
-          if (acts[a].type === "wait") continue;
+          if (r.cancelled) break;
+          r.cursor.action = a;
           await exec(acts[a], true);
         }
       }
       await quiescence();
       finishAnimations();
     } catch (err) {
-      post({ type: "error", runId: run.runId, code: err.code || "exception", message: err.message || String(err), action: run.cursor.action, selector: err.selector });
+      if (!r.cancelled) post({ type: "error", runId: r.runId, code: err.code || "exception", message: err.message || String(err), action: r.cursor.action, selector: err.selector });
     }
-    disableInstant();
-    run.playing = false;
+    if (run === r) disableInstant();
+    r.playing = false;
+    if (r.cancelled) return; // a newer run owns the document now
     postRects(true);
-    post({ type: "step-done", runId: run.runId, stepId: run.stepId, asserts: asserts.slice(), digest: digest(), ms: Math.round(performance.now() - started), finished: true });
+    post({ type: "step-done", runId: r.runId, stepId: r.stepId, asserts: asserts.slice(), digest: digest(), ms: Math.round(performance.now() - started), finished: true });
   }
 
   // ---------------------------------------------------------------- keys
@@ -856,6 +885,10 @@
           post({ type: "error", code: err.code || "flag-unknown", message: err.message });
         }
         postRects(true);
+        return;
+      case "set-live":
+        if (msg.on) document.documentElement.setAttribute("data-live", "");
+        else document.documentElement.removeAttribute("data-live");
         return;
       case "set-mode":
         handsOn = !!msg.handsOn;

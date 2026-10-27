@@ -62,6 +62,7 @@ export function Overlay({ handle, step, handsOn, reducedMotion }: Props) {
   }, [handle]);
 
   const spotlights = (step?.spotlight ?? []).flatMap((sel) => (rects?.rects[sel] ?? []).map((r, i) => ({ sel, r, i })));
+  const viewport = rects?.viewport ?? { w: 0, h: 0 };
   const callouts = (step?.callouts ?? []).map((c) => ({ ...c, r: rects?.rects[c.target]?.[0] ?? null })).filter((c) => c.r);
   const focusRing = rects?.focus && !rects.focusVisibleNative && !handsOn ? rects.focus : null;
 
@@ -72,7 +73,7 @@ export function Overlay({ handle, step, handsOn, reducedMotion }: Props) {
       ))}
       {focusRing ? <div className="overlay__focus" style={{ left: focusRing.x, top: focusRing.y, width: focusRing.w, height: focusRing.h }} /> : null}
       {callouts.map((c) => (
-        <div className="overlay__callout" key={`${c.target}:${c.text}`} data-side={c.side} style={calloutStyle(c.side, c.r!)}>
+        <div className="overlay__callout" key={`${c.target}:${c.text}`} data-side={c.side} style={calloutStyle(c.side, c.r!, viewport)}>
           <span className="overlay__callout-text">{c.text}</span>
         </div>
       ))}
@@ -93,8 +94,18 @@ export function Overlay({ handle, step, handsOn, reducedMotion }: Props) {
   );
 }
 
-function calloutStyle(side: "top" | "right" | "bottom" | "left", r: Rect): React.CSSProperties {
+/** A callout that would leave the frame flips to the opposite side; its anchor stays inside the frame. */
+function calloutStyle(side: "top" | "right" | "bottom" | "left", r: Rect, vp: { w: number; h: number }): React.CSSProperties {
   const gap = 28;
+  const room = 72;
+  let s = side;
+  if (vp.h && s === "top" && r.y - gap < room) s = "bottom";
+  else if (vp.h && s === "bottom" && r.y + r.h + gap > vp.h - room) s = "top";
+  if (vp.w && s === "left" && r.x - gap < 160) s = "right";
+  else if (vp.w && s === "right" && r.x + r.w + gap > vp.w - 160) s = "left";
+  const cx = vp.w ? Math.min(Math.max(r.x + r.w / 2, 120), vp.w - 120) : r.x + r.w / 2;
+  r = { ...r, x: cx - r.w / 2 };
+  side = s;
   switch (side) {
     case "top":
       return { left: r.x + r.w / 2, top: r.y - gap, transform: "translate(-50%, -100%)" };

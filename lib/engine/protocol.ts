@@ -40,6 +40,7 @@ export type ToRuntime =
   | { v: 1; type: "reset"; frameId: string }
   | { v: 1; type: "set-flag"; frameId: string; flag: string; on: boolean }
   | { v: 1; type: "set-mode"; frameId: string; handsOn: boolean }
+  | { v: 1; type: "set-live"; frameId: string; on: boolean }
   | { v: 1; type: "watch"; frameId: string; selectors: string[]; live: boolean };
 
 export type FromRuntime =
