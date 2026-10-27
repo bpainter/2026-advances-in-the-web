@@ -135,7 +135,8 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
     setTransport(sync.transport);
     sync.send({ type: "hello", writer });
     const t = window.setTimeout(() => {
-      if (settled) return;
+      // A peer answered, or this window already wrote state (a press before the fallback fired).
+      if (settled || stateRef.current.seq > 0) return;
       const stored = sync.readStored();
       const fromUrl = stateFromUrl(writer, initialSlide);
       // No other window answered: a typed URL wins; a reload resumes the last stored state.

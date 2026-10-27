@@ -1,0 +1,72 @@
+/* Fixed boxes; the script resizes both of them. */
+label[for] {
+  display: block;
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+textarea,
+.size {
+  font: inherit;
+  color: inherit;
+  background: #fafafa;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+textarea {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 8px 10px;
+  overflow-y: hidden;
+  resize: vertical;
+}
+
+.size {
+  box-sizing: content-box;
+  padding: 4px 6px;
+  font-size: 14px;
+}
+
+/* The hidden span the select is measured against. */
+.measure {
+  position: absolute;
+  visibility: hidden;
+  white-space: pre;
+  font-size: 14px;
+}
+
+textarea:focus-visible,
+.size:focus-visible {
+  outline-offset: 0;
+  border-color: var(--accent);
+}
+
+/* Stage hook: a note points at the corner. */
+.field {
+  position: relative;
+}
+
+.note {
+  position: absolute;
+  right: 8px;
+  bottom: 20px;
+  padding: 2px 8px;
+  font: 600 12px/1.5 system-ui;
+  color: #fff;
+  background: var(--ink);
+  border-radius: 999px;
+  opacity: 0;
+  scale: 0.9;
+  transition:
+    opacity 180ms var(--ease-out),
+    scale 180ms var(--ease-out);
+}
+
+html[data-state="grip"] .note {
+  opacity: 1;
+  scale: 1;
+}

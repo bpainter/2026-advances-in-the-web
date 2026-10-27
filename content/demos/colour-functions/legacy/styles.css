@@ -1,0 +1,49 @@
+/* Two token sets, and every derived colour comes from
+   the script as an inline custom property. */
+:root {
+  --accent: #0c62fb;
+  --ink: #0f1c41;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --surface: #fff;
+  --page: #f5f5f7;
+  --text: #1c1c1e;
+  --muted: #6b6b6b;
+  --border: #e6e6e6;
+  --sneaker: var(--ink);
+  color-scheme: light;
+}
+
+/* The switch toggles a class; every token repeats. */
+:root.dark {
+  --surface: #16213f;
+  --page: #0f1c41;
+  --text: #f5f5f7;
+  --muted: #a9b1c6;
+  --border: #2a3760;
+  --sneaker: #a9b1c6;
+  color-scheme: dark;
+}
+
+/* Sass mix(), done in JS because the brand is live. */
+.hero {
+  background: var(--hero);
+}
+
+.hero::after {
+  background: var(--sneaker);
+}
+
+.btn {
+  background: var(--accent);
+  color: var(--btn-text);
+}
+
+/* Sass darken(), same story. */
+.btn:hover {
+  background: var(--btn-hover);
+}
+
+body {
+  align-content: center;
+  gap: 20px;
+}

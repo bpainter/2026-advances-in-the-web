@@ -12,7 +12,7 @@ export const slide: Slide = {
   support: {
     tier: "baseline-newly",
     since: "16 Sep 2025 (::details-content); <details name> 3 Sep 2024",
-    note: "hidden=until-found: all three engines as of Safari 26.2 by WebKit's own notes; one dashboard still lists no Safari. Say: all three engines as of Safari 26.2, one dashboard is lagging.",
+    note: "hidden=until-found: all three engines as of Safari 26.2 by WebKit's own notes; one dashboard still lists no Safari. Say: all three engines as of Safari 26.2, one dashboard is lagging. The found step is simulated: find-in-page cannot be scripted, so the demo opens Materials and marks lugs itself; press Cmd-F lugs for the real thing.",
   },
   demo: demo,
   citations: [

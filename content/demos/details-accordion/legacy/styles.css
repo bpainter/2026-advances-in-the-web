@@ -1,0 +1,62 @@
+/* A hand-rolled accordion: the script toggles .open,
+   animates the height, then hides the panel. */
+:root {
+  --dur: 200ms;
+}
+
+.btn {
+  margin-bottom: 12px;
+}
+
+.faq {
+  border-top: 1px solid var(--border);
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: 600 14px/1.5 system-ui;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* The chevron is a box of our own, so it can rotate. */
+.summary::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border: solid var(--ink);
+  border-width: 0 2px 2px 0;
+  rotate: 45deg;
+  transition: rotate var(--dur) var(--ease-out);
+}
+
+.open > .summary::after {
+  rotate: 225deg;
+}
+
+/* Height animates in pixels, so the script owns it. */
+.panel {
+  height: 0;
+  overflow: hidden;
+  transition: height var(--dur) var(--ease-out);
+}
+
+.panel p {
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: #6b6b6b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur: 100ms;
+  }
+}
