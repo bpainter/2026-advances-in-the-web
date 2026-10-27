@@ -1,0 +1,19 @@
+{
+  "name": "@portal/ui",
+  "version": "2.4.0",
+  "description": "The internal UI package session D stages through CI. Published only to the private test registry.",
+  "license": "UNLICENSED",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node -e \"require('fs').mkdirSync('dist',{recursive:true});require('fs').writeFileSync('dist/index.js','module.exports={};\\n');require('fs').writeFileSync('dist/index.d.ts','export {};\\n')\"",
+    "test": "node --test"
+  },
+  "publishConfig": {
+    "registry": "http://localhost:4873/",
+    "access": "restricted"
+  }
+}

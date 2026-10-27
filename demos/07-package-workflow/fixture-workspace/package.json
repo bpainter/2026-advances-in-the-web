@@ -1,0 +1,10 @@
+{
+  "name": "fixture-workspace",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The workspace the F3 recordings run in. report-exporter is added during session A; the policy in pnpm-workspace.yaml is the committed state before review.",
+  "packageManager": "pnpm@12.11.0",
+  "scripts": {
+    "test": "node --test"
+  }
+}

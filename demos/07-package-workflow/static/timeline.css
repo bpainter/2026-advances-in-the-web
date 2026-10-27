@@ -1,0 +1,251 @@
+/* F3 today: eight dated markers on one axis, authored for 1296 x 856.
+   Markers start hidden; the engine's `reveal` action shows them one by one. */
+
+:root {
+  --navy: #0f1c41;
+  --blue: #0c62fb;
+  --ink-muted: #4a4a4a;
+  --rule: #c9cfdb;
+  --paper: #ffffff;
+  --card-w: 200px;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--navy);
+  font:
+    18px/1.35 system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  overflow: hidden;
+}
+
+.tl {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  height: 100vh;
+  padding: 44px 48px 36px;
+}
+
+/* Head */
+
+.tl__head {
+  display: grid;
+  gap: 4px;
+}
+
+.tl__eyebrow {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+.tl__title {
+  margin: 0;
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.tl__range {
+  margin: 0;
+  font-size: 20px;
+  color: var(--ink-muted);
+}
+
+/* Axis: eight equal columns, the line through the middle, markers
+   alternating above and below so the labels never collide. */
+
+.tl__axis {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  align-self: center;
+  height: 460px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tl__axis::before {
+  content: "";
+  position: absolute;
+  inset: 50% 8px auto;
+  height: 3px;
+  background: var(--rule);
+  border-radius: 2px;
+}
+
+/* Each item spans the whole axis height (its rect is what the engine outlines and
+   hangs callouts on, so "top" and "bottom" land in the clear margins). The marker
+   takes the middle row, which centres it on the line; the card goes above or below. */
+.tl__item {
+  grid-row: 1;
+  justify-self: center;
+  display: grid;
+  grid-template-rows: 1fr auto 1fr;
+  justify-items: center;
+  width: var(--card-w);
+  height: 100%;
+  transition:
+    opacity 250ms ease-out,
+    translate 250ms ease-out;
+}
+
+.tl__item[hidden] {
+  display: none;
+}
+
+@starting-style {
+  .tl__item {
+    opacity: 0;
+    translate: 0 12px;
+  }
+}
+
+/* Odd cards sit above the line, even cards hang below it. */
+.tl__item:nth-child(odd) .tl__card {
+  grid-row: 1;
+  align-self: end;
+  margin-bottom: 18px;
+}
+
+/* Even items end 64px short of the axis bottom, so a bottom callout on two
+   neighbouring columns lands at two heights instead of on top of itself; the
+   marker is pushed back down onto the line. */
+.tl__item:nth-child(even) {
+  align-self: start;
+  height: calc(100% - 64px);
+}
+
+.tl__item:nth-child(even) .tl__marker {
+  translate: 0 32px;
+}
+
+.tl__item:nth-child(even) .tl__card {
+  grid-row: 3;
+  align-self: start;
+  margin-top: 50px;
+}
+
+.tl__marker {
+  position: relative;
+  grid-row: 2;
+  box-sizing: border-box;
+  width: 30px;
+  height: 30px;
+  border: 4px solid var(--blue);
+  border-radius: 50%;
+  background: var(--blue);
+}
+
+.tl__item[data-fill="hollow"] .tl__marker {
+  background: var(--paper);
+}
+
+/* A short stem from the marker toward its card. */
+.tl__marker::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 2px;
+  height: 14px;
+  background: var(--rule);
+  translate: -50% 0;
+}
+
+.tl__item:nth-child(odd) .tl__marker::before {
+  bottom: 100%;
+  margin-bottom: 4px;
+}
+
+.tl__item:nth-child(even) .tl__marker::before {
+  top: 100%;
+  margin-top: 4px;
+}
+
+.tl__card {
+  display: grid;
+  gap: 2px;
+  text-align: center;
+}
+
+.tl__date {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+.tl__name {
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.tl__label {
+  font-size: 17px;
+  color: var(--ink-muted);
+}
+
+/* Year bands under the axis: four incidents each. */
+
+.tl__years {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 8px;
+}
+
+.tl__years span {
+  padding-top: 8px;
+  border-top: 2px solid var(--navy);
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+/* Legend */
+
+.tl__legend {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 22px 0 0;
+  font-size: 16px;
+  color: var(--ink-muted);
+}
+
+.tl__legend span + .tl__key {
+  margin-left: 18px;
+}
+
+.tl__key {
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  border: 3px solid var(--blue);
+  border-radius: 50%;
+  background: var(--blue);
+}
+
+.tl__key[data-fill="hollow"] {
+  background: var(--paper);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tl__item {
+    transition: none;
+  }
+}

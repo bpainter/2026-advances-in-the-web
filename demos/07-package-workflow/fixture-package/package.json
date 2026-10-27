@@ -1,0 +1,17 @@
+{
+  "name": "report-exporter",
+  "version": "1.2.0",
+  "description": "Harmless fixture for the package-trust demo. Its postinstall writes one marker file in the installing workspace and does nothing else.",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "write-marker.js"
+  ],
+  "scripts": {
+    "postinstall": "node write-marker.js"
+  },
+  "publishConfig": {
+    "registry": "http://localhost:4873/"
+  }
+}

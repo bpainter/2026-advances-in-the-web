@@ -1,0 +1,86 @@
+<!-- prettier-ignore -->
+<link rel="stylesheet" href="timeline.css">
+<main class="tl" id="page">
+  <header class="tl__head">
+    <p class="tl__eyebrow">npm supply chain</p>
+    <h1 class="tl__title">Eighteen months of incidents</h1>
+    <p class="tl__range">August 2025 to October 2026</p>
+  </header>
+  <ol class="tl__axis" id="timeline" data-count="8">
+    <li class="tl__item" id="incident-1" data-fill="solid" hidden>
+      <span class="tl__marker" aria-hidden="true"></span>
+      <div class="tl__card">
+        <time class="tl__date" datetime="2025-08-26">26 Aug 2025</time>
+        <strong class="tl__name">Nx s1ngularity</strong>
+        <span class="tl__label">About 8 h live</span>
+      </div>
+    </li>
+    <li class="tl__item" id="incident-2" data-fill="solid" hidden>
+      <span class="tl__marker" aria-hidden="true"></span>
+      <div class="tl__card">
+        <time class="tl__date" datetime="2025-09-08">8 Sep 2025</time>
+        <strong class="tl__name">chalk, debug</strong>
+        <span class="tl__label">About 2 h live</span>
+      </div>
+    </li>
+    <li class="tl__item" id="incident-3" data-fill="hollow" hidden>
+      <span class="tl__marker" aria-hidden="true"></span>
+      <div class="tl__card">
+        <time class="tl__date" datetime="2025-09-14">14 to 16 Sep 2025</time>
+        <strong class="tl__name">Shai-Hulud</strong>
+        <span class="tl__label">500+ packages</span>
+      </div>
+    </li>
+    <li class="tl__item" id="incident-4" data-fill="hollow" hidden>
+      <span class="tl__marker" aria-hidden="true"></span>
+      <div class="tl__card">
+        <time class="tl__date" datetime="2025-11-21">21 to 24 Nov 2025</time>
+        <strong class="tl__name">Shai-Hulud 2.0</strong>
+        <span class="tl__label">Ran at preinstall</span>
+      </div>
+    </li>
+    <li class="tl__item" id="incident-5" data-fill="solid" hidden>
+      <span class="tl__marker" aria-hidden="true"></span>
+      <div class="tl__card">
+        <time class="tl__date" datetime="2026-03-31">31 Mar 2026</time>
+        <strong class="tl__name">Axios</strong>
+        <span class="tl__label">About 3 h live</span>
+      </div>
+    </li>
+    <li class="tl__item" id="incident-6" data-fill="hollow" hidden>
+      <span class="tl__marker" aria-hidden="true"></span>
+      <div class="tl__card">
+        <time class="tl__date" datetime="2026-05-11">11 May 2026</time>
+        <strong class="tl__name">TanStack</strong>
+        <span class="tl__label">Valid provenance</span>
+      </div>
+    </li>
+    <li class="tl__item" id="incident-7" data-fill="hollow" hidden>
+      <span class="tl__marker" aria-hidden="true"></span>
+      <div class="tl__card">
+        <time class="tl__date" datetime="2026-08-04">4 Aug 2026</time>
+        <strong class="tl__name">ChainDrop</strong>
+        <span class="tl__label">Valid provenance</span>
+      </div>
+    </li>
+    <li class="tl__item" id="incident-8" data-fill="hollow" hidden>
+      <span class="tl__marker" aria-hidden="true"></span>
+      <div class="tl__card">
+        <time class="tl__date" datetime="2026-10-13">13 Oct 2026</time>
+        <strong class="tl__name">SlugFest</strong>
+        <span class="tl__label">1,500+ exposed</span>
+      </div>
+    </li>
+  </ol>
+  <div class="tl__years" aria-hidden="true">
+    <span>2025</span>
+    <span>2026</span>
+  </div>
+  <p class="tl__legend">
+    <span class="tl__key" data-fill="solid" aria-hidden="true"></span>
+    <span>Reported live window</span>
+    <span class="tl__key" data-fill="hollow" aria-hidden="true"></span>
+    <span>No live window reported</span>
+  </p>
+</main>
+<script type="module" src="timeline.js"></script>

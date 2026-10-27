@@ -1,0 +1,203 @@
+/* F3 terminal player: navy field, white monospace, a "recorded" chip.
+   Authored for 1296 x 856. Lines are server-rendered hidden; the engine's
+   `terminal` action reveals a range and the command text types in. */
+
+:root {
+  --navy: #0f1c41;
+  --blue: #0c62fb;
+  --cyan: #00c2ff;
+  --coral: #ff6b5b;
+  --fg: #ffffff;
+  --fg-dim: rgb(255 255 255 / 0.55);
+  --rule: rgb(255 255 255 / 0.14);
+  color-scheme: dark;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--navy);
+  color: var(--fg);
+  font:
+    21px/1.45 ui-monospace,
+    "SF Mono",
+    Menlo,
+    Consolas,
+    "Liberation Mono",
+    monospace;
+  overflow: hidden;
+}
+
+.term {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: 100vh;
+  padding: 26px 40px 22px;
+}
+
+/* Title bar */
+
+.term__bar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.term__dots {
+  display: inline-flex;
+  gap: 8px;
+}
+
+.term__dots i {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.22);
+}
+
+.term__title {
+  margin: 0;
+  font: inherit;
+  font-size: 19px;
+  color: rgb(255 255 255 / 0.85);
+}
+
+.term__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-left: auto;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: var(--blue);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.term__chip::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--coral);
+}
+
+.term__chip time {
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  opacity: 0.85;
+}
+
+/* The scroller the runtime keeps at its latest line */
+
+.term__scroll {
+  overflow-y: auto;
+  padding: 18px 0;
+  scrollbar-width: none;
+}
+
+.term__lines {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.term__lines li {
+  min-height: 1.45em;
+  white-space: pre;
+}
+
+.term__lines li[hidden] {
+  display: none;
+}
+
+.term__lines [data-kind="comment"] {
+  color: var(--fg-dim);
+}
+
+.term__prompt {
+  color: var(--cyan);
+}
+
+.term__lines [data-kind="cmd"] .term__text {
+  display: inline-block;
+  font-weight: 700;
+  animation: type min(calc(var(--n, 1) * 30ms), 350ms) steps(var(--n, 1), end) both;
+}
+
+@keyframes type {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 -2px 0 0);
+  }
+}
+
+/* A block caret on the last revealed line */
+
+.term__lines li:not([hidden]):not(:has(~ li:not([hidden]))) .term__text::after {
+  content: "";
+  display: inline-block;
+  width: 0.6ch;
+  height: 1.05em;
+  margin-left: 0.2ch;
+  background: var(--fg);
+  vertical-align: text-bottom;
+  animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+/* Environment strip */
+
+.term__env {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+  font-size: 15px;
+  color: var(--fg-dim);
+}
+
+.term__env span b {
+  font-weight: 400;
+  color: rgb(255 255 255 / 0.8);
+}
+
+/* `l` on the stage: a flat navy field with the title, so the speaker can put
+   a real terminal in the slot. */
+
+html[data-live] .term__dots,
+html[data-live] .term__chip,
+html[data-live] .term__scroll,
+html[data-live] .term__env {
+  visibility: hidden;
+}
+
+html[data-live] .term__bar {
+  border-bottom-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .term__lines [data-kind="cmd"] .term__text,
+  .term__lines .term__text::after {
+    animation: none;
+  }
+}
