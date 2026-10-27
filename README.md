@@ -91,7 +91,9 @@ export the slide's section file from the Claude Design deck, rewrite `/_blob/<id
 ## Demo views and size
 
 Every `demo-split` slide starts in the view named by `slide.demoView` (`"live" | "split" | "code" | "half"`,
-default `"split"`, the 60/40 view). Keys `1` to `4` switch views on the current slide; the choice resets when the slide changes.
+default `"half"`, the 50/50 view, so the code reads easily). Press `2` for the 60/40 view when the
+demo needs more room, or set `demoView: "split"` on that slide. Keys `1` to `4` switch views on the
+current slide; the choice resets when the slide changes.
 
 Live frames are scaled by `demo.zoom` (default `2`): the demo is laid out at half the frame's size and
 scaled up so it reads from the back of the room. Set `zoom: 1` on full-page website demos. Demo

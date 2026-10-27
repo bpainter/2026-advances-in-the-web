@@ -35,7 +35,7 @@ export function SlidePage({ slide, mode, canonicalPath, embedded, passive }: Pro
       stepThrough={slide.stepThrough ?? (slide.demo || slide.demos?.length ? "steps-first" : "slide-only")}
       demoIds={demos.map((d) => d.id)}
       kind={slide.layout === "demo-split" ? "split" : slide.layout === "demo-grid" ? "grid" : slide.layout === "terminal" ? "terminal" : "none"}
-      defaultView={slide.demoView ?? "split"}
+      defaultView={slide.demoView ?? "half"}
       mode={mode}
       canonicalPath={canonicalPath}
       embedded={embedded}

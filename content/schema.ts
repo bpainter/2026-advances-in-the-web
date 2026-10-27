@@ -127,7 +127,7 @@ export interface Slide {
     points: { label: string; x: number; y: number; source?: string }[];
     axisNotes?: { label: string; y: number }[]; // labelled ticks on the y axis for points with no x value (addition)
   };
-  demoView?: DemoView;     // default view for demo-split slides; default "split"
+  demoView?: DemoView;     // default view for demo-split slides; default "half" (50/50); "split" is the 60/40 view
   designed?: { file: string }; // layout "designed": the section file under content/designed/ (addition)
 }
 

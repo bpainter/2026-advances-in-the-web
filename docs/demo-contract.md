@@ -26,7 +26,7 @@ Firefox and Safari on stage. These rules keep a demo working in both places.
 ## Viewport
 
 - The live view is laid out at half the frame size and scaled 2x (`demo.zoom`, default 2), so design
-  for a **520 x 428 CSS px** viewport in the 60/40 split and **462 x 428** in the 50/50 split. Centre
+  for a **462 x 428 CSS px** viewport in the default 50/50 split and **520 x 428** in the 60/40 split. Centre
   the component; a single product card about 260 to 320px wide reads well. Nothing may depend on a
   wider viewport. Use `min-height: 100vh` and `display: grid; place-items: center` on `body` for
   centring unless the demo needs scrolling.
