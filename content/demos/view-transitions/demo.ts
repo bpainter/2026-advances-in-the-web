@@ -50,7 +50,6 @@ export const demo: Demo = {
   requires: [
     { id: "view-transition-name", kind: "css-supports", query: "view-transition-name: a" },
     { id: "view-transition-class", kind: "css-supports", query: "view-transition-class: a" },
-    { id: "navigation-api", kind: "js", expr: "'navigation' in window" },
   ],
   liveStates: ["sorted", "names", "double", "detail"],
   steps: [

@@ -1,19 +1,41 @@
-body { margin: 0; font: 18px/1.5 system-ui; }
+body {
+  margin: 0;
+  font: 18px/1.5 system-ui;
+}
 
-main { max-width: 420px; margin: 0 auto;
-  padding: 24px 24px 60vh; }
+main {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 24px 24px 64px;
+}
 
-.shot { height: 220px; border-radius: 8px;
-  background: #0C62FB; margin: 16px 0; }
+.shot {
+  height: 220px;
+  margin: 16px 0;
+  border-radius: 8px;
+  background: #0c62fb;
+}
 
-.progress { position: fixed; inset: 0 0 auto;
-  height: 6px; background: #0C62FB;
-  display: none; }
+/* The bar stays hidden until @supports opts it in. */
+.track {
+  position: fixed;
+  inset: 0 0 auto;
+  height: 6px;
+  display: none;
+  background: color-mix(in oklab, #0c62fb 15%, white);
+}
+
+.progress {
+  height: 100%;
+  background: #0c62fb;
+  transform-origin: left;
+}
 
 @supports (animation-timeline: scroll()) {
-  .progress {
+  .track {
     display: block;
-    transform-origin: left;
+  }
+  .progress {
     animation: grow linear;
     animation-timeline: scroll();
   }
@@ -25,9 +47,23 @@ main { max-width: 420px; margin: 0 auto;
 }
 
 @keyframes grow {
-  from { scale: 0 1; } to { scale: 1 1; }
+  from {
+    scale: 0 1;
+  }
+  to {
+    scale: 1 1;
+  }
 }
 
 @keyframes reveal {
-  from { opacity: 0; translate: 0 40px; }
+  from {
+    opacity: 0;
+    translate: 0 var(--rise, 40px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --rise: 0px;
+  }
 }
