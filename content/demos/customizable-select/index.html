@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="styles.css">
+
+<form>
+  <label for="ship">Ships to</label>
+  <select id="ship" name="country">
+    <button>
+      <selectedcontent></selectedcontent>
+    </button>
+    <option value="ca">
+      <span class="flag ca"></span> Canada
+    </option>
+    <option value="jp">
+      <span class="flag jp"></span> Japan
+    </option>
+    <option value="cl">
+      <span class="flag cl"></span> Chile
+    </option>
+  </select>
+
+  <button type="submit">Check out</button>
+  <output id="sent"></output>
+</form>
+
+<script>
+document.forms[0].onsubmit = (e) => {
+  e.preventDefault();
+  sent.value = 'Posted country=' +
+    new FormData(e.target).get('country');
+};
+</script>

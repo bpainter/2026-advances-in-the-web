@@ -1,0 +1,14 @@
+/* Thank-you slide: contact lines and wordmark on navy. */
+.close__contact {
+  @apply flex flex-col;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-8);
+  font-style: normal;
+}
+.close__line {
+  margin: 0;
+  font-size: var(--text-subtitle);
+  line-height: var(--leading-tight);
+  color: var(--slide-muted-fg);
+  max-width: 60ch;
+}

@@ -1,0 +1,10 @@
+body { display: flex; gap: 12px; margin: 24px;
+  font: 14px system-ui; }
+
+.tile {
+  width: 96px; height: 96px;
+  display: grid; place-items: center;
+  background: #0C62FB; color: #fff;
+  border-radius: 30%;
+  corner-shape: var(--shape);
+}

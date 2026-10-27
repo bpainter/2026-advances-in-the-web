@@ -1,0 +1,29 @@
+/* Fixed 1920 x 1080 canvas scaled to fit the viewport, letterboxed on black (PRD 6.2). */
+.stage {
+  @apply fixed grid place-items-center overflow-hidden;
+  inset: 0;
+  background: var(--color-black);
+}
+/* Centred by its own box, then scaled, so a 1920px canvas never pushes layout wider than the viewport. */
+.stage__canvas {
+  @apply absolute overflow-hidden;
+  top: 50%;
+  left: 50%;
+  width: var(--stage-width);
+  height: var(--stage-height);
+  transform: translate(-50%, -50%) scale(var(--stage-scale));
+  transform-origin: center center;
+  background: var(--color-white);
+}
+.stage__canvas:focus {
+  outline: none;
+}
+.stage__announcer {
+  @apply absolute overflow-hidden;
+  width: 1px;
+  height: 1px;
+  clip-path: inset(50%);
+}
+.stage[data-blank="true"] .stage__canvas {
+  visibility: hidden;
+}

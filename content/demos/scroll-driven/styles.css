@@ -1,0 +1,33 @@
+body { margin: 0; font: 18px/1.5 system-ui; }
+
+main { max-width: 420px; margin: 0 auto;
+  padding: 24px 24px 60vh; }
+
+.shot { height: 220px; border-radius: 8px;
+  background: #0C62FB; margin: 16px 0; }
+
+.progress { position: fixed; inset: 0 0 auto;
+  height: 6px; background: #0C62FB;
+  display: none; }
+
+@supports (animation-timeline: scroll()) {
+  .progress {
+    display: block;
+    transform-origin: left;
+    animation: grow linear;
+    animation-timeline: scroll();
+  }
+  .shot {
+    animation: reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 40%;
+  }
+}
+
+@keyframes grow {
+  from { scale: 0 1; } to { scale: 1 1; }
+}
+
+@keyframes reveal {
+  from { opacity: 0; translate: 0 40px; }
+}

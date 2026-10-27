@@ -1,0 +1,68 @@
+/* Minimal read-later controls, outside the scaled canvas (PRD 2, 4.2). */
+.reader-controls {
+  @apply fixed flex items-center;
+  right: var(--space-4);
+  bottom: var(--space-4);
+  gap: var(--space-2);
+  padding: var(--space-1);
+  border-radius: var(--radius-pill);
+  background: rgb(15 28 65 / 0.85);
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  opacity: 0.4;
+  transition: opacity var(--dur-base) var(--ease-brand);
+  z-index: 10;
+}
+.reader-controls:hover,
+.reader-controls:focus-within {
+  opacity: 1;
+}
+.stage[data-idle="true"] + .reader-controls:not(:hover):not(:focus-within) {
+  opacity: 0;
+  pointer-events: none;
+}
+.reader-controls__button {
+  @apply inline-flex items-center justify-center;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.reader-controls__button:hover {
+  background: rgb(255 255 255 / 0.12);
+}
+.reader-controls__button[aria-pressed="true"] {
+  background: var(--color-slalom-blue);
+}
+.reader-controls__button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.reader-controls__button svg {
+  width: 20px;
+  height: 20px;
+}
+.reader-controls__group {
+  @apply inline-flex items-center;
+  gap: 2px;
+  padding: 0 var(--space-1);
+  border-left: 1px solid rgb(255 255 255 / 0.2);
+  border-right: 1px solid rgb(255 255 255 / 0.2);
+}
+.reader-controls__group .reader-controls__button {
+  min-width: 36px;
+  height: 36px;
+  font-weight: var(--weight-bold);
+}
+.reader-controls__counter {
+  margin: 0;
+  padding: 0 var(--space-3);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

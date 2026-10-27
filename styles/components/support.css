@@ -1,0 +1,51 @@
+/* Support label: tier chip, since, engine marks (PRD 6.4). */
+.support {
+  @apply inline-flex items-center flex-wrap;
+  gap: var(--space-3);
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--slide-muted-fg);
+}
+.support__tier {
+  @apply inline-flex items-center;
+  padding: 2px var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--color-slalom-blue);
+  color: var(--color-white);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-footnote);
+  white-space: nowrap;
+}
+.support[data-tier="two-engine"] .support__tier,
+.support[data-tier="one-engine"] .support__tier,
+.support[data-tier="none"] .support__tier {
+  background: var(--color-black);
+}
+.slide[data-field="navy"] .support[data-tier="two-engine"] .support__tier,
+.slide[data-field="navy"] .support[data-tier="one-engine"] .support__tier,
+.slide[data-field="navy"] .support[data-tier="none"] .support__tier {
+  background: var(--color-white);
+  color: var(--color-navy);
+}
+.support__since {
+  white-space: nowrap;
+}
+.support__engines {
+  @apply inline-flex list-none;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+}
+.support__engine {
+  @apply inline-flex items-center;
+  gap: var(--space-1);
+  font-size: var(--text-footnote);
+}
+.support__engine svg {
+  width: 18px;
+  height: 18px;
+}
+.support__engine[data-missing="true"] {
+  text-decoration: line-through;
+  opacity: 0.7;
+}

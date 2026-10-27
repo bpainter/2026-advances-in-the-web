@@ -1,0 +1,7 @@
+.next
+node_modules
+content/.generated
+research_notes
+reports
+pnpm-lock.yaml
+content/demos/**/*.sh

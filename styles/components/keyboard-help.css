@@ -1,0 +1,58 @@
+/* `?` dialog listing the key map. */
+.keyboard-help {
+  width: min(720px, calc(100vw - 32px));
+  max-height: calc(100vh - 64px);
+  padding: var(--space-6);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  color: var(--color-black);
+  font-family: var(--font-sans);
+  box-shadow: var(--shadow-md);
+}
+.keyboard-help::backdrop {
+  background: rgb(0 0 0 / 0.6);
+}
+.keyboard-help__title {
+  margin: 0 0 var(--space-5);
+  font-size: 28px;
+  font-weight: var(--weight-bold);
+  line-height: 1.1;
+}
+.keyboard-help__list {
+  @apply grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--space-2) var(--space-5);
+  margin: 0;
+  font-size: 16px;
+}
+.keyboard-help__keys {
+  @apply flex flex-wrap;
+  gap: var(--space-1);
+  margin: 0;
+}
+.keyboard-help__keys kbd {
+  @apply inline-block;
+  padding: 2px 8px;
+  border: 1px solid var(--color-light-gray);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-muted);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+.keyboard-help__action {
+  margin: 0;
+  color: var(--color-dark-gray);
+}
+.keyboard-help__close {
+  margin-top: var(--space-5);
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-slalom-blue);
+  color: var(--color-white);
+  font: inherit;
+  font-weight: var(--weight-bold);
+  cursor: pointer;
+}

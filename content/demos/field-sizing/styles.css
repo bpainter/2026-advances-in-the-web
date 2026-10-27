@@ -1,0 +1,45 @@
+label[for] {
+  display: block;
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+textarea,
+.size {
+  font: inherit;
+  color: inherit;
+  background: #fafafa;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+textarea {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 8px 10px;
+  min-block-size: calc(2lh + 18px);
+  max-block-size: calc(5lh + 18px);
+  resize: none;
+}
+
+.size {
+  padding: 4px 6px;
+  font-size: 14px;
+}
+
+/* The star. Older engines keep the fixed box. */
+@supports (field-sizing: content) {
+  textarea,
+  .size {
+    field-sizing: content;
+  }
+}
+
+textarea:focus-visible,
+.size:focus-visible {
+  outline-offset: 0;
+  border-color: var(--accent);
+}

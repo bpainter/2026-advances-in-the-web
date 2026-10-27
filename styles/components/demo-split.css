@@ -1,0 +1,54 @@
+/* Demo slide body. Four views switched with 1, 2, 3, 4 (PRD 7.5 plus the view toggle). */
+/* 60/40: the code column fits Prettier's 56-column demo sources at 18px without clipping. */
+.demo-split {
+  @apply grid;
+  grid-template-columns: 3fr 2fr;
+  gap: var(--space-5);
+  min-height: 0;
+  height: 100%;
+}
+.demo-split[data-view="live"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+.demo-split[data-view="live"] .demo-split__code {
+  display: none;
+}
+.demo-split[data-view="code"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+.demo-split[data-view="code"] .demo-split__live {
+  display: none;
+}
+.demo-split__live,
+.demo-split__code {
+  @apply flex flex-col;
+  min-height: 0;
+  min-width: 0;
+}
+.demo-split[data-view="half"] {
+  grid-template-columns: 1fr 1fr;
+}
+/* Wider code columns get larger type. */
+.demo-split[data-view="code"] .code {
+  --code-size: var(--text-code-wide);
+}
+.demo-split[data-view="half"] .code {
+  --code-size: var(--text-code-half);
+}
+.demo-split__view-label {
+  @apply absolute;
+  top: var(--space-5);
+  right: var(--stage-gutter);
+  margin: 0;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--color-black);
+  color: var(--color-white);
+  font-size: var(--text-footnote);
+  font-weight: var(--weight-bold);
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-brand);
+}
+.demo-split__view-label[data-visible="true"] {
+  opacity: 1;
+}

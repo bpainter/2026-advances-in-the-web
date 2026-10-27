@@ -1,0 +1,47 @@
+body { font: 16px/1.5 system-ui;
+  margin: 32px; }
+
+form { display: grid; gap: 10px;
+  width: 240px; }
+
+.flag { display: inline-block; width: 14px;
+  height: 14px; border-radius: 3px; }
+
+.ca { background: #0C62FB; }
+
+.jp { background: #0F1C41; }
+
+.cl { background: #666666; }
+
+select, ::picker(select) {
+  appearance: base-select;
+}
+
+select { padding: 8px 12px; font: inherit;
+  border: 1px solid #0F1C41;
+  border-radius: 4px; }
+
+::picker(select) {
+  border: 1px solid #E6E6E6;
+  border-radius: 8px;
+  padding: 4px; margin-top: 4px;
+  opacity: 0; translate: 0 -6px;
+  transition: opacity .2s, translate .2s,
+    display .2s allow-discrete,
+    overlay .2s allow-discrete;
+}
+
+select:open::picker(select) {
+  opacity: 1; translate: 0;
+}
+
+@starting-style {
+  select:open::picker(select) {
+    opacity: 0; translate: 0 -6px;
+  }
+}
+
+option { padding: 6px 10px;
+  border-radius: 4px; }
+
+option:checked { background: #E6E6E6; }

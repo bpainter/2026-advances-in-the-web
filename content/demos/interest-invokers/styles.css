@@ -1,0 +1,12 @@
+body { font: 16px/1.5 system-ui;
+  margin: 24px; }
+
+a { anchor-name: --who; color: #0C62FB; }
+
+[popover="hint"] {
+  inset: auto; position-anchor: --who;
+  position-area: bottom span-right;
+  margin: 6px 0 0; padding: 10px 12px;
+  border: 1px solid #E6E6E6;
+  border-radius: 8px; font-size: 14px;
+}

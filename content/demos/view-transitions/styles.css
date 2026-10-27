@@ -1,0 +1,20 @@
+/* Only the cards animate; the root stays out of it. */
+:root {
+  view-transition-name: none;
+}
+
+::view-transition {
+  pointer-events: none;
+}
+
+/* Tune the morph: every card group, one rule. */
+::view-transition-group(*) {
+  animation-duration: 350ms;
+  animation-timing-function: var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*) {
+    animation-duration: 100ms;
+  }
+}

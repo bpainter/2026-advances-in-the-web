@@ -1,0 +1,15 @@
+@function --space(--n) {
+  result: calc(var(--n) * 8px);
+}
+
+body { font: 16px system-ui; margin: 24px;
+  display: flex; gap: 12px; }
+
+.btn {
+  font: inherit; border: 0; border-radius: 4px;
+  background: #0C62FB; color: #fff;
+  padding: if(
+    style(--size: lg): --space(2) --space(4);
+    else: --space(1) --space(2)
+  );
+}

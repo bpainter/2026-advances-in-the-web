@@ -1,0 +1,73 @@
+/* Recorded terminal transcript on a navy field; no syntax colour (PRD 7.10). */
+.terminal {
+  @apply relative grid;
+  grid-template-rows: minmax(0, 1fr);
+  margin: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+  border-radius: var(--radius-md);
+  background: var(--color-navy);
+  color: var(--color-white);
+}
+.terminal[data-live="true"] .terminal__log {
+  visibility: hidden;
+}
+.terminal__log {
+  @apply overflow-y-auto;
+  margin: 0;
+  padding: var(--space-6);
+  font-family: var(--font-mono);
+  font-size: 26px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+.terminal__line {
+  @apply block;
+}
+.terminal__line[data-kind="command"] {
+  font-weight: var(--weight-bold);
+}
+.terminal__line[data-kind="comment"] {
+  color: var(--color-chartreuse);
+}
+.terminal__line[data-kind="output"] {
+  color: rgb(255 255 255 / 0.85);
+}
+.terminal__cursor {
+  @apply inline-block;
+  width: 0.6em;
+  height: 1.1em;
+  vertical-align: text-bottom;
+  background: var(--color-white);
+  animation: terminal-blink 1s steps(1) infinite;
+}
+@keyframes terminal-blink {
+  50% {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .terminal__cursor {
+    animation: none;
+  }
+}
+.terminal__chip {
+  @apply absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  padding: 2px var(--space-3);
+  border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 0.12);
+  font-family: var(--font-sans);
+  font-size: var(--text-footnote);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.terminal__live-note {
+  @apply absolute;
+  left: var(--space-6);
+  bottom: var(--space-5);
+  margin: 0;
+  font-size: var(--text-caption);
+  color: rgb(255 255 255 / 0.6);
+}

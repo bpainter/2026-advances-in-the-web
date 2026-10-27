@@ -1,0 +1,10 @@
+/* One full-line Lora italic statement (PRD 6.3). */
+.statement {
+  margin: auto 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: var(--weight-regular);
+  font-size: var(--text-statement);
+  line-height: 1.15;
+  max-width: 30ch;
+}
