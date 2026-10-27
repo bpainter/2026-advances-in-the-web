@@ -59,9 +59,26 @@ export function segments(step: Step, startFlags: Record<string, boolean>): { act
   return out;
 }
 
-/** Actions of `steps[0..stepIndex]` minus reloading toggles, for a replay into a document mounted with `flagsAt`. */
+/**
+ * Steps to replay into a document mounted with `flagsAt(page, stepIndex)`: everything after the
+ * last reloading toggle at or before the step (actions before it ran in a document that was
+ * discarded, as in forward play), minus the toggles themselves (the flags are already applied).
+ */
 export function replaySteps(page: DemoPage, stepIndex: number): Step[] {
-  return page.steps.slice(0, stepIndex + 1).map((s) => ({ ...s, actions: s.actions.filter((a) => !isReloadingToggle(a)) }));
+  let fromStep = 0;
+  let fromAction = 0;
+  for (let i = 0; i <= stepIndex && i < page.steps.length; i++) {
+    page.steps[i].actions.forEach((a, j) => {
+      if (isReloadingToggle(a)) {
+        fromStep = i;
+        fromAction = j + 1;
+      }
+    });
+  }
+  return page.steps.slice(0, stepIndex + 1).map((s, i) => ({
+    ...s,
+    actions: i < fromStep ? [] : s.actions.filter((a, j) => (i > fromStep || j >= fromAction) && !isReloadingToggle(a)),
+  }));
 }
 
 /** Nominal duration of a step's animated playback in ms (Part A, 3.2). */

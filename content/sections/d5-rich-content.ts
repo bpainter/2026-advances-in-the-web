@@ -148,9 +148,9 @@ export const section: DemoSection = {
           ],
           meter: {
             label: "innerHTML sinks",
-            value: "computed at build",
+            value: "7 sinks",
             source:
-              "count of innerHTML, outerHTML and insertAdjacentHTML assignments in /demos/05-trusted-types/today/*.js",
+              "count of innerHTML, outerHTML and insertAdjacentHTML assignments in /demos/05-trusted-types/today, counted by hand",
           },
           notes:
             "There is a Content Security Policy that controls script sources, but it cannot require a trusted object at each DOM injection sink. Security testing finds unsafe paths after they are introduced. The meter counts the sinks a reviewer has to remember.",

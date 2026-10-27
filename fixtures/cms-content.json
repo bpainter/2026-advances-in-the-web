@@ -1,0 +1,17 @@
+{
+  "approved": "<p>The <strong>Ridgeline Trail</strong> is a mid-weight hiking shoe for long days on mixed ground: a grippy outsole, a recycled mesh upper and a toe cap that takes the knocks.</p><ul><li>Vibram outsole with 4 mm lugs</li><li>Recycled mesh upper, 310 g per shoe</li><li>Wide fit in every size</li></ul>",
+  "handler": "<p>Great grip.</p><img src=\"/missing.png\" alt=\"\" onerror=\"document.body.dataset.injected='yes'\">",
+  "reviews": [
+    {
+      "author": "Priya N.",
+      "rating": 5,
+      "body": "<p>Light and steady on wet rock. Dried overnight after a river crossing.</p>"
+    },
+    {
+      "author": "Tomas R.",
+      "rating": 4,
+      "body": "<p>Runs about half a size small. Order up if you wear thick socks.</p>"
+    }
+  ],
+  "promo": "<p class=\"promo__title\">Trail week</p><p>Free returns on every pair until Sunday, and resoling at cost for the life of the shoe.</p>"
+}
