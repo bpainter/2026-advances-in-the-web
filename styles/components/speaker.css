@@ -1,34 +1,44 @@
-/* Speaker view (PRD 5.2): fixed grid at 1280px and up, stacked below. */
+/* Speaker view (PRD 5.2): previews on the left, notes in their own scrolling column on the right,
+   health and controls in one row below. The timing bar only takes a row while it is shown. */
 .speaker {
   @apply grid;
-  grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 5fr) minmax(380px, 6fr);
+  grid-template-rows: minmax(0, 1fr) auto;
   grid-template-areas:
-    "timer timer"
-    "main next"
-    "main notes"
-    "health controls";
+    "left notes"
+    "bottom bottom";
   gap: var(--space-4);
-  min-height: 100vh;
+  height: 100vh;
   padding: var(--space-4);
   box-sizing: border-box;
+  overflow: hidden;
   background: var(--color-black);
   color: var(--color-white);
   font-family: var(--font-sans);
 }
+.speaker[data-timer="true"] {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "timer timer"
+    "left notes"
+    "bottom bottom";
+}
 .speaker[data-rehearse="true"] {
-  grid-template-columns: minmax(0, 3fr) minmax(320px, 2fr);
+  grid-template-columns: minmax(0, 6fr) minmax(380px, 5fr);
 }
 @media (max-width: 1279px) {
-  .speaker {
+  .speaker,
+  .speaker[data-timer="true"] {
     grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
     grid-template-areas:
       "timer"
-      "main"
-      "next"
+      "left"
       "notes"
-      "health"
-      "controls";
+      "bottom";
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
   }
 }
 .speaker__region-label {
@@ -107,16 +117,18 @@
   margin-left: auto;
 }
 
-/* Current preview and status bar */
-.speaker__main {
-  grid-area: main;
-  @apply flex flex-col;
+/* Left column: current preview, status bar, next preview */
+.speaker__left {
+  grid-area: left;
+  @apply flex flex-col overflow-y-auto;
   gap: var(--space-3);
   min-width: 0;
   min-height: 0;
+  scrollbar-width: thin;
 }
 .speaker__current {
   @apply relative;
+  flex: none;
   border-radius: var(--radius-sm);
   overflow: hidden;
 }
@@ -136,12 +148,13 @@
 }
 .speaker__status {
   @apply flex items-center flex-wrap;
-  gap: var(--space-5);
-  min-height: 48px;
-  padding: 0 var(--space-4);
+  flex: none;
+  gap: var(--space-4);
+  min-height: 44px;
+  padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-sm);
   background: rgb(255 255 255 / 0.08);
-  font-size: 16px;
+  font-size: 15px;
 }
 .speaker__counter {
   font-weight: var(--weight-bold);
@@ -151,22 +164,55 @@
   color: rgb(255 255 255 / 0.6);
 }
 .speaker__engines {
-  margin-left: auto;
   color: var(--color-chartreuse);
 }
+.speaker__status-timer {
+  @apply inline-flex items-center;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+.speaker__status .speaker__button {
+  min-height: 30px;
+  padding: 0 var(--space-3);
+  font-size: 13px;
+}
+.timer-badge {
+  @apply inline-flex items-baseline;
+  gap: var(--space-2);
+  font-variant-numeric: tabular-nums;
+}
+.timer-badge__elapsed {
+  font-weight: var(--weight-bold);
+}
+.timer-badge__delta {
+  font-size: 13px;
+  color: rgb(255 255 255 / 0.6);
+}
+.timer-badge[data-over="true"] .timer-badge__delta {
+  color: var(--color-coral);
+}
 
-/* Next */
+/* Next, under the status bar: a small preview beside its title */
 .speaker__next {
-  grid-area: next;
+  flex: none;
   min-width: 0;
 }
+.speaker__next-row {
+  @apply flex items-start;
+  gap: var(--space-3);
+}
 .speaker__next-preview {
+  flex: none;
+  width: 45%;
   border-radius: var(--radius-sm);
   overflow: hidden;
 }
+.speaker__next-meta {
+  min-width: 0;
+}
 .speaker__next-title {
-  margin: var(--space-2) 0 0;
-  font-size: 16px;
+  margin: 0;
+  font-size: 15px;
   font-weight: var(--weight-bold);
 }
 .speaker__next-layout {
@@ -180,12 +226,30 @@
   color: rgb(255 255 255 / 0.75);
 }
 
-/* Notes */
+/* Notes: the right column; the body scrolls on its own, the head stays put */
 .speaker__notes {
   grid-area: notes;
-  @apply overflow-y-auto;
+  @apply flex flex-col;
+  min-width: 0;
   min-height: 0;
   line-height: 1.4;
+}
+.speaker__notes-body {
+  @apply overflow-y-auto;
+  flex: 1;
+  min-height: 0;
+  padding-right: var(--space-3);
+  scrollbar-width: thin;
+}
+.speaker__notes-step {
+  font-weight: var(--weight-regular);
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--color-chartreuse);
+}
+.speaker__step {
+  margin: 0 0 var(--space-2);
+  font-weight: var(--weight-bold);
 }
 .speaker__notes-head {
   @apply flex items-center justify-between;
@@ -236,13 +300,17 @@
   color: var(--color-light-gray);
 }
 
-/* Demo health */
+/* Bottom row: controls, then demo health */
+.speaker__bottom {
+  grid-area: bottom;
+  @apply flex flex-col;
+  gap: var(--space-2);
+}
 .speaker__health {
-  grid-area: health;
   @apply flex items-center flex-wrap;
   gap: var(--space-3);
-  min-height: 44px;
-  font-size: 14px;
+  min-height: 32px;
+  font-size: 13px;
 }
 .speaker__chips {
   @apply flex flex-wrap list-none;
@@ -279,13 +347,8 @@
 
 /* Controls */
 .speaker__controls {
-  grid-area: controls;
   @apply flex items-center flex-wrap;
   gap: var(--space-2);
-}
-.speaker__clock-note {
-  font-size: 12px;
-  color: rgb(255 255 255 / 0.5);
 }
 .speaker__toast {
   @apply fixed;

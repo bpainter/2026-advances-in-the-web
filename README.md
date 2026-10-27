@@ -12,8 +12,11 @@ slides were designed in Claude Design and render through the `designed` layout.
 
 ## Presenting
 
-Open <http://localhost:3000/speaker>, click "Open audience window" (or press `s` from any window),
-drag it to the projector and press `f`. Both windows share one state over `BroadcastChannel` with a
+Open <http://localhost:3000/speaker>, click "Audience window" (or press `s` from any window), drag
+it to the projector and press `f`. The speaker window keeps the current and next previews on the
+left and the notes in a column of their own on the right, which scrolls independently; the timing
+bar stays hidden until you press "Timer" in the status bar (the choice is remembered), and a small
+clock there shows elapsed time and whether you are over or under the slide's target. Both windows share one state over `BroadcastChannel` with a
 `localStorage` fallback: slide, step, demo view, grid cell, blank and the timer. A refresh of either
 window resumes where it was. `/speaker?rehearse=1` enlarges the preview and logs seconds per slide
 to `localStorage`, exportable as JSON from the controls.
