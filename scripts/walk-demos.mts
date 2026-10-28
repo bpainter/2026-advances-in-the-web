@@ -110,7 +110,9 @@ async function checkHandsOn(page: Page, where: string, demoPage: DemoPage, i: nu
     .catch(() => false);
   await page.waitForTimeout(800);
   const seq = await lastSeq(page);
-  await page.keyboard.press("h");
+  // In hands-on mode the frame owns the audience keyboard (a focused field takes the "h"), so
+  // hands-on ends from the speaker window, as on stage.
+  await speaker.keyboard.press("h");
   const r = await waitForResult(page, `${demoPage.id}:${step.id}`, seq, 10000);
   if (!shown) fail(where, `hands-on ${step.id}: ifKeyboard not shown in the speaker window`);
   else pass(`hands-on ${step.id}: ifKeyboard shown`);

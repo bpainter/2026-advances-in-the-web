@@ -1,5 +1,5 @@
 :root { --warning: #9A3412;
-  --line: #C9CFDB; }
+  --line: rgb(15 28 65 / 0.14); }
 .product-slot {
   container: product / inline-size;
 }
@@ -11,16 +11,16 @@
     border-color: var(--warning); }
   img { inline-size: 100%;
     block-size: auto; }
-  .name { margin: 0;
+  .name { margin: 0; line-height: 1.15;
     font-size: clamp(1rem, 3cqi + 0.5rem,
       1.75rem);
     overflow-wrap: anywhere; }
   .price, .stock { margin: 0; }
   .stock { color: var(--warning); }
 }
-@container product (width >= 34rem) {
+@container product (width >= 26rem) {
   .product-card {
-    grid-template-columns: 10rem 1fr auto;
+    grid-template-columns: 8rem 1fr auto;
     align-items: center; }
   .product-card img { grid-row: span 2; }
   .product-card form { grid-column: 3; }

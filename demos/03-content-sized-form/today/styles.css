@@ -1,23 +1,14 @@
-/* The same form as the native build, sized
-   by script instead of by CSS. The top
-   margin leaves room for the callout that
-   points at the form from above. */
-body {
-  margin-block-start: 4rem;
-}
+/* What the scripted sizing needs from CSS.
+   The fields' look comes from the portal
+   theme. */
 .case-form {
   display: grid;
   gap: 0.5rem;
-  max-inline-size: 40rem;
-  font:
-    1rem/1.5 system-ui,
-    sans-serif;
+  max-inline-size: 30rem;
 }
 input,
 textarea {
   inline-size: 100%;
-  font: inherit;
-  padding: 0.5rem;
   box-sizing: border-box;
 }
 /* input-width.js writes the inline size;
@@ -42,12 +33,11 @@ textarea {
   pointer-events: none;
 }
 #t-details-hint,
-#t-status {
-  margin: 0;
-  color: #4a5468;
-}
+#t-status,
 .field-error {
   margin: 0;
+}
+.field-error {
   color: #b42318;
 }
 [aria-invalid="true"] {

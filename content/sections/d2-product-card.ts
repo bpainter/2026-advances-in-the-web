@@ -1,44 +1,31 @@
 import type { DemoSection } from "@/content/demo-schema";
-import { sectionFile } from "@/lib/demo-files";
+import { excerpt, sectionFile } from "@/lib/demo-files";
 
-/** Schema v4 (docs/PRD-demos-v4.md); shown code files live in ./d2-product-card/files/. */
+const TODAY = "demos/02-container-card/today";
+
+/** D2: viewport media queries, variant props and a resize observer, then a size container, container query units, @scope and :has(). */
 export const section: DemoSection = {
   id: "d2-product-card",
   order: 2,
   label: "Product card",
   feature: "Container queries",
-  scenario:
-    "TODO rewrite: The same product card appears in a search grid, a narrow recommendation rail, and a wide merchandising slot without viewport-specific component props.",
-  support: {
-    kind: "web-features",
-    id: "container-queries",
-    alsoUses: ["scope"],
-  },
+  scenario: "One product card sits in a featured slot, a search grid and a narrow rail.",
+  support: { kind: "web-features", id: "container-queries", alsoUses: ["scope"] },
   pages: [
     {
       id: "d2-intro",
       stage: "intro",
-      intro: "TODO rewrite",
-      description: "TODO description",
+      intro:
+        "Our second demo is a product card. The same card sits in a featured slot, a search grid and a narrow rail. Each place needs a different layout.",
+      description:
+        "Container queries let a component change its layout based on the space it is given.",
       visual: {
         src: "/intro/d2-product-card.png",
-        alt: "TODO alt",
-        capture: {
-          pageId: "d2-now",
-          stepId: "s1",
-        },
+        alt: "The product card laid out horizontally in a wide slot.",
+        capture: { pageId: "d2-now", stepId: "s2" },
       },
-      steps: [
-        {
-          id: "s0",
-          label: "Title and support",
-          actions: [],
-          bullets: [],
-        },
-      ],
-      timing: {
-        minutes: 0.25,
-      },
+      steps: [{ id: "s0", label: "Title and support", actions: [], bullets: [] }],
+      timing: { minutes: 0.25 },
     },
     {
       id: "d2-used-to",
@@ -46,107 +33,89 @@ export const section: DemoSection = {
       eyebrow: "Container queries",
       title: "How we used to do it",
       intro:
-        "TODO rewrite: Next, one component in many layout contexts. Here is what teams commonly maintain.",
+        "One card sits in three places. Each place tells it how to look.",
       frame: {
         build: "today",
         route: "/demos/02-container-card/today",
-        viewport: {
-          width: 640,
-          height: 628,
-        },
+        viewport: { width: 640, height: 628 },
         hooks: ["reset", "setViewportWidth"],
         poster: "/posters/d2-today.png",
       },
-      files: [],
+      files: [
+        excerpt(`${TODAY}/index.html`, "html", [
+          [14, 19],
+          [32, 37],
+          [49, 52],
+        ]),
+        excerpt(`${TODAY}/styles.css`, "css", [
+          [19, 21],
+          [121, 153],
+        ]),
+        excerpt(`${TODAY}/card.js`, "js", [[17, 35]]),
+        excerpt(`${TODAY}/resize-classes.js`, "js", [[1, 35]]),
+      ],
       steps: [
         {
           id: "s0",
-          label: "Three slots, three variants",
+          label: "Three slots",
           actions: [],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          bullets: [
-            "TODO rewrite: One card, three places on the page: a search grid, a recommendation rail, and a merchandising slot.",
-            "TODO rewrite: Today each placement tells the card how to look.",
-          ],
+          code: { file: "index.html", lines: [] },
+          bullets: [],
         },
         {
           id: "s1",
-          label: "Props carry layout",
-          actions: [
-            {
-              type: "pointer",
-              to: "#t-rail .c-product-card",
-            },
-          ],
+          label: "Fill the slots",
+          actions: [{ type: "pointer", to: "#t-rail .c-product-card" }],
           code: {
-            file: "TODO",
-            lines: [],
+            file: "index.html",
+            lines: [
+              [3, 6],
+              [10, 13],
+              [16, 19],
+            ],
           },
-          bullets: [
-            "TODO rewrite: Compact, horizontal, and promotional props duplicate layout knowledge in templates and JavaScript.",
-            "TODO rewrite: Every new slot means a new prop or a new class.",
+          spotlight: [
+            "#t-merch .c-product-card",
+            "#t-grid .c-product-card",
+            "#t-rail .c-product-card",
           ],
+          bullets: ["Script fills three empty slots with the same card and a different prop."],
         },
         {
           id: "s2",
-          label: "Measuring in script",
-          actions: [
-            {
-              type: "pointer",
-              to: "#t-grid .c-product-card",
-            },
-          ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          bullets: [
-            "TODO rewrite: In the grid, ResizeObserver code measures the card and sets classes.",
-            "TODO rewrite: Long selectors and naming conventions protect the component's styles from the rest of the page.",
-          ],
+          label: "Style the variants",
+          actions: [{ type: "pointer", to: "#t-merch .c-product-card" }],
+          code: { file: "styles.css", lines: [13, [23, 27], [34, 36]] },
+          spotlight: ["#t-merch .c-product-card"],
+          bullets: ["The wide layout uses a viewport query. CSS cannot ask about the slot."],
         },
         {
           id: "s3",
-          label: "The viewport moves",
+          label: "Narrow the page",
+          key: true,
           actions: [
-            {
-              type: "hook",
-              name: "setViewportWidth",
-              args: [880],
-            },
-            {
-              type: "wait",
-              ms: 600,
-            },
+            { type: "hook", name: "setViewportWidth", args: [560] },
+            { type: "wait", ms: 600 },
             {
               type: "assert",
               target: "#t-merch .c-product-card",
               expect: "attr:data-layout=stacked",
             },
           ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          bullets: [
-            "TODO rewrite: The merchandising slot kept its width.",
-            "TODO rewrite: The viewport narrowed, and the card stacked anyway.",
-            "TODO rewrite: Viewport media queries work on the page where the component was first built.",
-            "TODO rewrite: The meter counts the script this layout needs.",
-          ],
+          code: { file: "resize-classes.js", lines: [[13, 24]] },
+          spotlight: ["#t-merch .c-product-card", "#t-grid .c-product-card"],
           meter: {
             label: "JavaScript",
             value: "125 lines",
             source: "non-blank, non-comment lines in /demos/02-container-card/today/*.js",
           },
+          bullets: [
+            "The page narrowed, and the featured card stacked in a slot that kept its width.",
+            "Props, classes and a resize observer take 125 lines of script.",
+          ],
         },
       ],
-      timing: {
-        minutes: 0.5,
-      },
+      timing: { minutes: 0.5 },
     },
     {
       id: "d2-now",
@@ -154,65 +123,34 @@ export const section: DemoSection = {
       eyebrow: "Container queries",
       title: "How we do it now",
       intro:
-        "TODO rewrite: Same card. What the browser can own now: a size container, container query units, @scope, and :has().",
+        "This is the same card with no layout script. Its slot is a container the card can measure. Watch the card as the slot changes width.",
       frame: {
         build: "native",
         route: "/demos/02-container-card/native",
-        viewport: {
-          width: 640,
-          height: 628,
-        },
-        flags: {
-          "enhance-js": true,
-        },
-        hooks: ["reset", "setStock", "setViewportWidth", "setProductName", "setTextScale"],
-        poster: "/posters/d2-code.png",
+        viewport: { width: 640, height: 628 },
+        flags: { "enhance-js": true },
+        hooks: ["reset", "setViewportWidth", "setStock"],
+        poster: "/posters/d2-now.png",
       },
       files: [
-        {
-          file: "index.html",
-          lang: "html",
-          source: sectionFile("d2-product-card", "index.html"),
-        },
-        {
-          file: "card.css",
-          lang: "css",
-          source: sectionFile("d2-product-card", "card.css"),
-        },
-        {
-          file: "app.js",
-          lang: "js",
-          source: sectionFile("d2-product-card", "app.js"),
-        },
+        { file: "index.html", lang: "html", source: sectionFile("d2-product-card", "index.html") },
+        { file: "card.css", lang: "css", source: sectionFile("d2-product-card", "card.css") },
+        { file: "app.js", lang: "js", source: sectionFile("d2-product-card", "app.js") },
       ],
       steps: [
         {
           id: "s0",
-          label: "Grid width",
-          actions: [
-            {
-              type: "resize",
-              target: ".product-slot",
-              inlineSize: "24rem",
-            },
-          ],
-          code: {
-            file: "index.html",
-            lines: [],
-          },
-          bullets: [
-            "TODO rewrite: Plain HTML, one stylesheet, and a JavaScript file with nothing in it.",
-          ],
+          label: "Same card",
+          actions: [{ type: "resize", target: ".product-slot", inlineSize: "22rem" }],
+          code: { file: "index.html", lines: [] },
+          bullets: [],
         },
         {
           id: "s1",
-          label: "A slot and a card",
+          label: "Narrow the slot",
           actions: [
-            {
-              type: "resize",
-              target: ".product-slot",
-              inlineSize: "15rem",
-            },
+            { type: "resize", target: ".product-slot", inlineSize: "15rem" },
+            { type: "assert", target: ".product-card", expect: "columns=1" },
           ],
           code: {
             file: "index.html",
@@ -223,19 +161,17 @@ export const section: DemoSection = {
           },
           spotlight: [".product-slot", ".product-card"],
           bullets: [
-            "TODO rewrite: The slot is the parent the page controls.",
-            "TODO rewrite: The card inside it is the same article everywhere.",
+            "The slot shrinks to rail width, and the card stays stacked.",
+            "The slot is the part the page controls. The card markup never changes.",
           ],
         },
         {
           id: "s2",
-          label: "Container and query",
+          label: "Widen the slot",
+          key: true,
           actions: [
-            {
-              type: "resize",
-              target: ".product-slot",
-              inlineSize: "44rem",
-            },
+            { type: "resize", target: ".product-slot", inlineSize: "32rem" },
+            { type: "assert", target: ".product-card", expect: "columns=3" },
           ],
           code: {
             file: "card.css",
@@ -246,274 +182,71 @@ export const section: DemoSection = {
           },
           spotlight: [".product-slot", ".product-card"],
           bullets: [
-            "TODO rewrite: container: product / inline-size makes the slot a size container.",
-            "TODO rewrite: The @container rule switches to three columns when the card has 34rem to work with, and only then.",
+            "The slot widens, and the card turns horizontal.",
+            "The container line makes the slot something the card can measure.",
+            "A container query asks how wide the slot is, not how wide the page is.",
           ],
         },
         {
           id: "s3",
-          label: "@scope and container units",
+          label: "Scope the styles",
           actions: [
-            {
-              type: "resize",
-              target: ".product-slot",
-              inlineSize: "15rem",
-            },
-            {
-              type: "wait",
-              ms: 400,
-            },
-            {
-              type: "resize",
-              target: ".product-slot",
-              inlineSize: "24rem",
-            },
+            { type: "resize", target: ".product-slot", inlineSize: "22rem" },
+            { type: "assert", target: ".product-card", expect: "columns=1" },
           ],
           code: {
             file: "card.css",
             lines: [
               [6, 9],
-              [12, 20],
+              [12, 17],
             ],
           },
           spotlight: [".product-card", ".product-card .name"],
           bullets: [
-            "TODO rewrite: @scope limits these selectors to the card subtree and keeps their weight low, so plain img and .name are safe here.",
-            "TODO rewrite: Chris Coyier's line from his CSS Day talk fits:",
-            'TODO rewrite: "CSS is naturally scoped.',
-            'TODO rewrite: That might be all you need." The cqi unit sizes the name against the card.',
+            "Back to grid width. The product name shrinks with the card.",
+            "The @scope rule limits these short selectors to the card. Page styles cannot reach them.",
+            "The cqi unit sizes the name by the card's width.",
           ],
         },
         {
           id: "s4",
-          label: ":has(.stock)",
+          label: "Remove the stock line",
           actions: [
-            {
-              type: "hook",
-              name: "setStock",
-              args: [false],
-            },
-            {
-              type: "wait",
-              ms: 600,
-            },
-            {
-              type: "hook",
-              name: "setStock",
-              args: [true],
-            },
+            { type: "hook", name: "setStock", args: [false] },
+            { type: "wait", ms: 300 },
           ],
-          code: {
-            file: "card.css",
-            lines: [[10, 11]],
-          },
-          spotlight: [".product-card", ".product-card .stock"],
+          code: { file: "card.css", lines: [[10, 11]] },
+          spotlight: [".product-card"],
           bullets: [
-            "TODO rewrite: The border reacts to meaningful content, the low-stock message, without a template-only state class.",
-            "TODO rewrite: The server decides whether that message exists.",
+            "The low-stock line goes away, and the warning border goes with it.",
+            "The has selector checks whether the card holds a stock line. No state class is needed.",
           ],
         },
         {
           id: "s5",
-          label: "JavaScript off",
+          label: "Narrow the page",
           actions: [
-            {
-              type: "toggle",
-              flag: "enhance-js",
-              on: false,
-            },
-            {
-              type: "resize",
-              target: ".product-slot",
-              inlineSize: "44rem",
-            },
+            { type: "resize", target: ".product-slot", inlineSize: "28rem" },
+            { type: "hook", name: "setViewportWidth", args: [560] },
+            { type: "wait", ms: 700 },
+            { type: "assert", target: ".product-card", expect: "columns=3" },
           ],
-          code: {
-            file: "app.js",
-            lines: [[1, 5]],
-          },
-          spotlight: [".product-card form"],
-          bullets: [
-            "TODO rewrite: None for layout.",
-            "TODO rewrite: The application still owns inventory state and the add-to-order action.",
-            "TODO rewrite: With JavaScript disabled the card looks and responds the same.",
-          ],
-          proof: "Inspect the card with JavaScript disabled.",
-        },
-        {
-          id: "s6",
-          label: "Production cautions",
-          actions: [],
-          code: {
-            file: "card.css",
-            lines: [[3, 5], 6],
-          },
-          spotlight: [".product-slot"],
-          bullets: [
-            "TODO rewrite: Choose containment deliberately: size containment can collapse a container that has no external size.",
-            "TODO rewrite: Keep source order aligned with reading and focus order, so CSS placement never turns keyboard navigation into a puzzle.",
-            "TODO rewrite: Treat @scope as an enhancement if your browser policy reaches further back than Baseline 2026.",
-          ],
-        },
-        {
-          id: "s7",
-          label: "TODO cut: Merchandising slot",
-          actions: [
-            {
-              type: "resize",
-              target: ".product-slot",
-              inlineSize: "44rem",
-            },
-            {
-              type: "assert",
-              target: ".product-card",
-              expect: "columns=3",
-            },
-          ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          callouts: [
-            {
-              target: ".product-card",
-              text: "Container query",
-              side: "right",
-            },
-          ],
-          bullets: [
-            "TODO rewrite: Widen it to the merchandising slot and it turns horizontal at 34rem of its own width.",
-            "TODO rewrite: No props, no ResizeObserver.",
-          ],
-          proof:
-            "Drag the same component between three parent widths without changing its markup or props.",
-        },
-        {
-          id: "s8",
-          label: "TODO cut: Page changes, card does not",
-          actions: [
-            {
-              type: "resize",
-              target: ".product-slot",
-              inlineSize: "20rem",
-            },
-            {
-              type: "hook",
-              name: "setViewportWidth",
-              args: [1280],
-            },
-            {
-              type: "wait",
-              ms: 300,
-            },
-            {
-              type: "hook",
-              name: "setViewportWidth",
-              args: [720],
-            },
-            {
-              type: "wait",
-              ms: 600,
-            },
-            {
-              type: "assert",
-              target: ".product-card",
-              expect: "columns=1",
-            },
-          ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          callouts: [
-            {
-              target: ".page",
-              text: "Page narrowed",
-              side: "bottom",
-            },
-            {
-              target: ".product-card",
-              text: "Card unchanged",
-              side: "right",
-            },
-          ],
-          bullets: [
-            "TODO rewrite: Now fix the slot at 20rem and change the page width.",
-            "TODO rewrite: The card does not move, which proves the query belongs to the component.",
-          ],
+          code: { file: "app.js", lines: [[1, 5]] },
+          spotlight: [".product-card"],
           proof:
             "Switch page width while keeping the card container fixed to prove the query belongs to the component.",
-        },
-        {
-          id: "s9",
-          label: "TODO cut: Long name, larger text",
-          actions: [
-            {
-              type: "hook",
-              name: "setViewportWidth",
-              args: [1280],
-            },
-            {
-              type: "resize",
-              target: ".product-slot",
-              inlineSize: "640px",
-            },
-            {
-              type: "hook",
-              name: "setProductName",
-              args: ["Ridgeline Trail GTX Waterproof Wide Fit Running Shoe"],
-            },
-            {
-              type: "wait",
-              ms: 400,
-            },
-            {
-              type: "assert",
-              target: ".product-card",
-              expect: "columns=3",
-            },
-            {
-              type: "hook",
-              name: "setTextScale",
-              args: [1.5],
-            },
-            {
-              type: "wait",
-              ms: 400,
-            },
-            {
-              type: "assert",
-              target: ".product-card",
-              expect: "columns=1",
-            },
-          ],
-          code: {
-            file: "TODO",
-            lines: [],
+          meter: {
+            label: "JavaScript",
+            value: "0 lines",
+            source: "non-blank, non-comment lines in content/sections/d2-product-card/files/*.js",
           },
-          callouts: [
-            {
-              target: ".product-card .name",
-              text: "Wraps cleanly",
-              side: "right",
-            },
-            {
-              target: ".product-card",
-              text: "Stacks at 150%",
-              side: "right",
-            },
-          ],
           bullets: [
-            "TODO rewrite: A long product name wraps, and the document order stays the reading order.",
-            "TODO rewrite: At 150 percent text the same 640-pixel slot picks the stacked layout, because the query is written in rem.",
+            "The page gets narrower, but the slot keeps its width. The card stays horizontal.",
+            "No script measures anything. The JavaScript file holds only a comment.",
           ],
-          proof:
-            "Increase text size and use a long product name to show that the document order and layout remain sound.",
         },
       ],
-      timing: {
-        minutes: 1.75,
-      },
+      timing: { minutes: 1.75 },
     },
   ],
   citations: [
@@ -551,8 +284,8 @@ export const section: DemoSection = {
     },
   ],
   cautions: [
-    "TODO rewrite: Choose containment deliberately. Size containment can affect intrinsic sizing and can collapse a container that has no external size.",
-    "TODO rewrite: Keep source order aligned with reading and focus order. CSS placement must not turn keyboard navigation into a puzzle.",
-    "TODO rewrite: Treat @scope as an enhancement if the supported browser policy reaches further back than Baseline 2026.",
+    "Size containment needs an outside width. A container with no set size can collapse to zero.",
+    "Keep source order the same as reading order. CSS placement must not scramble keyboard focus.",
+    "Treat @scope as an enhancement if you support browsers older than March 2026.",
   ],
 };

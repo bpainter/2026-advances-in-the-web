@@ -1,0 +1,20 @@
+/* D4 portal content (unshown, PRD v4 6.3): spacing for the toolbar links and the order detail in
+   both builds. Nothing a demo step toggles. */
+@layer portal-layout {
+  .toolbar nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--glass-space-4) var(--glass-space-6);
+  }
+  .toolbar nav a {
+    padding-block: var(--glass-space-2);
+  }
+  .order-detail {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--glass-space-2) var(--glass-space-6);
+  }
+  .order-detail dd {
+    margin: 0;
+  }
+}

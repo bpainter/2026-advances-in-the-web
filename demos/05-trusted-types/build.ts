@@ -87,6 +87,7 @@ export const folder: DemoFolder = {
         },
         sideEffects: ["reset"],
         csp: LEGACY_CSP,
+        shell: { title: "Content", nav: "content" },
       }),
     ),
     native: nativeBuild(
@@ -101,6 +102,7 @@ export const folder: DemoFolder = {
         sideEffects: ["reset"],
         runtimeSelectors: ["#description img"],
         csp: TRUSTED_TYPES_CSP,
+        shell: { title: "Content", nav: "content" },
       }),
     ),
   },

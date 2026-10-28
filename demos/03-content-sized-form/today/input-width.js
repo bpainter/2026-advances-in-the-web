@@ -43,7 +43,12 @@ export function createInputWidth(
       width(
         input.value || input.placeholder,
       ) + extra;
-    input.style.inlineSize = `${Math.ceil(Math.min(max, Math.max(min, text)))}px`;
+    const size = Math.min(
+      max,
+      Math.max(min, text),
+    );
+    input.style.inlineSize =
+      Math.ceil(size) + "px";
   }
 
   input.addEventListener("input", measure);

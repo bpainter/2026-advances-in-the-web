@@ -183,12 +183,14 @@ async function load(
       "text/html",
     );
   } catch (err) {
-    if (mine.signal.aborted) return; // superseded by a newer navigation
+    // Superseded by a newer navigation.
+    if (mine.signal.aborted) return;
     content.classList.remove("is-loading");
     showError(err);
     return;
   }
-  if (controller !== mine) return; // a newer navigation won the race
+  // A newer navigation won the race.
+  if (controller !== mine) return;
 
   const main =
     page.querySelector("#content");

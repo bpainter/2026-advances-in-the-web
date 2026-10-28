@@ -1,21 +1,12 @@
 /* D5 today: a product page with CMS content
    in three places. */
 
-body {
-  margin: 2rem;
-  font:
-    1rem/1.6 system-ui,
-    sans-serif;
-  color: #1c2434;
-  background: #fff;
-}
-
 .shop {
   display: grid;
   grid-template-columns:
     minmax(0, 1fr)
-    22rem;
-  gap: 2rem 3rem;
+    12rem;
+  gap: 1rem 1.25rem;
   align-items: start;
 }
 
@@ -103,8 +94,8 @@ h1 {
 
 .rail {
   display: grid;
-  gap: 1.5rem;
-  margin-block-start: 3.5rem;
+  gap: 1rem;
+  margin-block-start: 2rem;
 }
 
 .promo {

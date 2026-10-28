@@ -7,7 +7,7 @@
 
 export function autosize(
   textarea,
-  { minRows = 6, maxRows = 18 } = {},
+  { minRows = 6, maxRows = 12 } = {},
 ) {
   let frame = 0;
 
@@ -44,7 +44,8 @@ export function autosize(
         textarea.scrollHeight + border,
       ),
     );
-    textarea.style.blockSize = `${height}px`;
+    textarea.style.blockSize =
+      height + "px";
     textarea.style.overflowY =
       height >= max ? "auto" : "hidden";
     if (height <= min)

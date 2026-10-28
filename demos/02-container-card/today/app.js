@@ -86,7 +86,7 @@ function postViewport(px, ms) {
 // restores the width this page is authored
 // for (a remount is the engine's reset
 // point).
-const AUTHORED_WIDTH = 1280;
+const AUTHORED_WIDTH = 640;
 if (embedded)
   postViewport(AUTHORED_WIDTH, 0);
 

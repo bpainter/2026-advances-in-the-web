@@ -28,6 +28,8 @@ const today: BuildDef = folderBuild(
   manifestDefaults({
     sandbox: FORMS_SANDBOX,
     enhancement: { css: "all", js: ["router.js"] },
+    shell: { title: "Orders", nav: "orders" },
+    styles: ["/portal/04-navigation-api.css"],
     instrumentation: ["/demo/log.js", "/demo/hooks.js"],
     sideEffects: ["reset"],
   }),
@@ -41,6 +43,8 @@ const native: BuildDef = nativeBuild(
     sandbox: FORMS_SANDBOX,
     flags: { "enhance-js": true },
     enhancement: { css: { files: [] }, js: ["app.js"] },
+    shell: { title: "Orders", nav: "orders" },
+    styles: ["/portal/04-navigation-api.css"],
     instrumentation: ["/demo/log.js", "/demo/hooks.js"],
     sideEffects: ["reset"],
   }),
