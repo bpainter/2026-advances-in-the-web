@@ -124,6 +124,16 @@ export function Stage(props: Props) {
     w.__stepSeq = (w.__stepSeq ?? 0) + 1;
     w.__stepResults = { ...(w.__stepResults ?? {}), [`${pageId}:${stepId}`]: { ...result, seq: w.__stepSeq } };
   }, []);
+  const playState = useRef({ slideId, stepIndex });
+  useEffect(() => {
+    playState.current = { slideId, stepIndex };
+  }, [slideId, stepIndex]);
+  const reportPlaying = useCallback(
+    (playing: boolean) => {
+      if (shared && mode === "audience") presenterRef.current?.reportPlayback({ ...playState.current, playing });
+    },
+    [shared, mode],
+  );
   const registerPlayback = useCallback((p: Playback | null) => {
     playback.current = p;
   }, []);
@@ -370,8 +380,8 @@ export function Stage(props: Props) {
   const focusStage = useCallback(() => canvasRef.current?.focus({ preventScroll: true }), []);
 
   const ctx = useMemo<StageState>(
-    () => ({ stepIndex, stepCount, handsOn, live, reloadToken, rehearsal, demoStatus, stepResults, setStepIndex, setDemoStatus, setStepResult, registerPlayback, dispatchKey, focusStage }),
-    [stepIndex, stepCount, handsOn, live, reloadToken, rehearsal, demoStatus, stepResults, setStepIndex, setDemoStatus, setStepResult, registerPlayback, dispatchKey, focusStage],
+    () => ({ stepIndex, stepCount, handsOn, live, reloadToken, rehearsal, demoStatus, stepResults, setStepIndex, setDemoStatus, setStepResult, reportPlaying, registerPlayback, dispatchKey, focusStage }),
+    [stepIndex, stepCount, handsOn, live, reloadToken, rehearsal, demoStatus, stepResults, setStepIndex, setDemoStatus, setStepResult, reportPlaying, registerPlayback, dispatchKey, focusStage],
   );
 
   const style = { "--stage-scale": scale } as CSSProperties;

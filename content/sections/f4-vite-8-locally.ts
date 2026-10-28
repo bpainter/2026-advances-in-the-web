@@ -11,6 +11,7 @@ export const section: DemoSection = {
     {
       id: "f4-single",
       stage: "single",
+      badge: { text: "Vite 7 and Vite 8, measured here" },
       title: "Vite 8 locally",
       intro:
         "Vite 8 uses one bundler, Rolldown, for development and builds. We measured our own repository on this laptop.",

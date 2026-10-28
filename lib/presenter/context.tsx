@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { useRouter } from "next/navigation";
 import type { KeyAction } from "@/lib/keys";
 import { createSync, type Sync, type Transport } from "./transport";
-import { isNewer, newWriterId, type DemoHealth, type PresenterState, type SyncMessage } from "./types";
+import { isNewer, newWriterId, type DemoHealth, type Playback, type PresenterState, type SyncMessage } from "./types";
 
 export type PresenterMode = "audience" | "speaker";
 
@@ -20,6 +20,9 @@ export interface Presenter {
   /** The latest state, synchronously (ahead of the render that `state` reflects). */
   getState: () => PresenterState;
   reportHealth: (demoId: string, status: DemoHealth) => void;
+  /** The audience window's playback: a step is playing, or the frame is ready for the next press. */
+  playback: Playback | null;
+  reportPlayback: (p: Playback) => void;
   /** The mounted stage registers its action handler so speaker controls can drive it. */
   registerPerform: (fn: ((action: KeyAction) => void) | null) => void;
   perform: (action: KeyAction) => void;
@@ -77,6 +80,7 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
   const stateRef = useRef(state);
   const [transport, setTransport] = useState<Transport>("broadcast");
   const [demoHealth, setDemoHealth] = useState<Record<string, DemoHealth>>({});
+  const [playback, setPlayback] = useState<Playback | null>(null);
   const [peerSeen, setPeerSeen] = useState<Record<string, number>>({});
   const [rendered, setRendered] = useState(initialSlideId);
   const syncRef = useRef<Sync | null>(null);
@@ -133,6 +137,8 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
         setPeerSeen((p) => ({ ...p, [msg.writer]: Date.now() }));
         // The current holder answers with its state.
         sync.send({ type: "state", state: stateRef.current });
+      } else if (msg.type === "playback") {
+        setPlayback({ slideId: msg.slideId, stepIndex: msg.stepIndex, playing: msg.playing });
       } else if (msg.type === "demo-health") {
         setPeerSeen((p) => ({ ...p, [msg.writer]: Date.now() }));
         setDemoHealth((h) => (h[msg.demoId] === msg.status ? h : { ...h, [msg.demoId]: msg.status }));
@@ -207,6 +213,14 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
     [writer],
   );
 
+  const reportPlayback = useCallback<Presenter["reportPlayback"]>(
+    (p) => {
+      setPlayback(p);
+      syncRef.current?.send({ type: "playback", ...p, writer });
+    },
+    [writer],
+  );
+
   const getState = useCallback(() => stateRef.current, []);
 
   const registerPerform = useCallback<Presenter["registerPerform"]>((fn) => {
@@ -226,8 +240,8 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
   }, [peerSeen, writer]);
 
   const value = useMemo<Presenter>(
-    () => ({ mode, state, writer, transport, peers, demoHealth, update, getState, reportHealth, registerPerform, perform, setRenderedSlide: setRendered }),
-    [mode, state, writer, transport, peers, demoHealth, update, getState, reportHealth, registerPerform, perform],
+    () => ({ mode, state, writer, transport, peers, demoHealth, update, getState, reportHealth, playback, reportPlayback, registerPerform, perform, setRenderedSlide: setRendered }),
+    [mode, state, writer, transport, peers, demoHealth, update, getState, reportHealth, playback, reportPlayback, registerPerform, perform],
   );
 
   return <PresenterContext.Provider value={value}>{children}</PresenterContext.Provider>;

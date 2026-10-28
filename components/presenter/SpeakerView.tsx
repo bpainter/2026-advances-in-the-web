@@ -169,6 +169,9 @@ export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative,
   const nextLine = nextStep ? `Next: ${nextStep.label}` : nextPageName ? `Next page: ${nextPageName}` : "End of deck";
   const heading = page && section ? (hasFrame(page) && page.stage !== "single" ? { eyebrow: page.eyebrow, title: page.title } : { eyebrow: page.stage === "intro" ? "Intro slide" : null, title: page.stage === "intro" ? (section.feature ?? section.label) : page.title }) : null;
   const health = page ? demoHealth[page.id] : undefined;
+  // Playing while the audience frame runs this step; Ready once it has finished (CX risk 2).
+  const pb = presenter.playback;
+  const playing = Boolean(pb && pb.playing && pb.slideId === slide.id && pb.stepIndex === stepIndex);
   const supportLine = section?.support ? (section.support.kind === "tooling" ? `Tools: ${section.support.packages.map((p) => `${p.name} ${p.version}`).join(", ")}.` : `web-features: ${section.support.id}${section.support.alsoUses?.length ? `; also uses ${section.support.alsoUses.join(", ")}` : ""}.`) : null;
   const openAudience = () => window.open("/present", "deck-audience");
   const openFrame = () => {
@@ -261,6 +264,11 @@ export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative,
                   Step {stepIndex + 1} of {steps.length}: {step.label}
                   {step.key ? <span className="notes__chip notes__chip--key">Key point</span> : null}
                   {step.proof ? <span className="notes__chip">Proof</span> : null}
+                  {hasFrame(page) ? (
+                    <span className="notes__play" data-playing={playing} role="status">
+                      {playing ? "Playing" : "Ready"}
+                    </span>
+                  ) : null}
                 </p>
               </header>
               {state.handsOn && step.ifKeyboard ? <p className="notes__hands-on">{step.ifKeyboard}</p> : null}

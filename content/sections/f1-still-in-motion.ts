@@ -10,6 +10,7 @@ export const section: DemoSection = {
     {
       id: "f1-single",
       stage: "single",
+      badge: { text: "A wait signal on each tile" },
       title: "Still in motion",
       intro:
         "The six demos so far work in every browser. These five are close but still moving. Each tile names a use and what we are waiting for.",

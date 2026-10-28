@@ -290,7 +290,10 @@ export function validate(sections: DemoSection[], ctx: ValidateContext): Issue[]
       if (page.eyebrow !== section.feature) add("eyebrow", where, `eyebrow "${page.eyebrow}" must equal the feature "${section.feature}"`);
       if (page.title !== TITLES[stage]) add("title", where, `title "${page.title}" must be "${TITLES[stage]}"`);
       if (page.files.length > LIMITS.tabs[stage]) add("files", where, `${page.files.length} files; at most ${LIMITS.tabs[stage]} on ${stage} pages`);
-    } else if (page.title !== section.label) add("title", where, `title "${page.title}" must be the section label "${section.label}"`);
+    } else {
+      if (page.title !== section.label) add("title", where, `title "${page.title}" must be the section label "${section.label}"`);
+      if (page.stage === "single") copy(where, "badge", page.badge?.text, { label: true, sentenceCheck: false });
+    }
 
     const vp = walk ? LIMITS.viewport.walk : LIMITS.viewport.single;
     const ratio = page.frame.viewport.width / page.frame.viewport.height / (vp.width / vp.height);

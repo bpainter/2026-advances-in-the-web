@@ -26,6 +26,8 @@ export interface StageState {
   setStepIndex: (n: number) => void;
   setDemoStatus: (pageId: string, status: DemoStatus) => void;
   setStepResult: (pageId: string, stepId: string, result: StepResult) => void;
+  /** The page frame reports when a step starts and stops playing (the speaker's Playing / Ready). */
+  reportPlaying: (playing: boolean) => void;
   /** The page frame registers its playback so Next can finish a running step. */
   registerPlayback: (p: Playback | null) => void;
   /** Keys forwarded from inside a frame. */

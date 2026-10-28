@@ -37,7 +37,7 @@ function documentUrl(page: FramePage, flags: Record<string, boolean>): { origin:
  * document beneath, replays `s0..sN` instantly and swaps. Reloading toggles split a step.
  */
 export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, onStepResult }: Props) {
-  const { stepIndex, handsOn, live, reloadToken, registerPlayback, dispatchKey } = useStage();
+  const { stepIndex, handsOn, live, reloadToken, registerPlayback, dispatchKey, reportPlaying } = useStage();
   const slotRef = useRef<HTMLDivElement>(null);
   const [handle, setHandle] = useState<FrameHandle | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
@@ -111,6 +111,7 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
       // Play forward in the active document; reloading toggles split the step.
       const segs = segments(target, cur.flags);
       cur.handle.watch(watchList, true);
+      reportPlaying(true);
       void (async () => {
         let h = cur.handle;
         let last: StepResult | null = null;
@@ -132,6 +133,7 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
           if (i === segs.length - 1 && gen === generation.current) current.current = { handle: h, stepIndex, flags: seg.flags };
         }
         run.current = null;
+        if (gen === generation.current) reportPlaying(false);
         if (last && gen === generation.current) onStepResult?.(target.id, last);
       })();
       return;
@@ -146,6 +148,7 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
     setViewportMs(0);
     const fresh = mount(flags, cur === null);
     fresh.watch(watchList, false);
+    reportPlaying(true);
     report(cur === null ? "loading" : status);
     const timeout = window.setTimeout(() => {
       if (gen === generation.current && !current.current) report("error");
@@ -166,12 +169,13 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
       }
       show(fresh, stepIndex, flags);
       report("ready");
+      reportPlaying(false);
       onStepResult?.(target.id, result);
     });
     return () => window.clearTimeout(timeout);
     // `status` is read for the report only; it must not retrigger entry.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, stepIndex, handsOn, reloadToken, mount, show, report, onStepResult]);
+  }, [page, stepIndex, handsOn, reloadToken, mount, show, report, onStepResult, reportPlaying]);
 
   // Terminal pages: `l` hides the recording for a real terminal.
   useEffect(() => {

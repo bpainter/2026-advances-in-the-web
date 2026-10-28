@@ -21,6 +21,8 @@ interface Props {
  * Slot geometry on the 1920 x 1080 canvas (PRD v4, 1.4): walk pages split 50/50, frame left and
  * code right, each 880 by 864; single pages use one 1792 by 864 slot.
  */
+const BROWSER_NAMES = { chrome: "Chrome", edge: "Edge", firefox: "Firefox", safari: "Safari" } as const;
+
 export const SLOT = { split: { width: 880, height: 864 }, full: { width: 1792, height: 864 } };
 
 /**
@@ -63,6 +65,17 @@ export async function DemoPageSlide({ slide, mode }: Props) {
       <header className="page__header">
         {eyebrow ? <p className="page__eyebrow">{eyebrow}</p> : null}
         <h1 className="page__title">{page.title}</h1>
+        {page.stage === "single" && page.badge ? (
+          <p className="page__badge">
+            {page.badge.text}
+            {page.badge.missing?.map((b) => (
+              <s key={b}>
+                {BROWSER_NAMES[b]}
+                <span className="visually-hidden"> missing</span>
+              </s>
+            ))}
+          </p>
+        ) : null}
       </header>
       <PageBody page={page} files={files} sandbox={manifest?.sandbox ?? "allow-scripts allow-same-origin"} sideEffects={manifest?.sideEffects ?? []} mode={mode} slot={split ? SLOT.split : SLOT.full} meters={meters} posters={posters} />
     </article>

@@ -16,7 +16,15 @@ export interface PresenterState {
 export type SyncMessage =
   | { type: "state"; state: PresenterState }
   | { type: "hello"; writer: string }
-  | { type: "demo-health"; demoId: string; status: DemoHealth; writer: string };
+  | { type: "demo-health"; demoId: string; status: DemoHealth; writer: string }
+  /** The audience window reports whether a step is playing, so the speaker waits for Ready (CX risk 2). */
+  | { type: "playback"; slideId: string; stepIndex: number; playing: boolean; writer: string };
+
+export interface Playback {
+  slideId: string;
+  stepIndex: number;
+  playing: boolean;
+}
 
 export const STORAGE_KEY = "deck:state";
 

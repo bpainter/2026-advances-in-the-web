@@ -66,6 +66,7 @@ export interface SinglePage extends PageBase {
   stage: "single";
   title: string;                   // the section label
   frame: Frame;                    // viewport 1304 by 628
+  badge?: { text: string; missing?: Browser[] };   // spec 6: support chip in the title row; missing browsers struck through
   files?: DemoCodeFile[];
 }
 

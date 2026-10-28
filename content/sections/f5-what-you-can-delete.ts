@@ -10,6 +10,7 @@ export const section: DemoSection = {
     {
       id: "f5-single",
       stage: "single",
+      badge: { text: "npm, one weekly pull" },
       title: "What you can delete",
       intro:
         "Each core demo stood in for code teams carry today. This table names it, with the exceptions.",
