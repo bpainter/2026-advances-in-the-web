@@ -544,65 +544,103 @@
     return open.length ? open[open.length - 1] : null;
   }
 
-  // Back and Forward (PRD Part A, 3.3): navigation.back()/forward() where the API exists, else
-  // history. The traversal may be intercepted (same document; the run continues here) or load a
-  // document (`pagehide` posts `unloading` with the cursor), so nothing is announced up front.
-  // The API's promises reject when there is no entry to go to; that must not surface as an
-  // uncaught error.
+  // Back and Forward (PRD Part A, 3.3). The traversal may be intercepted (same document; the run
+  // continues here) or load a document (`pagehide` posts `unloading` with the cursor), so nothing
+  // is announced up front. Navigation API promises must not surface as uncaught errors.
   function swallow(result) {
     if (!result) return;
     if (result.committed) result.committed.catch(function () {});
     if (result.finished) result.finished.catch(function () {});
     if (typeof result.catch === "function") result.catch(function () {});
   }
-  // Back and Forward stay inside this frame: the Navigation API's entries belong to the frame's own
-  // navigable, and a traversal it cannot make is skipped instead of handed to the joint session
-  // history, where WebKit could move the presenter window (design review, item 7).
+  // Back and Forward stay inside this frame (design review, item 7). The guard asks whether this
+  // frame has an entry to go to: the Navigation API's canGoBack/canGoForward when its current entry
+  // matches the document, else a count of the entries this frame made, kept in window.name (it
+  // belongs to the frame and survives loads). WebKit 26.0 leaves currentEntry on the first entry
+  // after intercepted navigations, so the count is what guards there. The move itself is
+  // history.back()/forward(): WebKit 26.0's navigation.back() in a sandboxed frame tries to move the
+  // presenter window, while history traversal from the frame stays in the frame. A move the guard
+  // refuses is skipped, never handed to the joint session history.
   function traverse(dir) {
     var nav = window.navigation;
-    if (nav && nav.currentEntry) {
-      var can = dir === "back" ? nav.canGoBack : nav.canGoForward;
-      if (!can) throw errorOf("via-unsupported", "No " + dir + " entry in this frame");
-      swallow(dir === "back" ? nav.back() : nav.forward());
-      return;
-    }
-    // No Navigation API: the frame's own history, guarded by the entries this frame made (loads
-    // and pushState), counted in window.name, which belongs to the frame and survives loads.
     var d = frameDepth();
-    if (dir === "back" && d.index <= 0) throw errorOf("via-unsupported", "No back entry in this frame");
-    if (dir === "forward" && d.index >= d.max) throw errorOf("via-unsupported", "No forward entry in this frame");
-    saveDepth({ index: d.index + (dir === "back" ? -1 : 1), max: d.max });
+    var can;
+    if (nav && nav.currentEntry && nav.currentEntry.url === location.href) can = dir === "back" ? nav.canGoBack : nav.canGoForward;
+    else can = dir === "back" ? d.index > 0 : d.index < d.max;
+    if (!can) throw errorOf("via-unsupported", "No " + dir + " entry in this frame");
+    traversing = true;
+    saveDepth({ index: Math.max(0, d.index + (dir === "back" ? -1 : 1)), max: Math.max(d.max, d.index + (dir === "back" ? 0 : 1)) });
     if (dir === "back") history.back();
     else history.forward();
   }
+  var traversing = false;
 
+  // window.name is the frame's own and survives loads. A page may use it for itself (the F2 apps
+  // keep their session there), so the count is only kept while the name is empty or already ours.
+  function ownName() {
+    return !window.name || window.name.indexOf('{"index":') === 0;
+  }
   function frameDepth() {
+    if (!ownName()) return { index: 0, max: 0 };
     try {
       var parsed = JSON.parse(window.name || "{}");
       if (typeof parsed.index === "number" && typeof parsed.max === "number") return parsed;
     } catch (e) {
-      /* a name set by someone else */
+      /* not a count */
     }
     return { index: 0, max: 0 };
   }
   function saveDepth(d) {
+    if (!ownName()) return;
     try {
       window.name = JSON.stringify({ index: d.index, max: d.max });
     } catch (e) {
       /* refused */
     }
   }
+  // Counts this frame's entries: a document load that is a new navigation, then every same-document
+  // push (the Navigation API's navigate event followed by navigatesuccess, which covers intercepted
+  // links and pushState; without the API, the pushState wrapper). A frame's first document leaves
+  // the name alone; a load the frame made itself has a same-origin referrer.
   (function recordFrameEntries() {
-    if (window.navigation) return;
     var type = (performance.getEntriesByType("navigation")[0] || {}).type;
-    var known = window.name && window.name.charAt(0) === "{";
     var d = frameDepth();
-    if (!known) saveDepth({ index: 0, max: 0 });
-    else if (type === "navigate") saveDepth({ index: d.index + 1, max: d.index + 1 });
-    var push = history.pushState;
-    history.pushState = function () {
+    if (type === "navigate") {
+      if (window.name) saveDepth({ index: d.index + 1, max: d.index + 1 });
+      else if (document.referrer.indexOf(location.origin + "/") === 0) saveDepth({ index: 1, max: 1 });
+    }
+    function pushed() {
       var cur = frameDepth();
       saveDepth({ index: cur.index + 1, max: cur.index + 1 });
+    }
+    var nav = window.navigation;
+    if (nav && typeof nav.addEventListener === "function") {
+      var pending = null;
+      nav.addEventListener("navigate", function (e) {
+        pending = e.navigationType;
+      });
+      nav.addEventListener("navigatesuccess", function () {
+        if (pending === "push") pushed();
+        else if (pending === "traverse" && !traversing) {
+          // A traversal this runtime did not make (hands-on Back): only the API can say where it went.
+          try {
+            if (nav.currentEntry && nav.currentEntry.url === location.href) saveDepth({ index: nav.currentEntry.index, max: nav.entries().length - 1 });
+          } catch (err) {
+            /* keep the count */
+          }
+        }
+        pending = null;
+        traversing = false;
+      });
+      nav.addEventListener("navigateerror", function () {
+        pending = null;
+        traversing = false;
+      });
+      return;
+    }
+    var push = history.pushState;
+    history.pushState = function () {
+      pushed();
       return push.apply(history, arguments);
     };
   })();

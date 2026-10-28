@@ -77,10 +77,18 @@ runtime, flag metadata and instrumentation scripts.
 
 As in v3, `public/runtime/demo-runtime.js` runs the scripted actions; Next from the
 previous step animates in the active document, any other move mounts a fresh document and replays
-`s0..sN` instantly. Hands-on mode (`h`) gives the frame the keyboard. Back and Forward never leave the frame: with the
-Navigation API the runtime checks `canGoBack`/`canGoForward`; without it, it counts the frame's
-own loads and `pushState` entries in `window.name`. A replaying document takes focus first, so
-programmatic focus replays the same in WebKit. While an intro slide shows,
+`s0..sN` instantly. Hands-on mode (`h`) gives the frame the keyboard. Back and Forward never
+leave the frame. The guard is the Navigation API's `canGoBack`/`canGoForward` when its current
+entry matches the document, else a count of the frame's own entries (loads, intercepted pushes,
+`pushState`) kept in `window.name` while the name is empty or the runtime's own (the F2 apps keep
+their session there, and `presenter.js` ignores a JSON name); the move is `history.back()`/`forward()`. Safari 26.0 needs
+both: its `currentEntry` stays on the first entry after intercepted navigations, and its
+`navigation.back()` in a sandboxed frame tries to move the presenter window.
+
+A replaying document takes focus first, and the replay is posted from a task that carries the
+presenter's press (`lib/engine/input-relay.ts`): Safari 26.0 refuses `focus()` in a cross-origin
+frame outside such a task. Focus a page moves later (after a fetch) still cannot be restored in a
+fresh document there; a forward run, which has the real key press, restores it. While an intro slide shows,
 the next page's frame is loaded once in a hidden iframe to warm it (never for F2, whose apps log
 every request).
 

@@ -12,6 +12,8 @@ export function RequestLogRows({ session, initial }: { session: string; initial:
   const [lines, setLines] = useState<LogLine[]>(initial);
 
   useEffect(() => {
+    // presenter.js is already loading the page again: no stream for a document on its way out.
+    if (document.documentElement.hasAttribute("data-unloading")) return;
     const last = initial.length ? initial[initial.length - 1].seq : 0;
     const source = new EventSource(
       `/__demo/log?after=${last}&session=${encodeURIComponent(session)}`,
@@ -27,9 +29,16 @@ export function RequestLogRows({ session, initial }: { session: string; initial:
     });
     const onReset = () => setLines([]);
     window.addEventListener("f2:reset", onReset);
+    // Closed before the document goes (presenter.js loads the page again), so WebKit does not
+    // report the stream the load cancels as a failed request.
+    const onLeave = () => source.close();
+    window.addEventListener("f2:unloading", onLeave);
+    window.addEventListener("pagehide", onLeave);
     return () => {
       source.close();
       window.removeEventListener("f2:reset", onReset);
+      window.removeEventListener("f2:unloading", onLeave);
+      window.removeEventListener("pagehide", onLeave);
     };
   }, [initial, session]);
 

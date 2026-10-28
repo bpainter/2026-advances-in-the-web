@@ -55,6 +55,11 @@
   document.addEventListener("focusout", update);
   window.addEventListener("scroll", update, { passive: true });
   if (window.navigation) {
+    // The address commits right after the navigate event is handled; WebKit 26.0 fires no
+    // currententrychange, so the panel also reads it on the next task.
+    navigation.addEventListener("navigate", function () {
+      setTimeout(update, 0);
+    });
     navigation.addEventListener("currententrychange", update);
     navigation.addEventListener("navigatesuccess", function () {
       update();

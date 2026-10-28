@@ -81,13 +81,14 @@ function flagsFor(def: BuildDef, url: URL): Record<string, boolean> {
  * fetches; the response is delayed and the wait ends early when the request is aborted (PRD Part
  * A, 10.1). The delays must outlast the 100ms gap the steps author between two clicks, measured
  * from the first click: animated, the second click's cursor glide and ripple add about 700ms, so
- * the slow profile takes 1 second (short enough that the step fits the 2.5 s ceiling); in instant
+ * the slow profile takes 1.4 seconds (the request outlasts the second click in every engine, and the
+ * step still ends well inside the runtime's grace past its 2.5 s ceiling); in instant
  * replay the gap is the authored 100ms, so slow-instant takes 450ms. Either way the stale request
  * is still in flight and gets aborted.
  */
 function delayFor(url: URL): number {
   const net = url.searchParams.get("demo-net");
-  return net === "slow" ? 1000 : net === "slow-instant" ? 450 : 0;
+  return net === "slow" ? 1400 : net === "slow-instant" ? 450 : 0;
 }
 
 function throttle(req: Request, url: URL): Promise<"ok" | "aborted"> {

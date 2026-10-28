@@ -38,8 +38,14 @@
     }
   })();
 
+  // The frame runtime may keep its history count in window.name (a JSON object); that is not a
+  // session.
+  function session() {
+    return window.name && window.name.charAt(0) !== "{" ? window.name : "";
+  }
+
   function withSession(url) {
-    if (window.name) url.searchParams.set("s", window.name);
+    if (session()) url.searchParams.set("s", session());
     return url;
   }
 
@@ -65,13 +71,15 @@
 
   /** Marks the next request from this frame as this frame's. */
   function stamp() {
-    if (!window.name) window.name = newSession();
+    if (!session()) window.name = newSession();
     setCookie("f2s", window.name);
   }
 
   function load(href) {
     document.documentElement.setAttribute("data-unloading", "");
     stamp();
+    // Open streams close first: WebKit reports a stream the load cancels as a failed request.
+    window.dispatchEvent(new Event("f2:unloading"));
     location.replace(href);
     return new Promise(function () {});
   }

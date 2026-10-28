@@ -4,6 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProp
 import type { FramePage, Step } from "@/content/demo-schema";
 import type { Mode } from "@/lib/mode";
 import { FrameHandle, type StepResult } from "@/lib/engine/frame";
+import { installInputRelay, withInput } from "@/lib/engine/input-relay";
 import { flagsAt, replaySteps, segments, selectorsFor } from "@/lib/engine/steps";
 import { flagsQuery, frameUrl, glassFlags } from "@/lib/frames/origins";
 import { useStage } from "@/lib/stage-context";
@@ -98,6 +99,8 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
     [mode, handsOn],
   );
 
+  useEffect(() => installInputRelay(), []);
+
   // Enter the step: animate from the previous one, or reset and replay.
   useEffect(() => {
     const gen = ++generation.current;
@@ -159,11 +162,17 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
         fresh.dispose();
         return;
       }
-      // The replaying document takes focus first: WebKit ignores programmatic focus inside a frame
-      // that does not have it, so focus asserts and focus returns would replay differently.
-      if (mode === "audience" && !handsOn) fresh.focus();
-      const result = await fresh.replayTo(replaySteps(page, stepIndex));
-      if (gen !== generation.current) {
+      // The replaying document takes focus first, and the replay is posted from a task carrying the
+      // presenter's press: WebKit 26.0 ignores programmatic focus in a cross-origin frame outside
+      // such a task, so focus asserts and focus returns would replay differently (input-relay.ts).
+      const result = await new Promise<StepResult | null>((resolve) =>
+        withInput(() => {
+          if (gen !== generation.current) return resolve(null);
+          if (mode === "audience" && !handsOn) fresh.focus();
+          void fresh.replayTo(replaySteps(page, stepIndex)).then(resolve);
+        }),
+      );
+      if (gen !== generation.current || !result) {
         fresh.dispose();
         return;
       }

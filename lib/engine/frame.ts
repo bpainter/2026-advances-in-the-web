@@ -1,4 +1,5 @@
 import type { Action, Step } from "@/content/demo-schema";
+import { notePress } from "./input-relay";
 import { DEFAULT_PACE, parseFromRuntime, type AssertResult, type Cursor, type Cue, type Flags, type FromRuntime, type Rect, type RunMode, type ToRuntime } from "./protocol";
 
 export interface StepResult {
@@ -151,6 +152,8 @@ export class FrameHandle {
         this.errorListeners.forEach((l) => l(msg));
         return;
       case "key":
+        // The frame forwards a real press; keep it for a fresh document's replay (input-relay.ts).
+        notePress();
         this.keyListeners.forEach((l) => l(msg));
         return;
       case "resize-viewport":
@@ -193,10 +196,13 @@ export class FrameHandle {
     return new Promise<StepResult>((resolve) => {
       const list = steps.map((s) => ({ stepId: s.id, actions: s.actions }));
       this.run = { runId, stepId: steps[steps.length - 1]?.id ?? "s0", mode: "instant", actions: [], resolve, playing: true, steps: list };
-      void this.ready.then(() => {
+      // Posted in the caller's task when the frame is ready, so a press it carries reaches the frame.
+      const post = () => {
         if (!this.run || this.run.runId !== runId) return;
         this.post({ v: 1, type: "replay-to", frameId: this.id, runId, steps: list, from });
-      });
+      };
+      if (this.isReady) post();
+      else void this.ready.then(post);
     });
   }
 
