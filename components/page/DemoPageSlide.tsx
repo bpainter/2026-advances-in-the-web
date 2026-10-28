@@ -6,7 +6,7 @@ import { meterValue } from "@/lib/meters";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { PageBody } from "./PageBody";
-import { SupportBadge } from "./SupportBadge";
+import { hasFrame } from "@/content/demo-schema";
 
 interface Props {
   slide: Slide;
@@ -25,6 +25,15 @@ export async function DemoPageSlide({ slide, mode }: Props) {
   const page = slide.page;
   const section = slide.demoSection;
   if (!page || !section) throw new Error(`Slide ${slide.id} has layout demo-page but no page`);
+  if (!hasFrame(page)) {
+    return (
+      <article className="page" data-stage={page.stage} aria-label={section.feature}>
+        <header className="page__header">
+          <h1 className="page__title">{section.feature}</h1>
+        </header>
+      </article>
+    );
+  }
   const files = page.files ? await renderCodeFiles(page.files.map((f) => ({ file: f.file, lang: f.lang, source: f.source }))) : [];
   const manifest = page.frame ? manifestFor(page.frame.route) : null;
   const hasCode = files.length > 0;
@@ -36,7 +45,6 @@ export async function DemoPageSlide({ slide, mode }: Props) {
     <article className="page" data-stage={page.stage} data-code={hasCode} aria-label={page.title}>
       <header className="page__header">
         <h1 className="page__title">{page.title}</h1>
-        {section.support && (page.stage === "now" || page.stage === "code" || page.stage === "single") ? <SupportBadge support={section.support} /> : null}
       </header>
       <PageBody page={page} files={files} sandbox={manifest?.sandbox ?? "allow-scripts allow-same-origin"} sideEffects={manifest?.sideEffects ?? []} mode={mode} slot={hasCode ? SLOT.code : SLOT.full} meters={meters} posters={posters} />
     </article>

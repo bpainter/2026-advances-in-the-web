@@ -1,31 +1,26 @@
 import type { DemoSection } from "@/content/demo-schema";
 import { sectionFile } from "@/lib/demo-files";
 
-/** Extracted from PRD_Demos.md by scripts/extract-demo-prd.mts; code files live in ./f1-still-in-motion/files/. */
+/** Schema v4 (docs/PRD-demos-v4.md); shown code files live in ./f1-still-in-motion/files/. */
 export const section: DemoSection = {
   id: "f1-still-in-motion",
-  order: 6,
+  order: 7,
   label: "Still in motion",
   scenario:
-    "Six features worth prototyping now that do not yet get the core demos' production recommendation, with one live teaser: a customizable product color picker that falls back to a normal select.",
-  support: {
-    tier: "two-engine",
-    summary: "Chrome + Safari 27",
-    detail:
-      "Customizable select: Chrome 135 and Edge 135, Safari 27 (shipped 14 Sep 2026). Firefox: Nightly prefs only; Firefox 153 added parsing groundwork. Not Baseline. Safari 27.2 (26 Oct 2026) added ::field-content. The badge applies to the teaser only; the six tiles carry their own wait signals.",
-    missing: ["firefox"],
-  },
+    "TODO rewrite: Six features worth prototyping now that do not yet get the core demos' production recommendation, with one live teaser: a customizable product color picker that falls back to a normal select.",
   pages: [
     {
       id: "f1-single",
       stage: "single",
       title: "Still in motion",
+      intro:
+        "TODO rewrite: These are worth learning and prototyping. They should not receive the same production recommendation as the five core demos until syntax, implementation, and the team's support target line up.",
       frame: {
         build: "static",
         route: "/demos/08-fast-follows/static",
         viewport: {
-          width: 1296,
-          height: 856,
+          width: 1304,
+          height: 628,
         },
         hooks: ["reset", "resetTeaser"],
         poster: "/posters/f1-firefox-select.png",
@@ -52,7 +47,10 @@ export const section: DemoSection = {
               name: "reset",
             },
           ],
-          notes: "Six tiles are coming. Each one has a feature, a real use, and one wait signal.",
+          bullets: [
+            "TODO rewrite: Six tiles are coming.",
+            "TODO rewrite: Each one has a feature, a real use, and one wait signal.",
+          ],
         },
         {
           id: "s1",
@@ -72,9 +70,13 @@ export const section: DemoSection = {
             },
           ],
           spotlight: ["#tile-select", "#tile-anchor"],
-          notes:
-            "Customizable select gives branded product, color, or status pickers with native form semantics. Safari 27 shipped support, but cross-browser details and fallback authoring are still being refined. Anchor positioning covers tooltips, menus, teaching UI, and annotations that follow an anchor. Interop 2026 continues alignment, and recent keyword changes show that details still move.",
-          ifKeyboard: "Same. Nothing to operate on this step.",
+          bullets: [
+            "TODO rewrite: Customizable select gives branded product, color, or status pickers with native form semantics.",
+            "TODO rewrite: Safari 27 shipped support, but cross-browser details and fallback authoring are still being refined.",
+            "TODO rewrite: Anchor positioning covers tooltips, menus, teaching UI, and annotations that follow an anchor.",
+            "TODO rewrite: Interop 2026 continues alignment, and recent keyword changes show that details still move.",
+          ],
+          ifKeyboard: "TODO rewrite: Same. Nothing to operate on this step.",
         },
         {
           id: "s2",
@@ -94,10 +96,14 @@ export const section: DemoSection = {
             },
           ],
           spotlight: ["#tile-grid-lanes", "#tile-xdoc-vt"],
-          notes:
-            "Grid Lanes gives masonry-style editorial and product collections with logical tab order. Safari 27.2 renamed flow-tolerance to fit-tolerance on 26 October while the specification evolves, and Jeremy Keith already runs Grid Lanes on The Session behind @supports, with a carousel everywhere else. Cross-document view transitions polish moves between server-rendered pages. Same-document transitions are usable, while cross-document behavior remains an Interop 2026 focus.",
+          bullets: [
+            "TODO rewrite: Grid Lanes gives masonry-style editorial and product collections with logical tab order.",
+            "TODO rewrite: Safari 27.2 renamed flow-tolerance to fit-tolerance on 26 October while the specification evolves, and Jeremy Keith already runs Grid Lanes on The Session behind @supports, with a carousel everywhere else.",
+            "TODO rewrite: Cross-document view transitions polish moves between server-rendered pages.",
+            "TODO rewrite: Same-document transitions are usable, while cross-document behavior remains an Interop 2026 focus.",
+          ],
           ifKeyboard:
-            "Same. If there is time, open thesession.org/events/11446 in Safari, then in Chrome.",
+            "TODO rewrite: Same. If there is time, open thesession.org/events/11446 in Safari, then in Chrome.",
         },
         {
           id: "s3",
@@ -117,9 +123,13 @@ export const section: DemoSection = {
             },
           ],
           spotlight: ["#tile-scroll-driven", "#tile-scoped-registries"],
-          notes:
-            "Scroll-driven animations tie progress indicators and restrained content reveals to scroll. Interop work is still closing cross-browser differences. Scoped custom element registries let two versions of a design-system component live on one page. The feature is in Interop 2026 and is not yet a broad production default.",
-          ifKeyboard: "Same.",
+          bullets: [
+            "TODO rewrite: Scroll-driven animations tie progress indicators and restrained content reveals to scroll.",
+            "TODO rewrite: Interop work is still closing cross-browser differences.",
+            "TODO rewrite: Scoped custom element registries let two versions of a design-system component live on one page.",
+            "TODO rewrite: The feature is in Interop 2026 and is not yet a broad production default.",
+          ],
+          ifKeyboard: "TODO rewrite: Same.",
         },
         {
           id: "s4",
@@ -144,27 +154,33 @@ export const section: DemoSection = {
             },
           ],
           spotlight: ["#color"],
-          notes:
-            "One live teaser, and only one. Customizable select is the strongest visual option because unsupported browsers retain a normal select when the options keep real text. It is still a real select: keyboard, form submission, and validation stay native.",
+          bullets: [
+            "TODO rewrite: One live teaser, and only one.",
+            "TODO rewrite: Customizable select is the strongest visual option because unsupported browsers retain a normal select when the options keep real text.",
+            "TODO rewrite: It is still a real select: keyboard, form submission, and validation stay native.",
+          ],
           ifKeyboard:
-            "Tab to the select and press Space, or click it. ArrowDown to Moss and Enter, then open it again.",
+            "TODO rewrite: Tab to the select and press Space, or click it. ArrowDown to Moss and Enter, then open it again.",
         },
         {
           id: "s5",
           label: "Opt in, and keep the text",
           actions: [],
-          spotlight: ["#color", "#color option"],
           code: {
             file: "styles.css",
             lines: [[1, 4]],
           },
-          notes:
-            "Two selectors opt in: the select and its picker. Every option keeps its text next to the swatch. The golden rule, from Saron Yitbarek and Tim Nguyen at WebKit: always provide text content or accessible text attributes for your option elements.",
-          ifKeyboard: "Point at the word beside each swatch in the open picker.",
+          spotlight: ["#color", "#color option"],
+          bullets: [
+            "TODO rewrite: Two selectors opt in: the select and its picker.",
+            "TODO rewrite: Every option keeps its text next to the swatch.",
+            "TODO rewrite: The golden rule, from Saron Yitbarek and Tim Nguyen at WebKit: always provide text content or accessible text attributes for your option elements.",
+          ],
+          ifKeyboard: "TODO rewrite: Point at the word beside each swatch in the open picker.",
         },
         {
           id: "s6",
-          label: "Firefox fallback",
+          label: "TODO cut: Firefox fallback",
           actions: [
             {
               type: "hook",
@@ -176,14 +192,17 @@ export const section: DemoSection = {
             },
           ],
           spotlight: ["#firefox-poster"],
-          notes:
-            "Firefox does not support it yet. It gets a normal select, because every option keeps text, and the color still posts with the form. Safari 27.2 also added ::field-content on 26 October, one more sign the details are still moving.",
+          bullets: [
+            "TODO rewrite: Firefox does not support it yet.",
+            "TODO rewrite: It gets a normal select, because every option keeps text, and the color still posts with the form.",
+            "TODO rewrite: Safari 27.2 also added ::field-content on 26 October, one more sign the details are still moving.",
+          ],
           ifKeyboard:
-            "If Firefox is on the laptop, open /demos/08-fast-follows/static/select there and show the plain select live instead of the poster.",
+            "TODO rewrite: If Firefox is on the laptop, open /demos/08-fast-follows/static/select there and show the plain select live instead of the poster.",
         },
         {
           id: "s7",
-          label: "The rule",
+          label: "TODO cut: The rule",
           actions: [
             {
               type: "reveal",
@@ -191,20 +210,16 @@ export const section: DemoSection = {
             },
           ],
           spotlight: ["#rule"],
-          notes:
-            "Prototype now, verify in Baseline and Interop, then move it into the main demo set when support and syntax settle.",
-          ifKeyboard: "Same.",
+          bullets: [
+            "TODO rewrite: Prototype now, verify in Baseline and Interop, then move it into the main demo set when support and syntax settle.",
+          ],
+          ifKeyboard: "TODO rewrite: Same.",
         },
       ],
-      notes: {
-        open: "These are worth learning and prototyping. They should not receive the same production recommendation as the five core demos until syntax, implementation, and the team's support target line up.",
-        bridge:
-          "The browser is not the only thing that moved this year. The framework section solves one production problem deeply, and that problem is caching.",
-      },
       timing: {
-        minutes: 2,
-        cumulative: 22.75,
+        minutes: 1,
       },
+      cutPriority: 4,
     },
   ],
   citations: [
@@ -266,6 +281,6 @@ export const section: DemoSection = {
     },
   ],
   cautions: [
-    "They should not receive the same production recommendation as the five core demos until syntax, implementation, and the team's support target line up.",
+    "TODO rewrite: They should not receive the same production recommendation as the five core demos until syntax, implementation, and the team's support target line up.",
   ],
 };

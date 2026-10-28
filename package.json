@@ -10,10 +10,10 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "check": "node --conditions=react-server --import tsx scripts/validate.mts",
+    "test:validator": "node --conditions=react-server --import tsx scripts/validator-fixtures.mts",
     "validate": "pnpm typecheck && pnpm lint && pnpm meters && pnpm check",
     "walk": "node --conditions=react-server --import tsx scripts/walk-demos.mts",
     "meters": "node --conditions=react-server --import tsx scripts/meters.mts",
-    "extract:demos": "tsx scripts/extract-demo-prd.mts",
     "dev:framework": "pnpm --dir demos/06-framework-cache dev",
     "build:framework": "pnpm --dir demos/06-framework-cache build",
     "start:framework": "pnpm --dir demos/06-framework-cache start",
@@ -45,6 +45,7 @@
     "prettier": "3.8.1",
     "tailwindcss": "4.3.3",
     "tsx": "4.23.15",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "web-features": "3.44.0"
   }
 }

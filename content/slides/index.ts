@@ -1,6 +1,6 @@
 import type { Slide } from "@/content/schema";
-import type { DemoPage, DemoSection } from "@/content/demo-schema";
-import { sections } from "@/content/sections";
+import { pageHeading, type DemoPage, type DemoSection } from "@/content/demo-schema";
+import { DEMO_SECTION_END, sections } from "@/content/sections";
 import { slide as o1 } from "./01-title";
 import { slide as o2 } from "./02-the-mandate";
 import { slide as o3 } from "./03-three-reactions";
@@ -19,12 +19,12 @@ function pageSlide(section: DemoSection, page: DemoPage): Slide {
     index: 0,
     section: SECTION_OF[section.id] ?? (section.id.startsWith("d") ? "platform-baseline" : section.id === "f2-caching" ? "frameworks" : section.id === "f3-package-trust" ? "package-managers" : "decide"),
     layout: "demo-page",
-    title: page.title,
+    title: pageHeading(section, page),
     page,
     demoSection: section,
     citations: section.citations,
-    speakerNotes: page.notes.open,
-    timing: page.timing,
+    speakerNotes: page.intro,
+    timing: { minutes: page.timing.minutes, cumulative: page.timing.cumulative ?? 0 },
     cutPriority: page.cutPriority,
   };
 }
@@ -40,6 +40,8 @@ const closing = [c1, c2];
 
 let cumulative = 0;
 export const slides: Slide[] = [...opening, ...pages, ...closing].map((s, i) => {
+  // The closing starts after the demo section's buffer (PRD v4, 7.4), not at its last page.
+  if (s.layout !== "demo-page" && i > 0 && opening.length + pages.length === i) cumulative = Math.max(cumulative, DEMO_SECTION_END);
   cumulative = s.layout === "demo-page" ? s.timing.cumulative : cumulative + s.timing.minutes;
   return { ...s, index: i + 1, timing: { minutes: s.timing.minutes, cumulative: Math.round(cumulative * 100) / 100 } };
 });

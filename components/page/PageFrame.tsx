@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
-import type { DemoPage, Step } from "@/content/demo-schema";
+import type { FramePage, Step } from "@/content/demo-schema";
 import type { Mode } from "@/lib/mode";
 import { FrameHandle, type StepResult } from "@/lib/engine/frame";
 import { flagsAt, replaySteps, segments, selectorsFor } from "@/lib/engine/steps";
@@ -10,7 +10,7 @@ import { useStage } from "@/lib/stage-context";
 import { Overlay } from "./Overlay";
 
 interface Props {
-  page: DemoPage;
+  page: FramePage;
   /** The frame's sandbox attribute and side-effecting hooks come from the build manifest. */
   sandbox: string;
   sideEffects: string[];
@@ -21,7 +21,7 @@ interface Props {
   onStepResult?: (stepId: string, result: StepResult) => void;
 }
 
-function documentUrl(page: DemoPage, flags: Record<string, boolean>): { origin: string; url: string } {
+function documentUrl(page: FramePage, flags: Record<string, boolean>): { origin: string; url: string } {
   const route = page.frame!.route;
   const { origin, url } = frameUrl(route.endsWith("/") ? `${route}index.html` : route.includes(".") ? route : `${route}/index.html`);
   const q = flagsQuery(flags);

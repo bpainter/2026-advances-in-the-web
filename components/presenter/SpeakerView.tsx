@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { Slide } from "@/content/schema";
-import type { Action, DemoPage, DemoSection, Step } from "@/content/demo-schema";
+import { hasFrame, type Action, type DemoPage, type DemoSection, type Step } from "@/content/demo-schema";
 import { usePresenter } from "@/lib/presenter/context";
 import { frameUrl } from "@/lib/frames/origins";
 import { Timer, TimerBadge } from "./Timer";
@@ -147,12 +147,12 @@ export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative,
   const step = steps[stepIndex];
   const last = steps.length > 0 && stepIndex === steps.length - 1;
   const nextStep = steps[stepIndex + 1];
-  const lastCodeStep = last && page?.stage === "code";
+  const lastCodeStep = last && page?.stage === "now";
   const nextLine = nextStep ? `${nextStep.label}${nextStep.actions.length ? `: ${summarize(nextStep.actions)}` : ""}` : next ? `Next page: ${next.title}` : "End of deck";
   const health = page ? demoHealth[page.id] : undefined;
   const openAudience = () => window.open("/present", "deck-audience");
   const openFrame = () => {
-    if (page?.frame) window.open(frameUrl(page.frame.route).url, "_blank", "noopener");
+    if (page && hasFrame(page)) window.open(frameUrl(page.frame.route).url, "_blank", "noopener");
   };
   const exportLog = () => {
     const blob = new Blob([localStorage.getItem(LOG_KEY) ?? "[]"], { type: "application/json" });
@@ -239,17 +239,15 @@ export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative,
               {stepIndex === 0 ? (
                 <>
                   <p className="speaker__eyebrow">Open</p>
-                  <p className="speaker__notes-text">{page.notes.open}</p>
+                  <p className="speaker__notes-text">{page.intro}</p>
                 </>
               ) : null}
-              <p className="speaker__notes-text">{step.notes}</p>
+              <ul className="speaker__bullets">
+                {step.bullets.map((b) => (
+                  <li key={b}>{b}</li>
+                ))}
+              </ul>
               {step.proof ? <p className="speaker__proof">Proof: {step.proof}</p> : null}
-              {last ? (
-                <>
-                  <p className="speaker__eyebrow">Bridge</p>
-                  <p className="speaker__notes-text">{page.notes.bridge}</p>
-                </>
-              ) : null}
               <p className="speaker__next-press">
                 <span className="speaker__next-press-label">Next press</span> {nextLine}
               </p>
@@ -260,7 +258,6 @@ export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative,
                   ))}
                 </ul>
               ) : null}
-              {section?.support?.detail ? <p className="speaker__gotcha">{section.support.detail}</p> : null}
               {section ? (
                 <details className="speaker__citations">
                   <summary>Citations ({section.citations.length})</summary>
@@ -316,7 +313,7 @@ export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative,
           <button type="button" className="speaker__button speaker__button--quiet" onClick={openAudience}>
             Audience window
           </button>
-          <button type="button" className="speaker__button speaker__button--quiet" onClick={openFrame} disabled={!page?.frame}>
+          <button type="button" className="speaker__button speaker__button--quiet" onClick={openFrame} disabled={!page || !hasFrame(page)}>
             Open frame
           </button>
           {rehearse ? (

@@ -1,30 +1,25 @@
 import type { DemoSection } from "@/content/demo-schema";
-import { sectionFile } from "@/lib/demo-files";
 
-/** Extracted from PRD_Demos.md by scripts/extract-demo-prd.mts; code files live in ./f4-vite-8-locally/files/. */
+/** Schema v4 (docs/PRD-demos-v4.md); shown code files live in ./f4-vite-8-locally/files/. */
 export const section: DemoSection = {
   id: "f4-vite-8-locally",
-  order: 9,
+  order: 10,
   label: "Vite 8 locally",
   scenario:
-    "Run the same repository under the existing Vite setup and Vite 8, and capture cold build time, warm build time, output size, warnings, and failing plugins.",
-  support: {
-    tier: "tooling",
-    summary: "Vite 8 · Rolldown",
-    detail:
-      "Vite 8 shipped 12 Mar 2026 and replaces the split esbuild and Rollup path with Rolldown. The comparison runs on the demo repository on the presenting laptop.",
-  },
+    "TODO rewrite: Run the same repository under the existing Vite setup and Vite 8, and capture cold build time, warm build time, output size, warnings, and failing plugins.",
   pages: [
     {
       id: "f4-single",
       stage: "single",
       title: "Vite 8 locally",
+      intro:
+        "TODO rewrite: Keep Vite 8 concrete. Vite 8 replaces the split esbuild and Rollup path with Rolldown, and this is what that did to our repository.",
       frame: {
         build: "static",
         route: "/demos/09-vite-8/static",
         viewport: {
-          width: 1296,
-          height: 856,
+          width: 1304,
+          height: 628,
         },
         hooks: ["reset"],
         poster: "/posters/f4-s3.png",
@@ -39,8 +34,9 @@ export const section: DemoSection = {
               name: "reset",
             },
           ],
-          notes:
-            "Same repository, the existing Vite setup against Vite 8, measured on this laptop.",
+          bullets: [
+            "TODO rewrite: Same repository, the existing Vite setup against Vite 8, measured on this laptop.",
+          ],
         },
         {
           id: "s1",
@@ -60,8 +56,11 @@ export const section: DemoSection = {
             },
           ],
           spotlight: ["#row-cold", "#row-warm"],
-          notes: "Cold build, then warm build. Read both numbers aloud.",
-          ifKeyboard: "Same. If asked, run pnpm measure:vite and show the JSON.",
+          bullets: [
+            "TODO rewrite: Cold build, then warm build.",
+            "TODO rewrite: Read both numbers aloud.",
+          ],
+          ifKeyboard: "TODO rewrite: Same. If asked, run pnpm measure:vite and show the JSON.",
         },
         {
           id: "s2",
@@ -73,8 +72,8 @@ export const section: DemoSection = {
             },
           ],
           spotlight: ["#row-size"],
-          notes: "Output size, measured on the same build.",
-          ifKeyboard: "Same.",
+          bullets: ["TODO rewrite: Output size, measured on the same build."],
+          ifKeyboard: "TODO rewrite: Same.",
         },
         {
           id: "s3",
@@ -94,19 +93,18 @@ export const section: DemoSection = {
             },
           ],
           spotlight: ["#row-warnings", "#row-plugins"],
-          notes:
-            "Warnings and failing plugins are the upgrade cost. These are local measurements, so I am not repeating the project's 10 to 30 times benchmark claim. Your plugins decide your number.",
-          ifKeyboard: "Same.",
+          bullets: [
+            "TODO rewrite: Warnings and failing plugins are the upgrade cost.",
+            "TODO rewrite: These are local measurements, so I am not repeating the project's 10 to 30 times benchmark claim.",
+            "TODO rewrite: Your plugins decide your number.",
+          ],
+          ifKeyboard: "TODO rewrite: Same.",
         },
       ],
-      notes: {
-        open: "Keep Vite 8 concrete. Vite 8 replaces the split esbuild and Rollup path with Rolldown, and this is what that did to our repository.",
-        bridge: "Last, a short list of what the core demos let you delete, and what stays.",
-      },
       timing: {
         minutes: 0.5,
-        cumulative: 30.25,
       },
+      cutPriority: 2,
     },
   ],
   citations: [
@@ -116,6 +114,6 @@ export const section: DemoSection = {
     },
   ],
   cautions: [
-    "Avoid vendor benchmark claims in the live narrative unless the same result is reproduced in the demo repository.",
+    "TODO rewrite: Avoid vendor benchmark claims in the live narrative unless the same result is reproduced in the demo repository.",
   ],
 };

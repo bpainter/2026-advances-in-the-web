@@ -1,0 +1,214 @@
+/**
+ * One broken fixture per validator rule (PRD v4, M0 acceptance). A small valid section passes with
+ * no errors; each mutation below breaks exactly one rule, and the test fails unless the validator
+ * reports that rule.
+ *
+ *   pnpm test:validator
+ */
+import type { DemoSection, IntroPage, WalkPage } from "@/content/demo-schema";
+import { validate, type ValidateContext } from "@/lib/validate/rules";
+import { computeSupport } from "@/lib/support-data";
+import { installedWebFeatures } from "@/lib/web-features";
+
+const wf = installedWebFeatures();
+const FIXTURE_JS = Array.from({ length: 60 }, (_, i) => `const line${i + 1} = ${i + 1};`).join("\n");
+
+function base(): DemoSection {
+  return {
+    id: "x1-fixture",
+    order: 1,
+    label: "Fixture row",
+    feature: "Dialog element",
+    scenario: "A row opens a dialog.",
+    support: { kind: "web-features", id: "dialog", alsoUses: ["popover"] },
+    citations: [],
+    cautions: ["Check permission on the server."],
+    pages: [
+      {
+        id: "x1-intro",
+        stage: "intro",
+        intro: "This is the fixture. It has one row.",
+        description: "The dialog element asks the user to confirm.",
+        visual: { src: "/intro/x1.png", alt: "A dialog over a row.", capture: { pageId: "x1-now", stepId: "s1" } },
+        steps: [{ id: "s0", label: "Title and support", actions: [], bullets: [] }],
+        timing: { minutes: 0.25 },
+      },
+      {
+        id: "x1-used-to",
+        stage: "used-to",
+        eyebrow: "Dialog element",
+        title: "How we used to do it",
+        intro: "This is the old row. The code lights up as it plays.",
+        frame: { build: "today", route: "/x/today", viewport: { width: 640, height: 628 } },
+        files: [{ file: "app.js", lang: "js", source: "", excerptOf: { path: "fixture.js", ranges: [[1, 10], [20, 30]] } }],
+        steps: [
+          { id: "s0", label: "The old row", actions: [], code: { file: "app.js", lines: [] }, bullets: [] },
+          { id: "s1", label: "Open the box", actions: [{ type: "click", target: "#open" }], code: { file: "app.js", lines: [[1, 4]] }, bullets: ["The button opens the box."] },
+          {
+            id: "s2",
+            label: "Count the code",
+            key: true,
+            actions: [{ type: "click", target: "#close" }],
+            code: { file: "app.js", lines: [[13, 16]] },
+            meter: { label: "JavaScript", value: "10 lines", source: "fixture" },
+            bullets: ["The box closes.", "That took ten lines."],
+          },
+        ],
+        timing: { minutes: 0.5 },
+      },
+      {
+        id: "x1-now",
+        stage: "now",
+        eyebrow: "Dialog element",
+        title: "How we do it now",
+        intro: "This is the same row. The box is a dialog.",
+        frame: { build: "native", route: "/x/native", viewport: { width: 640, height: 628 } },
+        files: [{ file: "index.html", lang: "html", source: "<button>\n  Open\n</button>\n<dialog></dialog>" }],
+        steps: [
+          { id: "s0", label: "Same row", actions: [], code: { file: "index.html", lines: [] }, bullets: [] },
+          {
+            id: "s1",
+            label: "Open the dialog",
+            key: true,
+            actions: [{ type: "click", target: "#open" }],
+            code: { file: "index.html", lines: [[1, 3]] },
+            callouts: [{ target: "dialog", text: "Page is inert", side: "top" }],
+            bullets: ["The button opens the dialog.", "The page behind waits."],
+          },
+          { id: "s2", label: "Styles off", actions: [{ type: "toggle", flag: "enhance-css", on: false }], code: { file: "index.html", lines: [], off: false }, proof: "Styles off.", bullets: ["The styles are off."] },
+        ],
+        timing: { minutes: 1.75 },
+      },
+    ],
+  };
+}
+
+function context(sections: DemoSection[]): ValidateContext {
+  // The excerpt's source is generated as the loader would.
+  for (const s of sections)
+    for (const p of s.pages)
+      if (p.stage !== "intro")
+        for (const f of p.files ?? [])
+          if (f.excerptOf) {
+            const lines = FIXTURE_JS.split("\n");
+            const shown: string[] = [];
+            let next = 1;
+            for (const [a, b] of f.excerptOf.ranges) {
+              if (a > next) shown.push(`// ... ${a - next} more lines`);
+              shown.push(...lines.slice(a - 1, b));
+              next = b + 1;
+            }
+            if (next <= lines.length) shown.push(`// ... ${lines.length - next + 1} more lines`);
+            if (!f.source) f.source = shown.join("\n");
+          }
+  return {
+    timing: { "x1-fixture": [0.25, 0.5, 1.75] },
+    start: 0,
+    lastPageBy: 10,
+    webFeatures: wf,
+    support: computeSupport(sections, wf.data, wf.version, {}),
+    meters: { fixture: "10 lines" },
+    publicFile: () => true,
+    repoFile: (p) => (p === "fixture.js" ? FIXTURE_JS : null),
+    build: () => null,
+  };
+}
+
+type Mut = (s: DemoSection) => void;
+const intro = (s: DemoSection) => s.pages[0] as IntroPage;
+const usedTo = (s: DemoSection) => s.pages[1] as WalkPage;
+const now = (s: DemoSection) => s.pages[2] as WalkPage;
+const addStep = (p: WalkPage, n: number) => {
+  for (let i = 0; i < n; i++) p.steps.push({ id: `s${p.steps.length}`, label: "Click again", actions: [{ type: "click", target: "#open" }], code: { file: p.files[0].file, lines: [1] }, bullets: ["The button opens it."] });
+};
+
+const CASES: [string, Mut][] = [
+  ["v3-field", (s) => Object.assign(now(s).steps[1], { notes: "old" })],
+  ["v3-field", (s) => Object.assign(s, { support: { ...s.support, tier: "baseline-newly" } })],
+  ["page-order", (s) => s.pages.reverse()],
+  ["todo", (s) => (now(s).steps[1].bullets[0] = "TODO rewrite: old text.")],
+  ["step-cap", (s) => addStep(now(s), 4)],
+  ["step-cap", (s) => addStep(usedTo(s), 2)],
+  ["proof", (s) => now(s).steps.forEach((st) => (st.proof = "Proof."))],
+  ["key-step", (s) => (now(s).steps[2].key = true)],
+  ["bullets", (s) => (now(s).steps[1].bullets = [])],
+  ["bullets", (s) => (usedTo(s).steps[1].bullets = ["One.", "Two.", "Three."])],
+  ["budget", (s) => (intro(s).intro = Array.from({ length: 6 }, () => "This sentence has nine words in it, all told.").join(" "))],
+  ["budget", (s) => (usedTo(s).steps[2].bullets = Array.from({ length: 2 }, () => "Ten words sit in this bullet for the budget test now.")) && (usedTo(s).intro = Array.from({ length: 3 }, () => "Here we have a sentence of exactly fifteen words in it for the test.").join(" "))],
+  ["step-words", (s) => (now(s).steps[1].bullets = Array.from({ length: 3 }, () => "Fourteen words here make up one bullet of this long step on the page."))],
+  ["dash", (s) => (now(s).steps[1].bullets[0] = "The button — the blue one — opens it.")],
+  ["exclaim", (s) => (now(s).steps[1].bullets[0] = "The button opens the dialog!")],
+  ["sentence", (s) => (now(s).steps[1].bullets[0] = "This one sentence keeps going on and on with many more words than anyone in the room could ever follow on the stage.")],
+  ["bullet-length", (s) => (now(s).steps[1].bullets[0] = "The button opens it. Then the page waits for you. Then the dialog asks a question. Then you answer it and it closes again right away.")],
+  ["banned", (s) => (now(s).steps[1].bullets[0] = "The button just opens the dialog.")],
+  ["x-not-y", (s) => (now(s).steps[1].bullets = ["The browser does it, not us.", "The page waits, not the dialog."])],
+  ["x-not-y", (s) => (now(s).steps[1].label = "Browser, not script")],
+  ["case", (s) => (now(s).steps[1].label = "open the dialog")],
+  ["intro-sentences", (s) => (now(s).intro = "One sentence only.")],
+  ["code", (s) => delete now(s).steps[1].code],
+  ["code", (s) => (now(s).steps[1].code = { file: "index.html", lines: [[1, 9]] })],
+  ["code", (s) => (usedTo(s).steps[1].code = { file: "app.js", lines: [[1, 13]] })],
+  ["code", (s) => (usedTo(s).steps[1].code = { file: "app.js", lines: [11] })],
+  ["code", (s) => (now(s).steps[1].code = { file: "missing.html", lines: [1] })],
+  ["file-size", (s) => (now(s).files[0].source = "<p>" + "x".repeat(50) + "</p>")],
+  ["file-size", (s) => (now(s).files[0].source = Array.from({ length: 41 }, () => "<p></p>").join("\n"))],
+  ["files", (s) => now(s).files.push({ file: "a.css", lang: "css", source: "a{}" }, { file: "b.css", lang: "css", source: "b{}" }, { file: "c.css", lang: "css", source: "c{}" })],
+  ["excerpt", (s) => (usedTo(s).files[0].source = usedTo(s).files[0].source.replace("const line2 = 2;", "const line2 = 3;"))],
+  ["excerpt", (s) => (usedTo(s).files[0].excerptOf!.ranges = [[20, 30], [1, 10]])],
+  ["intro", (s) => (intro(s).description = "It confirms. It also closes.")],
+  ["intro", (s) => (s.support = { kind: "web-features", id: "no-such-feature" })],
+  ["intro", (s) => (intro(s).visual.capture.stepId = "s9")],
+  ["eyebrow", (s) => (now(s).eyebrow = "Dialogs")],
+  ["title", (s) => (usedTo(s).title = "How we do it now")],
+  ["callouts", (s) => (usedTo(s).steps[1].callouts = [{ target: "#open", text: "Open", side: "top" }])],
+  ["callouts", (s) => (now(s).steps[1].callouts!.push({ target: "#open", text: "Two", side: "left" }))],
+  ["callouts", (s) => (now(s).steps[1].callouts![0].text = "Four words are here")],
+  ["meter", (s) => (usedTo(s).steps[1].meter = usedTo(s).steps[2].meter) && delete usedTo(s).steps[2].meter],
+  ["meter", (s) => (usedTo(s).steps[2].meter = { label: "JavaScript", value: "12 lines", source: "fixture" })],
+  ["viewport", (s) => (now(s).frame.viewport = { width: 1280, height: 720 })],
+  ["timing", (s) => (now(s).timing.minutes = 2)],
+  ["timing", (s) => (now(s).timing.minutes = 20) && (s.id = "x1-fixture")],
+  ["frame-change", (s) => (now(s).steps[2].actions = [{ type: "wait", ms: 100 }])],
+  ["cautions", (s) => (s.cautions = ["One.", "Two.", "Three.", "Four."])],
+  ["cautions", (s) => (s.cautions = ["This caution runs on for many more words than the rule allows so that it is plainly too long to say."])],
+  ["via", (s) => now(s).steps[1].actions.push({ type: "key", key: "Escape", via: "magic" })],
+  ["support", (s) => (s.support = { kind: "web-features", id: "customizable-select" })],
+];
+
+let failed = 0;
+const clean = base();
+const baseIssues = validate([clean], context([clean])).filter((i) => i.level === "error");
+if (baseIssues.length) {
+  failed++;
+  console.log("✖ the valid fixture fails:");
+  for (const i of baseIssues) console.log(`    [${i.rule}] ${i.where}: ${i.message}`);
+} else console.log("✓ the valid fixture passes");
+
+for (const [rule, mutate] of CASES) {
+  const s = base();
+  const ctx = context([s]);
+  mutate(s);
+  let issues;
+  try {
+    issues = validate([s], { ...ctx, support: rule === "support" ? ctx.support : computeSupportSafe(s, ctx) });
+  } catch (e) {
+    issues = [{ rule: "threw", where: "", message: (e as Error).message, level: "error" as const }];
+  }
+  const hit = issues.filter((i) => i.rule === rule && i.level === "error");
+  if (hit.length) console.log(`✓ ${rule}: ${hit[0].message}`);
+  else {
+    failed++;
+    console.log(`✖ ${rule}: not reported (got ${issues.map((i) => i.rule).join(", ") || "nothing"})`);
+  }
+}
+
+function computeSupportSafe(s: DemoSection, ctx: ValidateContext) {
+  try {
+    return computeSupport([s], wf.data, wf.version, {});
+  } catch {
+    return ctx.support;
+  }
+}
+
+console.log(`\n${CASES.length - failed + (baseIssues.length ? 0 : 1)} passed, ${failed} failed`);
+process.exit(failed ? 1 : 0);

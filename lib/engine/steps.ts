@@ -1,4 +1,4 @@
-import type { Action, DemoPage, Step } from "@/content/demo-schema";
+import type { Action, FramePage, Step } from "@/content/demo-schema";
 import { PACE } from "@/content/demo-schema";
 
 /** Flags whose toggle reloads the document (PRD Part A, 9). */
@@ -9,7 +9,7 @@ export function isReloadingToggle(a: Action): boolean {
 }
 
 /** Flags in effect after `steps[0..stepIndex]` (toggles accumulate through the page). */
-export function flagsAt(page: DemoPage, stepIndex: number): Record<string, boolean> {
+export function flagsAt(page: FramePage, stepIndex: number): Record<string, boolean> {
   const flags = { ...(page.frame?.flags ?? {}) };
   for (let i = 0; i <= stepIndex && i < page.steps.length; i++) {
     for (const a of page.steps[i].actions) if (a.type === "toggle") flags[a.flag] = a.on;
@@ -18,7 +18,7 @@ export function flagsAt(page: DemoPage, stepIndex: number): Record<string, boole
 }
 
 /** Flags before the step's own actions run (the document a step starts in). */
-export function flagsBefore(page: DemoPage, stepIndex: number): Record<string, boolean> {
+export function flagsBefore(page: FramePage, stepIndex: number): Record<string, boolean> {
   return flagsAt(page, stepIndex - 1);
 }
 
@@ -64,7 +64,7 @@ export function segments(step: Step, startFlags: Record<string, boolean>): { act
  * last reloading toggle at or before the step (actions before it ran in a document that was
  * discarded, as in forward play), minus the toggles themselves (the flags are already applied).
  */
-export function replaySteps(page: DemoPage, stepIndex: number): Step[] {
+export function replaySteps(page: FramePage, stepIndex: number): Step[] {
   let fromStep = 0;
   let fromAction = 0;
   for (let i = 0; i <= stepIndex && i < page.steps.length; i++) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
-import type { DemoPage } from "@/content/demo-schema";
+import type { FramePage } from "@/content/demo-schema";
 import type { Mode } from "@/lib/mode";
 import type { RenderedFile } from "@/lib/highlight";
 import type { StepResult } from "@/lib/engine/frame";
@@ -10,7 +10,7 @@ import { PageFrame } from "./PageFrame";
 import { PageCodePanel } from "./PageCodePanel";
 
 interface Props {
-  page: DemoPage;
+  page: FramePage;
   files: RenderedFile[];
   sandbox: string;
   sideEffects: string[];

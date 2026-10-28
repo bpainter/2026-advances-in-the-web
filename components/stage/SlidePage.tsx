@@ -1,3 +1,4 @@
+import { hasFrame } from "@/content/demo-schema";
 import type { Slide } from "@/content/schema";
 import type { Mode } from "@/lib/mode";
 import { slides, neighbours } from "@/lib/content";
@@ -30,7 +31,7 @@ export function SlidePage({ slide, mode, canonicalPath, embedded, passive }: Pro
       lastId={slides[slides.length - 1].id}
       slideIds={slides.map((s) => s.id)}
       steps={slide.page?.steps.map((s) => ({ label: s.label })) ?? []}
-      frameRoute={slide.page?.frame?.route}
+      frameRoute={slide.page && hasFrame(slide.page) ? slide.page.frame.route : undefined}
       mode={mode}
       canonicalPath={canonicalPath}
       embedded={embedded}

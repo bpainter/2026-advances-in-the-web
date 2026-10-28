@@ -2,6 +2,8 @@ import "server-only";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import type { CodeFile, CodeLang } from "@/content/schema";
+import type { DemoCodeFile, DemoCodeLang } from "@/content/demo-schema";
+import { excerptSource } from "./excerpt";
 
 const DEMOS_DIR = path.join(process.cwd(), "content", "demos");
 
@@ -33,4 +35,28 @@ const SECTIONS_DIR = path.join(process.cwd(), "content", "sections");
  */
 export function sectionFile(sectionId: string, file: string): string {
   return readFileSync(path.join(SECTIONS_DIR, sectionId, "files", file), "utf8").replace(/\n$/, "");
+}
+
+/**
+ * A shown excerpt of a today build's file (PRD v4, 7.1 item 6): `source` is generated from the
+ * 44-column formatted file at `relPath` (relative to the repo root) by joining `ranges` with elision
+ * lines. Read when accessed, like `sectionFile`, so edits show in dev.
+ */
+export function excerpt(relPath: string, lang: DemoCodeLang, ranges: [number, number][], file = path.basename(relPath)): DemoCodeFile {
+  const entry = { file, lang, excerptOf: { path: relPath, ranges } } as DemoCodeFile;
+  Object.defineProperty(entry, "source", {
+    enumerable: true,
+    get: () => excerptSource(readFileSync(path.join(process.cwd(), relPath), "utf8"), ranges, lang),
+  });
+  return entry;
+}
+
+/** A whole file of a demo folder, shown as is (`demos/07-package-workflow/used-to/.npmrc`). */
+export function repoFile(relPath: string, lang: DemoCodeLang, file = path.basename(relPath)): DemoCodeFile {
+  const entry = { file, lang } as DemoCodeFile;
+  Object.defineProperty(entry, "source", {
+    enumerable: true,
+    get: () => readFileSync(path.join(process.cwd(), relPath), "utf8").replace(/\n$/, ""),
+  });
+  return entry;
 }

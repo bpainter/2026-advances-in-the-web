@@ -1,24 +1,25 @@
 import type { DemoSection } from "@/content/demo-schema";
-import { sectionFile } from "@/lib/demo-files";
 
-/** Extracted from PRD_Demos.md by scripts/extract-demo-prd.mts; code files live in ./f5-what-you-can-delete/files/. */
+/** Schema v4 (docs/PRD-demos-v4.md); shown code files live in ./f5-what-you-can-delete/files/. */
 export const section: DemoSection = {
   id: "f5-what-you-can-delete",
-  order: 10,
+  order: 11,
   label: "What you can delete",
   scenario:
-    "One table maps each core demo's today plumbing to the libraries it stands in for, with one fresh npm pull and an honest not-yet column.",
+    "TODO rewrite: One table maps each core demo's today plumbing to the libraries it stands in for, with one fresh npm pull and an honest not-yet column.",
   pages: [
     {
       id: "f5-single",
       stage: "single",
       title: "What you can delete",
+      intro:
+        "TODO rewrite: Each core demo stood in for libraries teams carry today. Here is the list, with the honest exceptions.",
       frame: {
         build: "static",
         route: "/demos/10-delete/static",
         viewport: {
-          width: 1296,
-          height: 856,
+          width: 1304,
+          height: 628,
         },
         hooks: ["reset"],
         poster: "/posters/f5-s4.png",
@@ -33,7 +34,7 @@ export const section: DemoSection = {
               name: "reset",
             },
           ],
-          notes: "One row per core demo, and one row that stays.",
+          bullets: ["TODO rewrite: One row per core demo, and one row that stays."],
         },
         {
           id: "s1",
@@ -45,9 +46,11 @@ export const section: DemoSection = {
             },
           ],
           spotlight: ["#row-d1"],
-          notes:
-            "Order actions stood in for dialog and popover components, focus trapping and modal libraries. Floating UI stays until anchor positioning settles.",
-          ifKeyboard: "Same.",
+          bullets: [
+            "TODO rewrite: Order actions stood in for dialog and popover components, focus trapping and modal libraries.",
+            "TODO rewrite: Floating UI stays until anchor positioning settles.",
+          ],
+          ifKeyboard: "TODO rewrite: Same.",
         },
         {
           id: "s2",
@@ -67,9 +70,11 @@ export const section: DemoSection = {
             },
           ],
           spotlight: ["#row-d2", "#row-d3"],
-          notes:
-            "The product card replaces ResizeObserver element-query code. The support form replaces textarea autosizing scripts.",
-          ifKeyboard: "Same.",
+          bullets: [
+            "TODO rewrite: The product card replaces ResizeObserver element-query code.",
+            "TODO rewrite: The support form replaces textarea autosizing scripts.",
+          ],
+          ifKeyboard: "TODO rewrite: Same.",
         },
         {
           id: "s3",
@@ -89,9 +94,12 @@ export const section: DemoSection = {
             },
           ],
           spotlight: ["#row-d4", "#row-d5"],
-          notes:
-            "Dashboard navigation replaces the click handler and History glue a small router library provides. Rich content keeps DOMPurify and changes how you use it: one reviewed policy instead of scattered calls. The Sanitizer API's setHTML() would remove it, but it is not in Safari as of October.",
-          ifKeyboard: "Same.",
+          bullets: [
+            "TODO rewrite: Dashboard navigation replaces the click handler and History glue a small router library provides.",
+            "TODO rewrite: Rich content keeps DOMPurify and changes how you use it: one reviewed policy instead of scattered calls.",
+            "TODO rewrite: The Sanitizer API's setHTML() would remove it, but it is not in Safari as of October.",
+          ],
+          ifKeyboard: "TODO rewrite: Same.",
         },
         {
           id: "s4",
@@ -103,18 +111,16 @@ export const section: DemoSection = {
             },
           ],
           spotlight: ["#row-dates"],
-          notes:
-            "Date libraries stay until Temporal reaches Safari. Intl covers formatting today. The counts come from one npm pull this week and include CI and agent installs, so compare ratios between rows.",
-          ifKeyboard: "Same.",
+          bullets: [
+            "TODO rewrite: Date libraries stay until Temporal reaches Safari.",
+            "TODO rewrite: Intl covers formatting today.",
+            "TODO rewrite: The counts come from one npm pull this week and include CI and agent installs, so compare ratios between rows.",
+          ],
+          ifKeyboard: "TODO rewrite: Same.",
         },
       ],
-      notes: {
-        open: "Each core demo stood in for libraries teams carry today. Here is the list, with the honest exceptions.",
-        bridge: "That is the demo section. Let me pull it together.",
-      },
       timing: {
         minutes: 0.75,
-        cumulative: 31,
       },
       cutPriority: 1,
     },
