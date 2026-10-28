@@ -9,7 +9,10 @@
  * Needs `pnpm dev` at DECK_URL (default http://localhost:3000) with the demo origin reachable.
  */
 import { chromium, firefox, webkit, type Browser, type Page } from "@playwright/test";
-import type { DemoPage, DemoSection } from "@/content/demo-schema";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { hasFrame, type DemoPage, type DemoSection } from "@/content/demo-schema";
+import type { SupportFile } from "@/lib/support-data";
 import { sections } from "@/lib/content";
 import type { StepResult } from "@/lib/engine/frame";
 
@@ -54,8 +57,8 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
   const where = demoPage.id;
   console.log(`\n== ${where} (${section.label}, ${demoPage.stage}, ${demoPage.steps.length} steps)`);
   await page.goto(`${BASE}/present?s=${demoPage.id}`);
-  if (!demoPage.frame) {
-    pass(`${where}: no frame`);
+  if (!hasFrame(demoPage)) {
+    await walkIntro(page, section, where);
     return;
   }
   const forward: (string | null)[] = [];
@@ -89,6 +92,22 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
     else if (forward[i] && r.digest !== forward[i]) console.log(`    · back ${step.id}: digest ${r.digest} differs from forward ${forward[i]} (asserts pass)`);
     else pass(`back ${step.id}: asserts pass, digest ${r.digest}`);
   }
+}
+
+const support = JSON.parse(readFileSync(path.join(process.cwd(), "content", ".generated", "support.json"), "utf8")) as SupportFile;
+
+/** Intro slides (PRD v4, 7.6): the tiles render and their text matches support.json. */
+async function walkIntro(page: Page, section: DemoSection, where: string) {
+  const entry = support.sections[section.id];
+  if (!entry) return fail(where, "no support.json entry");
+  await page.waitForSelector(".support-row__tile", { timeout: 8000 }).catch(() => null);
+  const tiles = await page.$$eval(".support-row__tile", (els) => els.map((el) => ({ version: el.querySelector(".support-row__version")?.textContent ?? "", name: el.querySelector(".support-row__name")?.textContent ?? "" })));
+  const expected = entry.tiles.map((t) => ({ version: t.version ?? "Not yet", name: t.name }));
+  if (JSON.stringify(tiles) !== JSON.stringify(expected)) fail(where, `tiles ${JSON.stringify(tiles)}; support.json says ${JSON.stringify(expected)}`);
+  else pass(`${where}: ${tiles.length} tiles match support.json (${tiles.map((t) => `${t.name} ${t.version}`).join(", ")})`);
+  const text = (await page.textContent(".intro__description")) ?? "";
+  if (!text.includes(entry.since)) fail(where, `description lacks "${entry.since}"`);
+  else pass(`${where}: generated sentence shown`);
 }
 
 async function main() {

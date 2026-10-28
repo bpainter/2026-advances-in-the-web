@@ -6,6 +6,8 @@ import { meterValue } from "@/lib/meters";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { PageBody } from "./PageBody";
+import { IntroSlide } from "./IntroSlide";
+import { FrameWarm } from "./FrameWarm";
 import { hasFrame } from "@/content/demo-schema";
 
 interface Props {
@@ -26,12 +28,13 @@ export async function DemoPageSlide({ slide, mode }: Props) {
   const section = slide.demoSection;
   if (!page || !section) throw new Error(`Slide ${slide.id} has layout demo-page but no page`);
   if (!hasFrame(page)) {
+    const nextPage = section.pages[section.pages.indexOf(page) + 1];
+    const warm = mode === "audience" && nextPage && hasFrame(nextPage) ? nextPage.frame : null;
     return (
-      <article className="page" data-stage={page.stage} aria-label={section.feature}>
-        <header className="page__header">
-          <h1 className="page__title">{section.feature}</h1>
-        </header>
-      </article>
+      <>
+        <IntroSlide section={section} page={page} />
+        {warm ? <FrameWarm route={warm.route} flags={warm.flags} sandbox={manifestFor(warm.route)?.sandbox ?? "allow-scripts allow-same-origin"} /> : null}
+      </>
     );
   }
   const files = page.files ? await renderCodeFiles(page.files.map((f) => ({ file: f.file, lang: f.lang, source: f.source }))) : [];

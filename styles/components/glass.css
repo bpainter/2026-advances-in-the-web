@@ -1,0 +1,14 @@
+/* Glass surfaces of the demo slide chrome (PRD v4, 6.1). Token values come from the design spec
+   (styles/glass-tokens.css) once it lands; the fallbacks here are the PRD 6.3 values. */
+.glass-card {
+  border: var(--glass-border, 1px solid rgb(255 255 255 / 0.6));
+  border-radius: 24px;
+  background: var(--glass-surface, rgb(255 255 255 / 0.55));
+  box-shadow: var(--glass-shadow, 0 8px 32px rgb(15 28 65 / 0.12));
+  backdrop-filter: var(--glass-blur, blur(24px));
+}
+@supports not (backdrop-filter: blur(1px)) {
+  .glass-card {
+    background: var(--glass-surface-solid, rgb(255 255 255 / 0.92));
+  }
+}

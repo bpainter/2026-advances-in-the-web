@@ -1,0 +1,118 @@
+/* Intro slide (PRD v4, 1.1): visual card left, text column right, centered as a group. */
+.intro {
+  @apply grid relative;
+  grid-template-columns: 880px 848px;
+  column-gap: 64px;
+  width: var(--stage-width);
+  height: var(--stage-height);
+  padding: 64px;
+  box-sizing: border-box;
+  color: var(--color-navy);
+  font-family: var(--font-sans);
+}
+.intro__visual {
+  @apply flex items-center justify-center overflow-hidden;
+  margin: 0;
+  height: 952px;
+  padding: 24px;
+  box-sizing: border-box;
+}
+.intro__image {
+  @apply block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 16px;
+}
+.intro__missing {
+  margin: 0;
+  font-size: 24px;
+  color: var(--color-navy);
+}
+.intro__text {
+  @apply flex flex-col justify-center;
+  min-width: 0;
+  gap: 40px;
+}
+.intro__title {
+  margin: 0;
+  font-size: 88px;
+  font-weight: var(--weight-bold);
+  line-height: 1.05;
+}
+.intro__description {
+  margin: 0;
+  font-size: 36px;
+  line-height: 1.35;
+}
+.intro__also {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.35;
+}
+
+/* Support row: four 196 px tiles, 21 px apart (PRD v4, 1.1). */
+.support-row {
+  @apply flex;
+  gap: 21px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.support-row__tile {
+  @apply flex flex-col items-center justify-center;
+  width: 196px;
+  height: 196px;
+  box-sizing: border-box;
+  gap: 6px;
+  border: var(--glass-border, 1px solid rgb(255 255 255 / 0.6));
+  border-radius: 24px;
+  background: var(--glass-surface-strong, rgb(255 255 255 / 0.72));
+  box-shadow: var(--glass-shadow, 0 8px 32px rgb(15 28 65 / 0.12));
+  animation: support-tile-in 320ms var(--ease-brand) both;
+  animation-delay: calc(var(--tile-index) * 80ms);
+}
+.support-row__logo {
+  width: 72px;
+  height: 72px;
+}
+.support-row__version {
+  font-size: 48px;
+  font-weight: var(--weight-bold);
+  line-height: 1;
+}
+.support-row__name {
+  font-size: 24px;
+  line-height: 1.2;
+}
+.support-row__tile[data-supported="false"] .support-row__logo {
+  filter: grayscale(1);
+  opacity: 0.4;
+}
+.support-row__tile[data-supported="false"] .support-row__version {
+  font-size: 36px;
+}
+@keyframes support-tile-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .support-row__tile {
+    animation: none;
+  }
+}
+
+.frame-warm {
+  @apply absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  border: 0;
+}

@@ -1,0 +1,280 @@
+{
+  "package": "web-features",
+  "version": "3.44.0",
+  "toolDates": {
+    "next@16.0.0": "2025-10-22",
+    "pnpm@12.11.0": "2026-10-09",
+    "npm@11.15.0": "2026-05-20"
+  },
+  "sections": {
+    "d1-order-actions": {
+      "kind": "web-features",
+      "id": "dialog",
+      "name": "<dialog>",
+      "baseline": "high",
+      "baselineLowDate": "2022-03-14",
+      "tiles": [
+        {
+          "id": "chrome",
+          "name": "Chrome",
+          "logo": "/logos/chrome.svg",
+          "version": "37",
+          "date": "2014-08-26"
+        },
+        {
+          "id": "edge",
+          "name": "Edge",
+          "logo": "/logos/edge.svg",
+          "version": "79",
+          "date": "2020-01-15"
+        },
+        {
+          "id": "firefox",
+          "name": "Firefox",
+          "logo": "/logos/firefox.svg",
+          "version": "98",
+          "date": "2022-03-08"
+        },
+        {
+          "id": "safari",
+          "name": "Safari",
+          "logo": "/logos/safari.svg",
+          "version": "15.4",
+          "date": "2022-03-14"
+        }
+      ],
+      "since": "It has been available in all four browsers since March 2022.",
+      "alsoUses": "This demo also uses Popover (January 2025) and Invoker commands (December 2025)."
+    },
+    "d2-product-card": {
+      "kind": "web-features",
+      "id": "container-queries",
+      "name": "Container queries (size)",
+      "baseline": "high",
+      "baselineLowDate": "2023-02-14",
+      "tiles": [
+        {
+          "id": "chrome",
+          "name": "Chrome",
+          "logo": "/logos/chrome.svg",
+          "version": "105",
+          "date": "2022-09-02"
+        },
+        {
+          "id": "edge",
+          "name": "Edge",
+          "logo": "/logos/edge.svg",
+          "version": "105",
+          "date": "2022-09-01"
+        },
+        {
+          "id": "firefox",
+          "name": "Firefox",
+          "logo": "/logos/firefox.svg",
+          "version": "110",
+          "date": "2023-02-14"
+        },
+        {
+          "id": "safari",
+          "name": "Safari",
+          "logo": "/logos/safari.svg",
+          "version": "16",
+          "date": "2022-09-12"
+        }
+      ],
+      "since": "It has been available in all four browsers since February 2023.",
+      "alsoUses": "This demo also uses @scope (March 2026)."
+    },
+    "d3-support-form": {
+      "kind": "web-features",
+      "id": "field-sizing",
+      "name": "field-sizing",
+      "baseline": "low",
+      "baselineLowDate": "2026-06-16",
+      "tiles": [
+        {
+          "id": "chrome",
+          "name": "Chrome",
+          "logo": "/logos/chrome.svg",
+          "version": "123",
+          "date": "2024-03-19"
+        },
+        {
+          "id": "edge",
+          "name": "Edge",
+          "logo": "/logos/edge.svg",
+          "version": "123",
+          "date": "2024-03-22"
+        },
+        {
+          "id": "firefox",
+          "name": "Firefox",
+          "logo": "/logos/firefox.svg",
+          "version": "152",
+          "date": "2026-06-16"
+        },
+        {
+          "id": "safari",
+          "name": "Safari",
+          "logo": "/logos/safari.svg",
+          "version": "26.2",
+          "date": "2025-12-12"
+        }
+      ],
+      "since": "It has been available in all four browsers since June 2026.",
+      "alsoUses": null
+    },
+    "d4-dashboard-navigation": {
+      "kind": "web-features",
+      "id": "navigation",
+      "name": "Navigation API",
+      "baseline": "low",
+      "baselineLowDate": "2026-01-13",
+      "tiles": [
+        {
+          "id": "chrome",
+          "name": "Chrome",
+          "logo": "/logos/chrome.svg",
+          "version": "102",
+          "date": "2022-05-24"
+        },
+        {
+          "id": "edge",
+          "name": "Edge",
+          "logo": "/logos/edge.svg",
+          "version": "102",
+          "date": "2022-05-31"
+        },
+        {
+          "id": "firefox",
+          "name": "Firefox",
+          "logo": "/logos/firefox.svg",
+          "version": "147",
+          "date": "2026-01-13"
+        },
+        {
+          "id": "safari",
+          "name": "Safari",
+          "logo": "/logos/safari.svg",
+          "version": "26.2",
+          "date": "2025-12-12"
+        }
+      ],
+      "since": "It has been available in all four browsers since January 2026.",
+      "alsoUses": null
+    },
+    "d5-rich-content": {
+      "kind": "web-features",
+      "id": "trusted-types",
+      "name": "Trusted types",
+      "baseline": "low",
+      "baselineLowDate": "2026-02-24",
+      "tiles": [
+        {
+          "id": "chrome",
+          "name": "Chrome",
+          "logo": "/logos/chrome.svg",
+          "version": "83",
+          "date": "2020-05-19"
+        },
+        {
+          "id": "edge",
+          "name": "Edge",
+          "logo": "/logos/edge.svg",
+          "version": "83",
+          "date": "2020-05-21"
+        },
+        {
+          "id": "firefox",
+          "name": "Firefox",
+          "logo": "/logos/firefox.svg",
+          "version": "148",
+          "date": "2026-02-24"
+        },
+        {
+          "id": "safari",
+          "name": "Safari",
+          "logo": "/logos/safari.svg",
+          "version": "26",
+          "date": "2025-09-15"
+        }
+      ],
+      "since": "It has been available in all four browsers since February 2026.",
+      "alsoUses": null
+    },
+    "d6-variant-picker": {
+      "kind": "web-features",
+      "id": "customizable-select",
+      "name": "Customizable <select>",
+      "baseline": false,
+      "baselineLowDate": null,
+      "tiles": [
+        {
+          "id": "chrome",
+          "name": "Chrome",
+          "logo": "/logos/chrome.svg",
+          "version": "135",
+          "date": "2025-04-01"
+        },
+        {
+          "id": "edge",
+          "name": "Edge",
+          "logo": "/logos/edge.svg",
+          "version": "135",
+          "date": "2025-04-04"
+        },
+        {
+          "id": "firefox",
+          "name": "Firefox",
+          "logo": "/logos/firefox.svg",
+          "version": null,
+          "date": null
+        },
+        {
+          "id": "safari",
+          "name": "Safari",
+          "logo": "/logos/safari.svg",
+          "version": "27",
+          "date": "2026-09-14"
+        }
+      ],
+      "since": "It works in Chrome, Edge and Safari since September 2026. Firefox shows a normal select.",
+      "alsoUses": null
+    },
+    "f2-caching": {
+      "kind": "tooling",
+      "tiles": [
+        {
+          "id": "next",
+          "name": "Next.js",
+          "logo": "/logos/nextjs.svg",
+          "version": "16",
+          "date": "2025-10-22"
+        }
+      ],
+      "since": "Next.js 16 came out in October 2025.",
+      "alsoUses": null
+    },
+    "f3-package-trust": {
+      "kind": "tooling",
+      "tiles": [
+        {
+          "id": "pnpm",
+          "name": "pnpm",
+          "logo": "/logos/pnpm.svg",
+          "version": "12.11",
+          "date": "2026-10-09"
+        },
+        {
+          "id": "npm",
+          "name": "npm",
+          "logo": "/logos/npm.svg",
+          "version": "11.15",
+          "date": "2026-05-20"
+        }
+      ],
+      "since": "pnpm 12.11 came out in October 2026 and npm 11.15 in May 2026.",
+      "alsoUses": null
+    }
+  }
+}
