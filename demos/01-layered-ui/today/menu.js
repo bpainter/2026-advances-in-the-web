@@ -40,6 +40,7 @@ export function createMenu(
   function render() {
     menu = document.createElement("div");
     menu.id = MENU_ID;
+    menu.className = "glass-menu";
     menu.setAttribute("role", "menu");
     menu.setAttribute(
       "aria-labelledby",
@@ -50,6 +51,7 @@ export function createMenu(
       const el =
         document.createElement("div");
       el.id = item.id;
+      el.className = "glass-menu__item";
       el.setAttribute("role", "menuitem");
       el.tabIndex = -1;
       el.textContent = item.label;

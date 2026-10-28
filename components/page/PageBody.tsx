@@ -55,6 +55,18 @@ export function PageBody({ page, files, sandbox, sideEffects, mode, slot, meters
           <PageFrame page={page} sandbox={sandbox} sideEffects={sideEffects} mode={mode} slot={slot} onStatus={onStatus} onStepResult={onStepResult} />
         )}
       </div>
+      {page.steps.length > 1 ? (
+        <div className="page__steps" aria-hidden="true">
+          <span>
+            Step {stepIndex + 1} of {page.steps.length}
+          </span>
+          <span className="page__steps-bar">
+            {page.steps.map((s, i) => (
+              <span key={s.id} className="page__steps-seg" data-state={i < stepIndex ? "done" : i === stepIndex ? "current" : "future"} />
+            ))}
+          </span>
+        </div>
+      ) : null}
       {meter && meterStep ? (
         <p className="page__meter" aria-live="polite">
           <span className="page__meter-label">{meter.label}</span>

@@ -9,6 +9,7 @@ import type { DemoSection, IntroPage, WalkPage } from "@/content/demo-schema";
 import { validate, type ValidateContext } from "@/lib/validate/rules";
 import { computeSupport } from "@/lib/support-data";
 import { installedWebFeatures } from "@/lib/web-features";
+import { lintTheme } from "@/lib/validate/theme";
 
 const wf = installedWebFeatures();
 const FIXTURE_JS = Array.from({ length: 60 }, (_, i) => `const line${i + 1} = ${i + 1};`).join("\n");
@@ -202,6 +203,33 @@ for (const [rule, mutate] of CASES) {
   }
 }
 
+// Theme lint (PRD v4 6.2, with portal-layout allowed for .portal* and .glass-* classes).
+const THEME_CASES: [string, string][] = [
+  ["a rule outside both layers", ".x { color: red; }"],
+  ["layout in portal-theme", "@layer portal-theme { .x { display: grid; } }"],
+  ["z-index in portal-theme", "@layer portal-theme { .x { z-index: 2; } }"],
+  ["a transition anywhere", "@layer portal-layout { .portal { transition: opacity 1s; } }"],
+  ["field-sizing anywhere", "@layer portal-theme { textarea { field-sizing: content; } }"],
+  ["non-paint on a dialog", "@layer portal-theme { dialog { margin: 0; } }"],
+  ["anchor positioning", "@layer portal-layout { .glass-menu { position-area: block-end; } }"],
+  ["an element selector in portal-layout", "@layer portal-layout { dialog { display: block; } }"],
+  ["a container query", "@layer portal-theme { @container (width > 1px) { .x { color: red; } } }"],
+  ["@scope", "@layer portal-theme { @scope (.x) { p { color: red; } } }"],
+];
+const themeClean = lintTheme("@layer portal-theme { dialog { padding: 4px; color: red; } [popover] > button { cursor: pointer; } } @layer portal-layout { .portal__nav { display: grid; } .glass-card::before { position: absolute; } }");
+if (themeClean.length) {
+  failed++;
+  console.log(`✖ theme-lint: the clean fixture fails: ${themeClean.map((i) => i.message).join("; ")}`);
+} else console.log("✓ theme-lint: the clean fixture passes");
+for (const [name, css] of THEME_CASES) {
+  const hit = lintTheme(css);
+  if (hit.length) console.log(`✓ theme-lint ${name}: ${hit[0].message}`);
+  else {
+    failed++;
+    console.log(`✖ theme-lint ${name}: not reported`);
+  }
+}
+
 function computeSupportSafe(s: DemoSection, ctx: ValidateContext) {
   try {
     return computeSupport([s], wf.data, wf.version, {});
@@ -210,5 +238,5 @@ function computeSupportSafe(s: DemoSection, ctx: ValidateContext) {
   }
 }
 
-console.log(`\n${CASES.length - failed + (baseIssues.length ? 0 : 1)} passed, ${failed} failed`);
+console.log(`\n${CASES.length + THEME_CASES.length + 2 - failed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

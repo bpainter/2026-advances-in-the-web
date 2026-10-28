@@ -793,7 +793,7 @@
 
   .glass-menu__item,
   :where(.glass-menu, [popover]:not(.glass-toast))
-    :where(button, a, [role="menuitem"], [role="menuitemradio"]) {
+    > :where(button, a, [role="menuitem"], [role="menuitemradio"]) {
     padding: var(--glass-space-4) 10px;
     color: var(--glass-ink);
     font: 400 var(--glass-text-md) / var(--glass-leading-md) var(--glass-font);
@@ -809,13 +809,13 @@
   .glass-menu__item:hover,
   .glass-menu__item.is-active,
   :where(.glass-menu, [popover]:not(.glass-toast))
-    :where(button:hover, a:hover, [role="menuitem"]:hover, [role="menuitem"].is-active) {
+    > :where(button:hover, a:hover, [role="menuitem"]:hover, [role="menuitem"].is-active) {
     background: var(--glass-surface-selected);
   }
 
   .glass-menu__item:focus-visible,
   :where(.glass-menu, [popover]:not(.glass-toast))
-    :where(button:focus-visible, a:focus-visible, [role="menuitem"]:focus-visible) {
+    > :where(button:focus-visible, a:focus-visible, [role="menuitem"]:focus-visible) {
     background: var(--glass-surface-selected);
     outline-width: 2px;
     outline-offset: -2px;

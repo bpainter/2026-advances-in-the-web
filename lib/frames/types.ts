@@ -17,6 +17,13 @@ export interface BuildManifest {
   scrollers: string[];
   /** Selectors created at runtime, exempt from the static selector check. */
   runtimeSelectors: string[];
+  /**
+   * Unshown portal CSS for this demo's content layout (rows, grids), root-relative under
+   * public/portal/. It sits in @layer portal-layout, is linted like the theme and never toggles.
+   */
+  styles?: string[];
+  /** The portal shell to wrap the markup in (docs/design/demo-glass-spec.md, 8); portal builds only. */
+  shell?: { title: string; nav: "orders" | "products" | "support" | "content" | "reports"; outside?: string[] };
   /** Overrides the base CSP (D5). `ORIGIN` and `PRESENTER` are substituted. */
   csp?: string;
 }

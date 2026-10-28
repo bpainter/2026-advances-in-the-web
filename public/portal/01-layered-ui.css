@@ -1,0 +1,28 @@
+/* D1 portal content (unshown, PRD v4 6.3): the order row as a card in both builds. Layout and
+   paint only; nothing a demo step toggles. */
+@layer portal-layout {
+  .orders .order {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--glass-space-6);
+    margin-block-start: var(--glass-space-5);
+  }
+  .orders .order > p {
+    margin: 0;
+  }
+}
+@layer portal-theme {
+  .orders .order {
+    padding: var(--glass-space-6);
+    background: var(--glass-surface);
+    border: var(--glass-border);
+    border-radius: var(--glass-radius-card);
+    box-shadow: var(--glass-highlight), var(--glass-shadow-card);
+  }
+  .orders [role="status"] {
+    margin: var(--glass-space-5) 0 0;
+    color: var(--glass-ink);
+    font-weight: 700;
+  }
+}

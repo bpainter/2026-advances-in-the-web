@@ -3,6 +3,10 @@ import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { PRESENTER_ORIGIN } from "./origins";
 import type { BuildDef } from "./types";
+import { wrapInShell } from "./shell";
+
+/** The shared portal theme (PRD v4, 6.2), copied from styles/glass-tokens.css by pnpm theme:sync. */
+export const THEME_HREF = "/theme/portal-glass.css";
 
 /** Base CSP for frame documents (PRD Part A, 14.1); `ORIGIN` and `PRESENTER` are substituted. */
 export const BASE_CSP =
@@ -50,6 +54,8 @@ export function composeFrame(def: BuildDef, opts: ComposeOptions): string {
       return manifest.enhancement.js.includes(base) ? "" : m;
     });
   }
+  // The portal shell wraps portal builds' markup; it is never part of the shown code.
+  if (manifest.shell) body = wrapInShell(body, manifest.shell);
   // Instrumentation and hooks the manifest lists are injected after the shown markup; they are
   // never part of the code on screen (Part A, 8.4).
   const instrumentation = manifest.instrumentation.map((f) => `<script type="module" src="${escapeAttr(f)}"></script>`).join("\n");
@@ -61,6 +67,10 @@ export function composeFrame(def: BuildDef, opts: ComposeOptions): string {
     "<!doctype html>",
     `<html lang="en" data-demo="${escapeAttr(manifest.demo)}" data-build="${manifest.build}" data-flags="${escapeAttr(flagsAttr)}" data-enhance-css-mode="${mode}">`,
     "<head>",
+    // The theme comes first, so every build's own CSS (shown CSS is unlayered) wins over it. The
+    // enhance-css flag never touches it: it is not tagged.
+    `<link rel="stylesheet" href="${THEME_HREF}">`,
+    ...(manifest.styles ?? []).map((href) => `<link rel="stylesheet" href="${escapeAttr(href)}">`),
     '<meta charset="utf-8">',
     '<meta name="viewport" content="width=device-width, initial-scale=1">',
     '<meta name="color-scheme" content="light">',

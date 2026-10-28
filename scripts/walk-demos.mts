@@ -55,6 +55,15 @@ async function lastSeq(page: Page): Promise<number> {
 
 let speaker: Page | null = null;
 
+/** Every frame carries the portal theme (PRD v4, 7.6): computed --glass-surface is set on its root. */
+async function checkTheme(page: Page, where: string, stepId: string) {
+  const frames = page.frames().filter((f) => f !== page.mainFrame() && /^http:\/\/(127\.0\.0\.1|localhost):\d+\//.test(f.url()) && !f.url().startsWith(BASE));
+  const values = await Promise.all(frames.map((f) => f.evaluate(`getComputedStyle(document.documentElement).getPropertyValue("--glass-surface").trim()`).catch(() => "") as Promise<string>));
+  if (!frames.length) return fail(where, `theme ${stepId}: no frame found`);
+  if (values.some((v) => !v)) fail(where, `theme ${stepId}: --glass-surface is not set in a frame (${frames.map((f) => f.url()).join(", ")})`);
+  else pass(`theme ${stepId}: --glass-surface ${values[0]} in the frame`);
+}
+
 /**
  * Speaker window at 1440 by 900 (PRD v4, 5.1 and 7.6): on every step the header, the current
  * bullets and the Next line are visible without scrolling, no selector shows outside Reference,
@@ -132,6 +141,7 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
     if (failed.length) fail(where, `${step.id}: ${failed.map((a) => `${a.target} ${a.expect} (got ${a.actual})`).join("; ")}`);
     else pass(`${step.id} ${step.label}: ${r.asserts.filter((a) => a.stepId === step.id).length} assert(s) ok, ${r.ms}ms`);
     forward.push(r.digest);
+    if (i === 0 || i === demoPage.steps.length - 1) await checkTheme(page, where, step.id);
     await checkSpeaker(where, demoPage, section, i);
     await checkHandsOn(page, where, demoPage, i);
   }
@@ -159,7 +169,7 @@ async function walkIntro(page: Page, section: DemoSection, where: string) {
   const entry = support.sections[section.id];
   if (!entry) return fail(where, "no support.json entry");
   await page.waitForSelector(".support-row__tile", { timeout: 8000 }).catch(() => null);
-  const tiles = await page.$$eval(".support-row__tile", (els) => els.map((el) => ({ version: el.querySelector(".support-row__version")?.textContent ?? "", name: el.querySelector(".support-row__name")?.textContent ?? "" })));
+  const tiles = await page.$$eval(".support-row__tile", (els) => els.map((el) => ({ version: el.querySelector(".support-row__version")?.textContent ?? "", name: el.querySelector(".support-row__name")?.firstChild?.textContent ?? "" })));
   const expected = entry.tiles.map((t) => ({ version: t.version ?? "Not yet", name: t.name }));
   if (JSON.stringify(tiles) !== JSON.stringify(expected)) fail(where, `tiles ${JSON.stringify(tiles)}; support.json says ${JSON.stringify(expected)}`);
   else pass(`${where}: ${tiles.length} tiles match support.json (${tiles.map((t) => `${t.name} ${t.version}`).join(", ")})`);

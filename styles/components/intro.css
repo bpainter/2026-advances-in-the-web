@@ -1,4 +1,5 @@
-/* Intro slide (PRD v4, 1.1): visual card left, text column right, centered as a group. */
+/* Intro slide (PRD v4 1.1; docs/design/demo-glass-spec.md 7): navy, so each section opens with a
+   clear break from the light walk pages. No blur anywhere on the slide. */
 .intro {
   @apply grid relative;
   grid-template-columns: 880px 848px;
@@ -7,83 +8,109 @@
   height: var(--stage-height);
   padding: 64px;
   box-sizing: border-box;
-  color: var(--color-navy);
+  background:
+    /* A navy scrim under the text column: body and soft text hold 4.5:1 over the brightest arc
+       of glass-navy.jpg (scripts/contrast-test.mts). */
+    linear-gradient(90deg, rgb(15 28 65 / 0) 0, rgb(15 28 65 / 0) 944px, rgb(15 28 65 / 0.45) 1008px),
+    linear-gradient(var(--intro-wash), var(--intro-wash)),
+    var(--intro-image) center / cover no-repeat,
+    var(--glass-dark-solid);
+  color: var(--glass-dark-ink);
   font-family: var(--font-sans);
 }
 .intro__visual {
-  @apply flex items-center justify-center overflow-hidden;
+  @apply relative flex items-center justify-center overflow-hidden;
   margin: 0;
   height: 952px;
-  padding: 24px;
+  padding: 0 24px;
   box-sizing: border-box;
+  border: 1px solid rgb(255 255 255 / 0.24);
+  border-radius: var(--chrome-card-radius);
+  background: var(--intro-visual-image, var(--intro-visual-image-a)) center / cover no-repeat;
+  box-shadow: var(--glass-dark-shadow);
+}
+.intro[data-accent="b"] .intro__visual {
+  --intro-visual-image: var(--intro-visual-image-b);
 }
 .intro__image {
   @apply block;
-  width: 100%;
-  height: 100%;
+  width: 832px;
+  height: 816px;
   object-fit: contain;
+  border: 1px solid rgb(255 255 255 / 0.6);
   border-radius: 16px;
+  box-shadow: 0 24px 64px rgb(15 28 65 / 0.32);
 }
 .intro__missing {
   margin: 0;
   font-size: 24px;
-  color: var(--color-navy);
+  color: var(--glass-dark-ink-body);
 }
 .intro__text {
   @apply flex flex-col justify-center;
   min-width: 0;
-  gap: 40px;
 }
 .intro__title {
   margin: 0;
-  font-size: 88px;
+  font-size: var(--intro-title-size);
+  line-height: var(--intro-title-leading);
   font-weight: var(--weight-bold);
-  line-height: 1.05;
 }
 .intro__description {
-  margin: 0;
-  font-size: 36px;
-  line-height: 1.35;
+  margin: 32px 0 0;
+  font-size: var(--intro-body-size);
+  line-height: var(--intro-body-leading);
+  color: var(--glass-dark-ink-body);
 }
 .intro__also {
-  margin: 0;
+  margin: 32px 0 0;
   font-size: 24px;
-  line-height: 1.35;
+  line-height: 32px;
+  color: var(--glass-dark-ink-soft);
 }
 
-/* Support row: four 196 px tiles, 21 px apart (PRD v4, 1.1). */
+/* Support row: 196 px tiles, 21 px apart. A missing browser keeps the row height, with a dashed
+   edge, a grayscale logo and "Not yet", so color is never the only signal. */
 .support-row {
   @apply flex;
-  gap: 21px;
-  margin: 0;
+  gap: var(--intro-tile-gap);
+  margin: 56px 0 0;
   padding: 0;
   list-style: none;
 }
 .support-row__tile {
   @apply flex flex-col items-center justify-center;
-  width: 196px;
-  height: 196px;
+  width: var(--intro-tile-size);
+  height: var(--intro-tile-size);
   box-sizing: border-box;
-  gap: 6px;
-  border: var(--glass-border, 1px solid rgb(255 255 255 / 0.6));
-  border-radius: 24px;
-  background: var(--glass-surface-strong, rgb(255 255 255 / 0.72));
-  box-shadow: var(--glass-shadow, 0 8px 32px rgb(15 28 65 / 0.12));
-  animation: support-tile-in 320ms var(--ease-brand) both;
-  animation-delay: calc(var(--tile-index) * 80ms);
+  border: 1px solid var(--glass-dark-border-color);
+  border-radius: 20px;
+  background: var(--glass-dark-surface);
+  box-shadow: var(--glass-dark-highlight);
+  animation: support-tile-in 200ms var(--glass-ease) both;
+  animation-delay: calc(120ms + var(--tile-index) * 80ms);
 }
 .support-row__logo {
   width: 72px;
   height: 72px;
 }
 .support-row__version {
+  margin-top: 12px;
   font-size: 48px;
+  line-height: 48px;
   font-weight: var(--weight-bold);
-  line-height: 1;
+  color: var(--glass-dark-ink);
 }
 .support-row__name {
+  margin-top: 4px;
   font-size: 24px;
-  line-height: 1.2;
+  line-height: 28px;
+  color: var(--glass-dark-ink-soft);
+}
+.support-row__tile[data-supported="false"] {
+  border: 1px dashed rgb(255 255 255 / 0.32);
+  background: transparent;
+  box-shadow: none;
 }
 .support-row__tile[data-supported="false"] .support-row__logo {
   filter: grayscale(1);
@@ -91,6 +118,7 @@
 }
 .support-row__tile[data-supported="false"] .support-row__version {
   font-size: 36px;
+  color: var(--glass-dark-ink-body);
 }
 @keyframes support-tile-in {
   from {

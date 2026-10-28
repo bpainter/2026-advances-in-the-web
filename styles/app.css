@@ -1,4 +1,6 @@
 @import "./theme.css";
+/* Glass tokens (--chrome-*, --intro-*, --glass-*); its frame rules are scoped to :root[data-build]. */
+@import "./glass-tokens.css";
 @import "./fonts.css";
 
 @layer base {

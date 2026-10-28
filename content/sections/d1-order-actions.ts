@@ -44,20 +44,15 @@ export const section: DemoSection = {
       },
       files: [
         excerpt(`${TODAY}/index.html`, "html", [[2, 20]]),
-        excerpt(`${TODAY}/styles.css`, "css", [
-          [49, 54],
-          [60, 62],
-          [86, 91],
-          [93, 98],
-        ]),
+        excerpt(`${TODAY}/styles.css`, "css", [[23, 57]]),
         excerpt(`${TODAY}/menu.js`, "js", [
-          [110, 128],
-          [219, 231],
+          [112, 130],
+          [221, 233],
         ]),
         excerpt(`${TODAY}/modal.js`, "js", [
-          [93, 106],
-          [115, 121],
-          [172, 181],
+          [98, 111],
+          [120, 126],
+          [177, 186],
         ]),
       ],
       steps: [
@@ -90,7 +85,7 @@ export const section: DemoSection = {
             { type: "click", target: "#t-cancel" },
             { type: "assert", target: "#t-modal", expect: "visible" },
           ],
-          code: { file: "styles.css", lines: [2, 5, 9, 11, 13, 16, 20, 22] },
+          code: { file: "styles.css", lines: [6, 9, 17, 19, 23, 26, 29, 31] },
           spotlight: ["#t-modal", "#t-backdrop"],
           bullets: [
             "Cancel order opens a confirm box over a dark backdrop. The CSS needs four z-index numbers to stack it.",
@@ -113,12 +108,12 @@ export const section: DemoSection = {
           spotlight: ["#t-actions"],
           meter: {
             label: "JavaScript",
-            value: "399 lines",
+            value: "404 lines",
             source: "non-blank, non-comment lines in /demos/01-layered-ui/today/*.js",
           },
           bullets: [
             "Escape closes the box, and focus goes back to Actions.",
-            "Script handles Escape, keeps Tab inside the box and returns focus. That is 399 lines to maintain.",
+            "Script handles Escape, keeps Tab inside the box and returns focus. That is 404 lines to maintain.",
           ],
           ifKeyboard: "Press Escape. Then press Next once to sync the frame.",
         },

@@ -36,12 +36,14 @@ export function createModal({
     backdrop =
       document.createElement("div");
     backdrop.id = "t-backdrop";
+    backdrop.className = "glass-backdrop";
     backdrop.addEventListener("click", () =>
       close("dismiss"),
     );
 
     modal = document.createElement("div");
     modal.id = "t-modal";
+    modal.className = "glass-dialog";
     modal.setAttribute("role", "dialog");
     modal.setAttribute(
       "aria-modal",
@@ -56,11 +58,14 @@ export function createModal({
     const heading =
       document.createElement("h2");
     heading.id = "t-modal-title";
+    heading.className =
+      "glass-dialog__title";
     heading.textContent = title;
 
     const actions =
       document.createElement("div");
-    actions.className = "modal__actions";
+    actions.className =
+      "glass-dialog__actions";
 
     const keep =
       document.createElement("button");

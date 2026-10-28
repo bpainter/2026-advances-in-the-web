@@ -5,7 +5,7 @@ import type { FramePage, Step } from "@/content/demo-schema";
 import type { Mode } from "@/lib/mode";
 import { FrameHandle, type StepResult } from "@/lib/engine/frame";
 import { flagsAt, replaySteps, segments, selectorsFor } from "@/lib/engine/steps";
-import { flagsQuery, frameUrl } from "@/lib/frames/origins";
+import { flagsQuery, frameUrl, glassFlags } from "@/lib/frames/origins";
 import { useStage } from "@/lib/stage-context";
 import { Overlay } from "./Overlay";
 
@@ -27,7 +27,7 @@ const CODE_LEAD_MS = 400;
 function documentUrl(page: FramePage, flags: Record<string, boolean>): { origin: string; url: string } {
   const route = page.frame!.route;
   const { origin, url } = frameUrl(route.endsWith("/") ? `${route}index.html` : route.includes(".") ? route : `${route}/index.html`);
-  const q = flagsQuery(flags);
+  const q = flagsQuery(glassFlags(flags));
   return { origin, url: q ? `${url}?flags=${q}` : url };
 }
 

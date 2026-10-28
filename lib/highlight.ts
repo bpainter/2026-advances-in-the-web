@@ -5,13 +5,31 @@ import { toJsxRuntime } from "hast-util-to-jsx-runtime";
 import { createHighlighter, type Highlighter } from "shiki";
 import type { Element, ElementContent, Root } from "hast";
 import type { CodeFile, CodeLang } from "@/content/schema";
+import { CODE_COLORS } from "./highlight-colors";
 
 const LANGS: Record<CodeLang, string> = { html: "html", css: "css", js: "javascript", ts: "typescript", tsx: "tsx", bash: "bash", http: "http", yaml: "yaml" };
-const THEME = "github-light-high-contrast";
+/**
+ * Code colors from docs/design/demo-glass-spec.md (5, rule 4): every color meets 7:1 on
+ * --chrome-code-surface (scripts/contrast-test.mts checks it). Keep in step with the
+ * --chrome-code-* tokens in styles/glass-tokens.css.
+ */
+const THEME = "chrome-code";
+const CHROME_THEME = {
+  name: THEME,
+  type: "light" as const,
+  colors: { "editor.background": "#ffffff", "editor.foreground": CODE_COLORS.ink },
+  tokenColors: [
+    { scope: ["comment", "punctuation.definition.comment"], settings: { foreground: CODE_COLORS.comment, fontStyle: "italic" } },
+    { scope: ["keyword", "storage", "storage.type", "storage.modifier", "constant.language", "entity.name.tag", "support.type.primitive", "variable.language", "keyword.control"], settings: { foreground: CODE_COLORS.keyword } },
+    { scope: ["string", "string.quoted", "string.template", "punctuation.definition.string", "string.unquoted"], settings: { foreground: CODE_COLORS.string } },
+    { scope: ["constant.numeric", "keyword.other.unit", "constant.other.color", "constant.character"], settings: { foreground: CODE_COLORS.number } },
+    { scope: ["entity.other.attribute-name", "support.type.property-name", "meta.property-name", "variable.other.property", "entity.name.function", "support.function", "entity.other.attribute-name.class.css", "entity.other.attribute-name.id.css", "entity.other.attribute-name.pseudo-class.css", "meta.object-literal.key", "entity.name.tag.yaml"], settings: { foreground: CODE_COLORS.property } },
+  ],
+};
 
 let highlighterPromise: Promise<Highlighter> | undefined;
 function highlighter(): Promise<Highlighter> {
-  highlighterPromise ??= createHighlighter({ themes: [THEME], langs: Object.values(LANGS) });
+  highlighterPromise ??= createHighlighter({ themes: [CHROME_THEME], langs: Object.values(LANGS) });
   return highlighterPromise;
 }
 

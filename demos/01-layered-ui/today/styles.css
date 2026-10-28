@@ -1,10 +1,8 @@
-body {
-  margin: 2rem;
-  color: #0f1c41;
-  font:
-    1rem/1.5 system-ui,
-    sans-serif;
-}
+/* What the hand-rolled menu and modal need
+   from CSS: a portal root, stacking order,
+   overlay placement, the scroll lock and a
+   hidden state. Their look comes from the
+   portal theme. */
 
 /* Scroll lock: the modal freezes the page;
    the padding keeps the layout from
@@ -16,26 +14,6 @@ body.is-locked {
     --scrollbar-width,
     0px
   );
-}
-
-.order {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem;
-  border: 1px solid #c9cfdb;
-}
-
-button {
-  font: inherit;
-  padding: 0.5rem 1rem;
-}
-
-button:focus-visible,
-[role="menuitem"]:focus-visible {
-  outline: 2px solid #0c62fb;
-  outline-offset: 2px;
 }
 
 #t-status:empty {
@@ -60,34 +38,13 @@ button:focus-visible,
 #t-menu {
   position: absolute;
   z-index: 1010;
-  min-width: 11rem;
-  padding: 0.5rem;
-  background: #fff;
-  border: 1px solid #c9cfdb;
-  box-shadow: 0 0.5rem 1.5rem
-    rgb(0 0 0 / 0.2);
-}
-
-[role="menuitem"] {
-  padding: 0.5rem 1rem;
-  cursor: default;
-  user-select: none;
-}
-
-[role="menuitem"]:hover,
-[role="menuitem"].is-active {
-  background: #eef3ff;
-}
-
-[role="menuitem"]:focus-visible {
-  outline-offset: -2px;
+  min-width: 12rem;
 }
 
 #t-backdrop {
   position: absolute;
   inset: 0;
   z-index: 1020;
-  background: rgb(0 0 0 / 0.45);
 }
 
 #t-modal {
@@ -96,20 +53,5 @@ button:focus-visible,
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  min-width: 22rem;
-  padding: 1rem 1.5rem;
-  background: #fff;
-  border: 1px solid #c9cfdb;
-  box-shadow: 0 1rem 2.5rem
-    rgb(0 0 0 / 0.25);
-}
-
-#t-modal h2 {
-  margin: 0 0 1rem;
-  font-size: 1.25rem;
-}
-
-.modal__actions {
-  display: flex;
-  gap: 0.5rem;
+  width: min(22.5rem, 80vw);
 }

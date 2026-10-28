@@ -1,13 +1,116 @@
-import { existsSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
+import postcss, { type AtRule, type Container, type Rule } from "postcss";
 import type { Issue } from "./rules";
 
-/** Portal backgrounds (PRD v4, 6.5); a missing file is a warning, the theme falls back to a gradient. */
-export const BACKGROUNDS = ["glass-fan.jpg", "glass-petal.jpg", "glass-lavender.jpg", "glass-navy.jpg", "glass-blue.jpg"];
+/**
+ * Theme checks (PRD v4, 6.2 and 7.5, with the speaker's decision on the spec's section 13 item 1):
+ *
+ * - `@layer portal-theme` is paint: no position, inset, display, appearance, sizing, field-sizing,
+ *   container queries, @scope, anchor properties, transitions, animation, overlay or z-index on any
+ *   element; on dialog, [popover], ::backdrop, select, ::picker(select), option, input and
+ *   textarea only color, background, border, border-radius, box-shadow, padding, font and
+ *   backdrop-filter (custom properties and outline for focus are allowed too).
+ * - `@layer portal-layout` may lay out the shell, but only on `.portal*` and `.glass-*` class
+ *   selectors, never on an element, attribute or pseudo-element selector (other than ::before and
+ *   ::after), and still never with the demo-relevant properties (field-sizing, container
+ *   queries, @scope, anchor properties, transitions, animation, overlay).
+ * - Every rule sits in one of the two layers, so shown CSS (unlayered) always wins.
+ * - The F2 apps' copies match the source byte for byte.
+ */
 
-/** Theme checks: backgrounds present. The theme lint and the F2 copy hash join in M4. */
+export const THEME_SOURCE = "styles/glass-tokens.css";
+export const THEME_PUBLIC = "public/theme/portal-glass.css";
+export const F2_APPS = ["demos/06-framework-cache", "demos/06-framework-cache-today"];
+export const BACKGROUNDS = ["glass-fan.jpg", "glass-petal.jpg", "glass-lavender.jpg", "glass-navy.jpg", "glass-blue.jpg"];
+export const FONTS = ["SlalomSans-Regular.otf", "SlalomSans-Bold.otf"];
+
+const DEMO_RELEVANT = /^(field-sizing|container(-type|-name)?|anchor-name|anchor-scope|position-anchor|position-area|position-try(-.*)?|position-visibility|inset-area|transition(-.*)?|animation(-.*)?|overlay)$/;
+const LAYOUT = /^(position|inset(-.*)?|top|right|bottom|left|display|appearance|z-index|(min-|max-)?(width|height|inline-size|block-size))$/;
+const PAINT_ONLY = /^(--.*|color|background(-.*)?|border(-.*)?|box-shadow|padding(-.*)?|font(-.*)?|line-height|-webkit-backdrop-filter|backdrop-filter|outline(-.*)?|text-decoration(-.*)?|accent-color)$/;
+const FEATURE_ELEMENTS = /(?<![\w.-])(dialog|select|option|input|textarea)(?![\w-])|\[popover|::backdrop|::picker/;
+const BANNED_AT = /^(container|scope|keyframes|position-try|starting-style)$/;
+
+/** Compounds of a selector, split at combinators outside parentheses. */
+export function compounds(selector: string): string[] {
+  const out: string[] = [];
+  let depth = 0;
+  let cur = "";
+  for (const ch of selector.trim()) {
+    if (ch === "(") depth++;
+    if (ch === ")") depth--;
+    if (depth === 0 && /[\s>+~]/.test(ch)) {
+      if (cur) out.push(cur);
+      cur = "";
+      continue;
+    }
+    cur += ch;
+  }
+  if (cur) out.push(cur);
+  return out;
+}
+
+function layerOf(node: Container | AtRule | Rule): string | null {
+  let p = node.parent;
+  while (p && p.type !== "root") {
+    if (p.type === "atrule" && (p as AtRule).name === "layer") return (p as AtRule).params.trim();
+    p = p.parent;
+  }
+  return null;
+}
+
+/** Lints the theme source; returns one issue per violation. */
+export function lintTheme(css: string, file = THEME_SOURCE, opts: { perDemo?: boolean } = {}): Issue[] {
+  const out: Issue[] = [];
+  const add = (where: string, message: string) => out.push({ rule: "theme-lint", where: `${file}:${where}`, message, level: "error" });
+  const root = postcss.parse(css, { from: file });
+  root.walkAtRules((at) => {
+    if (BANNED_AT.test(at.name)) add(String(at.source?.start?.line), `@${at.name} is not allowed in the theme`);
+  });
+  root.walkRules((rule) => {
+    if (rule.parent?.type === "atrule" && /keyframes/.test((rule.parent as AtRule).name)) return;
+    const line = String(rule.source?.start?.line);
+    const layer = layerOf(rule);
+    if (layer !== "portal-theme" && layer !== "portal-layout") {
+      add(line, `"${rule.selector}" sits outside @layer portal-theme and portal-layout`);
+      return;
+    }
+    // Only the subject (last compound) of a selector decides whether a feature element is styled.
+    const featureTarget = rule.selectors.some((sel) => FEATURE_ELEMENTS.test(compounds(sel).pop() ?? ""));
+    // Per-demo portal CSS lays out its own content classes; the shared theme keeps to .portal* and .glass-*.
+    if (layer === "portal-layout" && !opts.perDemo) {
+      for (const sel of rule.selectors) {
+        const ok = compounds(sel).every((c) => /^\.(portal|glass-)[\w-]*/.test(c) && !/\[|::(?!before|after)/.test(c) && !/(^|[^\w-])(dialog|select|option|input|textarea|button|a|ul|li|nav|main|header|h[1-6])\b(?![\w-])/.test(c.replace(/^\.[\w-]+/, "")));
+        if (!ok) add(line, `portal-layout selector "${sel}" must use .portal* or .glass-* class selectors only`);
+      }
+    }
+    rule.walkDecls((d) => {
+      const prop = d.prop.toLowerCase();
+      if (DEMO_RELEVANT.test(prop)) add(String(d.source?.start?.line), `${prop} is never allowed in the theme ("${rule.selector}")`);
+      else if (layer === "portal-theme" && LAYOUT.test(prop)) add(String(d.source?.start?.line), `${prop} is layout; not allowed in portal-theme ("${rule.selector}")`);
+      else if (featureTarget && !PAINT_ONLY.test(prop)) add(String(d.source?.start?.line), `${prop} on "${rule.selector}": feature elements take paint properties only`);
+    });
+  });
+  return out;
+}
+
+const sha = (file: string) => createHash("sha256").update(readFileSync(file)).digest("hex");
+
+/** Theme checks for pnpm check: lint, the public copy and the F2 copies, backgrounds present. */
 export function themeIssues(root: string): Issue[] {
   const out: Issue[] = [];
+  const src = path.join(root, THEME_SOURCE);
+  if (!existsSync(src)) return [{ rule: "theme", where: "theme", message: `${THEME_SOURCE} is missing`, level: "error" }];
+  out.push(...lintTheme(readFileSync(src, "utf8")));
+  // Per-demo portal CSS follows the same rules (and must sit in portal-layout or portal-theme).
+  const portalDir = path.join(root, "public", "portal");
+  if (existsSync(portalDir)) for (const f of readdirSync(portalDir).filter((n) => n.endsWith(".css"))) out.push(...lintTheme(readFileSync(path.join(portalDir, f), "utf8"), `public/portal/${f}`, { perDemo: true }));
+  const hash = sha(src);
+  for (const copy of [THEME_PUBLIC, ...F2_APPS.map((a) => `${a}/public/theme/portal-glass.css`)]) {
+    const abs = path.join(root, copy);
+    if (!existsSync(abs) || sha(abs) !== hash) out.push({ rule: "theme-hash", where: copy, message: `differs from ${THEME_SOURCE}; run pnpm theme:sync`, level: "error" });
+  }
   for (const f of BACKGROUNDS) if (!existsSync(path.join(root, "public", "backgrounds", f))) out.push({ rule: "backgrounds", where: "theme", message: `public/backgrounds/${f} is missing; the theme falls back to a gradient`, level: "warning" });
   return out;
 }

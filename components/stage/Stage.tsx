@@ -133,6 +133,28 @@ export function Stage(props: Props) {
     if (shared && presenter!.state.stepIndex === -1) presenter!.update({ stepIndex: Math.max(stepCount - 1, 0) });
   }, [shared, presenter, stepCount]);
 
+  // ----- rehearsal: 95th percentile frame time (PRD v4, 6.6: under 20 ms during playback) -----
+  const [p95, setP95] = useState<number | null>(null);
+  useEffect(() => {
+    if (!rehearsal) return;
+    const deltas: number[] = [];
+    let last = performance.now();
+    let raf = 0;
+    let n = 0;
+    const tick = (t: number) => {
+      deltas.push(t - last);
+      last = t;
+      if (deltas.length > 600) deltas.shift();
+      if (++n % 30 === 0 && deltas.length > 30) {
+        const sorted = [...deltas].sort((a, b) => a - b);
+        setP95(Math.round(sorted[Math.floor(sorted.length * 0.95)] * 10) / 10);
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [rehearsal]);
+
   // ----- canvas scaling (PRD v2 6.2) -----
   useEffect(() => {
     const el = wrapperRef.current;
@@ -365,7 +387,7 @@ export function Stage(props: Props) {
         {passive ? null : <div className="stage__announcer" aria-live="polite" aria-atomic="true" ref={announcerRef} />}
         {rehearsal && !passive ? (
           <p className="stage__rehearsal">
-            {slideId} · step {stepIndex + 1}/{Math.max(stepCount, 1)} · {last?.digest ?? "no digest"} · {last?.ms ?? 0}ms · {last?.asserts.filter((a) => !a.pass).length ?? 0} failed assert(s)
+            {slideId} · step {stepIndex + 1}/{Math.max(stepCount, 1)} · {last?.digest ?? "no digest"} · {last?.ms ?? 0}ms · {last?.asserts.filter((a) => !a.pass).length ?? 0} failed assert(s) · p95 frame {p95 ?? "…"} ms{p95 !== null && p95 > 20 ? " (over 20)" : ""}
           </p>
         ) : null}
       </div>

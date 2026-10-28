@@ -8,8 +8,12 @@
   height: var(--stage-height);
   padding: 48px 64px 40px;
   box-sizing: border-box;
-  color: var(--color-navy);
+  color: var(--glass-ink);
   font-family: var(--font-sans);
+  background:
+    var(--chrome-wash),
+    var(--chrome-image) center / cover no-repeat,
+    var(--glass-frame-fallback);
 }
 .page__header {
   @apply contents;
@@ -20,7 +24,7 @@
   font-size: 28px;
   font-weight: var(--weight-bold);
   line-height: 36px;
-  color: var(--color-dark-blue, #002faf);
+  color: var(--dark-blue);
 }
 .page__title {
   @apply self-center;
@@ -60,23 +64,46 @@
   right: 64px;
   height: 72px;
   margin: 0;
-  gap: 16px;
-  padding: 0 24px;
-  box-sizing: border-box;
-  align-items: center;
-  border: var(--glass-border, 1px solid rgb(255 255 255 / 0.6));
-  border-radius: 20px;
-  background: var(--glass-surface-strong, rgb(255 255 255 / 0.72));
+  gap: 12px;
+  line-height: 72px;
 }
 .page__meter-label {
-  font-size: 28px;
-  color: var(--color-navy);
+  font-size: 20px;
+  color: var(--glass-ink-soft);
 }
 .page__meter-value {
   font-size: 40px;
   font-weight: var(--weight-bold);
-  line-height: 1;
-  color: var(--color-navy);
+  color: var(--dark-blue);
+}
+
+/* Step indicator: right edge at 1856, y 48; width and text carry the state, not color alone. */
+.page__steps {
+  @apply absolute flex items-center;
+  top: 48px;
+  right: 64px;
+  height: 36px;
+  margin: 0;
+  gap: 12px;
+  font-size: 20px;
+  color: var(--glass-ink-soft);
+}
+.page__steps-bar {
+  @apply flex items-center;
+  gap: 6px;
+}
+.page__steps-seg {
+  width: 16px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--navy);
+}
+.page__steps-seg[data-state="current"] {
+  width: 40px;
+  background: var(--slalom-blue);
+}
+.page__steps-seg[data-state="future"] {
+  background: rgb(15 28 65 / 0.16);
 }
 
 /* The frame wrapper carries the scale so overlay coordinates are frame CSS pixels. */
@@ -85,10 +112,9 @@
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  border: var(--glass-border, 1px solid rgb(255 255 255 / 0.6));
-  border-radius: 24px;
-  background: var(--glass-surface, rgb(255 255 255 / 0.55));
-  box-shadow: var(--glass-shadow, 0 8px 32px rgb(15 28 65 / 0.12));
+  border: var(--chrome-card-border);
+  border-radius: var(--chrome-card-radius);
+  box-shadow: var(--chrome-card-highlight), var(--chrome-card-shadow);
 }
 .page-frame__scaled {
   @apply absolute;
@@ -121,9 +147,9 @@
   margin: 0;
   padding: var(--space-6);
   text-align: center;
-  color: var(--color-dark-gray);
-  font-size: var(--text-caption);
-  background: var(--surface-muted);
+  color: var(--glass-ink-soft);
+  font-size: 20px;
+  background: var(--glass-surface-solid);
 }
 .page-frame[data-status="ready"] .page-frame__status {
   display: none;
@@ -153,61 +179,75 @@
   color: var(--color-navy);
 }
 
-/* Code panel (PRD v4, 1.4): 24 px monospace, 0.6 em advance, line height 1.5; 44 columns take
-   634 px inside 32 px of padding each side; 56 px of tabs leave 776 px, 21 lines. */
+/* Code card (PRD v4 1.4; spec 6): tabs 56 px, code 24/36 px with 24 px top and bottom and 32 px
+   at the sides, 21 lines visible. Code colors meet 7:1 on --chrome-code-surface. */
 .code--page {
-  --code-size: 24px;
+  --code-size: var(--chrome-code-size);
   height: 100%;
-  color: var(--color-navy);
+  background: var(--chrome-code-surface);
+  color: var(--chrome-code-ink);
 }
 .code--page .code__tabs {
-  @apply items-end;
-  height: 56px;
+  @apply items-stretch;
+  height: var(--chrome-code-tabs-height);
   box-sizing: border-box;
-  padding: 0 24px;
-  gap: 4px;
-  border-bottom: 1px solid rgb(15 28 65 / 0.12);
+  padding: 0 var(--chrome-code-pad-inline);
+  gap: 24px;
+  border-bottom: 1px solid var(--glass-rule);
 }
 .code--page .code__tab {
   @apply inline-flex items-center;
-  gap: 10px;
-  padding: 10px 14px;
-  font-family: var(--font-mono);
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  font-family: var(--glass-font-mono);
   font-size: 20px;
-  color: var(--color-navy);
+  font-weight: var(--weight-regular);
+  color: var(--glass-ink-soft);
+}
+.code--page .code__tab[aria-selected="true"] {
+  color: var(--glass-ink);
+  font-weight: var(--weight-bold);
+  box-shadow: inset 0 -3px 0 var(--slalom-blue);
 }
 .code__off-chip {
   padding: 2px 10px;
   border-radius: var(--radius-pill);
-  background: var(--color-navy);
-  color: var(--color-white);
+  background: var(--coral);
+  color: var(--navy);
   font-family: var(--font-sans);
-  font-size: 18px;
+  font-size: 14px;
   font-weight: var(--weight-bold);
 }
-.code__pre--plain {
-  padding: 16px 0;
-  line-height: 1.5;
+.code--page .code__pre--plain {
+  padding: var(--chrome-code-pad-block) 24px;
+  font-family: var(--glass-font-mono);
+  line-height: var(--chrome-code-leading);
 }
 .code__pre--plain .code__line {
-  padding: 0 32px;
+  padding: 0 8px;
 }
 .code__pre--plain .code__line::before {
   content: none;
 }
 .code--page[data-has-highlight="true"] .code__line[data-highlighted="false"] {
-  opacity: 0.4;
+  opacity: var(--chrome-code-dim-opacity);
 }
 .code--page[data-off="true"] .code__line {
-  opacity: 0.35;
+  opacity: var(--chrome-code-dim-opacity);
 }
-.code--page .code__line[data-elision] {
+.code--page .code__line[data-elision],
+.code--page[data-has-highlight="true"] .code__line[data-elision] {
   font-style: italic;
-  opacity: 0.6;
+  color: var(--chrome-code-comment);
+  opacity: 1;
+}
+.code--page .code__line[data-elision] * {
+  color: inherit !important;
 }
 .code--page .code__line[data-highlighted="true"] {
-  background: rgb(12 98 251 / 0.1);
-  box-shadow: inset 6px 0 0 var(--color-slalom-blue);
+  background: var(--chrome-code-highlight-bg);
+  box-shadow: inset 4px 0 0 var(--chrome-code-highlight-bar);
 }
 
 /* Overlay (PRD Part A, 3.1, 5.1): spotlights, callouts, cursor, ripple, keycaps. */
@@ -240,18 +280,18 @@
 .overlay__callout {
   @apply absolute;
   padding: 6px 12px;
-  border-radius: 6px;
-  background: var(--color-navy);
-  color: var(--color-white);
-  font-size: 24px;
+  border-radius: 9px;
+  background: var(--chrome-callout-bg);
+  color: var(--chrome-callout-ink);
+  font-size: 19px;
   font-weight: var(--weight-bold);
-  line-height: 1.2;
+  line-height: 23px;
   white-space: nowrap;
 }
 .overlay__callout::after {
   content: "";
   @apply absolute;
-  background: var(--color-slalom-blue);
+  background: var(--chrome-callout-leader);
 }
 .overlay__callout[data-side="top"]::after {
   left: 50%;

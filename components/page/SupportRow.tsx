@@ -13,8 +13,13 @@ export function SupportRow({ tiles, kind }: { tiles: SupportTile[]; kind: "web-f
           {/* Local SVG logos (public/logos); next/image adds nothing for a fixed 72 px vector. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img className="support-row__logo" src={t.logo} alt="" width={72} height={72} />
-          <span className="support-row__version">{t.version ?? "Not yet"}</span>
-          <span className="support-row__name">{t.name}</span>
+          <span className="support-row__version" aria-hidden="true">
+            {t.version ?? "Not yet"}
+          </span>
+          <span className="support-row__name">
+            {t.name}
+            <span className="visually-hidden">{t.version ? `, from version ${t.version}` : ", not supported yet"}</span>
+          </span>
         </li>
       ))}
     </ul>

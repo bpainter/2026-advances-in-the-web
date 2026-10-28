@@ -254,6 +254,8 @@
         if (!on) {
           removedSupports = [];
           Array.prototype.slice.call(document.styleSheets).forEach(function (sheet) {
+            // The portal theme is never part of an enhancement (PRD v4, 6.2).
+            if (sheet.href && sheet.href.indexOf("/theme/portal-glass.css") !== -1) return;
             var removed = [];
             try {
               for (var i = sheet.cssRules.length - 1; i >= 0; i--) {

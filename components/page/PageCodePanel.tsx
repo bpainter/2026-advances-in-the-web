@@ -53,7 +53,7 @@ export function PageCodePanel({ files, code, mode }: Props) {
   }, [activeFile, key]);
 
   return (
-    <div className="code code--page glass-card" data-has-highlight={highlighted.size > 0} data-off={off}>
+    <div className="code code--page chrome-card" data-has-highlight={highlighted.size > 0} data-off={off}>
       <div className="code__tabs" role="tablist" aria-label="Files">
         {files.map((f) => (
           <button
