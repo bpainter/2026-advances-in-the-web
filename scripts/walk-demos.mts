@@ -109,6 +109,12 @@ async function checkSpeaker(where: string, demoPage: DemoPage, section: DemoSect
     .then(() => true)
     .catch(() => false);
   if (!synced) return fail(where, `speaker ${step.id}: the notes did not follow (wanted "${want}")`);
+  // CX risk 2: once the audience frame has finished the step, the speaker window says Ready.
+  const ready = await speaker
+    .waitForFunction(() => document.querySelector(".notes__play")?.textContent === "Ready", null, { timeout: 8000 })
+    .then(() => true)
+    .catch(() => false);
+  if (!ready) fail(where, `speaker ${step.id}: the indicator never returned to Ready`);
   const v = (await speaker.evaluate(`(() => {
     const body = document.querySelector(".speaker__notes-body");
     const br = body.getBoundingClientRect();

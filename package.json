@@ -25,6 +25,7 @@
     "theme:sync": "node --import tsx scripts/theme.mts sync",
     "theme:lint": "node --import tsx scripts/theme.mts lint",
     "measure:vite": "node --import tsx scripts/measure-vite.mts",
+    "capture": "node --import tsx scripts/capture.mts",
     "meters": "node --conditions=react-server --import tsx scripts/meters.mts",
     "dev:framework": "pnpm -s theme:sync && pnpm --dir demos/06-framework-cache dev",
     "build:framework": "pnpm -s theme:sync && pnpm --dir demos/06-framework-cache build",

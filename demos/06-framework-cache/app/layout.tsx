@@ -24,6 +24,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="stylesheet" href="/theme/portal-glass.css" />
       </head>
       <body>
+        {/* Synchronous on purpose: the hooks must exist before the frame runtime asks for them. */}
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script
           src="/presenter.js"
           data-app="now"

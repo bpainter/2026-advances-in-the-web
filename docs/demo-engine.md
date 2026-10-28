@@ -35,9 +35,14 @@ per page), `proof`, `ifKeyboard` and `poster`.
 On the 1920 by 1080 canvas: eyebrow at y 48 (with the step indicator at the right), title at y 88
 (with the meter at the right), body at y 176. Walk pages split the body into two 880 by 864 cards
 32 px apart. Frames are authored at 640 by 628 and scaled by 1.375; single pages use 1304 by 628.
-The code card shows 24 px code (21 lines of 36 px, 44 columns), file-name tabs, a highlight that
-leads playback by 400 ms, elision lines dimmed and italic, and an "Off" chip on enhancement-off
-steps.
+The code card shows 24 px code in a scroller exactly 21 lines tall that scrolls in whole lines
+(no line is cut at either edge), file-name tabs, a highlight that leads playback by 400 ms, elision
+lines in the comment color and italic (gaps under three lines are shown in full), and an 18 px
+"Off" chip on enhancement-off steps. Spotlights follow the target's radius, merge when within 12
+frame px, and only fade; the cursor tip lands off a button's label; the last keycap of a step stays
+up until the next step. A frame a hook narrows shows the frame background and a dashed edge.
+Single pages put their title on the walk pages' baseline and may carry a support badge
+(`badge`).
 
 ## Frames and the theme
 
@@ -56,6 +61,9 @@ runtime, flag metadata and instrumentation scripts.
 - **Portal shell.** `manifest.shell` wraps portal builds in the Ridgeline shell (nav rail, top bar)
   at compose time, so the shown code stays about the feature. The markup is wrapped as written,
   never reparsed; ids in `shell.outside` (overlay roots) are lifted out of `.portal`.
+  `shell.context` adds an unshown context card after the shown markup (recent orders, recent
+  cases, catalog from `fixtures/`), plain tables and chips that never use a demo's feature. The F2
+  apps render the same shell themselves (`components/portal-shell.tsx`).
 - **Glass off.** `?glass=off` on `/present` or `/speaker` sets `data-glass="off"` on the window and
   passes `glass:0` to every frame; surfaces turn solid.
 - Native builds compose the section's shown files (`content/sections/<id>/files/`); today builds
@@ -67,9 +75,12 @@ runtime, flag metadata and instrumentation scripts.
 
 ## The runtime and the player
 
-Unchanged from v3: `public/runtime/demo-runtime.js` runs the scripted actions; Next from the
+As in v3, `public/runtime/demo-runtime.js` runs the scripted actions; Next from the
 previous step animates in the active document, any other move mounts a fresh document and replays
-`s0..sN` instantly. Hands-on mode (`h`) gives the frame the keyboard. While an intro slide shows,
+`s0..sN` instantly. Hands-on mode (`h`) gives the frame the keyboard. Back and Forward never leave the frame: with the
+Navigation API the runtime checks `canGoBack`/`canGoForward`; without it, it counts the frame's
+own loads and `pushState` entries in `window.name`. A replaying document takes focus first, so
+programmatic focus replays the same in WebKit. While an intro slide shows,
 the next page's frame is loaded once in a hidden iframe to warm it (never for F2, whose apps log
 every request).
 
@@ -79,7 +90,9 @@ Previews on the left; the notes column on the right, top to bottom: header (eyeb
 n of m: label", Proof and Key point chips), the hands-on box (`ifKeyboard`), the page intro on step
 0, the bullets (40 px, 28 to 56; the key step's last bullet in bold), cautions on the now page's
 last step, a collapsed Reference (support, citations, step list, action summaries). Next is pinned
-under the column; `d` adds the next step's actions under it. The timer stays hidden by default.
+under the column; `d` adds the next step's actions under it. The step header shows "Playing" while
+the audience frame runs the step and "Ready" once it is done (a `playback` sync message). Bullets
+have markers. The previews use one captured poster per step. The timer stays hidden by default.
 
 ## Support data
 
@@ -92,11 +105,14 @@ only this file; logos are local (`public/logos/`).
 
 | Command | What it does |
 |---|---|
-| `pnpm check [--strict] [section]` | The validator (`lib/validate/rules.ts`): page order, step caps, proofs, bullets, word budgets, writing rules (dashes, "!", sentence and bullet length, banned words, "X, not Y", no TODO), code on every walk step, 44 columns and 40 lines, excerpt fidelity, intro support and visuals, eyebrow and title, callouts, meters, viewports, the timing table (`lib/validate/timing.ts`), v3 field names, theme lint and hashes. |
+| `pnpm check [--strict] [section]` | The validator (`lib/validate/rules.ts`): page order, step caps, proofs, bullets, word budgets, writing rules (dashes, "!", sentence and bullet length, banned words, "X, not Y", no TODO), code on every walk step, highlights of 12 lines spanning 20 at most, 44 columns and 40 lines, excerpt fidelity, intro support and visuals, eyebrow and title, callouts, meters, viewports, the timing table (`lib/validate/timing.ts`), v3 field names, theme lint and hashes. |
 | `pnpm test` | `test:validator` (one broken fixture per rule, theme lint included), `test:support` (the PRD 3.2 table), `test:contrast` (every text token over its surfaces, washes and palette). |
 | `pnpm validate` | typecheck, lint, meters, test, check. |
 | `pnpm walk [page, section or prefix] [--browser=webkit\|firefox] [--capture] [--no-speaker]` | Drives the audience window with the arrow keys: step asserts, forward and back digests, intro tiles against support.json, the theme in every frame, slot geometry and a 44 by 40 fixture, and (Chromium) a speaker window at 1440 by 900 for notes visibility and hands-on. `pnpm walk d6 --browser=firefox --capture` saves `public/posters/d6-firefox.png`. Needs `pnpm dev`. |
 | `pnpm visuals [section]` | Replays each intro's `visual.capture` step and saves the frame as a 2x PNG in `public/intro/`. |
+| `pnpm capture [section]` | Production builds of the presenter and both F2 apps on ports 3300, 3316 and 3317 (separate build directories, beside `next dev`), then `pnpm visuals --posters` against them: intro stills and one poster per step in `public/posters/<page>/<step>.jpg`. |
+| `pnpm measure:vite` | Builds `fixtures/vite-measure/app` with Vite 7 and Vite 8 (same plugins), five cold and five warm runs, and writes `fixtures/vite-measurements.json` for F4. |
+| `node --import tsx scripts/record-f3.mts` | Records F3 sessions A to C for real against Verdaccio on 4873 with pinned pnpm and npm; session D stays a marked example. |
 | `pnpm meters` | Counts today builds' and native shown JavaScript at printWidth 80 into `content/.generated/meters.json`. |
 | `pnpm support [--tools]` | Writes `content/.generated/support.json`. |
 | `pnpm axe [section]` | axe-core in every frame with `glass:0`. |

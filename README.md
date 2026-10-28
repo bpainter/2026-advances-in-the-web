@@ -39,8 +39,10 @@ data, contrast) and `pnpm check` (the content validator); `pnpm walk` drives eve
 Playwright, with a speaker window beside it, and asserts the frames' step results. `pnpm support`
 refreshes the browser support data from the pinned `web-features` package (refresh the package the
 week of the talk), `pnpm visuals` recaptures the intro stills, `pnpm theme:sync` copies the portal
-theme to `public/theme/` and the F2 apps (`pnpm dev` and `pnpm build` run it first). See
-`docs/demo-engine.md`.
+theme to `public/theme/` and the F2 apps (`pnpm dev` and `pnpm build` run it first), `pnpm
+capture` regenerates the intro stills and the speaker's step posters from production builds, and
+`pnpm measure:vite` measures F4 on this machine. Present from production builds (`pnpm build &&
+pnpm start`, `pnpm start:framework`, `pnpm start:framework-today`). See `docs/demo-engine.md`.
 
 ## Framework demo apps (F2 caching)
 
