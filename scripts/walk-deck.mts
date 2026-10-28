@@ -65,6 +65,7 @@ export async function walkDeck(page: Page, base: string, slides: Slide[], report
       if (v.grain === null) problems.push(`${slide.id}: no grain layer`);
       else if (Math.abs(v.grain - tokenOpacity) > 0.001 || v.blend !== "overlay") problems.push(`${slide.id}: grain at ${v.grain} ${v.blend}; the token says ${tokenOpacity} overlay`);
       if (i > 0 && !v.decoded.includes(want)) problems.push(`${slide.id}: ${want} was not decoded before arrival`);
+      if (slide.id === "closing") await checkClosing(page, report);
     }
     if (i < slides.length - 1) {
       // A frame may take focus while it swaps documents and drop the key; press again until the
@@ -129,4 +130,30 @@ export async function checkFrameBackground(frame: Frame | null, where: string, b
   }
   if (problems.length) report.fail(where, `frame background: ${problems.join("; ")}`);
   else report.pass(`frame on ${BACKGROUNDS[background].file} at 1396.36 by 785.45, offset -47.27 -128.73, fixed`);
+}
+
+/** The closing slide (PRD v5, 4.6 and 4.8): whole QR modules of 12 stage px or more, and the three lines. */
+async function checkClosing(page: Page, report: Report) {
+  await page.waitForSelector(".sg-qr__code", { timeout: 5000 }).catch(() => null);
+  const v = (await page.evaluate(`(async () => {
+    const canvas = document.querySelector(".stage__canvas").getBoundingClientRect();
+    const scale = canvas.width / 1920;
+    const img = document.querySelector(".sg-qr__code");
+    if (!img) return null;
+    await img.decode().catch(() => {});
+    const r = img.getBoundingClientRect();
+    const svg = await (await fetch(img.getAttribute("src"))).text();
+    const modules = Number(/data-modules="(\\d+)"/.exec(svg)?.[1] || 0);
+    const text = (sel) => document.querySelector(sel)?.textContent?.trim() ?? "";
+    return { width: r.width / scale, height: r.height / scale, modules, eyebrow: text(".sg-closing .sg-eyebrow"), name: text(".sg-closing__name"), role: text(".sg-closing__role"), link: text(".sg-closing__link") };
+  })()`)) as { width: number; height: number; modules: number; eyebrow: string; name: string; role: string; link: string } | null;
+  if (!v) return report.fail("closing", "no QR image");
+  const px = v.modules ? v.width / v.modules : 0;
+  const whole = Math.abs(px - Math.round(px)) < 0.01;
+  const want = { eyebrow: "Thank you", name: "Bermon Painter", role: "Head of DXP and Commerce, Slalom", link: "linkedin.com/in/bermonpainter" };
+  const problems: string[] = [];
+  if (!whole || px < 12) problems.push(`QR modules are ${px.toFixed(2)} stage px`);
+  for (const [k, w] of Object.entries(want)) if (v[k as keyof typeof want] !== w) problems.push(`${k} reads "${v[k as keyof typeof want]}"`);
+  if (problems.length) report.fail("closing", problems.join("; "));
+  else report.pass(`closing: QR at ${Math.round(px)} stage px per module (${v.modules} modules, ${Math.round(v.width)} px), name, role and link as PRD 4.6`);
 }

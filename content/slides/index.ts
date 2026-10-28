@@ -10,6 +10,7 @@ import { slide as o6 } from "./06-open-web";
 import { slide as o7 } from "./07-what-we-cover";
 import { slide as c1 } from "./32-what-changed";
 import { slide as c2 } from "./33-people-to-follow";
+import { slide as c3 } from "./34-closing";
 
 const SECTION_OF: Record<DemoSection["id"], Slide["section"]> = {};
 
@@ -31,13 +32,13 @@ function pageSlide(section: DemoSection, page: DemoPage): Slide {
 }
 
 /**
- * The deck: the Claude Design opening, every page of the demo section in order (PRD Part A,
- * section 1), and the Claude Design closing. Indexes are assigned here; the closing's cumulative
+ * The deck: the native opening slides, every page of the demo section in order (PRD Part A,
+ * section 1), and the closing slides with the new closing slide last (PRD v5, 4.6). Indexes are assigned here; the closing's cumulative
  * timing continues from the last demo page.
  */
 const opening = [o1, o2, o3, o4, o5, o6, o7];
 const pages = sections.flatMap((s) => s.pages.map((p) => pageSlide(s, p)));
-const closing = [c1, c2];
+const closing = [c1, c2, c3];
 
 let cumulative = 0;
 export const slides: Slide[] = [...opening, ...pages, ...closing].map((s, i) => {

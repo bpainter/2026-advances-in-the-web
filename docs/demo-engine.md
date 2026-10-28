@@ -143,6 +143,15 @@ the walk checks at s0 and on the last step that the shown CSS and the tab order 
 shown slot, that the blocks fill 85 percent of the frame with no gap over 96 px, and that nothing
 scrolls except D4. Wrapper data lives in `fixtures/portal-context.json` and the existing fixtures.
 
+## Opening and closing slides (v5)
+
+The opening and closing slides are native glass layouts (`components/layouts/glass/`, text in
+`slide.glass`). The closing slide (`content/slides/34-closing.ts`) is always last: name, role and
+LinkedIn on dark glass and a QR code on solid white. `pnpm qr` (also in `predev` and `prebuild`)
+writes `public/qr/linkedin.svg` offline with the pinned `qrcode` package: error correction M, a
+4-module quiet zone, 14 stage px per module; `pnpm check` fails when a fresh render differs, and
+the walk checks the module size and the three lines.
+
 ## Speaker window
 
 Previews on the left; the notes column on the right, top to bottom: header (eyebrow, title, "Step
@@ -167,6 +176,9 @@ only this file; logos are local (`public/logos/`).
 | `pnpm check [--strict] [section]` | The validator (`lib/validate/rules.ts`): page order, step caps, proofs, bullets, word budgets, writing rules (dashes, "!", sentence and bullet length, banned words, "X, not Y", no TODO), code on every walk step, highlights of 12 lines spanning 20 at most, 44 columns and 40 lines, excerpt fidelity, intro support and visuals, eyebrow and title, callouts, meters, viewports, the timing table (`lib/validate/timing.ts`), v3 field names, theme lint and hashes. |
 | `pnpm test` | `test:settle` (the spotlight gate with a fake clock), `test:validator` (one broken fixture per rule, theme lint included), `test:support` (the PRD 3.2 table), `test:contrast` (every text token over its surfaces, washes and palette). |
 | `pnpm validate` | typecheck, lint, meters, test, check. |
+| `pnpm backgrounds` | Measures every background's text zones into `content/.generated/backgrounds.json`. |
+| `pnpm grain` | Writes the seeded grain tile `public/theme/grain.png`. |
+| `pnpm qr` | Writes the closing slide's QR code `public/qr/linkedin.svg`. |
 | `pnpm walk [page, section or prefix] [--browser=webkit\|firefox] [--capture] [--no-speaker]` | Drives the audience window with the arrow keys: step asserts, forward and back digests, intro tiles against support.json, the theme in every frame, slot geometry and a 44 by 40 fixture, and (Chromium) a speaker window at 1440 by 900 for notes visibility and hands-on. `pnpm walk d6 --browser=firefox --capture` saves `public/posters/d6-firefox.png`. Needs `pnpm dev`. |
 | `pnpm visuals [section]` | Replays each intro's `visual.capture` step and saves the frame as a 2x PNG in `public/intro/`. |
 | `pnpm capture [section]` | Production builds of the presenter and both F2 apps on ports 3300, 3316 and 3317 (separate build directories, beside `next dev`), then `pnpm visuals --posters` against them: intro stills and one poster per step in `public/posters/<page>/<step>.jpg`. |

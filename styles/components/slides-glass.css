@@ -460,10 +460,16 @@
   background: var(--glass-surface-solid);
   box-shadow: 0 24px 64px rgb(0 10 37 / 0.4);
 }
-.sg-qr__code {
-  display: block;
+/* The QR keeps its own size: the largest whole module size that fits 544 (scripts/qr.mts),
+   centered in the 544 box, so modules land on whole stage px. */
+.sg-qr__frame {
+  display: grid;
+  place-items: center;
   width: 544px;
   height: 544px;
+}
+.sg-qr__code {
+  display: block;
 }
 .sg-qr__caption {
   margin-top: 24px;

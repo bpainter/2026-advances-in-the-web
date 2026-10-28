@@ -24,6 +24,7 @@ import { slides } from "@/lib/content";
 import { BACKGROUNDS } from "@/content/backgrounds";
 import { jpegSize, slideCopyIssues, validateV5 } from "@/lib/validate/v5";
 import { decodeGrainPng, grainPixels } from "@/lib/grain";
+import { qrSvg } from "@/lib/qr";
 import { BACKGROUND_BY_DEMO } from "@/lib/frames/compose";
 import { DEMO_FOLDERS } from "@/lib/frames/registry";
 import { WRAPPERS } from "@/lib/frames/wrappers";
@@ -92,8 +93,7 @@ const v5Issues = validateV5({
   backgroundsDir: existsSync(bgDir) ? readdirSync(bgDir).filter((n) => !n.startsWith(".")) : [],
   glassMentions,
   stats: readJson(path.join(root, "content", ".generated", "backgrounds.json")),
-  // The closing slide (PRD v5, 4.6) lands in M7; its background is registered from M2.
-  pending: slides.some((s) => s.id === "closing") ? [] : ["closing"],
+  qr: { committed: existsSync(path.join(root, "public", "qr", "linkedin.svg")) ? readFileSync(path.join(root, "public", "qr", "linkedin.svg"), "utf8") : null, fresh: (await qrSvg()).svg },
   grain: { committed: existsSync(path.join(root, "public", "theme", "grain.png")) ? decodeGrainPng(readFileSync(path.join(root, "public", "theme", "grain.png"))) : null, fresh: grainPixels() },
 });
 // Frames default to their demo folder's section background (lib/frames/compose.ts): keep it in step.
