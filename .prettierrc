@@ -3,8 +3,20 @@
   "singleQuote": false,
   "overrides": [
     {
-      "files": ["content/demos/**/*.{html,css,js}"],
-      "options": { "printWidth": 56 }
+      "files": [
+        "content/demos/**/*.{html,css,js}"
+      ],
+      "options": {
+        "printWidth": 56
+      }
+    },
+    {
+      "files": [
+        "demos/*/today/**/*.{html,css,js}"
+      ],
+      "options": {
+        "printWidth": 44
+      }
     }
   ]
 }

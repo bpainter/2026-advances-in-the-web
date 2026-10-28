@@ -83,6 +83,7 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
   const performRef = useRef<((action: KeyAction) => void) | null>(null);
   // The provider survives slide navigations (same page component); the transport must start once.
   const firstSlideRef = useRef(initialSlideId);
+  const urlAtMount = useRef<PresenterState | null>(null);
 
   useEffect(() => {
     stateRef.current = state;
@@ -98,6 +99,11 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
     const navType = (performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined)?.type;
     const urlSlide = new URLSearchParams(window.location.search).get("s");
     const urlWins = navType === "navigate" && urlSlide !== null;
+    // Read the URL now: the mirror effect below rewrites it (dropping `step=`) before the
+    // fallback timer fires.
+    // A ref, because Strict Mode runs this effect twice and the second run sees the rewritten URL.
+    urlAtMount.current ??= stateFromUrl(writer, initialSlide);
+    const fromUrlAtMount = urlAtMount.current;
     let claimed = false;
     const accept = (incoming: PresenterState) => {
       if (!isNewer(incoming, stateRef.current)) return;
@@ -105,8 +111,7 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
       if (urlWins && !claimed && urlSlide && incoming.slideId !== urlSlide) {
         // Take the peer's timer and counters, but move both windows to the URL's slide.
         claimed = true;
-        const fromUrl = stateFromUrl(writer, initialSlide);
-        const next: PresenterState = { ...incoming, slideId: urlSlide, stepIndex: fromUrl.stepIndex, seq: incoming.seq + 1, writer };
+        const next: PresenterState = { ...incoming, slideId: urlSlide, stepIndex: fromUrlAtMount.stepIndex, seq: incoming.seq + 1, writer };
         stateRef.current = next;
         setState(next);
         sync.send({ type: "state", state: next });
@@ -136,7 +141,7 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
       // A peer answered, or this window already wrote state (a press before the fallback fired).
       if (settled || stateRef.current.seq > 0) return;
       const stored = sync.readStored();
-      const fromUrl = stateFromUrl(writer, initialSlide);
+      const fromUrl = { ...fromUrlAtMount, writer };
       // No other window answered: a typed URL wins; a reload resumes the last stored state.
       const initial = stored && !urlWins ? { ...stored, writer } : fromUrl;
       stateRef.current = initial;

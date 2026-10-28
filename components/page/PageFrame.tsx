@@ -21,6 +21,9 @@ interface Props {
   onStepResult?: (stepId: string, result: StepResult) => void;
 }
 
+/** How long the code highlight shows before a step's playback starts (docs/design/demo-flow-cx.md, 4). */
+const CODE_LEAD_MS = 400;
+
 function documentUrl(page: FramePage, flags: Record<string, boolean>): { origin: string; url: string } {
   const route = page.frame!.route;
   const { origin, url } = frameUrl(route.endsWith("/") ? `${route}index.html` : route.includes(".") ? route : `${route}/index.html`);
@@ -109,6 +112,9 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
       void (async () => {
         let h = cur.handle;
         let last: StepResult | null = null;
+        // The code highlight leads the playback by 400 ms, so the room reads the cause first (CX 4).
+        if (target.code && !reducedMotion) await new Promise((r) => window.setTimeout(r, CODE_LEAD_MS));
+        if (gen !== generation.current) return;
         for (const [i, seg] of segs.entries()) {
           if (gen !== generation.current) return;
           if (seg.reload) {

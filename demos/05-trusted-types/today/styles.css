@@ -1,4 +1,5 @@
-/* D5 today: a product page with CMS content in three places. */
+/* D5 today: a product page with CMS content
+   in three places. */
 
 body {
   margin: 2rem;
@@ -11,7 +12,9 @@ body {
 
 .shop {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 22rem;
+  grid-template-columns:
+    minmax(0, 1fr)
+    22rem;
   gap: 2rem 3rem;
   align-items: start;
 }

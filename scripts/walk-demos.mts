@@ -61,6 +61,7 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
     await walkIntro(page, section, where);
     return;
   }
+  await checkGeometry(page, demoPage, where);
   const forward: (string | null)[] = [];
   for (let i = 0; i < demoPage.steps.length; i++) {
     const step = demoPage.steps[i];
@@ -108,6 +109,38 @@ async function walkIntro(page: Page, section: DemoSection, where: string) {
   const text = (await page.textContent(".intro__description")) ?? "";
   if (!text.includes(entry.since)) fail(where, `description lacks "${entry.since}"`);
   else pass(`${where}: generated sentence shown`);
+}
+
+/**
+ * Geometry (PRD v4, 7.6): on walk pages the frame slot and the code panel are each 880 canvas px
+ * wide, and a 44-column, 40-line fixture fits the code panel with no horizontal scroll.
+ */
+async function checkGeometry(page: Page, demoPage: DemoPage, where: string) {
+  if (demoPage.stage !== "used-to" && demoPage.stage !== "now") return;
+  await page.waitForSelector(".page__code .code__pre", { timeout: 10000 }).catch(() => null);
+  // A string, so tsx does not wrap the helpers in its __name() calls inside the page.
+  const g = (await page.evaluate(`(() => {
+    const canvas = document.querySelector(".stage__canvas").getBoundingClientRect();
+    const scale = canvas.width / 1920;
+    const width = (sel) => Math.round((document.querySelector(sel)?.getBoundingClientRect().width ?? 0) / scale);
+    // Measure on a clone beside the real panel: React owns the real nodes.
+    const real = document.querySelector(".page__code .code__pre");
+    const pre = real.cloneNode(false);
+    const code = real.querySelector("code").cloneNode(false);
+    code.textContent = Array.from({ length: 40 }, () => "W".repeat(44)).join("\\n");
+    pre.append(code);
+    pre.style.position = "absolute";
+    pre.style.visibility = "hidden";
+    pre.style.width = real.getBoundingClientRect().width / scale + "px";
+    real.parentElement.append(pre);
+    const fixture = { scrollWidth: pre.scrollWidth, clientWidth: pre.clientWidth };
+    pre.remove();
+    return { frame: width(".page__frame"), code: width(".page__code"), fixture };
+  })()`)) as { frame: number; code: number; fixture: { scrollWidth: number; clientWidth: number } };
+  if (g.frame !== 880 || g.code !== 880) fail(where, `slots are ${g.frame} and ${g.code} canvas px; both should be 880`);
+  else pass(`${where}: frame slot and code panel are 880 px`);
+  if (g.fixture.scrollWidth > g.fixture.clientWidth) fail(where, `a 44 by 40 fixture scrolls sideways (${g.fixture.scrollWidth} > ${g.fixture.clientWidth})`);
+  else pass(`${where}: 44 by 40 fixture fits without horizontal scroll`);
 }
 
 async function main() {

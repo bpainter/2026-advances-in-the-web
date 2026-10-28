@@ -1,44 +1,32 @@
 import type { DemoSection } from "@/content/demo-schema";
-import { sectionFile } from "@/lib/demo-files";
+import { excerpt, sectionFile } from "@/lib/demo-files";
 
-/** Schema v4 (docs/PRD-demos-v4.md); shown code files live in ./d1-order-actions/files/. */
+const TODAY = "demos/01-layered-ui/today";
+
+/** D1: a hand-rolled menu and modal, then popover, dialog and invoker commands. Shown native files live in ./d1-order-actions/files/. */
 export const section: DemoSection = {
   id: "d1-order-actions",
   order: 1,
   label: "Order actions",
   feature: "Dialog element",
   scenario:
-    "TODO rewrite: An order row opens an action menu. Choosing Cancel order opens a confirmation dialog, returns focus correctly, and calls the application only after confirmation.",
-  support: {
-    kind: "web-features",
-    id: "dialog",
-    alsoUses: ["popover", "invoker-commands"],
-  },
+    "An order row has an Actions menu. Cancel order asks you to confirm, returns focus and calls the server only after you confirm.",
+  support: { kind: "web-features", id: "dialog", alsoUses: ["popover", "invoker-commands"] },
   pages: [
     {
       id: "d1-intro",
       stage: "intro",
-      intro: "TODO rewrite",
-      description: "TODO description",
+      intro:
+        "Our first demo is an order list where each order has an Actions menu. Cancel order asks you to confirm first. We build it the old way, then the way browsers allow now.",
+      description:
+        "The dialog element gives you a confirm box with focus and Escape handled by the browser.",
       visual: {
         src: "/intro/d1-order-actions.png",
-        alt: "TODO alt",
-        capture: {
-          pageId: "d1-now",
-          stepId: "s1",
-        },
+        alt: "The order portal with the cancel dialog open.",
+        capture: { pageId: "d1-now", stepId: "s2" },
       },
-      steps: [
-        {
-          id: "s0",
-          label: "Title and support",
-          actions: [],
-          bullets: [],
-        },
-      ],
-      timing: {
-        minutes: 0.25,
-      },
+      steps: [{ id: "s0", label: "Title and support", actions: [], bullets: [] }],
+      timing: { minutes: 0.25 },
     },
     {
       id: "d1-used-to",
@@ -46,90 +34,72 @@ export const section: DemoSection = {
       eyebrow: "Dialog element",
       title: "How we used to do it",
       intro:
-        "TODO rewrite: One order row, one destructive action. Here is what teams commonly maintain to make a menu and a confirmation behave.",
+        "This is an order list, and Cancel order asks you to confirm first. Here is how teams commonly build it. The code lights up as the demo plays.",
       frame: {
         build: "today",
         route: "/demos/01-layered-ui/today",
-        viewport: {
-          width: 640,
-          height: 628,
-        },
+        viewport: { width: 640, height: 628 },
         hooks: ["reset"],
         poster: "/posters/d1-today.png",
       },
-      files: [],
+      files: [
+        excerpt(`${TODAY}/index.html`, "html", [[2, 20]]),
+        excerpt(`${TODAY}/styles.css`, "css", [
+          [49, 54],
+          [60, 62],
+          [86, 91],
+          [93, 98],
+        ]),
+        excerpt(`${TODAY}/menu.js`, "js", [
+          [110, 128],
+          [219, 231],
+        ]),
+        excerpt(`${TODAY}/modal.js`, "js", [
+          [93, 106],
+          [115, 121],
+          [172, 181],
+        ]),
+      ],
       steps: [
         {
           id: "s0",
-          label: "The hand-rolled row",
+          label: "The old row",
           actions: [],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          bullets: [
-            "TODO rewrite: This is a menu and modal built from div elements, ARIA roles, and a component library pattern.",
-            "TODO rewrite: It works.",
-            "TODO rewrite: Watch what it takes to keep it working.",
-          ],
+          code: { file: "index.html", lines: [] },
+          bullets: [],
         },
         {
           id: "s1",
           label: "Open the menu",
           actions: [
-            {
-              type: "pointer",
-              to: "#t-actions",
-            },
-            {
-              type: "click",
-              target: "#t-actions",
-            },
-            {
-              type: "assert",
-              target: "#t-menu",
-              expect: "visible",
-            },
+            { type: "pointer", to: "#t-actions" },
+            { type: "click", target: "#t-actions" },
+            { type: "assert", target: "#t-menu", expect: "visible" },
           ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
+          code: { file: "index.html", lines: [[7, 15], 19] },
+          spotlight: ["#t-actions", "#t-menu"],
           bullets: [
-            "TODO rewrite: The menu needs JavaScript for open state, Escape, and outside clicks.",
-            "TODO rewrite: It renders into a portal root because ordinary z-index rules cannot reliably place the surface above the page.",
+            "The Actions button opens the menu. Script builds it in an empty box at the end of the page.",
           ],
         },
         {
           id: "s2",
-          label: "Open the confirmation",
+          label: "Open the confirm box",
           actions: [
-            {
-              type: "pointer",
-              to: "#t-cancel",
-            },
-            {
-              type: "click",
-              target: "#t-cancel",
-            },
-            {
-              type: "assert",
-              target: "#t-modal",
-              expect: "visible",
-            },
+            { type: "pointer", to: "#t-cancel" },
+            { type: "click", target: "#t-cancel" },
+            { type: "assert", target: "#t-modal", expect: "visible" },
           ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
+          code: { file: "styles.css", lines: [2, 5, 9, 11, 13, 16, 20, 22] },
+          spotlight: ["#t-modal", "#t-backdrop"],
           bullets: [
-            "TODO rewrite: The modal adds focus trapping, scroll locking, and stacking.",
-            "TODO rewrite: Each one is code the team owns, tests, and fixes again when the component moves.",
+            "Cancel order opens a confirm box over a dark backdrop. The CSS needs four z-index numbers to stack it.",
           ],
         },
         {
           id: "s3",
-          label: "Dismiss and count",
+          label: "Close with Escape",
+          key: true,
           actions: [
             {
               type: "key",
@@ -137,31 +107,23 @@ export const section: DemoSection = {
               target: "#t-modal",
               via: "dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' })); the today build listens in JavaScript",
             },
-            {
-              type: "assert",
-              target: "#t-actions",
-              expect: "focused",
-            },
+            { type: "assert", target: "#t-actions", expect: "focused" },
           ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          bullets: [
-            "TODO rewrite: Escape closes it, and a handler puts focus back on the Actions button.",
-            "TODO rewrite: Teams keep separate versions of this behavior across frameworks, with regressions when the component is moved or nested.",
-            "TODO rewrite: The meter is the JavaScript this one row needs, counted from the build.",
-          ],
+          code: { file: "modal.js", lines: [[12, 14], [17, 22], 32] },
+          spotlight: ["#t-actions"],
           meter: {
             label: "JavaScript",
             value: "399 lines",
             source: "non-blank, non-comment lines in /demos/01-layered-ui/today/*.js",
           },
+          bullets: [
+            "Escape closes the box, and focus goes back to Actions.",
+            "Script handles Escape, keeps Tab inside the box and returns focus. That is 399 lines to maintain.",
+          ],
+          ifKeyboard: "Press Escape. Then press Next once to sync the frame.",
         },
       ],
-      timing: {
-        minutes: 0.75,
-      },
+      timing: { minutes: 0.75 },
     },
     {
       id: "d1-now",
@@ -169,171 +131,106 @@ export const section: DemoSection = {
       eyebrow: "Dialog element",
       title: "How we do it now",
       intro:
-        "TODO rewrite: Same row, same task, with what the browser can own now: popover for the menu, dialog for the decision, and invoker commands to connect them in HTML.",
+        "This is the same order row, built from HTML the browser understands. The menu is a popover. The confirm box is a dialog.",
       frame: {
         build: "native",
         route: "/demos/01-layered-ui/native",
-        viewport: {
-          width: 640,
-          height: 628,
-        },
-        flags: {
-          "enhance-css": true,
-        },
+        viewport: { width: 640, height: 628 },
+        flags: { "enhance-css": true },
         hooks: ["reset"],
-        poster: "/posters/d1-code.png",
+        poster: "/posters/d1-now.png",
       },
       files: [
-        {
-          file: "index.html",
-          lang: "html",
-          source: sectionFile("d1-order-actions", "index.html"),
-        },
+        { file: "index.html", lang: "html", source: sectionFile("d1-order-actions", "index.html") },
         {
           file: "enhance.css",
           lang: "css",
           source: sectionFile("d1-order-actions", "enhance.css"),
         },
-        {
-          file: "app.js",
-          lang: "js",
-          source: sectionFile("d1-order-actions", "app.js"),
-        },
+        { file: "app.js", lang: "js", source: sectionFile("d1-order-actions", "app.js") },
       ],
       steps: [
         {
           id: "s0",
-          label: "Three files",
+          label: "Same row",
           actions: [],
-          code: {
-            file: "index.html",
-            lines: [],
-          },
-          bullets: [
-            "TODO rewrite: Three files.",
-            "TODO rewrite: The HTML carries the behavior, the CSS is an enhancement, and the JavaScript handles one request.",
-          ],
+          code: { file: "index.html", lines: [] },
+          bullets: [],
         },
         {
           id: "s1",
-          label: "popovertarget",
+          label: "Open the menu",
           actions: [
-            {
-              type: "click",
-              target: "#actions-418",
-            },
-            {
-              type: "assert",
-              target: "#order-actions-418",
-              expect: ":popover-open",
-            },
+            { type: "pointer", to: "#actions-418" },
+            { type: "click", target: "#actions-418" },
+            { type: "assert", target: "#order-actions-418", expect: ":popover-open" },
           ],
-          code: {
-            file: "index.html",
-            lines: [[6, 10]],
-          },
+          code: { file: "index.html", lines: [[6, 10]] },
           spotlight: ["#actions-418", "#order-actions-418"],
           bullets: [
-            "TODO rewrite: popovertarget connects the button to the menu, and the popover attribute does the rest.",
-            'TODO rewrite: Shopify\'s region picker uses the same pair, popoverTarget with popover="auto"; that DevTools capture is taken the week of the talk.',
-            'TODO rewrite: Vercel ships a popover="manual" menu, and GitHub Primer moved ActionList to popover and Dialog to the dialog element.',
+            "The Actions button opens the menu again.",
+            "A popover is a layer that shows above the page. The popover attribute makes this menu one.",
+            "We need no z-index and no empty box at the end of the page.",
           ],
         },
         {
           id: "s2",
-          label: "Invoker command",
+          label: "Open the dialog",
           actions: [
-            {
-              type: "click",
-              target: '[commandfor="cancel-418"]',
-            },
-            {
-              type: "assert",
-              target: "#cancel-418",
-              expect: ":open",
-            },
+            { type: "pointer", to: '[commandfor="cancel-418"]' },
+            { type: "click", target: '[commandfor="cancel-418"]' },
+            { type: "assert", target: "#cancel-418", expect: ":open" },
+            { type: "assert", target: '#cancel-418 button[value="cancel"]', expect: "focused" },
           ],
-          code: {
-            file: "index.html",
-            lines: [[11, 16], 28],
-          },
+          code: { file: "index.html", lines: [[11, 16], 28] },
           spotlight: ['[commandfor="cancel-418"]', "#cancel-418"],
           bullets: [
-            'TODO rewrite: Invoker commands connect buttons to popovers and dialogs in HTML, reducing event-handler plumbing. command="show-modal" calls showModal() for us.',
-            "TODO rewrite: The dialog sits inside the menu on purpose: opened from a sibling, showModal() closes the menu first and focus has nowhere to return.",
+            "Cancel order opens the dialog. Focus lands on Keep order, the safe choice.",
+            "The command attribute tells the button what to do. Here it opens the dialog.",
+            "The page behind waits until you answer. That is what modal means.",
           ],
         },
         {
           id: "s3",
-          label: "form method=dialog",
+          label: "Close with the keyboard",
+          key: true,
           actions: [
             {
-              type: "click",
+              type: "key",
+              key: "Enter",
               target: '#cancel-418 button[value="cancel"]',
+              via: "click() on the focused button",
             },
+            { type: "assert", target: '[commandfor="cancel-418"]', expect: "focused" },
             {
-              type: "assert",
-              target: '[commandfor="cancel-418"]',
-              expect: "focused",
+              type: "key",
+              key: "Escape",
+              target: "#order-actions-418",
+              via: "hidePopover() on the menu (the same close request Escape sends)",
             },
+            { type: "assert", target: "#actions-418", expect: "focused" },
           ],
-          code: {
-            file: "index.html",
-            lines: [[17, 27]],
-          },
-          spotlight: ["#cancel-418 form", '#cancel-418 button[value="cancel"]'],
+          code: { file: "index.html", lines: [[17, 27]] },
+          spotlight: ["#cancel-418 form", "#actions-418"],
+          proof: "Close and return focus with the keyboard only.",
           bullets: [
-            'TODO rewrite: A form with method="dialog" closes the dialog and sets returnValue from the button that was pressed.',
-            "TODO rewrite: There are no click handlers.",
-            "TODO rewrite: Focus goes back to Cancel order in the menu.",
+            "Enter picks Keep order. Escape closes the menu. Focus is back on the Actions button.",
+            "The form uses method dialog, so its buttons close the dialog.",
+            "The browser moves focus back for us. We wrote no code for it.",
           ],
+          ifKeyboard: "Press Enter, then Escape. Press Next once to sync the frame.",
         },
         {
           id: "s4",
-          label: "Placement and state in CSS",
+          label: "Confirm the cancel",
           actions: [
-            {
-              type: "click",
-              target: '[commandfor="cancel-418"]',
-            },
-            {
-              type: "assert",
-              target: "#cancel-418",
-              expect: ":open",
-            },
-          ],
-          code: {
-            file: "enhance.css",
-            lines: [
-              [10, 17],
-              [18, 23],
-              [24, 33],
-            ],
-          },
-          spotlight: ["#order-actions-418", "#cancel-418"],
-          bullets: [
-            "TODO rewrite: The base placement works without anchor positioning.",
-            "TODO rewrite: Where position-area is supported, the menu sits under its button through the implicit anchor, and that feature gets its own row on the fast-follow slide.",
-            "TODO rewrite: The :open and :popover-open selectors expose state to CSS, and the short transition runs only when reduced motion is not requested.",
-          ],
-        },
-        {
-          id: "s5",
-          label: "The one request",
-          actions: [
-            {
-              type: "click",
-              target: '#cancel-418 button[value="confirm"]',
-            },
-            {
-              type: "wait",
-              ms: 300,
-            },
-            {
-              type: "assert",
-              target: "#status",
-              expect: "contains:Order 418 was canceled",
-            },
+            { type: "pointer", to: "#actions-418" },
+            { type: "click", target: "#actions-418" },
+            { type: "click", target: '[commandfor="cancel-418"]' },
+            { type: "pointer", to: '#cancel-418 button[value="confirm"]' },
+            { type: "click", target: '#cancel-418 button[value="confirm"]' },
+            { type: "wait", ms: 300 },
+            { type: "assert", target: "#status", expect: "contains:Order 418 was canceled" },
           ],
           code: {
             file: "app.js",
@@ -343,224 +240,37 @@ export const section: DemoSection = {
             ],
           },
           spotlight: ["#status"],
-          bullets: [
-            "TODO rewrite: JavaScript stays focused on the order cancellation request and result.",
-            "TODO rewrite: It listens for close, checks for confirm, calls the server, and announces the outcome.",
-            "TODO rewrite: It also clears returnValue, so a stale confirm can never cancel twice.",
-          ],
-        },
-        {
-          id: "s6",
-          label: "Production cautions",
-          actions: [],
-          code: {
-            file: "app.js",
-            lines: [[16, 24]],
+          meter: {
+            label: "JavaScript",
+            value: "20 lines",
+            source: "non-blank, non-comment lines in content/sections/d1-order-actions/files/*.js",
           },
-          spotlight: ["#status"],
           bullets: [
-            "TODO rewrite: Use dialog for a modal decision and popover for a nonmodal surface.",
-            "TODO rewrite: They are not interchangeable.",
-            "TODO rewrite: Keep destructive work behind a server authorization check, because native UI does not replace application security.",
-            "TODO rewrite: Test screen-reader output and nested overlay behavior:",
-            "TODO rewrite: Baseline is a browser signal, not an accessibility certificate.",
+            "This time we confirm. The status line says Order 418 was canceled.",
+            "This is the only JavaScript on the page. It waits for the dialog to close.",
+            "If the answer is confirm, it calls the server. That is 20 lines.",
           ],
         },
         {
-          id: "s7",
-          label: "TODO cut: Keep the order, then Escape",
+          id: "s5",
+          label: "Styles off",
           actions: [
-            {
-              type: "pointer",
-              to: '#cancel-418 button[value="cancel"]',
-            },
-            {
-              type: "click",
-              target: '#cancel-418 button[value="cancel"]',
-            },
-            {
-              type: "assert",
-              target: '[commandfor="cancel-418"]',
-              expect: "focused",
-            },
-            {
-              type: "key",
-              key: "Escape",
-              target: "#order-actions-418",
-              via: "hidePopover() on the menu (the same close request Escape sends)",
-            },
-            {
-              type: "assert",
-              target: "#actions-418",
-              expect: "focused",
-            },
+            { type: "toggle", flag: "enhance-css", on: false },
+            { type: "click", target: '[commandfor="cancel-418"]' },
+            { type: "assert", target: "#order-actions-418", expect: ":popover-open" },
+            { type: "assert", target: "#cancel-418", expect: ":open" },
           ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          callouts: [
-            {
-              target: "#actions-418",
-              text: "Focus returns",
-              side: "left",
-            },
-          ],
-          bullets: [
-            "TODO rewrite: Keep order closes the dialog, and focus goes back to the menu item that opened it.",
-            "TODO rewrite: Escape closes the menu, and focus returns to the Actions button.",
-            "TODO rewrite: One layer at a time, and none of it is our code.",
-          ],
-          proof: "Show focus returning to the Actions button after dismissal.",
-        },
-        {
-          id: "s8",
-          label: "TODO cut: Keyboard only",
-          actions: [
-            {
-              type: "focus",
-              target: "#actions-418",
-              visible: true,
-            },
-            {
-              type: "key",
-              key: "Enter",
-              target: "#actions-418",
-              via: "click() on the focused button",
-            },
-            {
-              type: "key",
-              key: "Tab",
-              target: '[commandfor="cancel-418"]',
-              via: "focus({ focusVisible: true })",
-            },
-            {
-              type: "key",
-              key: "Enter",
-              target: '[commandfor="cancel-418"]',
-              via: "click() on the focused button",
-            },
-            {
-              type: "key",
-              key: "Escape",
-              target: "#cancel-418",
-              via: "requestClose() on the dialog",
-            },
-            {
-              type: "assert",
-              target: '[commandfor="cancel-418"]',
-              expect: "focused",
-            },
-            {
-              type: "key",
-              key: "Enter",
-              target: '[commandfor="cancel-418"]',
-              via: "click() on the focused button",
-            },
-            {
-              type: "key",
-              key: "Tab",
-              target: '#cancel-418 button[value="confirm"]',
-              via: "focus({ focusVisible: true })",
-            },
-            {
-              type: "key",
-              key: "Enter",
-              target: '#cancel-418 button[value="confirm"]',
-              via: "click() on the focused button",
-            },
-            {
-              type: "wait",
-              ms: 300,
-            },
-            {
-              type: "assert",
-              target: "#status",
-              expect: "contains:Order 418 was canceled",
-            },
-            {
-              type: "key",
-              key: "Escape",
-              target: "#order-actions-418",
-              via: "hidePopover() on the menu",
-            },
-            {
-              type: "assert",
-              target: "#actions-418",
-              expect: "focused",
-            },
-          ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          spotlight: ["#status"],
-          bullets: [
-            "TODO rewrite: Now with the keyboard only.",
-            "TODO rewrite: Enter opens the menu, Tab reaches Cancel order, Enter opens the dialog, and Escape dismisses it.",
-            "TODO rewrite: Enter, Tab, and Enter confirm, and the status line announces the result.",
-            "TODO rewrite: Escape closes the menu and focus is back on Actions.",
-          ],
-          ifKeyboard:
-            "TODO rewrite: Drive it by hand: Tab to Actions, Enter, Tab, Enter, Escape, Enter, Tab, Enter, Escape. Then press Next once to sync the frame to the same end state.",
-          proof: "Open, choose, dismiss, and confirm with the keyboard only.",
-        },
-        {
-          id: "s9",
-          label: "TODO cut: Enhancement CSS off",
-          actions: [
-            {
-              type: "toggle",
-              flag: "enhance-css",
-              on: false,
-            },
-            {
-              type: "click",
-              target: "#actions-418",
-            },
-            {
-              type: "assert",
-              target: "#order-actions-418",
-              expect: ":popover-open",
-            },
-            {
-              type: "click",
-              target: '[commandfor="cancel-418"]',
-            },
-            {
-              type: "assert",
-              target: "#cancel-418",
-              expect: ":open",
-            },
-          ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          callouts: [
-            {
-              target: "#order-actions-418",
-              text: "Still semantic",
-              side: "right",
-            },
-            {
-              target: "#cancel-418",
-              text: "Still modal",
-              side: "top",
-            },
-          ],
-          bullets: [
-            "TODO rewrite: Remove the enhancement CSS and the controls remain semantic and usable.",
-            "TODO rewrite: The browser draws them plainly, and the behavior is unchanged.",
-            "TODO rewrite: In rehearsal the same flow runs in current Chrome, Firefox, and Safari, and Edge stays in the recorded test matrix.",
-          ],
+          code: { file: "enhance.css", lines: [], off: true },
+          spotlight: ["#cancel-418"],
           proof:
             "Remove the enhancement CSS and show that the controls remain semantic and usable.",
+          bullets: [
+            "The CSS file is off. The menu and the dialog look plain.",
+            "They still open, close and move focus. The CSS only sets the look.",
+          ],
         },
       ],
-      timing: {
-        minutes: 2.0,
-      },
+      timing: { minutes: 2.0 },
     },
   ],
   citations: [
@@ -614,8 +324,8 @@ export const section: DemoSection = {
     },
   ],
   cautions: [
-    "TODO rewrite: Use dialog for a modal decision and popover for a nonmodal surface. They are not interchangeable.",
-    "TODO rewrite: Keep destructive work behind a server authorization check. Native UI does not replace application security.",
-    "TODO rewrite: Test screen-reader output and nested overlay behavior. Baseline is a browser signal, not an accessibility certificate.",
+    "Use a dialog when the user must answer. Use a popover when they can ignore it.",
+    "Check permission on the server. The dialog does not protect your data.",
+    "Test with a screen reader. Browser support does not prove the page is accessible.",
   ],
 };

@@ -7,7 +7,7 @@ import type { Element, ElementContent, Root } from "hast";
 import type { CodeFile, CodeLang } from "@/content/schema";
 
 const LANGS: Record<CodeLang, string> = { html: "html", css: "css", js: "javascript", ts: "typescript", tsx: "tsx", bash: "bash", http: "http", yaml: "yaml" };
-const THEME = "github-light";
+const THEME = "github-light-high-contrast";
 
 let highlighterPromise: Promise<Highlighter> | undefined;
 function highlighter(): Promise<Highlighter> {

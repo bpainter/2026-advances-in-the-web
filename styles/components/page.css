@@ -1,36 +1,49 @@
-/* Demo page (PRD Part A, section 2): title row, frame slot, code panel on code pages. */
+/* Demo page (PRD v4, 1.4): eyebrow at y 48, title row at y 88, body at y 176. Walk pages split the
+   body 50/50 (880 + 32 + 880); single pages use one 1792 px slot. */
 .page {
-  @apply grid;
-  grid-template-rows: 96px minmax(0, 1fr);
+  @apply grid relative;
+  grid-template-rows: 36px 72px minmax(0, 1fr);
+  row-gap: 4px;
   width: var(--stage-width);
   height: var(--stage-height);
   padding: 48px 64px 40px;
   box-sizing: border-box;
-  background: var(--color-white);
-  color: var(--color-black);
+  color: var(--color-navy);
   font-family: var(--font-sans);
 }
 .page__header {
-  @apply flex items-center justify-between;
-  gap: var(--space-6);
-  min-width: 0;
+  @apply contents;
+}
+.page__eyebrow {
+  grid-row: 1;
+  margin: 0;
+  font-size: 28px;
+  font-weight: var(--weight-bold);
+  line-height: 36px;
+  color: var(--color-dark-blue, #002faf);
 }
 .page__title {
+  @apply self-center;
+  grid-row: 2;
   margin: 0;
   font-size: 64px;
   font-weight: var(--weight-bold);
-  line-height: 1.1;
-  letter-spacing: var(--tracking-tight);
+  line-height: 72px;
+}
+.page[data-stage="single"] .page__title {
+  grid-row: 1 / span 2;
 }
 .page__body {
   @apply grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-row: 3;
+  grid-template-columns: 1792px;
+  height: 864px;
+  margin-top: 12px;
   gap: 32px;
-  margin-top: 24px;
   min-height: 0;
 }
-.page[data-code="true"] .page__body {
-  grid-template-columns: 1232px 528px;
+.page[data-split="true"] .page__body {
+  grid-template-columns: 880px 880px;
 }
 .page__frame {
   @apply relative;
@@ -42,22 +55,28 @@
   min-height: 0;
 }
 .page__meter {
-  @apply absolute flex flex-col items-end;
-  top: -108px;
-  right: 0;
+  @apply absolute flex items-baseline;
+  top: 88px;
+  right: 64px;
+  height: 72px;
   margin: 0;
-  gap: 2px;
-  text-align: right;
+  gap: 16px;
+  padding: 0 24px;
+  box-sizing: border-box;
+  align-items: center;
+  border: var(--glass-border, 1px solid rgb(255 255 255 / 0.6));
+  border-radius: 20px;
+  background: var(--glass-surface-strong, rgb(255 255 255 / 0.72));
 }
 .page__meter-label {
-  font-size: 20px;
-  color: var(--color-dark-gray);
+  font-size: 28px;
+  color: var(--color-navy);
 }
 .page__meter-value {
   font-size: 40px;
   font-weight: var(--weight-bold);
   line-height: 1;
-  color: var(--color-slalom-blue);
+  color: var(--color-navy);
 }
 
 /* The frame wrapper carries the scale so overlay coordinates are frame CSS pixels. */
@@ -65,9 +84,11 @@
   @apply relative overflow-hidden;
   width: 100%;
   height: 100%;
-  border: 1px solid var(--color-light-gray);
-  border-radius: var(--radius-md);
-  background: var(--color-white);
+  box-sizing: border-box;
+  border: var(--glass-border, 1px solid rgb(255 255 255 / 0.6));
+  border-radius: 24px;
+  background: var(--glass-surface, rgb(255 255 255 / 0.55));
+  box-shadow: var(--glass-shadow, 0 8px 32px rgb(15 28 65 / 0.12));
 }
 .page-frame__scaled {
   @apply absolute;
@@ -132,61 +153,44 @@
   color: var(--color-navy);
 }
 
-/* Badge (PRD Part A, 2.4) */
-.badge {
-  @apply inline-flex items-center;
-  gap: var(--space-3);
-  margin: 0;
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-pill);
-  background: var(--color-slalom-blue);
-  color: var(--color-white);
-  font-size: 24px;
-  font-weight: var(--weight-bold);
-  white-space: nowrap;
-}
-.badge[data-tier="two-engine"],
-.badge[data-tier="one-engine"],
-.badge[data-tier="tooling"] {
-  background: var(--color-black);
-}
-.badge__missing {
-  @apply inline-flex items-center;
-  gap: 2px;
-  font-weight: var(--weight-regular);
-  opacity: 0.85;
-}
-.badge__sr {
-  @apply absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-}
-
-/* Code panel geometry for code pages: 44 columns at 18px, no line numbers. */
+/* Code panel (PRD v4, 1.4): 24 px monospace, 0.6 em advance, line height 1.5; 44 columns take
+   634 px inside 32 px of padding each side; 56 px of tabs leave 776 px, 21 lines. */
 .code--page {
-  --code-size: 18px;
+  --code-size: 24px;
   height: 100%;
+  color: var(--color-navy);
 }
 .code--page .code__tabs {
-  min-height: 56px;
-  padding: 0 var(--space-4);
-  align-items: end;
+  @apply items-end;
+  height: 56px;
+  box-sizing: border-box;
+  padding: 0 24px;
+  gap: 4px;
+  border-bottom: 1px solid rgb(15 28 65 / 0.12);
 }
 .code--page .code__tab {
+  @apply inline-flex items-center;
+  gap: 10px;
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 20px;
+  color: var(--color-navy);
+}
+.code__off-chip {
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--color-navy);
+  color: var(--color-white);
   font-family: var(--font-sans);
   font-size: 18px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  font-weight: var(--weight-bold);
 }
 .code__pre--plain {
-  padding: var(--space-4);
+  padding: 16px 0;
   line-height: 1.5;
 }
 .code__pre--plain .code__line {
-  padding: 0 var(--space-2);
-  border-radius: 2px;
+  padding: 0 32px;
 }
 .code__pre--plain .code__line::before {
   content: none;
@@ -194,9 +198,16 @@
 .code--page[data-has-highlight="true"] .code__line[data-highlighted="false"] {
   opacity: 0.4;
 }
+.code--page[data-off="true"] .code__line {
+  opacity: 0.35;
+}
+.code--page .code__line[data-elision] {
+  font-style: italic;
+  opacity: 0.6;
+}
 .code--page .code__line[data-highlighted="true"] {
-  background: color-mix(in oklab, var(--color-slalom-blue) 12%, white);
-  box-shadow: inset 4px 0 0 var(--color-slalom-blue);
+  background: rgb(12 98 251 / 0.1);
+  box-shadow: inset 6px 0 0 var(--color-slalom-blue);
 }
 
 /* Overlay (PRD Part A, 3.1, 5.1): spotlights, callouts, cursor, ripple, keycaps. */

@@ -1,5 +1,7 @@
-/* The same form as the native build, sized by script instead of by CSS. The
-   top margin leaves room for the callout that points at the form from above. */
+/* The same form as the native build, sized
+   by script instead of by CSS. The top
+   margin leaves room for the callout that
+   points at the form from above. */
 body {
   margin-block-start: 4rem;
 }
@@ -18,16 +20,19 @@ textarea {
   padding: 0.5rem;
   box-sizing: border-box;
 }
-/* input-width.js writes the inline size; the grid must not stretch it back. */
+/* input-width.js writes the inline size;
+   the grid must not stretch it back. */
 #t-subject {
   justify-self: start;
 }
-/* autosize.js writes the block size; the user must not fight it. */
+/* autosize.js writes the block size; the
+   user must not fight it. */
 #t-details {
   resize: none;
   overflow-y: hidden;
 }
-/* The hidden mirror the subject width is measured from. */
+/* The hidden mirror the subject width is
+   measured from. */
 #t-mirror {
   position: absolute;
   inset-block-start: 0;

@@ -1,6 +1,6 @@
 /**
- * Computes the today builds' meters (PRD Part A, 8.3): for every `meter.source` of the form
- * "… in /demos/<demo>/today/*.js", formats the build's own JavaScript with Prettier at
+ * Computes the meters (PRD Part A, 8.3; CX 4): for every `meter.source` of the form
+ * "… in /demos/<demo>/today/*.js" (used-to pages) or "… in content/sections/<id>/files/*.js" (now pages), formats the build's own JavaScript with Prettier at
  * printWidth 80, drops blank and comment-only lines, and writes the count to
  * content/.generated/meters.json keyed by the source string. Usage: pnpm meters
  */
@@ -17,7 +17,7 @@ async function countLines(dir: string): Promise<number> {
   let n = 0;
   for (const f of readdirSync(dir).filter((f) => f.endsWith(".js"))) {
     const src = readFileSync(path.join(dir, f), "utf8");
-    const pretty = await format(src, { parser: "babel", printWidth: 80 });
+    const pretty = await format(src, { parser: "babel", printWidth: 80, objectWrap: "collapse" });
     let inBlock = false;
     for (const raw of pretty.split("\n")) {
       const line = raw.trim();
@@ -41,7 +41,7 @@ for (const section of sections) {
   for (const page of section.pages) {
     for (const step of page.steps) {
       if (!step.meter) continue;
-      const m = /(\/demos\/[\w-]+\/today)\/\*\.js/.exec(step.meter.source);
+      const m = /(\/?demos\/[\w-]+\/today|\/?content\/sections\/[\w-]+\/files)\/\*\.js/.exec(step.meter.source);
       if (!m) {
         out[step.meter.source] = step.meter.value;
         continue;

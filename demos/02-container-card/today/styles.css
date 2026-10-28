@@ -49,8 +49,10 @@ body {
   text-transform: uppercase;
 }
 
-/* The merchandising panel is a fixed 44rem; when the viewport is narrower
-   than that, the panel scrolls sideways rather than reflowing. */
+/* The merchandising panel is a fixed 44rem;
+   when the viewport is narrower than that,
+   the panel scrolls sideways rather than
+   reflowing. */
 .merch__panel {
   overflow-x: auto;
 }
@@ -66,21 +68,23 @@ body {
   margin-top: 1.25rem;
 }
 
-/* Search results: a grid of fixed 24rem cells. */
+/* Search results: a grid of fixed 24rem
+   cells. */
 .search__grid {
   display: grid;
   grid-template-columns: 24rem;
   gap: 1rem;
 }
 
-/* Recommendation rail: a fixed 15rem column. */
+/* Recommendation rail: a fixed 15rem
+   column. */
 #t-rail {
   inline-size: 15rem;
 }
 
-/* ---------------------------------------------------------------------- */
-/* Component: c-product-card. Long BEM selectors keep the page's styles  */
-/* out and the component's styles in.                                     */
+/* Component: c-product-card. Long BEM
+   selectors keep the page's styles */
+/* out and the component's styles in. */
 
 .c-product-card {
   display: grid;
@@ -90,7 +94,8 @@ body {
   border-radius: 0.5rem;
 }
 
-/* Low stock is a template state class set when the card is rendered. */
+/* Low stock is a template state class set
+   when the card is rendered. */
 .c-product-card.c-product-card--low-stock {
   border-color: var(--warning);
 }
@@ -127,40 +132,51 @@ body {
   font: inherit;
 }
 
-/* Size classes set by resize-classes.js from a ResizeObserver, because
-   the stylesheet cannot ask how wide the card's own cell is. */
-.c-product-card.is-wide .c-product-card__title {
+/* Size classes set by resize-classes.js
+   from a ResizeObserver, because the
+   stylesheet cannot ask how wide the card's
+   own cell is. */
+.c-product-card.is-wide
+  .c-product-card__title {
   font-size: 1.25rem;
 }
 
-.c-product-card.is-narrow .c-product-card__stock {
+.c-product-card.is-narrow
+  .c-product-card__stock {
   display: none;
 }
 
-/* Compact variant: the rail passes the compact prop. */
+/* Compact variant: the rail passes the
+   compact prop. */
 .c-product-card.c-product-card--compact {
   gap: 0.5rem;
   padding: 0.75rem;
 }
 
-.c-product-card.c-product-card--compact .c-product-card__title {
+.c-product-card.c-product-card--compact
+  .c-product-card__title {
   font-size: 1rem;
 }
 
-.c-product-card.c-product-card--compact .c-product-card__button {
+.c-product-card.c-product-card--compact
+  .c-product-card__button {
   padding: 0.375rem 0.75rem;
   font-size: 0.875rem;
 }
 
-/* Promo variant: the merchandising slot passes the promo prop. It goes
-   horizontal only when the viewport is wide, because the stylesheet can
-   only ask about the viewport, not about the 44rem slot it sits in. */
+/* Promo variant: the merchandising slot
+   passes the promo prop. It goes horizontal
+   only when the viewport is wide, because
+   the stylesheet can only ask about the
+   viewport, not about the 44rem slot it
+   sits in. */
 .c-product-card.c-product-card--promo {
   gap: 0.75rem 1rem;
   background: #f6f7fb;
 }
 
-.c-product-card.c-product-card--promo .c-product-card__image {
+.c-product-card.c-product-card--promo
+  .c-product-card__image {
   max-block-size: 12rem;
 }
 
@@ -170,11 +186,13 @@ body {
     align-items: center;
   }
 
-  .c-product-card.c-product-card--promo .c-product-card__image {
+  .c-product-card.c-product-card--promo
+    .c-product-card__image {
     grid-row: span 2;
   }
 
-  .c-product-card.c-product-card--promo .c-product-card__form {
+  .c-product-card.c-product-card--promo
+    .c-product-card__form {
     grid-column: 3;
   }
 }
