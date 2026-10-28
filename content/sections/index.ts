@@ -11,9 +11,12 @@ import { section as s9 } from "./f3-package-trust";
 import { section as s10 } from "./f4-vite-8-locally";
 import { section as s11 } from "./f5-what-you-can-delete";
 
-/** Every page's `timing.cumulative`, computed from the authored minutes: the demo section starts at 5.0 (PRD 7.4). */
-export const DEMO_SECTION_START = 5.0;
-/** The section ends here on the talk clock; the 1.5 minutes after the last page are the section buffer. */
+/**
+ * Every page's `timing.cumulative`, computed from the authored minutes. The demo section starts at 6.5,
+ * where the opening slides end (PRD v5, open question 1: the speaker chose 6.5 over trimming the opening).
+ */
+export const DEMO_SECTION_START = 6.5;
+/** The section ends here on the talk clock. The last page ends at 30.5, so 0.5 minutes of buffer remain. */
 export const DEMO_SECTION_END = 31.0;
 function withCumulative(list: DemoSection[]): DemoSection[] {
   let t = DEMO_SECTION_START;

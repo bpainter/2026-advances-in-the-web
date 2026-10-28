@@ -375,7 +375,7 @@ Build in this order. Every milestone ends with `pnpm validate` green and `pnpm w
 
 ## 7. Open questions for the speaker
 
-1. The opening slides add up to 6.5 minutes, but the demo section is timed to start at 5.0. Should we trim the opening to 5.0, or start the demo clock at 6.5 and cut 1.5 minutes from the section buffer?
+1. The opening slides add up to 6.5 minutes, but the demo section is timed to start at 5.0. Should we trim the opening to 5.0, or start the demo clock at 6.5 and cut 1.5 minutes from the section buffer? **Decided 28 October 2026: start the demo clock at 6.5. The demo pages run from 6.5 to 30.5, leaving 0.5 minutes of buffer, and the section still ends at 31.0.**
 2. People photograph the first slide. Should the title slide also carry the LinkedIn QR code, small, in the lower right?
 3. The closing slide eyebrow reads "Thank you". Do you want different words, or none?
 4. Section intro slides will now sit on each section's light background, with their text in a dark glass panel. Do you want to see a fully light intro at the projector check as well?

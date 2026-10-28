@@ -40,7 +40,7 @@ interface PageBase {
   steps: Step[];                   // step 0 is the entry state; now pages 5 steps after s0 at most (CX 2)
   /**
    * `minutes` is authored. `cumulative` is never typed in content: content/sections/index.ts
-   * computes it from the minutes (the demo section starts at 5.0) and the validator checks the
+   * computes it from the minutes (the demo section starts at 6.5) and the validator checks the
    * minutes against the PRD's timing table (section 7.4).
    */
   timing: { minutes: number; cumulative?: number };

@@ -17,5 +17,5 @@ export const TIMING_TABLE: Record<string, number[]> = {
   "f5-what-you-can-delete": [0.75],
 };
 
-/** The last demo page ends by this time; the rest of the section (to 31.0) is buffer. */
-export const LAST_PAGE_BY = 29.5;
+/** The last demo page ends by this time, the section end (PRD v5, open question 1). The pages end at 30.5 today. */
+export const LAST_PAGE_BY = 31.0;
