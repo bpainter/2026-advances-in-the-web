@@ -1,0 +1,26 @@
+/* D2 storefront-merch (spec 4.2): header, context label, the shelf the card sits on, a footer line.
+   The shelf is the page; the shown slot inside it is what the hooks resize. */
+@layer wrapper {
+  .wrap-store-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-block-size: 0;
+    padding: 12px 20px;
+  }
+  .wrap-context {
+    margin: 0;
+    min-block-size: 20px;
+    color: var(--glass-ink);
+    font-size: 15px;
+    line-height: 20px;
+    font-weight: 700;
+  }
+  .wrap-shelf {
+    flex: 1;
+    min-block-size: 0;
+    padding: 12px;
+    background: var(--wrap-surface-quiet);
+    box-shadow: var(--glass-highlight);
+  }
+}

@@ -29,8 +29,6 @@ export interface BuildManifest {
    * document scroll (D4 only, because scroll restore is part of that demo).
    */
   wrapper?: { id: WrapperId; outside?: string[]; scrolls?: boolean };
-  /** The v4 portal shell (docs/design/demo-glass-spec.md, 8); replaced by `wrapper` in v5. */
-  shell?: { title: string; nav: "orders" | "products" | "support" | "content" | "reports"; outside?: string[]; context?: "orders" | "cases" | "products" };
   /** Overrides the base CSP (D5). `ORIGIN` and `PRESENTER` are substituted. */
   csp?: string;
 }

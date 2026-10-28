@@ -105,7 +105,7 @@ for (const s of sections) {
 }
 // Wrappers (PRD v5, 2.1 and 4.7): every frame build's wrapper, its CSS, markup and scripts, and no
 // shown file using the wrap- prefix. Folders still on the v4 shell are pending until M5.
-const PENDING_WRAPPERS = new Set(["02-container-card", "03-content-sized-form", "05-trusted-types", "11-customizable-select", "07-package-workflow", "08-fast-follows", "09-vite-8", "10-delete"]);
+const PENDING_WRAPPERS = new Set(["07-package-workflow", "08-fast-follows", "09-vite-8", "10-delete"]);
 const publicText = (href: string) => {
   const abs = path.join(root, "public", href);
   return existsSync(abs) ? readFileSync(abs, "utf8") : "";

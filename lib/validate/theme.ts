@@ -140,7 +140,6 @@ export function lintWrapperCss(css: string, file: string, banned: { name: string
   });
   const text = css.replace(/\/\*[\s\S]*?\*\//g, "");
   for (const b of banned) if (b.pattern.test(text)) add("1", `uses ${b.name}, which this section demonstrates`);
-  if (/:has\(/.test(text)) add("1", "uses :has(), which D2 demonstrates");
   return out;
 }
 

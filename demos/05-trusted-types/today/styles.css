@@ -23,7 +23,7 @@
 }
 
 h1 {
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.5rem;
   font-size: 2rem;
   line-height: 1.2;
 }
@@ -48,8 +48,8 @@ h1 {
 }
 
 .reviews {
-  margin-block-start: 1.5rem;
-  padding-block-start: 1rem;
+  margin-block-start: 1rem;
+  padding-block-start: 0.75rem;
   border-block-start: 1px solid #dfe3ea;
 }
 
@@ -70,7 +70,7 @@ h1 {
 }
 
 .review {
-  padding-block: 0.5rem;
+  padding-block: 0.375rem;
 }
 
 .review + .review {

@@ -49,7 +49,7 @@ export const section: DemoSection = {
         ]),
         excerpt(`${TODAY}/styles.css`, "css", [
           [19, 21],
-          [121, 153],
+          [122, 155],
         ]),
         excerpt(`${TODAY}/card.js`, "js", [[17, 35]]),
         excerpt(`${TODAY}/resize-classes.js`, "js", [[1, 35]]),
@@ -88,7 +88,7 @@ export const section: DemoSection = {
           code: {
             file: "styles.css",
             lines: [
-              [23, 27],
+              [21, 25],
               [34, 36],
             ],
           },

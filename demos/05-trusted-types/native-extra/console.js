@@ -9,7 +9,9 @@
   function log(text) {
     var item = document.createElement("li");
     item.textContent = text;
-    list.append(item);
+    // Errors are marked for the drawer's coral dot; the newest line goes first (spec 4.5).
+    if (/^(error|TypeError)|Error:/.test(text)) item.dataset.kind = "error";
+    list.prepend(item);
   }
 
   document.addEventListener("securitypolicyviolation", function (event) {

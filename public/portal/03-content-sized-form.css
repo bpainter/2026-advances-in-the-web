@@ -1,4 +1,5 @@
-/* D3 portal content (unshown; design review M7) for both builds: the field hint reads as a hint. */
+/* D3 shown block (unshown; design review M7; v5 spec 4.3) for both builds: the field hint reads
+   as a hint; the form sits on the wrapper's focus card. */
 @layer portal-theme {
   #details-hint,
   #t-hint {

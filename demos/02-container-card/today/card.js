@@ -104,7 +104,7 @@ export function syncLayout(card) {
     .gridTemplateColumns.trim()
     .split(/\s+/);
   card.dataset.layout =
-    tracks.length > 1
+    tracks.length > 2
       ? "horizontal"
       : "stacked";
 }

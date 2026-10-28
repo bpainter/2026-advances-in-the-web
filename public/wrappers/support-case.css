@@ -1,0 +1,49 @@
+/* D3 support-case (spec 4.3): case head, the form in the wide first column, one side card. */
+@layer wrapper {
+  .wrap-case-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-block-size: 22px;
+  }
+  .wrap-case-head .wrap-title {
+    margin-inline-end: 4px;
+  }
+  .wrap-cols {
+    display: grid;
+    flex: 1;
+    grid-template-columns: minmax(0, 1fr) 184px;
+    gap: 16px;
+    min-block-size: 0;
+  }
+  .wrap-cols > .wrap-shown {
+    padding: 20px;
+  }
+  .wrap-side {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: var(--wrap-pad);
+  }
+  .wrap-side__item,
+  .wrap-side__total,
+  .wrap-side .wrap-card__title,
+  .wrap-side .wrap-meta {
+    margin: 0;
+  }
+  .wrap-side__item {
+    color: var(--glass-ink-soft);
+  }
+  .wrap-side__total {
+    color: var(--glass-ink);
+    font-size: 15px;
+    line-height: 20px;
+    font-weight: 700;
+  }
+  .wrap-side__rule {
+    display: block;
+    block-size: 1px;
+    margin: 8px 0;
+    background: var(--glass-rule);
+  }
+}

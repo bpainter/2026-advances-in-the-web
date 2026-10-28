@@ -1,0 +1,59 @@
+/* D5 product-page (spec 4.5): site header, product bar, the shown article on the focus surface,
+   and a developer tools drawer: open on the now page, collapsed to its tabs on the used-to page. */
+@layer wrapper {
+  .wrap-pdp-bar {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 12px;
+    block-size: 48px;
+    padding: 0 20px 0 0;
+    border-radius: 12px;
+    background: var(--wrap-surface-quiet);
+    box-shadow: var(--glass-highlight);
+    white-space: nowrap;
+  }
+  .wrap-pdp-thumb {
+    flex: none;
+    inline-size: 48px;
+    block-size: 48px;
+    border-radius: 8px;
+    background: var(--glass-surface-solid) url("/wrappers/shoe.avif") center / cover no-repeat;
+  }
+  .wrap-pdp-price {
+    color: var(--glass-ink);
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 700;
+  }
+  .wrap-pdp-returns {
+    margin-inline-start: auto;
+  }
+  .wrap--pdp .wrap-store-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-block-size: 0;
+    padding: 12px 20px 0;
+  }
+  .wrap--pdp [data-shown] {
+    padding: 12px 20px;
+  }
+  .wrap-console {
+    position: fixed;
+    inset: auto 12px 12px;
+    z-index: 0;
+    block-size: 44px;
+    overflow: hidden;
+  }
+  .wrap--pdp-open .wrap-console {
+    block-size: 240px;
+  }
+  /* Now page: the shown block reaches down to the open drawer, so no gap opens above it. */
+  .wrap--pdp-open .wrap-store-body {
+    padding-block-end: 264px;
+  }
+  .wrap--pdp-open [data-shown] {
+    flex: 1;
+  }
+}

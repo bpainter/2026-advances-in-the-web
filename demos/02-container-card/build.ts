@@ -15,7 +15,7 @@ export const folder: DemoFolder = {
       "Product card: today",
       manifestDefaults({
         enhancement: { css: "all", js: ["app.js", "card.js", "resize-classes.js"] },
-        shell: { title: "Products", nav: "products" },
+        wrapper: { id: "storefront-merch" },
         // The cards are rendered by card.js from props, so none of them is in index.html.
         runtimeSelectors: [
           "#t-grid .c-product-card",
@@ -35,7 +35,7 @@ export const folder: DemoFolder = {
         flags: { "enhance-js": true },
         enhancement: { css: "all", js: ["app.js"] },
         instrumentation: ["hooks.js"],
-        shell: { title: "Products", nav: "products" },
+        wrapper: { id: "storefront-merch" },
       }),
     ),
   },

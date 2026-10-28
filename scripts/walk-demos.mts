@@ -60,7 +60,7 @@ async function lastSeq(page: Page): Promise<number> {
 let speaker: Page | null = null;
 
 /** Sections whose frames must carry a v5 wrapper (all of them once M5 lands). */
-const V5_WRAPPED = new Set(["d1-order-actions", "d4-dashboard-navigation"]);
+const V5_WRAPPED = new Set(["d1-order-actions", "d2-product-card", "d3-support-form", "d4-dashboard-navigation", "d5-rich-content", "d6-variant-picker"]);
 
 /**
  * D6 (PRD v4, 2.2 and 7.6): in Firefox the select is a normal select and the saved form posted the

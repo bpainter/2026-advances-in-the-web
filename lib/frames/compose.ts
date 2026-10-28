@@ -3,7 +3,6 @@ import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { PRESENTER_ORIGIN } from "./origins";
 import type { BuildDef } from "./types";
-import { wrapInShell } from "./shell";
 import { wrapperDef } from "./wrappers";
 import { isBackgroundId, type BackgroundId } from "@/content/backgrounds";
 
@@ -74,7 +73,7 @@ export function composeFrame(def: BuildDef, opts: ComposeOptions): string {
       return manifest.enhancement.js.includes(base) ? "" : m;
     });
   }
-  // The wrapper (v5) or the v4 portal shell goes around the shown markup; neither is shown code.
+  // The wrapper goes around the shown markup; it is never shown code (PRD v5, 4.4).
   let wrapStyles: string[] = [];
   let wrapScripts: string[] = [];
   if (manifest.wrapper) {
@@ -82,7 +81,7 @@ export function composeFrame(def: BuildDef, opts: ComposeOptions): string {
     body = w.body;
     wrapStyles = w.styles;
     wrapScripts = w.scripts;
-  } else if (manifest.shell) body = wrapInShell(body, manifest.shell);
+  }
   // Instrumentation and hooks the manifest lists are injected after the shown markup; they are
   // never part of the code on screen (Part A, 8.4).
   const instrumentation = [...wrapScripts, ...manifest.instrumentation].map((f) => `<script type="module" src="${escapeAttr(f)}"></script>`).join("\n");

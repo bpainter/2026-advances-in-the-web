@@ -1,0 +1,72 @@
+/* D6 product-editor (spec 4.6): the Variants card holding the shown Color field, and a right
+   column of read-only details, color tiles and sizes. */
+@layer wrapper {
+  .wrap-editor {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 216px;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 4px 16px;
+  }
+  .wrap-editor__caption {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .wrap-editor > .wrap-shown {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 20px;
+  }
+  .wrap-editor__side {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .wrap-editor__details,
+  .wrap-editor__colors {
+    padding: var(--wrap-pad);
+  }
+  .wrap-dl {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 6px 12px;
+    margin: 0;
+  }
+  .wrap-dl__key {
+    color: var(--glass-ink-soft);
+  }
+  .wrap-dl__value {
+    margin: 0;
+    color: var(--glass-ink);
+    font-size: 15px;
+    line-height: 18px;
+  }
+  .wrap-editor__tiles {
+    display: flex;
+    gap: 12px;
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .wrap-editor__tile {
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+  }
+  .wrap-editor__swatch {
+    inline-size: 56px;
+    block-size: 56px;
+    border: 1px solid var(--wrap-chip-edge);
+    border-radius: 8px;
+  }
+  .wrap-editor__swatch--black {
+    background: var(--wrap-swatch-black);
+  }
+  .wrap-editor__swatch--moss {
+    background: var(--wrap-swatch-moss);
+  }
+  .wrap-editor__swatch--sand {
+    background: var(--wrap-swatch-sand);
+  }
+}
