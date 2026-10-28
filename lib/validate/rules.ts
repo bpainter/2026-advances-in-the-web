@@ -96,7 +96,10 @@ export const BANNED = [
 ];
 
 const V3_FIELDS = ["notes", "open", "bridge", "tier", "summary", "detail"];
-const TAILWIND = /\b(flex|grid|p|m|px|py|mx|my|gap|text|bg|border|rounded|w|h)-\w+\b|@apply|@tailwind|@theme/;
+/** Tailwind in shown code: utility class names inside class attributes (HTML), or Tailwind at-rules (CSS). Standard property names such as border-radius never match. */
+const TAILWIND_CLASS = /class="[^"]*\b(flex|grid|p|m|px|py|mx|my|gap|text|bg|border|rounded|w|h)-[\w./[\]-]+/;
+const TAILWIND_AT = /@apply\b|@tailwind\b|@theme\b/;
+const looksTailwind = (lang: string, source: string) => (lang === "html" ? TAILWIND_CLASS.test(source) : false) || TAILWIND_AT.test(source);
 const KEY_VIA: Record<string, RegExp> = {
   Escape: /requestClose|hidePopover|dispatch|hook:/,
   Tab: /focus\(|dispatch|hook:/,
@@ -315,7 +318,7 @@ export function validate(sections: DemoSection[], ctx: ValidateContext): Issue[]
     lines.forEach((l, i) => {
       if (l.length > LIMITS.columns) add("file-size", where, `${f.file}:${i + 1} is ${l.length} columns; at most ${LIMITS.columns}`);
     });
-    if ((f.lang === "html" || f.lang === "css") && TAILWIND.test(f.source)) add("tailwind", where, `${f.file} contains a Tailwind-looking pattern`, "warning");
+    if ((f.lang === "html" || f.lang === "css") && looksTailwind(f.lang, f.source)) add("tailwind", where, `${f.file} contains a Tailwind-looking pattern`, "warning");
     if (f.excerptOf) {
       const full = ctx.repoFile(f.excerptOf.path);
       if (full === null) {
