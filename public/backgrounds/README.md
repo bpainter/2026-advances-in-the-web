@@ -9,6 +9,12 @@ The files arrived at 2048 by 1152. They were resized to 1920 by 1080 (JPEG quali
 at 86 to stay under 900 KB) so the baked grain maps one to one to stage pixels (PRD v5, 1.1). The
 shared overlay `public/theme/grain.png` is the grain of record.
 
+Nine files were reworked after the design review (review-v5.md H8, M3, L8) to remove baked JPEG
+blocks and hard shapes: `o3`, `o5`, `d5`, `f1` and `closing` were blurred (sigma 8 to 16) and
+`f4` and `c2` more heavily (26 and 12); `o7` and `d3` were regenerated with Higgsfield and blurred
+lightly. All nine then had the same monochrome grain added (sd 4.4, quality 90, 4:4:4), so their
+fine-detail energy matches the median of the untouched files.
+
 The registry is `content/backgrounds.ts`; `pnpm backgrounds` measures the text zones into
 `content/.generated/backgrounds.json`. The generation prompts were not delivered with the files;
 the direction each was generated from is table 1.4 of `docs/PRD-demos-v5.md`, repeated here.
