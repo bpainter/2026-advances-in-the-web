@@ -145,14 +145,14 @@ for (const id of SECTION_IDS) {
 }
 
 // Opening and closing slides (PRD v5, 1.5; spec 6): text on the field, on light glass cards
-// (white 0.72) or on dark glass (navy 0.72), over each zone's extremes. They are native layouts
-// from M6 on; until then they keep their own fills (content/designed/) and are not tested here.
-if (!existsSync(path.join(process.cwd(), "content", "designed"))) {
+// (white 0.72) or on dark glass (navy 0.72), over each zone's extremes.
+{
   const lightCard = token("--glass-surface-strong");
   for (const id of (Object.keys(BACKGROUNDS) as BackgroundId[]).filter((x) => !SECTION_IDS.includes(x))) {
     for (const z of BACKGROUNDS[id].textZone) {
       const bases = zoneBases(id, z.name);
-      if (z.on === "field") expect(`${id}: ${z.name} (${z.ink}) on the field`, z.ink === "white" ? token("--white") : ink, [], 4.5, bases);
+      const scrim: RGBA[] = "scrim" in z && z.scrim ? [[...(z.scrim.color === "navy" ? token("--navy").slice(0, 3) : [255, 255, 255]), z.scrim.alpha] as RGBA] : [];
+      if (z.on === "field") expect(`${id}: ${z.name} (${z.ink}) on the field${scrim.length ? " under its wash" : ""}`, z.ink === "white" ? token("--white") : ink, scrim, 4.5, bases);
       else if (z.on === "light-card") {
         expect(`${id}: ${z.name} ink on light glass`, ink, [lightCard], 4.5, bases);
         expect(`${id}: ${z.name} ink-soft on light glass`, soft, [lightCard], 4.5, bases);

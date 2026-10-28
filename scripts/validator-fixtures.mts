@@ -10,7 +10,7 @@ import { validate, type ValidateContext } from "@/lib/validate/rules";
 import { computeSupport } from "@/lib/support-data";
 import { installedWebFeatures } from "@/lib/web-features";
 import { lintTheme } from "@/lib/validate/theme";
-import { validateV5, type V5Context } from "@/lib/validate/v5";
+import { slideCopyIssues, validateV5, type V5Context } from "@/lib/validate/v5";
 import type { Background } from "@/content/backgrounds";
 import { validateWrappers, type WrappedBuild } from "@/lib/validate/wrappers";
 
@@ -338,6 +338,28 @@ const WRAP_CASES: [string, (b: WrappedBuild) => void][] = [
   }
 }
 
+// Native slides (PRD v5, 4.7): writing rules on slide text and notes, no uppercase or tracking.
+const SLIDE_CASES: [string, Parameters<typeof slideCopyIssues>[0], string][] = [
+  ["dash", [{ id: "s", glass: { kind: "statement", lines: ["Keep humanity — at the center"] }, speakerNotes: "Pause." }], ""],
+  ["sentence", [{ id: "s", glass: { kind: "statement", lines: ["Keep"] }, speakerNotes: Array.from({ length: 22 }, () => "word").join(" ") + "." }], ""],
+  ["slide-case", [{ id: "s", glass: { kind: "statement", lines: ["Keep"] }, speakerNotes: "Pause." }], ".sg-eyebrow { text-transform: uppercase; letter-spacing: 0.1em; }"],
+];
+{
+  const clean = slideCopyIssues([{ id: "s", glass: { kind: "statement", lines: ["Keep humanity", "at the center"] }, speakerNotes: "Let it sit for a beat." }], ".sg { letter-spacing: -0.01em; }");
+  if (clean.length) {
+    failed++;
+    console.log(`✖ slides: the clean fixture fails: ${clean.map((i) => i.message).join("; ")}`);
+  } else console.log("✓ slides: the clean fixture passes");
+  for (const [rule, slidesIn, css] of SLIDE_CASES) {
+    const hit = slideCopyIssues(slidesIn, css).filter((i) => i.rule === rule);
+    if (hit.length) console.log(`✓ ${rule} (slides): ${hit[0].message}`);
+    else {
+      failed++;
+      console.log(`✖ ${rule} (slides): not reported`);
+    }
+  }
+}
+
 function computeSupportSafe(s: DemoSection, ctx: ValidateContext) {
   try {
     return computeSupport([s], wf.data, wf.version, {});
@@ -346,5 +368,5 @@ function computeSupportSafe(s: DemoSection, ctx: ValidateContext) {
   }
 }
 
-console.log(`\n${CASES.length + THEME_CASES.length + V5_CASES.length + WRAP_CASES.length + 5 - failed} passed, ${failed} failed`);
+console.log(`\n${CASES.length + THEME_CASES.length + V5_CASES.length + WRAP_CASES.length + SLIDE_CASES.length + 6 - failed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

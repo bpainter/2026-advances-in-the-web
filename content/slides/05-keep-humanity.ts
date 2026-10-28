@@ -1,15 +1,15 @@
 import type { Slide } from "@/content/schema";
 
-/** Designed in Claude Design; the section markup lives in content/designed/o3b-humanity-statement.html. */
+/** Keep humanity at the center, a native glass statement (PRD v5, 4.5; spec 6.2). */
 export const slide: Slide = {
   id: "keep-humanity",
   index: 5,
   section: "open-web",
-  layout: "designed",
+  layout: "glass-statement",
   title: "Keep humanity at the center",
-  designed: { file: "o3b-humanity-statement.html" },
+  glass: { kind: "statement", lines: ["Keep humanity", "at the center"] },
   citations: [],
-  speakerNotes: "The statement slide. Let it sit for a beat; this is the frame for everything that follows.",
+  speakerNotes: "The statement slide. Let it sit for a beat. This is the frame for everything that follows.",
   timing: { minutes: 0.5, cumulative: 4.5 },
   background: "keep-humanity",
 };

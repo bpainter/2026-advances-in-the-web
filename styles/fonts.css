@@ -1,7 +1,6 @@
 /*
   Self-hosted brand faces from the Slalom design system (public/fonts/). "Slalom Sans" carries the
-  weights the deck's tokens use; the single-weight family names are what the designed slides
-  (content/designed/) name, as exported from Claude Design.
+  weights the deck's tokens use; the single-weight family names stay for older layouts.
 */
 @font-face {
   font-family: "Slalom Sans";

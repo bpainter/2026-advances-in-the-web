@@ -1,4 +1,5 @@
-import type { Issue } from "./rules";
+import { BANNED, LIMITS, sentences, words, type Issue } from "./rules";
+import type { GlassContent } from "@/content/schema";
 import type { Background } from "@/content/backgrounds";
 
 /**
@@ -127,4 +128,58 @@ export function jpegSize(buf: Buffer): { width: number; height: number } | null 
     off += 2 + len;
   }
   return null;
+}
+
+/** The text of a native glass slide, field by field (PRD v5, 4.7: the writing rules apply). */
+export function glassText(g: GlassContent): { field: string; text: string; label?: boolean }[] {
+  switch (g.kind) {
+    case "title":
+      return [{ field: "eyebrow", text: g.eyebrow, label: true }, ...g.lines.map((t) => ({ field: "title", text: t })), { field: "speaker", text: `${g.speaker.name}, ${g.speaker.role}` }];
+    case "grid":
+      return [
+        ...(g.eyebrow ? [{ field: "eyebrow", text: g.eyebrow, label: true }] : []),
+        ...(g.title ? [{ field: "title", text: g.title, label: true }] : []),
+        ...(g.display ? [{ field: "display", text: g.display, label: true }] : []),
+        ...(g.lede ? [{ field: "lede", text: g.lede }] : []),
+        ...(g.cardsEyebrow ? [{ field: "eyebrow", text: g.cardsEyebrow, label: true }] : []),
+        ...g.cards.flatMap((c) => [{ field: "card title", text: c.title, label: true }, ...(c.body ? [{ field: "card body", text: c.body }] : []), ...(c.question ? [{ field: "question", text: c.question }] : [])]),
+      ];
+    case "quotes":
+      return [{ field: "title", text: g.title, label: true }, ...g.quotes.flatMap((q) => [{ field: "quote", text: q.text }, { field: "cite", text: q.cite }])];
+    case "statement":
+      return g.lines.map((t) => ({ field: "statement", text: t }));
+    case "people":
+      return [{ field: "title", text: g.title, label: true }, ...g.people.map((p) => ({ field: "person", text: `${p.name}, ${p.role}` }))];
+    case "closing":
+      return [{ field: "eyebrow", text: g.eyebrow, label: true }, { field: "name", text: g.name }, { field: "role", text: g.role }, { field: "caption", text: g.caption, label: true }];
+  }
+}
+
+/**
+ * The writing rules (PRD v4, 5.2) on the opening and closing slides' text and notes, and no
+ * uppercase or tracked text in their stylesheet (PRD v5, 4.7).
+ */
+export function slideCopyIssues(slides: { id: string; glass?: GlassContent; speakerNotes: string }[], css: string): Issue[] {
+  const out: Issue[] = [];
+  const add = (rule: string, where: string, message: string, level: "error" | "warning" = "error") => out.push({ rule, where, message, level });
+  for (const s of slides) {
+    const fields = [...(s.glass ? glassText(s.glass) : []), { field: "notes", text: s.speakerNotes }];
+    for (const { field, text, label } of fields) {
+      if (/[–—]/.test(text)) add("dash", s.id, `${field} has an en or em dash`);
+      if (text.includes("!")) add("exclaim", s.id, `${field} has an exclamation point`);
+      if (/\bTODO\b/.test(text)) add("todo", s.id, `${field} still has a TODO`);
+      const lower = ` ${text.toLowerCase().replace(/[^a-z' ]+/g, " ")} `;
+      for (const w of BANNED) if (lower.includes(` ${w} `)) add("banned", s.id, `${field} uses "${w}"`);
+      if (label && /^[a-z]/.test(text)) add("case", s.id, `${field} "${text}" should start with a capital (sentence case)`);
+      if (/, not /.test(text)) add("x-not-y", s.id, `${field} uses "X, not Y"`);
+      for (const sentence of sentences(text)) {
+        const n = words(sentence);
+        if (n > LIMITS.sentenceWords) add("sentence", s.id, `${field}: a sentence of ${n} words (at most ${LIMITS.sentenceWords}): "${sentence.slice(0, 60)}…"`);
+        else if (n > LIMITS.sentenceWarnWords) add("sentence", s.id, `${field}: a sentence of ${n} words (aim for ${LIMITS.sentenceWarnWords}): "${sentence.slice(0, 60)}…"`, "warning");
+      }
+    }
+  }
+  if (/text-transform:\s*uppercase/i.test(css)) add("slide-case", "styles/components/slides-glass.css", "sets text-transform: uppercase");
+  for (const m of css.matchAll(/letter-spacing:\s*([^;]+);/g)) if (!/^(0|normal|-)/.test(m[1].trim())) add("slide-case", "styles/components/slides-glass.css", `sets letter-spacing: ${m[1].trim()} (tracked text)`);
+  return out;
 }

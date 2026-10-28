@@ -112,14 +112,15 @@ server-sent events) and `POST /__demo/reset`. The today app's meter is printed b
 ## Fonts
 
 Slalom Sans (Regular, Bold, Black) and Lora Italic are in `public/fonts/`, from the Slalom design
-system, and loaded by `styles/fonts.css`. The designed slides name the single-weight families
-("Slalom Sans Bold"); the rest of the deck uses "Slalom Sans" with weights.
+system, and loaded by `styles/fonts.css`. The deck uses "Slalom Sans" with weights.
 
-## Designed slides
+## Opening and closing slides
 
-`layout: "designed"` renders a slide exported from Claude Design: one 1920 x 1080 `<section>` with
-inline styles in `content/designed/<file>.html`, named by `slide.designed.file`. `lib/designed.ts`
-parses it (no HTML injection) and the deck footer is laid over the bottom band. To update one,
-export the slide's section file from the Claude Design deck, rewrite `/_blob/<id>` image sources to
-`/images/design/<id>.png` (save the asset there), and replace the file.
+The opening and closing slides are native glass layouts (PRD v5, 4.5): `glass-title`,
+`glass-grid` (icons, portraits, numbered), `glass-quotes`, `glass-statement`, `glass-people` and
+`glass-closing` in `components/layouts/glass/`, styled by `styles/components/slides-glass.css`.
+Their text is typed data in `slide.glass` (`content/slides/0*.ts` and `3*.ts`), so `pnpm check`
+applies the writing rules to it. Each slide names its background in `content/backgrounds.ts`;
+portraits stay in `public/images/design/`. The Claude Design exports (`content/designed/`) are
+gone.
 

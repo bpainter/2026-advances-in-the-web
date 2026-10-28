@@ -22,7 +22,7 @@ import type { SupportFile } from "@/lib/support-data";
 import { installedWebFeatures } from "@/lib/web-features";
 import { slides } from "@/lib/content";
 import { BACKGROUNDS } from "@/content/backgrounds";
-import { jpegSize, validateV5 } from "@/lib/validate/v5";
+import { jpegSize, slideCopyIssues, validateV5 } from "@/lib/validate/v5";
 import { decodeGrainPng, grainPixels } from "@/lib/grain";
 import { BACKGROUND_BY_DEMO } from "@/lib/frames/compose";
 import { DEMO_FOLDERS } from "@/lib/frames/registry";
@@ -135,7 +135,11 @@ const wrappedBuilds: WrappedBuild[] = Object.values(DEMO_FOLDERS).flatMap((folde
 const shownFiles = sections.flatMap((sec) => sec.pages.flatMap((pg) => ("files" in pg && pg.files ? pg.files.map((f) => ({ path: `${pg.id}/${f.file}`, text: f.source })) : [])));
 const wrapperIssues = validateWrappers(wrappedBuilds, shownFiles);
 
-const issues: Issue[] = [...all, ...(only ? [] : [...themeIssues(root), ...v5Issues, ...wrapperIssues])];
+// The opening and closing slides (PRD v5, 4.7): writing rules and no uppercase or tracking.
+const slidesCss = existsSync(path.join(root, "styles", "components", "slides-glass.css")) ? readFileSync(path.join(root, "styles", "components", "slides-glass.css"), "utf8") : "";
+const slideIssues = slideCopyIssues(slides.filter((s) => s.layout !== "demo-page"), slidesCss);
+
+const issues: Issue[] = [...all, ...(only ? [] : [...themeIssues(root), ...v5Issues, ...wrapperIssues, ...slideIssues])];
 
 const inScope = (i: Issue) => !only || i.where.startsWith(only.split("-")[0]) || i.where === only;
 let errors = 0;

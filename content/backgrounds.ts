@@ -42,6 +42,8 @@ export interface TextZone {
   on: "field" | "chrome-wash" | "light-card" | "dark-panel" | "frame";
   /** Text color on this zone: ink on light, white on dark. */
   ink: "navy" | "white";
+  /** A wash the layout lays over the field under this text (styles/components/slides-glass.css). */
+  scrim?: { color: "navy" | "white"; alpha: number };
 }
 
 export interface Background {
@@ -68,8 +70,8 @@ export const BACKGROUNDS = {
     lead: "navy",
     hues: ["navy", "cobalt", "magenta", "orange"],
     textZone: [
-      { name: "eyebrow", x: 64, y: 64, w: 560, h: 36, on: "field", ink: "white" },
-      { name: "title", x: 64, y: 424, w: 1048, h: 288, on: "field", ink: "white" },
+      { name: "eyebrow", x: 64, y: 64, w: 560, h: 36, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.24 } },
+      { name: "title", x: 64, y: 424, w: 1048, h: 288, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.24 } },
       { name: "speaker card", x: 64, y: 840, w: 720, h: 176, on: "dark-panel", ink: "white" },
     ],
   },
@@ -157,7 +159,7 @@ export const BACKGROUNDS = {
     lead: "cream",
     hues: ["cream", "yellow", "coral", "orange", "purple"],
     textZone: [
-      { name: "title", x: 64, y: 64, w: 620, h: 72, on: "field", ink: "navy" },
+      { name: "title", x: 64, y: 64, w: 620, h: 72, on: "field", ink: "navy", scrim: { color: "white", alpha: 0.5 } },
       { name: "people panel", x: 64, y: 168, w: 1792, h: 816, on: "light-card", ink: "navy" },
     ],
   },

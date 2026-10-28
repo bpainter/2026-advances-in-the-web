@@ -13,7 +13,7 @@ import { FrameworkGridSlide } from "@/components/layouts/FrameworkGridSlide";
 import { ImageLedSlide } from "@/components/layouts/ImageLedSlide";
 import { SectionSlide } from "@/components/layouts/SectionSlide";
 import { CloseSlide } from "@/components/layouts/CloseSlide";
-import { DesignedSlide } from "@/components/layouts/DesignedSlide";
+import { GlassSlide } from "@/components/layouts/glass/GlassSlide";
 import { DemoPageSlide } from "@/components/page/DemoPageSlide";
 
 interface Props {
@@ -51,8 +51,13 @@ export function SlideRouter(props: Props) {
       return <SectionSlide {...props} />;
     case "close":
       return <CloseSlide {...props} />;
-    case "designed":
-      return <DesignedSlide {...props} />;
+    case "glass-title":
+    case "glass-grid":
+    case "glass-quotes":
+    case "glass-statement":
+    case "glass-people":
+    case "glass-closing":
+      return <GlassSlide {...props} />;
     case "demo-page":
       return <DemoPageSlide {...props} />;
     default: {

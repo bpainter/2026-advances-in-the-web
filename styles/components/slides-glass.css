@@ -1,0 +1,475 @@
+/* Native opening and closing slides (PRD v5, 4.5; docs/design/demo-wrappers-spec.md 6 and 7).
+   The stage draws the slide background and the grain; these layouts draw text and glass on the
+   1920 by 1080 canvas: 64 margins, three columns of 576 with 32 gutters, Slalom Sans Regular and
+   Bold, sentence case, no tracking. Light glass is white 0.72 with 24 px blur; dark glass is navy
+   0.72 with the same blur. Only --glass-*, --chrome-* and --slide-bg-image tokens are read. */
+.sg {
+  position: relative;
+  box-sizing: border-box;
+  width: var(--stage-width);
+  height: var(--stage-height);
+  padding: 64px;
+  font-family: var(--font-sans);
+  color: var(--glass-ink);
+}
+.sg[data-tone="dark"] {
+  color: var(--glass-dark-ink);
+}
+.sg p,
+.sg h1,
+.sg ul,
+.sg figure,
+.sg blockquote {
+  margin: 0;
+}
+.sg ul {
+  padding: 0;
+  list-style: none;
+}
+
+/* Type scale (PRD 4.5): eyebrow 28/36, title 64/72, display 144/144, body 36/50, card title
+   32/40, card body 24/32, meta 20/28. */
+.sg-eyebrow {
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: var(--weight-bold);
+  color: var(--glass-link);
+}
+.sg[data-tone="dark"] .sg-eyebrow {
+  color: var(--cyan);
+}
+.sg-title {
+  font-size: 64px;
+  line-height: 72px;
+  font-weight: var(--weight-bold);
+}
+.sg-display {
+  font-size: 144px;
+  line-height: 144px;
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.01em;
+}
+.sg-title-lines span {
+  display: block;
+}
+.sg-body {
+  font-size: 36px;
+  line-height: 50px;
+  color: var(--glass-ink-soft);
+}
+.sg-icon {
+  flex: none;
+  color: var(--glass-link);
+}
+.sg[data-tone="dark"] .sg-icon {
+  color: var(--glass-dark-ink);
+}
+
+/* Cards */
+.sg-card {
+  box-sizing: border-box;
+  border: var(--chrome-card-border);
+  border-radius: 24px;
+  background: var(--glass-surface-strong);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  box-shadow: var(--chrome-card-highlight), var(--chrome-card-shadow);
+}
+.sg-card--dark {
+  border: 1px solid var(--glass-dark-border-color);
+  background: var(--glass-dark-surface-strong);
+  box-shadow: var(--glass-dark-highlight), var(--glass-dark-shadow);
+  color: var(--glass-dark-ink);
+}
+.sg-card__title {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: var(--weight-bold);
+}
+.sg-card__body {
+  margin-top: 8px;
+  font-size: 24px;
+  line-height: 32px;
+  color: var(--glass-ink-soft);
+}
+.sg-card--dark .sg-card__body {
+  color: var(--glass-dark-ink-body);
+}
+.sg-num {
+  font-size: 64px;
+  line-height: 72px;
+  font-weight: var(--weight-bold);
+  color: var(--cyan);
+}
+
+/* Footer: two pills (spec 6.1). */
+.sg-footer {
+  position: absolute;
+  inset: auto 64px 28px;
+  display: flex;
+  justify-content: space-between;
+}
+.sg-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  height: 40px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  background: var(--glass-surface-strong);
+  color: var(--glass-ink-soft);
+  font-size: 20px;
+  line-height: 28px;
+}
+.sg-footer[data-tone="dark"] .sg-pill {
+  background: var(--glass-dark-surface-strong);
+  color: var(--glass-dark-ink-body);
+}
+.sg-pill__num {
+  font-weight: var(--weight-bold);
+}
+.sg-wordmark {
+  font-size: 48px;
+  line-height: 56px;
+  font-weight: var(--weight-bold);
+  color: var(--glass-dark-ink);
+}
+
+/* Washes under text that sits on the field (content/backgrounds.ts, `scrim`): a navy wash across
+   the title's two thirds, and a white band behind the people slide's title. The contrast test
+   composites the same values. */
+.sg--title::before,
+.sg--people::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.sg--title::before {
+  background: linear-gradient(90deg, rgb(15 28 65 / 0.24) 0, rgb(15 28 65 / 0.24) 1150px, rgb(15 28 65 / 0) 1500px);
+}
+.sg--people::before {
+  background: linear-gradient(rgb(255 255 255 / 0.5) 0, rgb(255 255 255 / 0.5) 152px, rgb(255 255 255 / 0) 220px);
+}
+.sg--people .sg-title {
+  position: relative;
+}
+
+/* Title */
+.sg--title .sg-eyebrow {
+  position: absolute;
+  left: 64px;
+  top: 64px;
+}
+.sg--title .sg-display {
+  position: absolute;
+  left: 64px;
+  top: 424px;
+  color: var(--glass-dark-ink);
+  text-shadow: 0 2px 24px rgb(15 28 65 / 0.35);
+}
+.sg-speaker {
+  position: absolute;
+  left: 64px;
+  top: 840px;
+  width: 720px;
+  height: 176px;
+  padding: 40px 48px;
+}
+.sg-speaker__name {
+  font-size: 36px;
+  line-height: 50px;
+  font-weight: var(--weight-bold);
+}
+.sg-speaker__role {
+  margin-top: 4px;
+  font-size: 24px;
+  line-height: 32px;
+  color: var(--glass-dark-ink-body);
+}
+.sg--title .sg-wordmark {
+  position: absolute;
+  right: 64px;
+  bottom: 64px;
+}
+
+/* Grids */
+.sg-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 576px);
+  gap: 32px;
+}
+/* The mandate: the display over the bloom, six icon cards from y 696. */
+.sg--grid[data-slide="the-mandate"] .sg-display {
+  margin-top: 16px;
+}
+.sg--grid[data-slide="the-mandate"] .sg-cards-eyebrow {
+  position: absolute;
+  left: 64px;
+  top: 644px;
+}
+.sg--grid[data-slide="the-mandate"] .sg-cards {
+  position: absolute;
+  left: 64px;
+  top: 696px;
+  grid-auto-rows: 128px;
+}
+.sg--grid[data-slide="the-mandate"] .sg-card {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 40px;
+}
+/* Three reactions: portrait cards. */
+.sg--portraits .sg-title {
+  margin-bottom: 32px;
+}
+.sg--portraits .sg-card {
+  display: flex;
+  flex-direction: column;
+  height: 816px;
+  padding: 32px;
+}
+.sg-portrait {
+  display: block;
+  width: 512px;
+  height: 512px;
+  border-radius: 16px;
+  object-fit: cover;
+}
+.sg--portraits .sg-card__text {
+  margin-top: 32px;
+}
+.sg-question {
+  margin-top: auto;
+  font-size: 64px;
+  line-height: 72px;
+  font-weight: var(--weight-bold);
+  color: var(--glass-link);
+}
+/* Open web: a lede, six cards with the icon top left and text pinned to the bottom. */
+.sg--grid[data-slide="open-web"] .sg-lede {
+  max-width: 1400px;
+  margin-top: 16px;
+}
+.sg--grid[data-slide="open-web"] .sg-cards {
+  position: absolute;
+  left: 64px;
+  top: 316px;
+  grid-auto-rows: 318px;
+}
+.sg--grid[data-slide="open-web"] .sg-card,
+.sg--numbered .sg-card {
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+}
+.sg--grid[data-slide="open-web"] .sg-card__text,
+.sg--numbered[data-tone="dark"] .sg-card__text {
+  margin-top: auto;
+}
+/* What we will cover: three numbered cards on dark glass. */
+.sg--numbered[data-tone="dark"] .sg-title {
+  margin-top: 16px;
+  color: var(--glass-dark-ink);
+}
+.sg--numbered[data-tone="dark"] .sg-cards {
+  position: absolute;
+  left: 64px;
+  top: 584px;
+  grid-auto-rows: 400px;
+}
+.sg--numbered[data-tone="dark"] .sg-card {
+  position: relative;
+}
+.sg--numbered[data-tone="dark"] .sg-icon {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+}
+.sg--numbered[data-tone="dark"] .sg-card__title {
+  font-size: 36px;
+  line-height: 50px;
+}
+/* What changed: six numbered cards on light glass. */
+.sg--numbered[data-tone="light"] .sg-cards {
+  position: absolute;
+  left: 64px;
+  top: 168px;
+  grid-auto-rows: 392px;
+}
+.sg--numbered[data-tone="light"] .sg-num {
+  font-size: 32px;
+  line-height: 40px;
+  color: var(--glass-link);
+}
+.sg--numbered[data-tone="light"] .sg-card__text {
+  margin-top: 16px;
+}
+.sg--numbered[data-tone="light"] .sg-card__body {
+  margin-top: 16px;
+}
+
+/* Two perspectives: one dark panel, two quotes. */
+.sg-quotes {
+  position: absolute;
+  left: 64px;
+  top: 64px;
+  width: 1792px;
+  height: 920px;
+  padding: 64px;
+}
+.sg-quotes__grid {
+  display: grid;
+  grid-template-columns: 768px 768px;
+  gap: 128px;
+  margin-top: 152px;
+  background: linear-gradient(var(--glass-dark-border-color), var(--glass-dark-border-color)) center / 1px 100% no-repeat;
+}
+.sg-quote__text {
+  font-size: 64px;
+  line-height: 72px;
+  font-weight: var(--weight-regular);
+}
+.sg-quote__cite {
+  margin-top: 40px;
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: var(--weight-bold);
+  color: var(--cyan);
+}
+
+/* Keep humanity: one centered dark panel. */
+.sg-statement {
+  position: absolute;
+  left: 352px;
+  top: 300px;
+  width: 1216px;
+  height: 480px;
+  padding: 96px;
+  display: flex;
+  align-items: center;
+}
+
+/* People to follow: one light panel, a 3 by 4 grid. */
+.sg-people {
+  position: absolute;
+  left: 64px;
+  top: 168px;
+  width: 1792px;
+  height: 816px;
+  padding: 24px 48px;
+}
+.sg-people__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 192px;
+  column-gap: 32px;
+}
+.sg-person {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.sg-person:nth-child(n + 4) {
+  border-top: 1px solid var(--glass-rule);
+}
+.sg-person__avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--slalom-blue);
+  color: var(--white);
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: var(--weight-bold);
+}
+.sg-person__text {
+  display: grid;
+  min-width: 0;
+}
+.sg-person__name {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: var(--weight-bold);
+}
+.sg-person__role {
+  font-size: 24px;
+  line-height: 32px;
+  color: var(--glass-ink-soft);
+  white-space: nowrap;
+}
+
+/* Closing (spec 7): dark panel on the left, the QR on solid white on the right. */
+.sg-closing {
+  position: absolute;
+  left: 64px;
+  top: 64px;
+  width: 1072px;
+  height: 952px;
+  padding: 0 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.sg-closing__name {
+  margin-top: 16px;
+  font-size: 120px;
+  line-height: 128px;
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.sg-closing__role {
+  margin-top: 24px;
+  font-size: 36px;
+  line-height: 50px;
+  color: var(--glass-dark-ink-body);
+}
+.sg-closing__link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 32px;
+  font-size: 36px;
+  line-height: 50px;
+  font-weight: var(--weight-bold);
+}
+.sg-closing__link img {
+  width: 40px;
+  height: 40px;
+}
+.sg-closing__wordmark {
+  position: absolute;
+  left: 64px;
+  top: 840px;
+}
+.sg-qr {
+  position: absolute;
+  left: 1200px;
+  top: 182px;
+  width: 656px;
+  height: 716px;
+  box-sizing: border-box;
+  padding: 56px;
+  border-radius: 24px;
+  background: var(--glass-surface-solid);
+  box-shadow: 0 24px 64px rgb(0 10 37 / 0.4);
+}
+.sg-qr__code {
+  display: block;
+  width: 544px;
+  height: 544px;
+}
+.sg-qr__caption {
+  margin-top: 24px;
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: var(--weight-bold);
+  color: var(--glass-ink);
+  text-align: center;
+}

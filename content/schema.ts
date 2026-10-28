@@ -23,7 +23,12 @@ export type Layout =
   | "image-led"      // full-bleed image, short headline bottom-left
   | "section"        // section divider: label + optional tier legend
   | "close"          // thank-you / contact
-  | "designed"       // a section exported from Claude Design (addition); see Slide.designed
+  | "glass-title"    // v5 native opening and closing slides (PRD v5, 4.5); see Slide.glass
+  | "glass-grid"
+  | "glass-quotes"
+  | "glass-statement"
+  | "glass-people"
+  | "glass-closing"
   | "demo-page";     // one page of a demo section, schema v3 (addition); see Slide.page
 
 export type Tier = "baseline-widely" | "baseline-newly" | "two-engine" | "one-engine" | "none";
@@ -130,10 +135,39 @@ export interface Slide {
     axisNotes?: { label: string; y: number }[]; // labelled ticks on the y axis for points with no x value (addition)
   };
   demoView?: DemoView;     // default view for demo-split slides; default "half" (50/50); "split" is the 60/40 view
-  designed?: { file: string }; // layout "designed": the section file under content/designed/ (addition)
+  glass?: GlassContent;    // the glass-* layouts: the slide's text as typed data (PRD v5, 4.5)
   page?: DemoPage;         // layout "demo-page": the page, from content/sections (addition)
   demoSection?: DemoSection; // layout "demo-page": the page's section, for the badge, notes and citations (addition)
 }
+
+/** A card on a glass-grid slide: a number, a Lucide icon, a portrait, a question. */
+export interface GlassCard {
+  num?: string;
+  icon?: string;            // a Lucide icon name, e.g. "Wrench"
+  title: string;
+  body?: string;
+  image?: { src: string; alt: string };
+  question?: string;
+}
+
+/** The text of a native glass slide (PRD v5, 4.5; docs/design/demo-wrappers-spec.md 6). */
+export type GlassContent =
+  | { kind: "title"; eyebrow: string; lines: string[]; speaker: { name: string; role: string } }
+  | {
+      kind: "grid";
+      variant: "icons" | "portraits" | "numbered";
+      tone: "light" | "dark";
+      eyebrow?: string;
+      title?: string;
+      display?: string;
+      lede?: string;
+      cardsEyebrow?: string;
+      cards: GlassCard[];
+    }
+  | { kind: "quotes"; title: string; quotes: { text: string; cite: string }[] }
+  | { kind: "statement"; lines: string[] }
+  | { kind: "people"; title: string; people: { initials: string; name: string; role: string }[] }
+  | { kind: "closing"; eyebrow: string; name: string; role: string; link: string; url: string; caption: string };
 
 export interface Deck {
   title: string;
