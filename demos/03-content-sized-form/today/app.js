@@ -4,7 +4,10 @@
 // messages under the fields, submits in
 // place and resets afterwards.
 
-import { createInputWidth } from "./input-width.js";
+// prettier-ignore
+import {
+  createInputWidth,
+} from "./input-width.js";
 import { autosize } from "./autosize.js";
 
 const form =
@@ -32,7 +35,7 @@ autosize(details, {
 // field instead of the browser's bubble.
 function setError(field, text) {
   const message = document.getElementById(
-    `${field.id}-error`,
+    `${field.id}-err`,
   );
   message.textContent = text;
   message.hidden = !text;

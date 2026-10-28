@@ -22,7 +22,7 @@ export const section: DemoSection = {
       intro:
         "Frameworks are changing too. This product page has copy everyone shares and stock that is different for each user. The question is what to cache.",
       description:
-        "Cache Components let you mark exactly which parts of a page are cached, right in the code.",
+        "Cache Components let you mark in code exactly which parts of a page are cached.",
       visual: {
         src: "/intro/f2-caching.png",
         alt: "The product page above its request log, where only inventory queries repeat.",
@@ -45,7 +45,7 @@ export const section: DemoSection = {
         hooks: ["reset", "requestPage"],
       },
       files: [
-        excerpt(`${TODAY}/app/products/[id]/page.tsx`, "tsx", [[5, 23]], "page.tsx"),
+        excerpt(`${TODAY}/app/products/[id]/page.tsx`, "tsx", [[11, 29]], "page.tsx"),
         excerpt(`${TODAY}/lib/inventory.ts`, "ts", [
           [9, 19],
           [31, 33],

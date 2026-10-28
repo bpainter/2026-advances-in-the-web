@@ -29,14 +29,23 @@ export function elisionText(lang: DemoCodeLang, count: number): string {
 export function excerptLayout(ranges: [number, number][], total: number): ShownLine[] {
   const out: ShownLine[] = [];
   let next = 1;
+  // A gap of fewer than three lines is shown in full: an elision line would hide almost nothing
+  // behind a line of its own (design review L5).
+  const gap = (from: number, to: number) => {
+    if (to - from + 1 >= MIN_ELIDED) out.push({ kind: "elision", count: to - from + 1 });
+    else for (let n = from; n <= to; n++) out.push({ kind: "source", line: n });
+  };
   for (const [a, b] of ranges) {
-    if (a > next) out.push({ kind: "elision", count: a - next });
+    if (a > next) gap(next, a - 1);
     for (let n = a; n <= Math.min(b, total); n++) out.push({ kind: "source", line: n });
     next = b + 1;
   }
-  if (next <= total) out.push({ kind: "elision", count: total - next + 1 });
+  if (next <= total) gap(next, total);
   return out;
 }
+
+/** The fewest hidden lines an elision line stands for. */
+export const MIN_ELIDED = 3;
 
 /** The shown source of an excerpt. */
 export function excerptSource(full: string, ranges: [number, number][], lang: DemoCodeLang): string {

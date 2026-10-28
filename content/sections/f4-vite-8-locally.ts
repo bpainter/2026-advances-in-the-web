@@ -6,7 +6,7 @@ export const section: DemoSection = {
   order: 10,
   label: "Vite 8 locally",
   scenario:
-    "The same repository built with the existing Vite setup and with Vite 8, on this laptop.",
+    "One fixture app built with Vite 7 and with Vite 8 on this laptop.",
   pages: [
     {
       id: "f4-single",

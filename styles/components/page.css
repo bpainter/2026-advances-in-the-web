@@ -34,8 +34,28 @@
   font-weight: var(--weight-bold);
   line-height: 72px;
 }
+/* Single pages keep the title on the walk pages' baseline (y 88); the badge sits at its right. */
 .page[data-stage="single"] .page__title {
-  grid-row: 1 / span 2;
+  grid-row: 2;
+}
+.page__badge {
+  @apply absolute inline-flex items-center;
+  top: 100px;
+  right: 64px;
+  height: 48px;
+  gap: 12px;
+  margin: 0;
+  padding: 0 20px;
+  box-sizing: border-box;
+  border: var(--glass-border);
+  border-radius: var(--radius-pill);
+  background: var(--glass-surface-strong);
+  font-size: 22px;
+  font-weight: var(--weight-bold);
+  color: var(--glass-ink);
+}
+.page__badge s {
+  font-weight: var(--weight-regular);
 }
 .page__body {
   @apply grid;
@@ -115,6 +135,24 @@
   border: var(--chrome-card-border);
   border-radius: var(--chrome-card-radius);
   box-shadow: var(--chrome-card-highlight), var(--chrome-card-shadow);
+  /* The frame background shows where a hook narrows the frame (design review M5). */
+  background:
+    linear-gradient(rgb(255 255 255 / 0.4), rgb(255 255 255 / 0.4)),
+    url("/backgrounds/glass-fan.jpg") center / cover;
+}
+.page-frame[data-build="today"],
+.page-frame[data-build="framework"] {
+  background:
+    linear-gradient(rgb(240 238 250 / 0.55), rgb(240 238 250 / 0.55)),
+    url("/backgrounds/glass-petal.jpg") center / cover;
+}
+.page-frame__edge {
+  @apply absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 2px dashed rgb(15 28 65 / 0.3);
+  pointer-events: none;
 }
 .page-frame__scaled {
   @apply absolute;
@@ -211,16 +249,20 @@
   box-shadow: inset 0 -3px 0 var(--slalom-blue);
 }
 .code__off-chip {
-  padding: 2px 10px;
+  padding: 2px 12px;
   border-radius: var(--radius-pill);
   background: var(--coral);
   color: var(--navy);
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 18px;
   font-weight: var(--weight-bold);
 }
+/* The scroller is exactly 21 lines tall (756 px) between 24 px and 28 px margins, and scrolls in
+   whole lines, so no line is ever cut at the tabs or the bottom edge (design review H4). */
 .code--page .code__pre--plain {
-  padding: var(--chrome-code-pad-block) 24px;
+  height: 756px;
+  margin: var(--chrome-code-pad-block) 0 28px;
+  padding: 0 24px;
   font-family: var(--glass-font-mono);
   line-height: var(--chrome-code-leading);
 }
@@ -264,11 +306,13 @@
   outline-offset: 4px;
   box-shadow: 0 0 0 6px rgb(255 255 255 / 0.9);
   border-radius: 4px;
-  transition:
-    left 200ms var(--ease-brand),
-    top 200ms var(--ease-brand),
-    width 200ms var(--ease-brand),
-    height 200ms var(--ease-brand);
+  /* Only opacity animates (spec 10); position and size snap per step. */
+  animation: overlay-spot-in 160ms var(--ease-brand) both;
+}
+@keyframes overlay-spot-in {
+  from {
+    opacity: 0;
+  }
 }
 .overlay__focus {
   @apply absolute;
@@ -379,19 +423,12 @@
   color: var(--color-white);
   font-size: 28px;
   font-weight: var(--weight-bold);
-  animation: overlay-cap 900ms ease-out forwards;
+  /* Fades in and stays until the next keycap or step (design review L3). */
+  animation: overlay-cap 160ms ease-out both;
 }
 @keyframes overlay-cap {
-  0% {
+  from {
     opacity: 0;
     transform: translate(-50%, 8px);
-  }
-  12%,
-  85% {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-  100% {
-    opacity: 0;
   }
 }

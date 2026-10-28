@@ -15,26 +15,43 @@ function stars(rating) {
 }
 
 function reviewMarkup(review) {
-  return `<li class="review">
-    <p class="review__meta">
-      <strong>${review.author}</strong>
-      <span class="review__stars" aria-label="${review.rating} of 5">${stars(review.rating)}</span>
-    </p>
-    <div class="review__body">${review.body}</div>
-  </li>`;
+  const starText = stars(review.rating);
+  const label = review.rating + " of 5";
+  return (
+    '<li class="review">' +
+    '<p class="review__meta">' +
+    "<strong>" +
+    review.author +
+    "</strong>" +
+    '<span class="review__stars" ' +
+    `aria-label="${label}">` +
+    starText +
+    "</span></p>" +
+    '<div class="review__body">' +
+    review.body +
+    "</div></li>"
+  );
 }
 
 function heading(count) {
-  return `Reviews <span class="count">(${count})</span>`;
+  return (
+    "Reviews " +
+    `<span class="count">(${count})</span>`
+  );
 }
 
 export function renderReviews(reviews) {
-  section.innerHTML = `<h2>${heading(reviews.length)}</h2><ul class="review-list"></ul>`;
+  section.innerHTML =
+    "<h2>" +
+    heading(reviews.length) +
+    '</h2><ul class="review-list"></ul>';
   const list = section.querySelector(
     ".review-list",
   );
   if (reviews.length === 0) {
-    list.innerHTML = `<li class="review review--empty">No reviews yet.</li>`;
+    list.innerHTML =
+      '<li class="review review--empty">' +
+      "No reviews yet.</li>";
     return;
   }
   list.innerHTML = reviews

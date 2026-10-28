@@ -2,7 +2,10 @@
 // combobox for the color, posted with the
 // form through its hidden input.
 
-import { createCombobox } from "./combobox.js";
+// prettier-ignore
+import {
+  createCombobox,
+} from "./combobox.js";
 
 const form = document.querySelector(
   "#t-variant",

@@ -523,8 +523,12 @@
   gap: 0.4em;
   margin: 0 0 var(--space-4);
   padding-left: 1.1em;
+  list-style: disc outside;
   font-size: var(--notes-size, 40px);
   line-height: 1.35;
+}
+.notes__bullet::marker {
+  color: var(--color-slalom-blue);
 }
 .notes__bullet[data-key] {
   font-weight: var(--weight-bold);
@@ -535,8 +539,11 @@
   line-height: 1.35;
 }
 .notes__cautions ul {
+  @apply flex flex-col;
+  gap: 0.4em;
   margin: 0;
   padding-left: 1.1em;
+  list-style: disc outside;
 }
 .notes__cautions-label {
   margin: 0 0 var(--space-1);

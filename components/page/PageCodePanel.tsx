@@ -46,10 +46,14 @@ export function PageCodePanel({ files, code, mode }: Props) {
     const scale = pre.offsetWidth ? preRect.width / pre.offsetWidth : 1;
     const top = (first.getBoundingClientRect().top - preRect.top) / scale + pre.scrollTop;
     const bottom = (last.getBoundingClientRect().bottom - preRect.top) / scale + pre.scrollTop;
-    // Center the highlighted range; when it is taller than the panel, show its start.
+    // Center the highlighted range; when it is taller than the panel, show its start. The scroll
+    // snaps to whole lines, so no line is cut at either edge (design review H4).
     const span = bottom - top;
-    const target = span < pre.clientHeight ? top - (pre.clientHeight - span) / 2 : top - 16;
-    pre.scrollTo({ top: Math.max(target, 0), behavior: reduced ? "auto" : "smooth" });
+    const lh = first.offsetHeight || 36;
+    const raw = span < pre.clientHeight ? top - (pre.clientHeight - span) / 2 : top;
+    const max = pre.scrollHeight - pre.clientHeight;
+    const target = Math.min(Math.max(Math.round(raw / lh) * lh, 0), Math.floor(Math.max(max, 0) / lh) * lh);
+    pre.scrollTo({ top: target, behavior: reduced ? "auto" : "smooth" });
   }, [activeFile, key]);
 
   return (

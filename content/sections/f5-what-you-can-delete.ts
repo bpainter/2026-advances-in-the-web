@@ -5,7 +5,7 @@ export const section: DemoSection = {
   id: "f5-what-you-can-delete",
   order: 11,
   label: "What you can delete",
-  scenario: "One table maps each core demo to the libraries it can replace, with one npm pull.",
+  scenario: "One table maps each core demo to the libraries it replaces, from one npm pull.",
   pages: [
     {
       id: "f5-single",

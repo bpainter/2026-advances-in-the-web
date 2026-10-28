@@ -3,7 +3,7 @@
 <form
   id="t-form"
   class="case-form"
-  action="/demos/03-content-sized-form/today/cases"
+  action="cases"
   method="post"
   novalidate
 >
@@ -13,10 +13,10 @@
     name="subject"
     required
     maxlength="120"
-    aria-describedby="t-subject-error"
+    aria-describedby="t-subject-err"
   />
   <p
-    id="t-subject-error"
+    id="t-subject-err"
     class="field-error"
     hidden
   ></p>
@@ -25,19 +25,19 @@
     aria-hidden="true"
   ></span>
   <label for="t-details">Details</label>
-  <p id="t-details-hint">
+  <p id="t-hint">
     Steps, order number, and what you
     expected.
   </p>
   <textarea
     id="t-details"
     name="details"
-    aria-describedby="t-details-hint t-details-error"
+    aria-describedby="t-hint t-details-err"
     rows="6"
     required
   ></textarea>
   <p
-    id="t-details-error"
+    id="t-details-err"
     class="field-error"
     hidden
   ></p>

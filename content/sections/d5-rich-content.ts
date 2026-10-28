@@ -9,7 +9,7 @@ export const section: DemoSection = {
   order: 5,
   label: "Rich content",
   feature: "Trusted Types",
-  scenario: "A product page shows rich text from a CMS, and only reviewed HTML may reach the page.",
+  scenario: "A product page shows CMS rich text, and only reviewed HTML may reach it.",
   support: { kind: "web-features", id: "trusted-types" },
   pages: [
     {
@@ -18,7 +18,7 @@ export const section: DemoSection = {
       intro:
         "Our fifth demo is a product page with rich text from a CMS. Some of that text could carry a script. We want the browser to stop it.",
       description:
-        "Trusted Types lets the browser refuse any HTML that did not pass through your reviewed code.",
+        "Trusted Types lets the browser refuse HTML that skipped your reviewed code.",
       visual: {
         src: "/intro/d5-rich-content.png",
         alt: "The product page with the security console showing a blocked write.",
@@ -43,10 +43,10 @@ export const section: DemoSection = {
       },
       files: [
         excerpt(`${TODAY}/index.html`, "html", [[9, 25]]),
-        excerpt(`${TODAY}/reviews.js`, "js", [[40, 55]]),
+        excerpt(`${TODAY}/reviews.js`, "js", [[57, 72]]),
         excerpt(`${TODAY}/sanitize.js`, "js", [
           [1, 5],
-          [8, 10],
+          [10, 12],
         ]),
       ],
       steps: [

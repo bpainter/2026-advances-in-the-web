@@ -63,6 +63,7 @@ export const LIMITS = {
   /** CX 2: words per now page, intro plus bullets. */
   nowPageWords: 220,
   highlight: 12,
+  highlightSpan: 20,
   columns: 44,
   fileLines: 40,
   tabs: { "used-to": 4, now: 3 } as Record<string, number>,
@@ -390,6 +391,13 @@ export function validate(sections: DemoSection[], ctx: ValidateContext): Issue[]
             if (a < 1 || b > count || a > b) add("code", where, `code.lines ${JSON.stringify(l)} outside 1..${count} of ${file.file}`);
           }
           if (set.size > LIMITS.highlight) add("code", where, `highlights ${set.size} lines; at most ${LIMITS.highlight}`);
+          // The highlighted range, gaps included, must fit the panel's 21 visible lines with one to
+          // spare, so the first and last highlighted lines are on screen together (design review H4).
+          if (set.size) {
+            const first = Math.min(...set);
+            const last = Math.max(...set);
+            if (last - first + 1 > LIMITS.highlightSpan) add("code", where, `highlights lines ${first} to ${last} of ${file.file}, a span of ${last - first + 1}; at most ${LIMITS.highlightSpan} so both ends are on screen`);
+          }
           if (file.excerptOf) {
             const elided = elisionLines(file.excerptOf.ranges, (ctx.repoFile(file.excerptOf.path) ?? "").replace(/\n$/, "").split("\n").length);
             for (const n of elided) if (set.has(n)) add("code", where, `highlights line ${n} of ${file.file}, an elision line`);

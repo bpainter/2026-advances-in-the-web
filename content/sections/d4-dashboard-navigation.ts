@@ -12,7 +12,7 @@ export const section: DemoSection = {
   label: "Dashboard navigation",
   feature: "Navigation API",
   scenario:
-    "A user moves between an order list, a filter and order details without full page loads.",
+    "A user moves between orders, a filter and order details without full page loads.",
   support: { kind: "web-features", id: "navigation" },
   pages: [
     {
@@ -21,7 +21,7 @@ export const section: DemoSection = {
       intro:
         "Our fourth demo is an order dashboard. Clicking an order should feel instant. Back, focus and scroll still have to work.",
       description:
-        "The Navigation API lets one event handle every link, form and Back press in a page.",
+        "The Navigation API lets one event handle every link, form and Back press.",
       visual: {
         src: "/intro/d4-dashboard-navigation.png",
         alt: "The order dashboard showing order 418 with the address and focus readout below.",
@@ -49,8 +49,8 @@ export const section: DemoSection = {
         excerpt(`${TODAY}/app.css`, "css", [[19, 22]]),
         excerpt(`${TODAY}/router.js`, "js", [
           [160, 171],
-          [219, 234],
-          [261, 267],
+          [222, 237],
+          [264, 270],
         ]),
       ],
       steps: [
@@ -71,9 +71,7 @@ export const section: DemoSection = {
           ],
           code: { file: "index.html", lines: [[2, 6]] },
           spotlight: [LINK_418, "#content"],
-          bullets: [
-            "These are real links. A click handler stops each one and loads by script.",
-          ],
+          bullets: ["These are real links. A click handler stops each one and loads by script."],
         },
         {
           id: "s2",
@@ -95,9 +93,9 @@ export const section: DemoSection = {
           actions: [
             { type: "network", profile: "slow" },
             { type: "click", target: LINK_418 },
-            { type: "wait", ms: 300 },
+            { type: "wait", ms: 100 },
             { type: "click", target: LINK_419 },
-            { type: "wait", ms: 2000 },
+            { type: "wait", ms: 900 },
             { type: "network", profile: "fast" },
           ],
           code: {
@@ -241,9 +239,9 @@ export const section: DemoSection = {
           actions: [
             { type: "network", profile: "slow" },
             { type: "click", target: LINK_418 },
-            { type: "wait", ms: 300 },
+            { type: "wait", ms: 100 },
             { type: "click", target: LINK_419 },
-            { type: "wait", ms: 2000 },
+            { type: "wait", ms: 900 },
             { type: "network", profile: "fast" },
             { type: "assert", target: "#request-log", expect: "contains:aborted" },
             { type: "assert", target: "#s-url", expect: "contains:/orders/419" },
@@ -269,9 +267,9 @@ export const section: DemoSection = {
           actions: [
             { type: "toggle", flag: "enhance-js", on: false },
             { type: "click", target: LINK_418 },
-            { type: "wait", ms: 800 },
+            { type: "wait", ms: 300 },
             { type: "navigate", history: "back" },
-            { type: "wait", ms: 800 },
+            { type: "wait", ms: 300 },
           ],
           code: { file: "app.js", lines: [], off: true },
           spotlight: ["#request-log", "#s-url"],

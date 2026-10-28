@@ -109,7 +109,9 @@
   }
   function rectOf(el) {
     var r = el.getBoundingClientRect();
-    return { x: r.left, y: r.top, w: r.width, h: r.height };
+    // The radius lets the spotlight follow the target's corners (design review M2).
+    var radius = parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0;
+    return { x: r.left, y: r.top, w: r.width, h: r.height, r: radius };
   }
   function sleep(ms) {
     return new Promise(function (r) {
@@ -553,11 +555,57 @@
     if (result.finished) result.finished.catch(function () {});
     if (typeof result.catch === "function") result.catch(function () {});
   }
+  // Back and Forward stay inside this frame: the Navigation API's entries belong to the frame's own
+  // navigable, and a traversal it cannot make is skipped instead of handed to the joint session
+  // history, where WebKit could move the presenter window (design review, item 7).
   function traverse(dir) {
-    if (window.navigation) swallow(dir === "back" ? navigation.back() : navigation.forward());
-    else if (dir === "back") history.back();
+    var nav = window.navigation;
+    if (nav && nav.currentEntry) {
+      var can = dir === "back" ? nav.canGoBack : nav.canGoForward;
+      if (!can) throw errorOf("via-unsupported", "No " + dir + " entry in this frame");
+      swallow(dir === "back" ? nav.back() : nav.forward());
+      return;
+    }
+    // No Navigation API: the frame's own history, guarded by the entries this frame made (loads
+    // and pushState), counted in window.name, which belongs to the frame and survives loads.
+    var d = frameDepth();
+    if (dir === "back" && d.index <= 0) throw errorOf("via-unsupported", "No back entry in this frame");
+    if (dir === "forward" && d.index >= d.max) throw errorOf("via-unsupported", "No forward entry in this frame");
+    saveDepth({ index: d.index + (dir === "back" ? -1 : 1), max: d.max });
+    if (dir === "back") history.back();
     else history.forward();
   }
+
+  function frameDepth() {
+    try {
+      var parsed = JSON.parse(window.name || "{}");
+      if (typeof parsed.index === "number" && typeof parsed.max === "number") return parsed;
+    } catch (e) {
+      /* a name set by someone else */
+    }
+    return { index: 0, max: 0 };
+  }
+  function saveDepth(d) {
+    try {
+      window.name = JSON.stringify({ index: d.index, max: d.max });
+    } catch (e) {
+      /* refused */
+    }
+  }
+  (function recordFrameEntries() {
+    if (window.navigation) return;
+    var type = (performance.getEntriesByType("navigation")[0] || {}).type;
+    var known = window.name && window.name.charAt(0) === "{";
+    var d = frameDepth();
+    if (!known) saveDepth({ index: 0, max: 0 });
+    else if (type === "navigate") saveDepth({ index: d.index + 1, max: d.index + 1 });
+    var push = history.pushState;
+    history.pushState = function () {
+      var cur = frameDepth();
+      saveDepth({ index: cur.index + 1, max: cur.index + 1 });
+      return push.apply(history, arguments);
+    };
+  })();
 
   async function exec(action, instant) {
     var el;

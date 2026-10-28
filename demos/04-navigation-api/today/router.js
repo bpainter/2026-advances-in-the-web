@@ -82,7 +82,7 @@ function saveScroll() {
       JSON.stringify(map),
     );
   } catch {
-    /* storage unavailable: scroll will not restore */
+    /* no storage: no scroll restore */
   }
 }
 
@@ -209,7 +209,10 @@ async function load(
 function showError(err) {
   const p = document.createElement("p");
   p.className = "error";
-  p.textContent = `Could not load this page (${err.message}).`;
+  p.textContent =
+    "Could not load this page (" +
+    err.message +
+    ").";
   content.replaceChildren(p);
   content.focus({ preventScroll: true });
 }

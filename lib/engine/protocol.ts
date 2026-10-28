@@ -1,7 +1,7 @@
 import type { Action } from "@/content/demo-schema";
 
 /** PRD Part A, 5.3. Rectangles are frame CSS pixels. */
-export type Rect = { x: number; y: number; w: number; h: number };
+export type Rect = { x: number; y: number; w: number; h: number; r?: number };
 export type Flags = Record<string, boolean>;
 export type RunMode = "animated" | "instant";
 export type Cursor = { step: number; action: number };

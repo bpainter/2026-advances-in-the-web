@@ -32,8 +32,7 @@ export const section: DemoSection = {
       stage: "used-to",
       eyebrow: "Container queries",
       title: "How we used to do it",
-      intro:
-        "One card sits in three places. Each place tells it how to look.",
+      intro: "One card sits in three places. Each place tells it how to look.",
       frame: {
         build: "today",
         route: "/demos/02-container-card/today",
@@ -85,7 +84,13 @@ export const section: DemoSection = {
           id: "s2",
           label: "Style the variants",
           actions: [{ type: "pointer", to: "#t-merch .c-product-card" }],
-          code: { file: "styles.css", lines: [13, [23, 27], [34, 36]] },
+          code: {
+            file: "styles.css",
+            lines: [
+              [23, 27],
+              [34, 36],
+            ],
+          },
           spotlight: ["#t-merch .c-product-card"],
           bullets: ["The wide layout uses a viewport query. CSS cannot ask about the slot."],
         },
@@ -106,12 +111,12 @@ export const section: DemoSection = {
           spotlight: ["#t-merch .c-product-card", "#t-grid .c-product-card"],
           meter: {
             label: "JavaScript",
-            value: "125 lines",
+            value: "126 lines",
             source: "non-blank, non-comment lines in /demos/02-container-card/today/*.js",
           },
           bullets: [
             "The page narrowed, and the featured card stacked in a slot that kept its width.",
-            "Props, classes and a resize observer take 125 lines of script.",
+            "Props, classes and a resize observer take 126 lines of script.",
           ],
         },
       ],
@@ -173,13 +178,7 @@ export const section: DemoSection = {
             { type: "resize", target: ".product-slot", inlineSize: "32rem" },
             { type: "assert", target: ".product-card", expect: "columns=3" },
           ],
-          code: {
-            file: "card.css",
-            lines: [
-              [3, 5],
-              [21, 27],
-            ],
-          },
+          code: { file: "card.css", lines: [4, [21, 23]] },
           spotlight: [".product-slot", ".product-card"],
           bullets: [
             "The slot widens, and the card turns horizontal.",

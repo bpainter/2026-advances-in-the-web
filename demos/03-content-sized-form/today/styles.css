@@ -32,7 +32,7 @@ textarea {
   white-space: pre;
   pointer-events: none;
 }
-#t-details-hint,
+#t-hint,
 #t-status,
 .field-error {
   margin: 0;

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
  */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-build="native">
+    <html lang="en" data-build="native" suppressHydrationWarning>
       <head>
         {/* The shared portal theme (PRD v4, 6.2), copied in by pnpm theme:sync. */}
         {/* eslint-disable-next-line @next/next/no-css-tags */}

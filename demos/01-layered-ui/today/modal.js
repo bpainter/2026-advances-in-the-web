@@ -7,7 +7,10 @@
 // dismissal, and focus return to the opener
 // on close.
 
-import { createFocusTrap } from "./focus-trap.js";
+// prettier-ignore
+import {
+  createFocusTrap,
+} from "./focus-trap.js";
 import {
   lockScroll,
   unlockScroll,

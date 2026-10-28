@@ -17,7 +17,8 @@ async function countLines(dir: string): Promise<number> {
   let n = 0;
   for (const f of readdirSync(dir).filter((f) => f.endsWith(".js"))) {
     const src = readFileSync(path.join(dir, f), "utf8");
-    const pretty = await format(src, { parser: "babel", printWidth: 80, objectWrap: "collapse" });
+    // prettier-ignore markers only keep a 44-column split; drop them so the count sees the code at 80.
+    const pretty = await format(src.replace(/^[ \t]*\/\/ prettier-ignore\n/gm, ""), { parser: "babel", printWidth: 80, objectWrap: "collapse" });
     let inBlock = false;
     for (const raw of pretty.split("\n")) {
       const line = raw.trim();

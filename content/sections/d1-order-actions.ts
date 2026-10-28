@@ -10,7 +10,7 @@ export const section: DemoSection = {
   label: "Order actions",
   feature: "Dialog element",
   scenario:
-    "An order row has an Actions menu. Cancel order asks you to confirm, returns focus and calls the server only after you confirm.",
+    "An order row has an Actions menu. Cancel order asks first, returns focus, and calls the server only after you confirm.",
   support: { kind: "web-features", id: "dialog", alsoUses: ["popover", "invoker-commands"] },
   pages: [
     {
@@ -19,7 +19,7 @@ export const section: DemoSection = {
       intro:
         "Our first demo is an order list where each order has an Actions menu. Cancel order asks you to confirm first. We build it the old way, then the way browsers allow now.",
       description:
-        "The dialog element gives you a confirm box with focus and Escape handled by the browser.",
+        "The dialog element gives you a confirm box, with focus and Escape handled for you.",
       visual: {
         src: "/intro/d1-order-actions.png",
         alt: "The order portal with the cancel dialog open.",
@@ -44,15 +44,18 @@ export const section: DemoSection = {
       },
       files: [
         excerpt(`${TODAY}/index.html`, "html", [[2, 20]]),
-        excerpt(`${TODAY}/styles.css`, "css", [[23, 57]]),
+        excerpt(`${TODAY}/styles.css`, "css", [
+          [27, 32],
+          [38, 57],
+        ]),
         excerpt(`${TODAY}/menu.js`, "js", [
           [112, 130],
           [221, 233],
         ]),
         excerpt(`${TODAY}/modal.js`, "js", [
-          [98, 111],
-          [120, 126],
-          [177, 186],
+          [101, 114],
+          [123, 129],
+          [182, 188],
         ]),
       ],
       steps: [
@@ -85,7 +88,7 @@ export const section: DemoSection = {
             { type: "click", target: "#t-cancel" },
             { type: "assert", target: "#t-modal", expect: "visible" },
           ],
-          code: { file: "styles.css", lines: [6, 9, 17, 19, 23, 26, 29, 31] },
+          code: { file: "styles.css", lines: [5, 11, 18, 23] },
           spotlight: ["#t-modal", "#t-backdrop"],
           bullets: [
             "Cancel order opens a confirm box over a dark backdrop. The CSS needs four z-index numbers to stack it.",
@@ -104,7 +107,7 @@ export const section: DemoSection = {
             },
             { type: "assert", target: "#t-actions", expect: "focused" },
           ],
-          code: { file: "modal.js", lines: [[12, 14], [17, 22], 32] },
+          code: { file: "modal.js", lines: [[12, 14], [17, 22], 30] },
           spotlight: ["#t-actions"],
           meter: {
             label: "JavaScript",
@@ -230,7 +233,7 @@ export const section: DemoSection = {
           code: {
             file: "app.js",
             lines: [
-              [7, 14],
+              [9, 14],
               [26, 28],
             ],
           },

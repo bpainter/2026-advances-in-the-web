@@ -79,14 +79,15 @@ function flagsFor(def: BuildDef, url: URL): Record<string, boolean> {
 /**
  * The frame runtime appends `demo-net=slow` or `demo-net=slow-instant` to the frame's same-origin
  * fetches; the response is delayed and the wait ends early when the request is aborted (PRD Part
- * A, 10.1). The delays must outlast the 300ms gap the steps author between two clicks, measured
+ * A, 10.1). The delays must outlast the 100ms gap the steps author between two clicks, measured
  * from the first click: animated, the second click's cursor glide and ripple add about 700ms, so
- * the slow profile takes Part B's 1.5 seconds; in instant replay the gap is the authored 300ms, so
- * slow-instant takes 450ms. Either way the stale request is still in flight and gets aborted.
+ * the slow profile takes 1 second (short enough that the step fits the 2.5 s ceiling); in instant
+ * replay the gap is the authored 100ms, so slow-instant takes 450ms. Either way the stale request
+ * is still in flight and gets aborted.
  */
 function delayFor(url: URL): number {
   const net = url.searchParams.get("demo-net");
-  return net === "slow" ? 1500 : net === "slow-instant" ? 450 : 0;
+  return net === "slow" ? 1000 : net === "slow-instant" ? 450 : 0;
 }
 
 function throttle(req: Request, url: URL): Promise<"ok" | "aborted"> {
@@ -143,6 +144,9 @@ export const folder: DemoFolder = {
   demo: DEMO,
   builds: { today, native },
   routes: [
+    // Today's own assets at short addresses, so its index.html fits 44 columns.
+    { method: "GET", path: "/demo/d4/app.css", handler: () => buildFile(today, "app.css") ?? new Response("Not found", { status: 404 }) },
+    { method: "GET", path: "/demo/d4/router.js", handler: () => buildFile(today, "router.js") ?? new Response("Not found", { status: 404 }) },
     // Today: the same pages under the build prefix.
     { method: "GET", path: `${TODAY_PREFIX}/orders`, handler: list(today) },
     {

@@ -1,5 +1,11 @@
-import { getCatalogProduct } from "@/lib/catalog";
-import { getInventory } from "@/lib/inventory";
+// prettier-ignore
+import {
+  getCatalogProduct,
+} from "@/lib/catalog";
+// prettier-ignore
+import {
+  getInventory,
+} from "@/lib/inventory";
 import { getPrice } from "@/lib/price";
 
 // Freshness settings 1 and 2 of 5: the

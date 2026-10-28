@@ -48,7 +48,9 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
   const run = useRef<{ finish: () => void; cancel: () => void; playing: () => boolean } | null>(null);
   const reducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const frame = page.frame!;
-  const scale = Math.min(slot.width / frame.viewport.width, slot.height / frame.viewport.height);
+  // The card has a 1 px border: the frame fills its content box (design review L9).
+  const scale = Math.min((slot.width - 2) / frame.viewport.width, (slot.height - 2) / frame.viewport.height);
+  const narrowed = viewportWidth !== null && viewportWidth < frame.viewport.width;
   const step: Step | undefined = page.steps[stepIndex];
 
   const report = useCallback(
@@ -154,6 +156,9 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
         fresh.dispose();
         return;
       }
+      // The replaying document takes focus first: WebKit ignores programmatic focus inside a frame
+      // that does not have it, so focus asserts and focus returns would replay differently.
+      if (mode === "audience" && !handsOn) fresh.focus();
       const result = await fresh.replayTo(replaySteps(page, stepIndex));
       if (gen !== generation.current) {
         fresh.dispose();
@@ -216,6 +221,7 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
         <div className="page-frame__slot" ref={slotRef} />
         <Overlay handle={handle} step={step} handsOn={handsOn} reducedMotion={reducedMotion} />
       </div>
+      {narrowed ? <div className="page-frame__edge" style={{ left: `calc(${viewportWidth}px * ${scale})` }} aria-hidden="true" /> : null}
       {status === "loading" ? <p className="page-frame__status">Loading demo…</p> : null}
       {status === "error" ? <p className="page-frame__status">The demo frame did not answer. Press r to reload it.</p> : null}
     </div>

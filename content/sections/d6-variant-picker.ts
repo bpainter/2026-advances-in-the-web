@@ -10,7 +10,7 @@ export const section: DemoSection = {
   label: "Variant picker",
   feature: "Customizable select",
   scenario:
-    "A product editor's Color field shows a swatch beside each name and still posts the color.",
+    "The Color field shows a swatch beside each name and still posts the color.",
   support: {
     kind: "web-features",
     id: "customizable-select",

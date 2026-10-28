@@ -10,7 +10,10 @@ import {
   syncLayout,
   syncAllLayouts,
 } from "./card.js";
-import { observeCard } from "./resize-classes.js";
+// prettier-ignore
+import {
+  observeCard,
+} from "./resize-classes.js";
 
 const product = {
   name: "Ridgeline Trail",
@@ -94,8 +97,8 @@ function setViewportWidth(
   px,
   { instant = false } = {},
 ) {
-  document.documentElement.dataset.viewportWidth =
-    String(px);
+  const root = document.documentElement;
+  root.dataset.viewportWidth = String(px);
   if (!embedded) return undefined;
   const ms = instant ? 0 : 560;
   postViewport(px, ms);

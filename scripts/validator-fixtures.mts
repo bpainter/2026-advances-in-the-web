@@ -151,6 +151,7 @@ const CASES: [string, Mut][] = [
   ["code", (s) => (usedTo(s).steps[1].code = { file: "app.js", lines: [[1, 13]] })],
   ["code", (s) => (usedTo(s).steps[1].code = { file: "app.js", lines: [11] })],
   ["code", (s) => (now(s).steps[1].code = { file: "missing.html", lines: [1] })],
+  ["code", (s) => (usedTo(s).steps[1].code = { file: "app.js", lines: [2, 23] })],
   ["file-size", (s) => (now(s).files[0].source = "<p>" + "x".repeat(50) + "</p>")],
   ["file-size", (s) => (now(s).files[0].source = Array.from({ length: 41 }, () => "<p></p>").join("\n"))],
   ["files", (s) => now(s).files.push({ file: "a.css", lang: "css", source: "a{}" }, { file: "b.css", lang: "css", source: "b{}" }, { file: "c.css", lang: "css", source: "c{}" })],

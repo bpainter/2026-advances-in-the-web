@@ -53,9 +53,8 @@ export const section: DemoSection = {
           [37, 52],
         ]),
         excerpt(`${TODAY}/autosize.js`, "js", [
-          [14, 19],
           [36, 49],
-          [64, 75],
+          [73, 76],
         ]),
       ],
       steps: [
@@ -104,13 +103,7 @@ export const section: DemoSection = {
             { type: "hook", name: "formReset" },
             { type: "assert", target: "#t-details", expect: "attr:data-rows=min" },
           ],
-          code: {
-            file: "autosize.js",
-            lines: [
-              [12, 17],
-              [32, 35],
-            ],
-          },
+          code: { file: "autosize.js", lines: [[5, 10], [17, 20]] },
           spotlight: ["#t-details"],
           meter: {
             label: "JavaScript",

@@ -26,7 +26,7 @@ export const section: DemoSection = {
       intro:
         "Package managers changed their defaults this year. We follow one package from install to release. Each step is a recorded terminal session.",
       description:
-        "Package managers now ask before a package runs code, and they let a person approve each release.",
+        "Package managers now ask before a package runs code, and a person approves each release.",
       visual: {
         src: "/intro/f3-package-trust.png",
         alt: "The terminal showing an install script held back until it is approved.",

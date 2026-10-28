@@ -6,7 +6,10 @@
 // renders a review through the unprotected
 // #t-reviews path.
 
-import { renderDescription } from "./description.js";
+// prettier-ignore
+import {
+  renderDescription,
+} from "./description.js";
 import {
   renderReviews,
   addReview,

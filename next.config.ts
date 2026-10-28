@@ -8,6 +8,10 @@ const crossOriginAssets = [
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // No dev badge on stage or in captures (design review B1).
+  devIndicators: false,
+  // A second build directory lets a production build run beside `next dev` (pnpm capture).
+  distDir: process.env.NEXT_DIST_DIR ?? ".next",
   images: { unoptimized: true },
   async headers() {
     return [

@@ -45,11 +45,15 @@ main.is-loading {
   max-block-size: 3lh;
   overflow: auto;
 }
-@media (prefers-reduced-motion: no-preference) {
-  .order-list a {
-    transition: background-color 0.15s;
-  }
+.order-list a {
+  transition: background-color 0.15s;
+}
+main {
+  transition: opacity 0.15s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .order-list a,
   main {
-    transition: opacity 0.15s;
+    transition: none;
   }
 }
