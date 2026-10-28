@@ -60,7 +60,8 @@ export const folder: DemoFolder = {
       manifestDefaults({
         sandbox: FORMS_SANDBOX,
         enhancement: { css: "all", js: ["input-width.js", "autosize.js", "app.js"] },
-        shell: { title: "Support", nav: "support" },
+        shell: { title: "Support", nav: "support", context: "cases" },
+        styles: ["/portal/03-content-sized-form.css"],
         sideEffects: ["reset"],
       }),
     ),
@@ -74,7 +75,8 @@ export const folder: DemoFolder = {
         // The enhancement is the @supports (field-sizing: content) block; the runtime removes and
         // reinserts it through the CSSOM, so the authored file never changes.
         enhancement: { css: "supports-blocks", js: ["app.js"] },
-        shell: { title: "Support", nav: "support" },
+        shell: { title: "Support", nav: "support", context: "cases" },
+        styles: ["/portal/03-content-sized-form.css"],
         instrumentation: ["hooks.js"],
         sideEffects: ["reset"],
       }),

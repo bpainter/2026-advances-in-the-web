@@ -1361,3 +1361,48 @@
     gap: var(--glass-space-6);
   }
 }
+
+/* Engineer additions after the v4 design review (docs/design/review-v4.md M1, M7, M8). Paint only,
+   inside the paint layer, so the lint and the enhancement-off proofs still hold. */
+@layer portal-theme {
+  /* M1: a dialog's title at 18/24 with room below it; its actions sit at the end, 8 apart, and
+     the confirm choice reads as the destructive one (coral fill, navy text). */
+  :where(:root[data-build]) :where(dialog) :where(h2) {
+    margin: 0 0 var(--glass-space-7);
+    font-size: var(--glass-text-lg);
+    line-height: var(--glass-leading-lg);
+    text-align: start;
+  }
+  :where(:root[data-build]) :where(dialog) :where(form) {
+    text-align: end;
+  }
+  :where(:root[data-build]) :where(dialog) :where(form > button + button) {
+    margin-inline-start: var(--glass-space-4);
+  }
+  :where(:root[data-build]) :where(dialog) :where(button[value="confirm"]) {
+    color: var(--navy);
+    background: var(--coral);
+    border-color: rgb(15 28 65 / 0.24);
+  }
+
+  /* M7: field labels read as labels. */
+  :where(:root[data-build]) :where(label) {
+    font-weight: 700;
+  }
+
+  /* M8: an invalid field adds an icon, so color is never the only signal. */
+  :where(:root[data-build]) :where(input:user-invalid, textarea:user-invalid, [aria-invalid="true"]) {
+    padding-inline-end: 34px;
+    background: var(--glass-surface-field)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d1293d' stroke-width='2.25' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='12' y1='7' x2='12' y2='13'/%3E%3Cline x1='12' y1='17' x2='12.01' y2='17'/%3E%3C/svg%3E")
+      no-repeat right 10px top 9px / 16px;
+  }
+}
+
+/* Intro stills (pnpm visuals passes the capture flag): a lighter scrim, so a dialog still does not
+   turn the hero image gray (design review M12). */
+@layer portal-theme {
+  :root[data-flags*="capture:1"] {
+    --glass-scrim: rgb(15 28 65 / 0.24);
+  }
+}

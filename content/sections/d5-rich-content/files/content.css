@@ -4,7 +4,3 @@
   background: #FEE4E2; color: #7A271A; }
 body[data-injected] .injected-banner {
   display: block; }
-.demo-console { font: 0.8rem/1.4
-  ui-monospace, monospace;
-  background: #0F1C41; color: #fff;
-  padding: 1rem; list-style: none; }

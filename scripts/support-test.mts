@@ -22,7 +22,7 @@ const ALSO: Record<string, string> = {
   "d1-order-actions": "This demo also uses Popover (January 2025) and Invoker commands (December 2025).",
   "d2-product-card": "This demo also uses @scope (March 2026).",
 };
-const D6 = "It works in Chrome, Edge and Safari since September 2026. Firefox shows a normal select.";
+const D6 = "It has been available in Chrome, Edge and Safari since September 2026. Firefox shows a normal select.";
 
 const wf = installedWebFeatures();
 const file = JSON.parse(readFileSync(path.join(process.cwd(), "content", ".generated", "support.json"), "utf8")) as SupportFile;

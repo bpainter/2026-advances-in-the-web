@@ -1,0 +1,22 @@
+/* D5 portal content (unshown; design review H9) for both builds: the security console is a
+   glass card with a coral rule, in the theme's monospace at 15 px, and hidden while it is empty. */
+@layer portal-layout {
+  .demo-console {
+    margin: var(--glass-space-5) 0 0;
+    padding: var(--glass-space-5) var(--glass-space-6);
+    list-style: none;
+  }
+  .demo-console:empty {
+    display: none;
+  }
+}
+@layer portal-theme {
+  .demo-console {
+    font: 15px/22px var(--glass-font-mono);
+    color: var(--glass-ink);
+    background: var(--glass-surface-strong);
+    border: var(--glass-border);
+    border-radius: var(--glass-radius-card);
+    box-shadow: inset 3px 0 0 var(--coral), var(--glass-shadow-card);
+  }
+}

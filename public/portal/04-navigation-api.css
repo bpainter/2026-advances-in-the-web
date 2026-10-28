@@ -1,6 +1,20 @@
-/* D4 portal content (unshown, PRD v4 6.3): spacing for the toolbar links and the order detail in
-   both builds. Nothing a demo step toggles. */
+/* D4 portal content (unshown, PRD v4 6.3; design review B4) for both builds: the document scrolls,
+   because scroll restore is part of the demo, so the toolbar and the evidence panel stick to the
+   top and bottom of the viewport, and the order list reads as a portal card. */
 @layer portal-layout {
+  .portal__main {
+    overflow: visible;
+  }
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--glass-space-4) var(--glass-space-6);
+    padding: var(--glass-space-4) var(--glass-space-5);
+  }
   .toolbar nav {
     display: flex;
     flex-wrap: wrap;
@@ -9,6 +23,20 @@
   .toolbar nav a {
     padding-block: var(--glass-space-2);
   }
+  .toolbar form {
+    display: flex;
+    align-items: center;
+    gap: var(--glass-space-4);
+  }
+  .order-list {
+    display: grid;
+    margin: var(--glass-space-4) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .order-list li {
+    padding: var(--glass-space-4) var(--glass-space-6);
+  }
   .order-detail {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -16,5 +44,56 @@
   }
   .order-detail dd {
     margin: 0;
+  }
+  .demo-panel {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    padding: var(--glass-space-4) var(--glass-space-6);
+  }
+  .demo-panel dl {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 0 var(--glass-space-5);
+    margin: 0;
+  }
+  .demo-panel dd {
+    margin: 0;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+  #request-log {
+    max-block-size: 40px;
+    margin: var(--glass-space-2) 0 0;
+    overflow: auto;
+  }
+}
+@layer portal-theme {
+  /* The toolbar and the panel float over the list as it scrolls: float fill and frost. */
+  .toolbar,
+  .demo-panel {
+    background: var(--glass-surface-float);
+    -webkit-backdrop-filter: var(--glass-filter-float);
+    backdrop-filter: var(--glass-filter-float);
+  }
+  .toolbar,
+  .demo-panel,
+  .order-list {
+    border: var(--glass-border);
+    border-radius: var(--glass-radius-card);
+    box-shadow: var(--glass-highlight), var(--glass-shadow-card);
+  }
+  .order-list {
+    background: var(--glass-surface);
+  }
+  .order-list li + li {
+    border-top: 1px solid var(--glass-rule);
+  }
+  .demo-panel {
+    font: 15px/20px var(--glass-font-mono);
+  }
+  .demo-panel dt {
+    color: var(--glass-ink-soft);
+    font-weight: 700;
   }
 }

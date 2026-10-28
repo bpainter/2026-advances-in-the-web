@@ -1,15 +1,3 @@
-.toolbar {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1rem;
-  align-items: center;
-  padding: 0.5rem;
-  background: var(--glass-surface-float);
-  border-radius: 12px;
-}
 main:focus {
   outline: none;
 }
@@ -19,31 +7,6 @@ main:focus-visible {
 main.is-loading {
   opacity: 0.5;
   cursor: progress;
-}
-.demo-panel {
-  position: sticky;
-  bottom: 0;
-  padding: 0.5rem;
-  font:
-    0.75rem/1.4 ui-monospace,
-    monospace;
-  border-radius: 12px;
-  background: var(--glass-surface-float);
-}
-.demo-panel dl {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 0 0.75rem;
-  margin: 0;
-}
-.demo-panel dd {
-  margin: 0;
-  overflow-wrap: anywhere;
-}
-#request-log {
-  margin: 0.25rem 0 0;
-  max-block-size: 3lh;
-  overflow: auto;
 }
 .order-list a {
   transition: background-color 0.15s;

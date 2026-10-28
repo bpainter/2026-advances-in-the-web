@@ -238,7 +238,7 @@
           "date": "2026-09-14"
         }
       ],
-      "since": "It works in Chrome, Edge and Safari since September 2026. Firefox shows a normal select.",
+      "since": "It has been available in Chrome, Edge and Safari since September 2026. Firefox shows a normal select.",
       "alsoUses": null
     },
     "f2-caching": {

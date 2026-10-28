@@ -93,7 +93,7 @@ export function webFeaturesEntry(data: WebFeaturesData, source: Extract<SupportS
     const listed = tiles.filter((t) => t.version);
     const latest = listed.map((t) => t.date ?? "").sort().pop() ?? "";
     const missing = tiles.filter((t) => !t.version);
-    since = `It works in ${joinAnd(listed.map((t) => t.name))} since ${monthYear(latest)}.`;
+    since = `It has been available in ${joinAnd(listed.map((t) => t.name))} since ${monthYear(latest)}.`;
     if (missing.length) {
       const fallback = source.fallback?.text;
       if (!fallback) throw new Error(`${source.id}: not Baseline and missing in ${missing.map((m) => m.name).join(", ")}, but support.fallback is not set`);

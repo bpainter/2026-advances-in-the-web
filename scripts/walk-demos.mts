@@ -68,12 +68,20 @@ async function checkD6(page: Page, where: string) {
     if (appearance === "base-select") fail(where, "Firefox: the select is customized; expected a normal select");
     else pass(`Firefox: the select is a normal select (appearance ${appearance}) and the color posted`);
     if (args.includes("--capture")) {
+      // A real Firefox run of the same form at 2x, cropped to the Color field, Save and the status
+      // line (design review H6), so the proof is readable at projector scale.
       const out = path.join(process.cwd(), "public", "posters", "d6-firefox.png");
       mkdirSync(path.dirname(out), { recursive: true });
-      await page.addStyleTag({ content: ".overlay { display: none !important; }" });
-      await page.locator('.page-frame__iframe[data-visible="true"]').screenshot({ path: out });
-      await page.addStyleTag({ content: ".overlay { display: block !important; }" });
-      pass(`captured ${path.relative(process.cwd(), out)} from Firefox`);
+      const ctx = await page.context().browser()!.newContext({ viewport: { width: 640, height: 628 }, deviceScaleFactor: 2 });
+      const p = await ctx.newPage();
+      await p.goto(`${frame.url().split("?")[0]}?flags=enhance-css:1`);
+      await p.selectOption("#color", "moss");
+      await p.click("#variant > button");
+      await p.waitForFunction(() => /color=moss/.test(document.querySelector("#status")?.textContent ?? ""), null, { timeout: 5000 });
+      const box = (await p.evaluate(`(() => { const a = document.querySelector("#color").getBoundingClientRect(); const b = document.querySelector("#status").getBoundingClientRect(); const l = document.querySelector("label[for=color]").getBoundingClientRect(); const x = Math.min(a.left, b.left, l.left) - 12; const y = l.top - 12; return { x, y, width: Math.max(a.right, b.right) - x + 12, height: b.bottom - y + 12 }; })()`)) as { x: number; y: number; width: number; height: number };
+      await p.screenshot({ path: out, clip: box });
+      await ctx.close();
+      pass(`captured ${path.relative(process.cwd(), out)} from Firefox (${Math.round(box.width)} by ${Math.round(box.height)} CSS px at 2x)`);
     }
   } else pass(`${browserName}: select appearance ${appearance}`);
 }

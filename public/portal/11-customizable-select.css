@@ -1,9 +1,18 @@
-/* D6 portal content (unshown): the open-picker replica and the Firefox capture panel. */
+/* D6 portal content (unshown; design review M9, H5, H6) for both builds: the product form stacks
+   the same way on both pages, the open-picker replica sits under its select, and the Firefox
+   capture sits under the status line. Nothing here styles the select feature itself. */
 @layer portal-layout {
+  .variant {
+    display: grid;
+    justify-items: start;
+    gap: var(--glass-space-3);
+  }
+  .variant .combo__button {
+    min-inline-size: 18rem;
+  }
   .picker-replica {
     position: absolute;
-    min-inline-size: 12rem;
-    margin-block-start: 4px;
+    min-inline-size: 18rem;
   }
   .picker-replica__option {
     display: flex;
@@ -11,28 +20,32 @@
     align-items: center;
   }
   .firefox-capture {
-    position: fixed;
-    inset-block-end: 16px;
-    inset-inline-end: 16px;
-    inline-size: 300px;
-    margin: 0;
-    padding: 8px;
+    margin: var(--glass-space-6) 0 0;
+    padding: var(--glass-space-4);
+    max-inline-size: 100%;
   }
   .firefox-capture img {
     display: block;
-    inline-size: 100%;
+    inline-size: min(100%, 520px);
     block-size: auto;
-    border-radius: 8px;
+    border-radius: var(--glass-radius-control);
+  }
+  #status:empty,
+  #t-status:empty {
+    display: none;
   }
 }
 @layer portal-theme {
+  .picker-replica {
+    background: rgb(255 255 255 / 0.92);
+  }
   .picker-replica__option.is-active {
     font-weight: 700;
     background: var(--glass-surface-selected);
   }
   .firefox-capture figcaption {
-    padding: 6px 4px 0;
-    font-size: var(--glass-text-sm);
+    padding: var(--glass-space-3) var(--glass-space-2) 0;
+    font-size: var(--glass-text-md);
     font-weight: 700;
   }
 }

@@ -123,21 +123,3 @@ h1 {
 body[data-injected] .injected-banner {
   display: block;
 }
-
-.demo-console {
-  margin: 0;
-  min-block-size: 6rem;
-  padding: 1rem;
-  font:
-    0.8rem/1.4 ui-monospace,
-    monospace;
-  background: #0f1c41;
-  color: #fff;
-  list-style: none;
-}
-
-.demo-console::before {
-  content: "security console";
-  display: block;
-  opacity: 0.55;
-}

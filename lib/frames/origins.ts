@@ -33,6 +33,9 @@ export function parseFlags(query: string | null): Record<string, boolean> {
 
 /** Adds `glass: false` when the presenter window runs with ?glass=off (components/presenter/GlassMode.tsx). */
 export function glassFlags(flags: Record<string, boolean>): Record<string, boolean> {
-  if (typeof document !== "undefined" && document.documentElement.dataset.glass === "off") return { ...flags, glass: false };
-  return flags;
+  if (typeof document === "undefined") return flags;
+  const out = { ...flags };
+  if (document.documentElement.dataset.glass === "off") out.glass = false;
+  if (document.documentElement.dataset.capture === "1") out.capture = true;
+  return out;
 }

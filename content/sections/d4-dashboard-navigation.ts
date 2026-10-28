@@ -46,7 +46,7 @@ export const section: DemoSection = {
       },
       files: [
         excerpt(`${TODAY}/index.html`, "html", [[8, 22]]),
-        excerpt(`${TODAY}/app.css`, "css", [[19, 22]]),
+        excerpt(`${TODAY}/app.css`, "css", [[7, 10]]),
         excerpt(`${TODAY}/router.js`, "js", [
           [160, 171],
           [222, 237],

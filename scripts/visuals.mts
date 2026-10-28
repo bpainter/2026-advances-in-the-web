@@ -32,7 +32,7 @@ for (const section of sections) {
     failed++;
     continue;
   }
-  await page.goto(`${BASE}/present?s=${pageId}&step=${stepIndex}`);
+  await page.goto(`${BASE}/present?s=${pageId}&step=${stepIndex}&capture=1`);
   const key = `${pageId}:${stepId}`;
   const ok = await page
     .waitForFunction((k) => Boolean((window as unknown as { __stepResults?: Record<string, unknown> }).__stepResults?.[k]), key, { timeout: 20000 })

@@ -1,0 +1,13 @@
+{
+  "note": "Unshown context content the composer adds around a demo's shown markup (design review M6). Orders come from demos/04-navigation-api/fixtures/orders.json; these lists fill the other panes.",
+  "cases": [
+    { "id": "CS-2291", "subject": "Wrong size shipped, order 402", "status": "Open" },
+    { "id": "CS-2290", "subject": "Refund for a returned pack", "status": "Pending" },
+    { "id": "CS-2287", "subject": "Address change before shipping", "status": "Resolved" }
+  ],
+  "products": [
+    { "sku": "RT-2-BLK", "name": "Trail Runner 2, Black", "stock": 42, "price": "$140.00" },
+    { "sku": "RT-2-MSS", "name": "Trail Runner 2, Moss", "stock": 9, "price": "$140.00" },
+    { "sku": "SM-40-GRY", "name": "Summit 40L pack", "stock": 17, "price": "$189.00" }
+  ]
+}

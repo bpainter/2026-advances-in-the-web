@@ -1,4 +1,6 @@
 import "server-only";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 
 /**
  * The Ridgeline Outfitters portal shell (docs/design/demo-glass-spec.md, section 8), wrapped around
@@ -14,6 +16,11 @@ export interface ShellOptions {
   nav: NavId;
   /** Ids of elements that must stay outside `.portal` (overlay roots, toasts, fixed layers). */
   outside?: string[];
+  /**
+   * Unshown context content after the shown markup, so the pane reads as a working portal
+   * (design review M6). Plain tables and chips only: it never uses a feature a demo shows.
+   */
+  context?: "orders" | "cases" | "products";
 }
 
 export type NavId = "orders" | "products" | "support" | "content" | "reports";
@@ -47,6 +54,28 @@ function shellHtml(opts: ShellOptions): { before: string; after: string } {
   return { before, after: "</div></div>" };
 }
 
+const esc = (v: string | number) => String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+const CHIP: Record<string, string> = { Open: "info", Shipped: "success", Pending: "pending", Resolved: "success" };
+const chip = (status: string) => `<span class="glass-chip glass-chip--${CHIP[status] ?? "neutral"}">${esc(status)}</span>`;
+
+function table(title: string, head: string[], rows: string[][]): string {
+  const th = head.map((h, i) => `<th scope="col"${i === head.length - 1 ? ' class="glass-table__num"' : ""}>${esc(h)}</th>`).join("");
+  const tr = rows.map((r) => `<tr>${r.map((c, i) => `<td${i === r.length - 1 ? ' class="glass-table__num"' : ""}>${c}</td>`).join("")}</tr>`).join("");
+  return `<section class="glass-card portal-context" aria-label="${esc(title)}"><h2 class="glass-card__title">${esc(title)}</h2><table class="glass-table"><thead><tr>${th}</tr></thead><tbody>${tr}</tbody></table></section>`;
+}
+
+function contextHtml(kind: NonNullable<ShellOptions["context"]>): string {
+  const root = process.cwd();
+  if (kind === "orders") {
+    const orders = (JSON.parse(readFileSync(path.join(root, "demos", "04-navigation-api", "fixtures", "orders.json"), "utf8")) as { orders: { id: number; customer: string; status: string; total: number }[] }).orders;
+    const rows = orders.filter((o) => o.id !== 418).slice(0, 4).map((o) => [`Order ${o.id}`, esc(o.customer), chip(o.status), `$${o.total.toFixed(2)}`]);
+    return table("Recent orders", ["Order", "Customer", "Status", "Total"], rows);
+  }
+  const data = JSON.parse(readFileSync(path.join(root, "fixtures", "portal-context.json"), "utf8")) as { cases: { id: string; subject: string; status: string }[]; products: { sku: string; name: string; stock: number; price: string }[] };
+  if (kind === "cases") return table("Recent cases", ["Case", "Subject", "Status"], data.cases.map((c) => [esc(c.id), esc(c.subject), chip(c.status)]));
+  return table("Catalog", ["Product", "Stock", "Price"], data.products.map((p) => [esc(p.name), esc(p.stock), esc(p.price)]));
+}
+
 /**
  * Wraps `body` (the build's markup) in the shell. The markup is never reparsed: an HTML library's
  * parser can restructure new syntax (a customizable select's button and option content), so the
@@ -64,5 +93,6 @@ export function wrapInShell(body: string, opts: ShellOptions): string {
     inner = inner.slice(0, m.index) + inner.slice(m.index + m[0].length);
   }
   const shell = shellHtml(opts);
-  return `${shell.before}\n${inner}\n${shell.after}\n${after.join("\n")}`;
+  const context = opts.context ? `\n${contextHtml(opts.context)}` : "";
+  return `${shell.before}\n${inner}${context}\n${shell.after}\n${after.join("\n")}`;
 }

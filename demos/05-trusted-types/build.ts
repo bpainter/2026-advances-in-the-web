@@ -88,6 +88,7 @@ export const folder: DemoFolder = {
         sideEffects: ["reset"],
         csp: LEGACY_CSP,
         shell: { title: "Content", nav: "content" },
+        styles: ["/portal/05-trusted-types.css"],
       }),
     ),
     native: nativeBuild(
@@ -103,6 +104,7 @@ export const folder: DemoFolder = {
         runtimeSelectors: ["#description img"],
         csp: TRUSTED_TYPES_CSP,
         shell: { title: "Content", nav: "content" },
+        styles: ["/portal/05-trusted-types.css"],
       }),
     ),
   },

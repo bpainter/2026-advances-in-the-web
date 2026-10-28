@@ -48,6 +48,9 @@ select.addEventListener("click", (event) => {
     select.showPicker();
   } catch {
     syncReplica();
+    // Under its select, as the real picker opens (design review H5).
+    replica.style.top = `${select.offsetTop + select.offsetHeight + 4}px`;
+    replica.style.left = `${select.offsetLeft}px`;
     replica.hidden = !supportsBase;
   }
 });
@@ -62,8 +65,9 @@ capture.className = "glass-card firefox-capture";
 capture.hidden = true;
 capture.innerHTML = '<img src="/posters/d6-firefox.png" alt="The same form in Firefox: a normal select, and Save still posts the color."><figcaption>Firefox: a normal select</figcaption>';
 
+// Below the status line, in the flow of the page (design review H6).
 function showFirefox() {
-  if (!capture.isConnected) document.body.append(capture);
+  if (!capture.isConnected) (document.querySelector("#status") ?? select).after(capture);
   capture.hidden = false;
 }
 

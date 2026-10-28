@@ -23,7 +23,7 @@ export interface BuildManifest {
    */
   styles?: string[];
   /** The portal shell to wrap the markup in (docs/design/demo-glass-spec.md, 8); portal builds only. */
-  shell?: { title: string; nav: "orders" | "products" | "support" | "content" | "reports"; outside?: string[] };
+  shell?: { title: string; nav: "orders" | "products" | "support" | "content" | "reports"; outside?: string[]; context?: "orders" | "cases" | "products" };
   /** Overrides the base CSP (D5). `ORIGIN` and `PRESENTER` are substituted. */
   csp?: string;
 }

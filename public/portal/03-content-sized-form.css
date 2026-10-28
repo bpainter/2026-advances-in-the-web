@@ -1,0 +1,9 @@
+/* D3 portal content (unshown; design review M7) for both builds: the field hint reads as a hint. */
+@layer portal-theme {
+  #details-hint,
+  #t-hint {
+    color: var(--glass-ink-soft);
+    font-size: var(--glass-text-sm);
+    line-height: var(--glass-leading-sm);
+  }
+}

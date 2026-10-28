@@ -254,17 +254,14 @@ export const section: DemoSection = {
           label: "Styles off",
           actions: [
             { type: "toggle", flag: "enhance-css", on: false },
-            { type: "click", target: '[commandfor="cancel-418"]' },
             { type: "assert", target: "#order-actions-418", expect: ":popover-open" },
-            { type: "assert", target: "#cancel-418", expect: ":open" },
           ],
           code: { file: "enhance.css", lines: [], off: true },
-          spotlight: ["#cancel-418"],
-          proof:
-            "Remove the enhancement CSS and show that the controls remain semantic and usable.",
+          spotlight: ["#order-actions-418"],
+          proof: "Remove the enhancement CSS and show that the controls remain semantic and usable.",
           bullets: [
-            "The CSS file is off. The menu and the dialog look plain.",
-            "They still open, close and move focus. The CSS only sets the look.",
+            "The CSS file is off. The menu loses its place under the button.",
+            "It still opens, closes and moves focus. The CSS only sets place and motion.",
           ],
         },
       ],

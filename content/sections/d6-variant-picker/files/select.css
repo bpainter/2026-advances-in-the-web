@@ -2,7 +2,7 @@ select,
 ::picker(select) {
   appearance: base-select;
 }
-select { min-inline-size: 12rem; }
+select { min-inline-size: 18rem; }
 ::picker(select) {
   margin-block-start: 4px;
 }
@@ -20,6 +20,3 @@ option:checked { font-weight: 700; }
 .black { background: #000a25; }
 .moss { background: #5b6b2e; }
 .sand { background: #d8c7a0; }
-.variant { display: grid; gap: 0.5rem;
-  justify-items: start; }
-#status:empty { display: none; }

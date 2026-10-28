@@ -14,7 +14,7 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
-  min-inline-size: 12rem;
+  min-inline-size: 18rem;
   padding: 0.4rem 0.75rem;
   border: 1px solid rgb(15 28 65 / 0.5);
   border-radius: 8px;
