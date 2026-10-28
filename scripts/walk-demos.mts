@@ -53,6 +53,61 @@ async function lastSeq(page: Page): Promise<number> {
   return page.evaluate(() => (window as unknown as { __stepSeq?: number }).__stepSeq ?? 0);
 }
 
+let speaker: Page | null = null;
+
+/**
+ * Speaker window at 1440 by 900 (PRD v4, 5.1 and 7.6): on every step the header, the current
+ * bullets and the Next line are visible without scrolling, no selector shows outside Reference,
+ * and the cautions show on the now page's last step.
+ */
+async function checkSpeaker(where: string, demoPage: DemoPage, section: DemoSection, i: number) {
+  if (!speaker) return;
+  const step = demoPage.steps[i];
+  const want = `Step ${i + 1} of ${demoPage.steps.length}: ${step.label}`;
+  const synced = await speaker
+    .waitForFunction((w) => document.querySelector(".notes__step")?.textContent?.startsWith(w), want, { timeout: 5000 })
+    .then(() => true)
+    .catch(() => false);
+  if (!synced) return fail(where, `speaker ${step.id}: the notes did not follow (wanted "${want}")`);
+  const v = (await speaker.evaluate(`(() => {
+    const body = document.querySelector(".speaker__notes-body");
+    const br = body.getBoundingClientRect();
+    const inView = (el) => { if (!el) return true; const r = el.getBoundingClientRect(); return r.top >= br.top - 1 && r.bottom <= br.bottom + 1 && r.bottom <= innerHeight; };
+    const next = document.querySelector(".notes__next");
+    const nr = next.getBoundingClientRect();
+    const clone = body.cloneNode(true);
+    clone.querySelectorAll("details").forEach((d) => d.remove());
+    const text = clone.textContent + " " + next.textContent;
+    const sel = /#[a-z][\\w-]*|\\[[a-z-]+(=|\\])/i.exec(text);
+    return { header: inView(document.querySelector(".notes__header")), bullets: inView(document.querySelector(".notes__bullets")), next: nr.top >= 0 && nr.bottom <= innerHeight, selector: sel ? sel[0] : null, cautions: Boolean(document.querySelector(".notes__cautions")) };
+  })()`)) as { header: boolean; bullets: boolean; next: boolean; selector: string | null; cautions: boolean };
+  const problems = [!v.header && "header", !v.bullets && "bullets", !v.next && "Next line"].filter(Boolean);
+  if (problems.length) fail(where, `speaker ${step.id}: ${problems.join(", ")} not visible at 1440 by 900`);
+  else pass(`speaker ${step.id}: header, bullets and Next visible`);
+  if (v.selector) fail(where, `speaker ${step.id}: selector text "${v.selector}" outside Reference`);
+  const wantCautions = demoPage.stage === "now" && i === demoPage.steps.length - 1 && section.cautions.length > 0;
+  if (wantCautions !== v.cautions) fail(where, `speaker ${step.id}: cautions ${v.cautions ? "shown" : "missing"}`);
+  else if (wantCautions) pass(`speaker ${step.id}: cautions shown`);
+}
+
+/** Hands-on mode shows the step's ifKeyboard in the speaker window; turning it off replays the step. */
+async function checkHandsOn(page: Page, where: string, demoPage: DemoPage, i: number) {
+  const step = demoPage.steps[i];
+  if (!speaker || !step.ifKeyboard) return;
+  await page.keyboard.press("h");
+  const shown = await speaker
+    .waitForFunction((t) => document.querySelector(".notes__hands-on")?.textContent === t, step.ifKeyboard, { timeout: 5000 })
+    .then(() => true)
+    .catch(() => false);
+  await page.waitForTimeout(800);
+  const seq = await lastSeq(page);
+  await page.keyboard.press("h");
+  const r = await waitForResult(page, `${demoPage.id}:${step.id}`, seq, 10000);
+  if (!shown) fail(where, `hands-on ${step.id}: ifKeyboard not shown in the speaker window`);
+  else pass(`hands-on ${step.id}: ifKeyboard shown`);
+  if (!r) fail(where, `hands-on ${step.id}: no replay after hands-on off`);
+}
+
 async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
   const where = demoPage.id;
   console.log(`\n== ${where} (${section.label}, ${demoPage.stage}, ${demoPage.steps.length} steps)`);
@@ -77,6 +132,8 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
     if (failed.length) fail(where, `${step.id}: ${failed.map((a) => `${a.target} ${a.expect} (got ${a.actual})`).join("; ")}`);
     else pass(`${step.id} ${step.label}: ${r.asserts.filter((a) => a.stepId === step.id).length} assert(s) ok, ${r.ms}ms`);
     forward.push(r.digest);
+    await checkSpeaker(where, demoPage, section, i);
+    await checkHandsOn(page, where, demoPage, i);
   }
   // Back: reset and replay must land on the same digest.
   for (let i = demoPage.steps.length - 2; i >= 0; i--) {
@@ -150,9 +207,19 @@ async function main() {
     process.exit(2);
   }
   const launcher = { chromium, webkit, firefox }[browserName];
-  const browser: Browser = await launcher.launch({ headless: !headed });
+  // Two windows in one context share BroadcastChannel; neither may be throttled as a background tab.
+  const chromiumArgs = ["--disable-background-timer-throttling", "--disable-renderer-backgrounding", "--disable-backgrounding-occluded-windows"];
+  const browser: Browser = await launcher.launch({ headless: !headed, ...(browserName === "chromium" ? { args: chromiumArgs } : {}) });
   const context = await browser.newContext({ viewport: { width: 1600, height: 900 } });
   const page = await context.newPage();
+  // The speaker checks are layout checks; they run in Chromium, where background tabs can be unthrottled.
+  if (!args.includes("--no-speaker") && browserName === "chromium") {
+    speaker = await context.newPage();
+    await speaker.setViewportSize({ width: 1440, height: 900 });
+    await speaker.goto(`${BASE}/speaker`);
+    // The audience page keeps the foreground, so its frames keep animation frames.
+    await page.bringToFront();
+  }
   page.on("pageerror", (err) => fail("page", `uncaught error: ${err.message}`));
   page.on("console", (msg) => {
     if (msg.type() === "error" && !/favicon/.test(msg.text())) console.log(`    console: ${msg.text().slice(0, 160)}`);

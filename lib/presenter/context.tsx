@@ -83,7 +83,7 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
   const performRef = useRef<((action: KeyAction) => void) | null>(null);
   // The provider survives slide navigations (same page component); the transport must start once.
   const firstSlideRef = useRef(initialSlideId);
-  const urlAtMount = useRef<PresenterState | null>(null);
+  const urlAtMount = useRef<{ state: PresenterState; urlSlide: string | null; urlWins: boolean } | null>(null);
 
   useEffect(() => {
     stateRef.current = state;
@@ -96,27 +96,31 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
     // A URL the presenter typed, followed or opened names the slide to show (`?s=`), and wins over
     // whatever the other window holds. A reload or back/forward carries the mirrored URL of the
     // state it had, so the live state wins there and the window resumes. (docs/demo-plan.md, E8.1)
-    const navType = (performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined)?.type;
-    const urlSlide = new URLSearchParams(window.location.search).get("s");
-    const urlWins = navType === "navigate" && urlSlide !== null;
-    // Read the URL now: the mirror effect below rewrites it (dropping `step=`) before the
-    // fallback timer fires.
-    // A ref, because Strict Mode runs this effect twice and the second run sees the rewritten URL.
-    urlAtMount.current ??= stateFromUrl(writer, initialSlide);
-    const fromUrlAtMount = urlAtMount.current;
+    // Read the URL once, at mount: the mirror effect below rewrites it (adding `s=`, dropping
+    // `step=`), and Strict Mode runs this effect twice, so a second read would see the mirror's URL
+    // and mistake it for one the presenter typed.
+    if (!urlAtMount.current) {
+      const navType = (performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined)?.type;
+      const slide = new URLSearchParams(window.location.search).get("s");
+      urlAtMount.current = { state: stateFromUrl(writer, initialSlide), urlSlide: slide, urlWins: navType === "navigate" && slide !== null };
+    }
+    const { state: fromUrlAtMount, urlSlide, urlWins } = urlAtMount.current;
     let claimed = false;
     const accept = (incoming: PresenterState) => {
-      if (!isNewer(incoming, stateRef.current)) return;
-      settled = true;
-      if (urlWins && !claimed && urlSlide && incoming.slideId !== urlSlide) {
-        // Take the peer's timer and counters, but move both windows to the URL's slide.
+      if (urlWins && !claimed && urlSlide) {
+        // Take the peer's timer and counters, but move both windows to the URL's slide. This
+        // claims even when the peer's state is not newer: both windows start at seq 0, and the
+        // writer-id tie-break would otherwise drop the claim half the time.
         claimed = true;
-        const next: PresenterState = { ...incoming, slideId: urlSlide, stepIndex: fromUrlAtMount.stepIndex, seq: incoming.seq + 1, writer };
+        settled = true;
+        const next: PresenterState = { ...incoming, slideId: urlSlide, stepIndex: fromUrlAtMount.stepIndex, seq: Math.max(incoming.seq, stateRef.current.seq) + 1, writer };
         stateRef.current = next;
         setState(next);
         sync.send({ type: "state", state: next });
         return;
       }
+      if (!isNewer(incoming, stateRef.current)) return;
+      settled = true;
       claimed = true;
       stateRef.current = incoming;
       setState(incoming);

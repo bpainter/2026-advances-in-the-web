@@ -79,7 +79,9 @@ function stageName(page: DemoPage): string {
  */
 export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative, rehearse, current, nextPreview, sectionPosition }: Props) {
   const presenter = usePresenter();
-  const [notesSize, setNotesSize] = useState(28);
+  const [notesSize, setNotesSize] = useState(40);
+  const [showActions, setShowActions] = useState(false);
+  const notesBodyRef = useRef<HTMLDivElement>(null);
   const [timerShown, setTimerShown] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const timerSeen = useRef<number | null>(null);
@@ -88,14 +90,14 @@ export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative,
     try {
       const saved = Number.parseInt(localStorage.getItem(NOTES_KEY) ?? "", 10);
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      if (saved >= 20 && saved <= 40) setNotesSize(saved);
+      if (saved >= 28 && saved <= 56) setNotesSize(saved);
       if (localStorage.getItem(TIMER_KEY) === "1") setTimerShown(true);
     } catch {
       /* no storage */
     }
   }, []);
   const changeNotes = (delta: number) => {
-    const n = Math.min(40, Math.max(20, notesSize + delta));
+    const n = Math.min(56, Math.max(28, notesSize + delta));
     setNotesSize(n);
     try {
       localStorage.setItem(NOTES_KEY, String(n));
@@ -138,6 +140,21 @@ export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative,
     };
   }, [rehearse, slide.id]);
 
+  // Rehearsal (`d`): the next step's scripted actions also show under Next (PRD v4, 5.1 item 7).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "d" && !e.metaKey && !e.ctrlKey && !e.altKey && !(e.target instanceof HTMLInputElement)) setShowActions((v) => !v);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  // Every step change brings the current step's notes into view (PRD v4, 5.1).
+  const currentStep = presenter?.state.stepIndex;
+  useEffect(() => {
+    notesBodyRef.current?.scrollTo({ top: 0 });
+  }, [slide.id, currentStep]);
+
   if (!presenter) return null;
   const { state, demoHealth, transport, peers, update, perform } = presenter;
   const page: DemoPage | undefined = slide.page;
@@ -147,9 +164,12 @@ export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative,
   const step = steps[stepIndex];
   const last = steps.length > 0 && stepIndex === steps.length - 1;
   const nextStep = steps[stepIndex + 1];
-  const lastCodeStep = last && page?.stage === "now";
-  const nextLine = nextStep ? `${nextStep.label}${nextStep.actions.length ? `: ${summarize(nextStep.actions)}` : ""}` : next ? `Next page: ${next.title}` : "End of deck";
+  const showCautions = last && page?.stage === "now";
+  const nextPageName = next ? (next.page && hasFrame(next.page) && next.page.stage !== "single" ? `${next.page.eyebrow}: ${next.page.title}` : next.title) : null;
+  const nextLine = nextStep ? `Next: ${nextStep.label}` : nextPageName ? `Next page: ${nextPageName}` : "End of deck";
+  const heading = page && section ? (hasFrame(page) && page.stage !== "single" ? { eyebrow: page.eyebrow, title: page.title } : { eyebrow: page.stage === "intro" ? "Intro slide" : null, title: page.stage === "intro" ? (section.feature ?? section.label) : page.title }) : null;
   const health = page ? demoHealth[page.id] : undefined;
+  const supportLine = section?.support ? (section.support.kind === "tooling" ? `Tools: ${section.support.packages.map((p) => `${p.name} ${p.version}`).join(", ")}.` : `web-features: ${section.support.id}${section.support.alsoUses?.length ? `; also uses ${section.support.alsoUses.join(", ")}` : ""}.`) : null;
   const openAudience = () => window.open("/present", "deck-audience");
   const openFrame = () => {
     if (page && hasFrame(page)) window.open(frameUrl(page.frame.route).url, "_blank", "noopener");
@@ -217,51 +237,59 @@ export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative,
         </aside>
       </section>
 
-      <section className="speaker__notes" aria-label="Notes" style={{ fontSize: `${notesSize}px` }}>
+      <section className="speaker__notes" aria-label="Notes" style={{ "--notes-size": `${notesSize}px` } as React.CSSProperties}>
         <div className="speaker__notes-head">
-          <p className="speaker__region-label">
-            Notes
-            {step ? <span className="speaker__notes-step"> · {step.label}</span> : null}
-          </p>
+          <p className="speaker__region-label">Notes</p>
           <div className="speaker__notes-size">
-            <button type="button" className="speaker__button speaker__button--quiet" onClick={() => changeNotes(-2)} aria-label="Smaller notes">
+            <button type="button" className="speaker__button speaker__button--quiet" onClick={() => changeNotes(-4)} aria-label="Smaller notes">
               −
             </button>
-            <button type="button" className="speaker__button speaker__button--quiet" onClick={() => changeNotes(2)} aria-label="Larger notes">
+            <button type="button" className="speaker__button speaker__button--quiet" onClick={() => changeNotes(4)} aria-label="Larger notes">
               +
             </button>
           </div>
         </div>
-        <div className="speaker__notes-body">
-          {page && step ? (
+        <div className="speaker__notes-body" ref={notesBodyRef}>
+          {page && step && heading ? (
             <>
-              {state.handsOn && step.ifKeyboard ? <p className="speaker__action">{step.ifKeyboard}</p> : null}
-              {stepIndex === 0 ? (
-                <>
-                  <p className="speaker__eyebrow">Open</p>
-                  <p className="speaker__notes-text">{page.intro}</p>
-                </>
-              ) : null}
-              <ul className="speaker__bullets">
-                {step.bullets.map((b) => (
-                  <li key={b}>{b}</li>
-                ))}
-              </ul>
-              {step.proof ? <p className="speaker__proof">Proof: {step.proof}</p> : null}
-              <p className="speaker__next-press">
-                <span className="speaker__next-press-label">Next press</span> {nextLine}
-              </p>
-              {lastCodeStep && section ? (
-                <ul className="speaker__cautions">
-                  {section.cautions.map((c) => (
-                    <li key={c}>{c}</li>
+              <header className="notes__header">
+                <p className="notes__page">
+                  {heading.eyebrow ? <span className="notes__eyebrow">{heading.eyebrow}: </span> : null}
+                  {heading.title}
+                </p>
+                <p className="notes__step">
+                  Step {stepIndex + 1} of {steps.length}: {step.label}
+                  {step.key ? <span className="notes__chip notes__chip--key">Key point</span> : null}
+                  {step.proof ? <span className="notes__chip">Proof</span> : null}
+                </p>
+              </header>
+              {state.handsOn && step.ifKeyboard ? <p className="notes__hands-on">{step.ifKeyboard}</p> : null}
+              {stepIndex === 0 && page.intro ? <p className="notes__intro">{page.intro}</p> : null}
+              {step.bullets.length ? (
+                <ul className="notes__bullets" data-key={step.key || undefined}>
+                  {step.bullets.map((b, i) => (
+                    <li key={b} className="notes__bullet" data-key={(step.key && i === step.bullets.length - 1) || undefined}>
+                      {b}
+                    </li>
                   ))}
                 </ul>
               ) : null}
-              {section ? (
-                <details className="speaker__citations">
-                  <summary>Citations ({section.citations.length})</summary>
+              {showCautions && section && section.cautions.length ? (
+                <section className="notes__cautions" aria-label="Cautions">
+                  <p className="notes__cautions-label">Cautions</p>
                   <ul>
+                    {section.cautions.map((c) => (
+                      <li key={c}>{c}</li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
+              <details className="notes__reference">
+                <summary>Reference</summary>
+                {supportLine ? <p className="notes__support">{supportLine}</p> : null}
+                {step.proof ? <p className="notes__support">Proof item: {step.proof}</p> : null}
+                {section?.citations.length ? (
+                  <ul className="notes__citations">
                     {section.citations.map((c) => (
                       <li key={c.url + c.text}>
                         <a href={c.url} target="_blank" rel="noopener">
@@ -270,27 +298,28 @@ export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative,
                       </li>
                     ))}
                   </ul>
-                </details>
-              ) : null}
-              <ol className="speaker__steps" aria-label="Steps">
-                {steps.map((s, i) => (
-                  <li key={s.id}>
-                    <button type="button" className="speaker__button speaker__button--quiet" aria-current={i === stepIndex} onClick={() => update({ stepIndex: i })}>
-                      {s.id} {s.label}
-                    </button>
-                  </li>
-                ))}
-              </ol>
+                ) : null}
+                <ol className="speaker__steps" aria-label="Steps">
+                  {steps.map((s, i) => (
+                    <li key={s.id}>
+                      <button type="button" className="speaker__button speaker__button--quiet" aria-current={i === stepIndex} onClick={() => update({ stepIndex: i })}>
+                        {s.id} {s.label}
+                      </button>
+                    </li>
+                  ))}
+                </ol>
+                <p className="notes__actions">This step: {summarize(step.actions) || "no actions"}</p>
+                {nextStep ? <p className="notes__actions">Next step: {summarize(nextStep.actions) || "no actions"}</p> : null}
+              </details>
             </>
           ) : (
-            <>
-              <p className="speaker__notes-text">{slide.speakerNotes}</p>
-              <p className="speaker__next-press">
-                <span className="speaker__next-press-label">Next press</span> {nextLine}
-              </p>
-            </>
+            <p className="notes__intro">{slide.speakerNotes}</p>
           )}
         </div>
+        <p className="notes__next">
+          {nextLine}
+          {showActions && nextStep ? <span className="notes__next-actions">{summarize(nextStep.actions)}</span> : null}
+        </p>
       </section>
 
       <footer className="speaker__bottom">
