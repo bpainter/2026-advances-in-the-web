@@ -4,6 +4,7 @@ import path from "node:path";
 import { PRESENTER_ORIGIN } from "./origins";
 import type { BuildDef } from "./types";
 import { wrapInShell } from "./shell";
+import { wrapperDef } from "./wrappers";
 import { isBackgroundId, type BackgroundId } from "@/content/backgrounds";
 
 /** The shared portal theme (PRD v4, 6.2), copied from styles/glass-tokens.css by pnpm theme:sync. */
@@ -73,11 +74,18 @@ export function composeFrame(def: BuildDef, opts: ComposeOptions): string {
       return manifest.enhancement.js.includes(base) ? "" : m;
     });
   }
-  // The portal shell wraps portal builds' markup; it is never part of the shown code.
-  if (manifest.shell) body = wrapInShell(body, manifest.shell);
+  // The wrapper (v5) or the v4 portal shell goes around the shown markup; neither is shown code.
+  let wrapStyles: string[] = [];
+  let wrapScripts: string[] = [];
+  if (manifest.wrapper) {
+    const w = wrapIn(body, manifest);
+    body = w.body;
+    wrapStyles = w.styles;
+    wrapScripts = w.scripts;
+  } else if (manifest.shell) body = wrapInShell(body, manifest.shell);
   // Instrumentation and hooks the manifest lists are injected after the shown markup; they are
   // never part of the code on screen (Part A, 8.4).
-  const instrumentation = manifest.instrumentation.map((f) => `<script type="module" src="${escapeAttr(f)}"></script>`).join("\n");
+  const instrumentation = [...wrapScripts, ...manifest.instrumentation].map((f) => `<script type="module" src="${escapeAttr(f)}"></script>`).join("\n");
   const flagsAttr = Object.entries(opts.flags)
     .map(([k, v]) => `${k}:${v ? 1 : 0}`)
     .join(",");
@@ -87,13 +95,14 @@ export function composeFrame(def: BuildDef, opts: ComposeOptions): string {
   const bg = opts.bg && isBackgroundId(opts.bg) ? opts.bg : (BACKGROUND_BY_DEMO[manifest.demo] ?? null);
   return [
     "<!doctype html>",
-    `<html lang="en" data-demo="${escapeAttr(manifest.demo)}" data-build="${manifest.build}" data-flags="${escapeAttr(flagsAttr)}" data-enhance-css-mode="${mode}"${bg ? ` data-section-bg="${bg}"` : ""}>`,
+    `<html lang="en" data-demo="${escapeAttr(manifest.demo)}" data-build="${manifest.build}" data-flags="${escapeAttr(flagsAttr)}" data-enhance-css-mode="${mode}"${bg ? ` data-section-bg="${bg}"` : ""}${wrapAttrs(manifest)}>`,
     "<head>",
     // The theme comes first, so every build's own CSS (shown CSS is unlayered) wins over it. The
     // enhance-css flag never touches it: it is not tagged.
     `<link rel="stylesheet" href="${THEME_HREF}">`,
     `<link rel="stylesheet" href="${BACKGROUNDS_HREF}">`,
     ...(manifest.styles ?? []).map((href) => `<link rel="stylesheet" href="${escapeAttr(href)}">`),
+    ...wrapStyles.map((href) => `<link rel="stylesheet" href="${escapeAttr(href)}">`),
     '<meta charset="utf-8">',
     '<meta name="viewport" content="width=device-width, initial-scale=1">',
     '<meta name="color-scheme" content="light">',
@@ -108,6 +117,38 @@ export function composeFrame(def: BuildDef, opts: ComposeOptions): string {
     "</html>",
     "",
   ].join("\n");
+}
+
+/** `<html>` attributes the walk and the theme read: the wrapper id, `scrolls`, the lifted ids. */
+function wrapAttrs(manifest: BuildDef["manifest"]): string {
+  const w = manifest.wrapper;
+  if (!w) return "";
+  return ` data-wrapper="${w.id}"${w.scrolls ? " data-scrolls" : ""}${w.outside?.length ? ` data-shown-outside="${escapeAttr(w.outside.join(" "))}"` : ""}`;
+}
+
+/**
+ * Puts the shown markup inside the wrapper's `[data-shown]` slot, as written and never reparsed
+ * (PRD v5, 4.4). Ids in `outside` (overlay roots) are lifted out and follow the wrapper.
+ */
+export function wrapIn(body: string, manifest: BuildDef["manifest"]): { body: string; styles: string[]; scripts: string[] } {
+  const w = manifest.wrapper!;
+  let inner = body;
+  const lifted: string[] = [];
+  for (const id of w.outside ?? []) {
+    const re = new RegExp(`<([a-z][\\w-]*)\\b[^>]*\\bid="${id}"[^>]*>[\\s\\S]*?</\\1>\\s*`, "i");
+    const m = re.exec(inner);
+    if (!m) throw new Error(`wrapper: no element with id "${id}" to place outside the shown slot`);
+    lifted.push(m[0].trim());
+    inner = inner.slice(0, m.index) + inner.slice(m.index + m[0].length);
+  }
+  // Scripts and the shown stylesheet links stay where the build wrote them; only markup moves.
+  const r = wrapperDef(w.id).render({ build: manifest.build, demo: manifest.demo });
+  const shownClass = ["wrap-shown", r.shownClass].filter(Boolean).join(" ");
+  return {
+    body: `${r.before}\n<div class="${shownClass}" data-shown>\n${inner.trim()}\n</div>\n${r.after}\n${lifted.join("\n")}`,
+    styles: r.styles,
+    scripts: r.scripts,
+  };
 }
 
 export function cspFor(def: BuildDef, origin: string, flags: Record<string, boolean>): { header: string; value: string } {

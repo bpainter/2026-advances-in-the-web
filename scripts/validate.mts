@@ -25,6 +25,9 @@ import { BACKGROUNDS } from "@/content/backgrounds";
 import { jpegSize, validateV5 } from "@/lib/validate/v5";
 import { decodeGrainPng, grainPixels } from "@/lib/grain";
 import { BACKGROUND_BY_DEMO } from "@/lib/frames/compose";
+import { DEMO_FOLDERS } from "@/lib/frames/registry";
+import { WRAPPERS } from "@/lib/frames/wrappers";
+import { validateWrappers, type WrappedBuild } from "@/lib/validate/wrappers";
 
 const args = process.argv.slice(2);
 const strict = args.includes("--strict");
@@ -100,7 +103,41 @@ for (const s of sections) {
     if (m && BACKGROUND_BY_DEMO[m[1]] !== s.background) v5Issues.push({ rule: "bg-frame", where: p.id, message: `frames of ${m[1]} default to "${BACKGROUND_BY_DEMO[m[1]] ?? "none"}"; the section uses "${s.background}" (lib/frames/compose.ts)`, level: "error" });
   }
 }
-const issues: Issue[] = [...all, ...(only ? [] : [...themeIssues(root), ...v5Issues])];
+// Wrappers (PRD v5, 2.1 and 4.7): every frame build's wrapper, its CSS, markup and scripts, and no
+// shown file using the wrap- prefix. Folders still on the v4 shell are pending until M5.
+const PENDING_WRAPPERS = new Set(["02-container-card", "03-content-sized-form", "05-trusted-types", "11-customizable-select", "07-package-workflow", "08-fast-follows", "09-vite-8", "10-delete"]);
+const publicText = (href: string) => {
+  const abs = path.join(root, "public", href);
+  return existsSync(abs) ? readFileSync(abs, "utf8") : "";
+};
+const wrappedBuilds: WrappedBuild[] = Object.values(DEMO_FOLDERS).flatMap((folder) =>
+  Object.values(folder.builds).map((def) => {
+    const w = def!.manifest.wrapper;
+    const where = `${folder.demo}/${def!.manifest.build}`;
+    const shownHasMain = existsSync(path.join(def!.dir, "index.html")) && /<main\b/i.test(readFileSync(path.join(def!.dir, "index.html"), "utf8"));
+    if (!w) return { where, wrapperId: null, known: false, pending: PENDING_WRAPPERS.has(folder.demo), markup: "", css: [], scripts: [], banned: [], shownHasMain };
+    const wdef = WRAPPERS[w.id];
+    if (!wdef) return { where, wrapperId: w.id, known: false, markup: "", css: [], scripts: [], banned: [], shownHasMain };
+    const r = wdef.render({ build: def!.manifest.build, demo: folder.demo });
+    return {
+      where,
+      wrapperId: w.id,
+      known: true,
+      markup: r.before + r.after,
+      css: r.styles.map((href) => ({ file: `public${href}`, text: publicText(href) })),
+      scripts: r.scripts.map((href) => ({ file: `public${href}`, text: publicText(href) })),
+      banned: wdef.banned,
+      shownHasMain,
+    };
+  }),
+);
+const shownFiles = [
+  ...filesUnder(path.join(root, "content", "sections"), /\.(html|css|js|ts|tsx|http|ya?ml)$/).filter((f) => f.includes(`${path.sep}files${path.sep}`)),
+  ...Object.values(DEMO_FOLDERS).flatMap((f) => Object.values(f.builds).filter((d) => d!.manifest.build !== "native").flatMap((d) => filesUnder(d!.dir, /\.(html|css|js)$/))),
+].map((f) => ({ path: path.relative(root, f), text: readFileSync(f, "utf8") }));
+const wrapperIssues = validateWrappers(wrappedBuilds, shownFiles);
+
+const issues: Issue[] = [...all, ...(only ? [] : [...themeIssues(root), ...v5Issues, ...wrapperIssues])];
 
 const inScope = (i: Issue) => !only || i.where.startsWith(only.split("-")[0]) || i.where === only;
 let errors = 0;

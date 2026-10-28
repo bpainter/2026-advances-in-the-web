@@ -1,27 +1,39 @@
-/* D1 portal content (unshown, PRD v4 6.3): the order row as a card in both builds. Layout and
-   paint only; nothing a demo step toggles. */
+/* D1 shown block (unshown, PRD v5 2; spec 4.1): the 418 row is the one raised object in the queue,
+   on the focus surface. Layout and paint only; nothing a demo step toggles. */
 @layer portal-layout {
+  .orders {
+    display: grid;
+    gap: 12px;
+  }
   .orders .order {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--glass-space-6);
-    margin-block-start: var(--glass-space-5);
+    min-block-size: 68px;
+    box-sizing: border-box;
   }
   .orders .order > p {
     margin: 0;
   }
+  #t-status:empty {
+    display: none;
+  }
 }
 @layer portal-theme {
   .orders .order {
-    padding: var(--glass-space-6);
-    background: var(--glass-surface);
+    padding: 16px 16px 16px 20px;
+    background: var(--wrap-surface-focus);
     border: var(--glass-border);
     border-radius: var(--glass-radius-card);
-    box-shadow: var(--glass-highlight), var(--glass-shadow-card);
+    box-shadow: var(--glass-highlight), var(--wrap-shadow-focus);
+  }
+  .orders .order > p {
+    color: var(--glass-ink);
+    font-weight: 700;
   }
   .orders [role="status"] {
-    margin: var(--glass-space-5) 0 0;
+    margin: 0;
     color: var(--glass-ink);
     font-weight: 700;
   }

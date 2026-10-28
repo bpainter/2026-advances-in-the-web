@@ -105,6 +105,45 @@ export function lintTheme(css: string, file = THEME_SOURCE, opts: { perDemo?: bo
   return out;
 }
 
+/**
+ * Wrapper CSS (PRD v5, 2.1 rule 5; spec 3.1): every rule in `@layer wrapper`; selectors use only
+ * `.wrap*` classes (with ::before, ::after, :not() and attribute tests on them) and the
+ * `[data-shown]` slot, never an element or an id; glass and --wrap-* tokens only, no raw colors;
+ * the demo-relevant properties banned as in the theme; and the section's own banned features.
+ */
+export function lintWrapperCss(css: string, file: string, banned: { name: string; pattern: RegExp }[] = []): Issue[] {
+  const out: Issue[] = [];
+  const add = (where: string, message: string) => out.push({ rule: "wrapper-lint", where: `${file}:${where}`, message, level: "error" });
+  const root = postcss.parse(css, { from: file });
+  root.walkAtRules((at) => {
+    if (BANNED_AT.test(at.name)) add(String(at.source?.start?.line), `@${at.name} is not allowed in wrapper CSS`);
+  });
+  root.walkRules((rule) => {
+    const line = String(rule.source?.start?.line);
+    if (layerOf(rule) !== "wrapper") {
+      add(line, `"${rule.selector}" sits outside @layer wrapper`);
+      return;
+    }
+    for (const sel of rule.selectors) {
+      for (const c of compounds(sel)) {
+        const head = /^(\.wrap[\w-]*|\[data-shown\])/.exec(c);
+        const rest = head ? c.slice(head[0].length) : "";
+        const ok = Boolean(head) && /^((\.[\w-]+)|(\[[^\]]*\])|(::?[\w-]+(\([^)]*\))?))*$/.test(rest);
+        if (!ok) add(line, `wrapper selector "${sel}" must use .wrap* classes or [data-shown] only`);
+      }
+    }
+    rule.walkDecls((d) => {
+      const prop = d.prop.toLowerCase();
+      if (DEMO_RELEVANT.test(prop)) add(String(d.source?.start?.line), `${prop} is never allowed in wrapper CSS ("${rule.selector}")`);
+      if (!prop.startsWith("--") && /#[0-9a-f]{3,8}\b|\b(rgb|rgba|hsl|hsla|oklch|oklab|lab|lch|color)\(/i.test(d.value)) add(String(d.source?.start?.line), `raw color "${d.value}" on ${prop}; use a --glass-* or --wrap-* token`);
+    });
+  });
+  const text = css.replace(/\/\*[\s\S]*?\*\//g, "");
+  for (const b of banned) if (b.pattern.test(text)) add("1", `uses ${b.name}, which this section demonstrates`);
+  if (/:has\(/.test(text)) add("1", "uses :has(), which D2 demonstrates");
+  return out;
+}
+
 const sha = (file: string) => createHash("sha256").update(readFileSync(file)).digest("hex");
 
 /** Theme checks for pnpm check: lint, the public copy and the F2 copies, backgrounds present. */

@@ -1,13 +1,112 @@
 {
-  "note": "Unshown context content the composer adds around a demo's shown markup (design review M6). Orders come from demos/04-navigation-api/fixtures/orders.json; these lists fill the other panes.",
+  "note": "Unshown wrapper data (PRD v5, 2.1 rule 7; docs/design/demo-wrappers-spec.md 4). Orders come from demos/04-navigation-api/fixtures/orders.json, measurements from fixtures/vite-measurements.json, npm counts from fixtures/npm-pull.json. Every number in wrapper markup comes from one of these files.",
+  "talkDate": "2026-10-28",
+  "store": {
+    "name": "Ridgeline Outfitters",
+    "returnsDays": 30,
+    "product": "Ridgeline Trail",
+    "price": 129,
+    "rating": "4.5",
+    "reviews": 2,
+    "search": "Search trail gear"
+  },
+  "queue": {
+    "after": 418,
+    "count": 4
+  },
+  "pickup": {
+    "carrier": "Canada Post",
+    "time": "3:30 pm"
+  },
+  "caseHeader": {
+    "order": 418,
+    "state": "canceled",
+    "priority": "Normal",
+    "canceled": "2026-10-28"
+  },
+  "editor": {
+    "area": "Products",
+    "title": "Trail Runner 2",
+    "price": 140,
+    "sku": "RT-2",
+    "state": "Draft",
+    "colors": [
+      "Black",
+      "Moss",
+      "Sand"
+    ],
+    "sizes": [
+      7,
+      13
+    ]
+  },
+  "advisories": {
+    "title": "npm security advisories",
+    "updated": "2026-10-28",
+    "filters": [
+      {
+        "label": "Ecosystem",
+        "value": "npm"
+      },
+      {
+        "label": "Type",
+        "value": "malware, takeover"
+      },
+      {
+        "label": "Range",
+        "value": "Aug 2025 to Oct 2026"
+      }
+    ],
+    "sources": [
+      "GitHub Advisory Database",
+      "Socket",
+      "StepSecurity"
+    ]
+  },
+  "benchmarks": {
+    "area": "Build benchmarks",
+    "runs": "Median of five runs"
+  },
+  "review": {
+    "area": "Pull requests",
+    "title": "Remove UI libraries the browser now covers",
+    "state": "Draft"
+  },
   "cases": [
-    { "id": "CS-2291", "subject": "Wrong size shipped, order 402", "status": "Open" },
-    { "id": "CS-2290", "subject": "Refund for a returned pack", "status": "Pending" },
-    { "id": "CS-2287", "subject": "Address change before shipping", "status": "Resolved" }
+    {
+      "id": "CS-2291",
+      "subject": "Wrong size shipped, order 402",
+      "status": "Open"
+    },
+    {
+      "id": "CS-2290",
+      "subject": "Refund for a returned pack",
+      "status": "Pending"
+    },
+    {
+      "id": "CS-2287",
+      "subject": "Address change before shipping",
+      "status": "Resolved"
+    }
   ],
   "products": [
-    { "sku": "RT-2-BLK", "name": "Trail Runner 2, Black", "stock": 42, "price": "$140.00" },
-    { "sku": "RT-2-MSS", "name": "Trail Runner 2, Moss", "stock": 9, "price": "$140.00" },
-    { "sku": "SM-40-GRY", "name": "Summit 40L pack", "stock": 17, "price": "$189.00" }
+    {
+      "sku": "RT-2-BLK",
+      "name": "Trail Runner 2, Black",
+      "stock": 42,
+      "price": "$140.00"
+    },
+    {
+      "sku": "RT-2-MSS",
+      "name": "Trail Runner 2, Moss",
+      "stock": 9,
+      "price": "$140.00"
+    },
+    {
+      "sku": "SM-40-GRY",
+      "name": "Summit 40L pack",
+      "stock": 17,
+      "price": "$189.00"
+    }
   ]
 }

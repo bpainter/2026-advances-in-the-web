@@ -16,6 +16,7 @@ import type { SupportFile } from "@/lib/support-data";
 import { sections } from "@/lib/content";
 import type { StepResult } from "@/lib/engine/frame";
 import { checkDistinct, checkFrameBackground, walkDeck } from "./walk-deck.mts";
+import { checkWrapper } from "./walk-wrapper.mts";
 import { slides as deckSlides } from "@/lib/content";
 import { PROTOCOL_WATCH, checkProtocol, finishDeckSampler, startDeckSampler, walkFixture } from "./walk-spotlight.mts";
 
@@ -57,6 +58,9 @@ async function lastSeq(page: Page): Promise<number> {
 }
 
 let speaker: Page | null = null;
+
+/** Sections whose frames must carry a v5 wrapper (all of them once M5 lands). */
+const V5_WRAPPED = new Set(["d1-order-actions", "d4-dashboard-navigation"]);
 
 /**
  * D6 (PRD v4, 2.2 and 7.6): in Firefox the select is a normal select and the saved form posted the
@@ -197,7 +201,13 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
     if (failed.length) fail(where, `${step.id}: ${failed.map((a) => `${a.target} ${a.expect} (got ${a.actual})`).join("; ")}`);
     else pass(`${step.id} ${step.label}: ${r.asserts.filter((a) => a.stepId === step.id).length} assert(s) ok, ${r.ms}ms`);
     forward.push(r.digest);
-    if (i === 0 || i === demoPage.steps.length - 1) await checkTheme(page, where, step.id);
+    if (i === 0 || i === demoPage.steps.length - 1) {
+      await checkTheme(page, where, step.id);
+      // Wrapper checks at s0 and on the last step (PRD v5, 4.8); builds still on the v4 shell are skipped.
+      const f = await visibleFrame(page);
+      const wrapped = f ? await f.evaluate("Boolean(document.documentElement.dataset.wrapper)").catch(() => false) : false;
+      if (wrapped || V5_WRAPPED.has(section.id)) await checkWrapper(f, `${where} ${step.id}`, demoPage.files ?? [], demoPage.stage === "single", { fail, pass });
+    }
     if (demoPage.id === "d6-now" && step.id === "s4") await checkD6(page, where);
     await checkSpeaker(where, demoPage, section, i);
     await checkHandsOn(page, where, demoPage, i);

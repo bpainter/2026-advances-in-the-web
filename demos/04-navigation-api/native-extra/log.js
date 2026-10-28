@@ -15,12 +15,13 @@
   };
   var log = document.getElementById("request-log");
 
-  // The engine's own query (`?flags=`) and network profile (`demo-net=`) are plumbing, not part
+  // The engine's own query (`?flags=`, `bg=`) and network profile (`demo-net=`) are plumbing, not part
   // of the application's address, so the panel leaves them out.
   function address(url) {
     var u = new URL(url, location.href);
     u.searchParams.delete("flags");
     u.searchParams.delete("demo-net");
+    u.searchParams.delete("bg");
     return u.pathname + u.search;
   }
   function describe(el) {
@@ -42,7 +43,8 @@
     if (!log) return null;
     var li = document.createElement("li");
     li.textContent = text;
-    log.append(li);
+    // Newest first, so the line that matters sits at the top of the drawer (spec 4.4).
+    log.prepend(li);
     return li;
   }
 

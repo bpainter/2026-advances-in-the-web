@@ -189,6 +189,35 @@
     --glass-dark-focus: #1be1f2;
     --glass-dark-solid: #16234d;
 
+    /* Demo wrappers (PRD v5, 2; docs/design/demo-wrappers-spec.md 3.3): two tiers. The context
+       tier is quiet glass with no shadow; the shown block is the one raised, strongest surface. */
+    --wrap-surface-quiet: var(--glass-surface);
+    --wrap-surface-focus: var(--glass-surface-strong);
+    --wrap-shadow-focus: 0 8px 24px rgb(15 28 65 / 0.14), 0 1px 2px rgb(15 28 65 / 0.06);
+    --wrap-surface-dark: var(--glass-dark-surface-float);
+    --wrap-text-sm: 14px;
+    --wrap-leading-sm: 18px;
+    --wrap-bar-height: 48px;
+    --wrap-site-height: 52px;
+    --wrap-row-height: 72px;
+    --wrap-pad: 16px;
+    --wrap-clear: 16px;
+    --wrap-chip-fill: rgb(15 28 65 / 0.06);
+    --wrap-chip-edge: rgb(15 28 65 / 0.12);
+    --wrap-skeleton: rgb(15 28 65 / 0.08);
+    --wrap-search-fill: rgb(15 28 65 / 0.06);
+    --wrap-dark-ink: #ffffff;
+    --wrap-dark-ink-body: #d6dcec;
+    --wrap-dark-ink-soft: #b8c0d9;
+    --wrap-dark-edge: rgb(255 255 255 / 0.16);
+    --wrap-dark-rule: rgb(255 255 255 / 0.1);
+    --wrap-dark-dot: rgb(255 255 255 / 0.24);
+    --wrap-dark-chip: rgb(255 255 255 / 0.12);
+    /* D6 editor tiles alias the shown swatch colors without using their selectors. */
+    --wrap-swatch-black: #000a25;
+    --wrap-swatch-moss: #5b6b2e;
+    --wrap-swatch-sand: #d8c7a0;
+
     /* Grain overlay on audience slides (PRD v5, 1.2): tune 0 to 0.16 at the projector check. */
     --grain-opacity: 0.1;
     --grain-blend: overlay;
@@ -298,6 +327,11 @@
       var(--glass-frame-fallback);
     background-attachment: fixed;
     -webkit-font-smoothing: antialiased;
+  }
+
+  /* Under a v5 wrapper the wrapper carries the frame padding (spec 3.6). */
+  :root[data-wrapper] body {
+    padding: 0;
   }
 
   :where(:root[data-build]) :where(h1) {

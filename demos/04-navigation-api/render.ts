@@ -40,7 +40,7 @@ function esc(s: string): string {
 }
 
 function money(n: number): string {
-  return `$${n.toFixed(2)}`;
+  return Number.isInteger(n) ? `$${n}` : `$${n.toFixed(2)}`;
 }
 
 export interface Rendered {

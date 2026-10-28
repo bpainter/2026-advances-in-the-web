@@ -1,0 +1,94 @@
+/* D4 portal-dashboard (spec 4.4): the v4 portal corrected. The document scrolls (scroll restore
+   is part of the demo): the rail and the top bar stick; the shown evidence panel docks itself
+   (public/portal/04-navigation-api.css). */
+@layer wrapper {
+  .wrap--app {
+    block-size: auto;
+    min-block-size: 100vh;
+  }
+  .wrap-app {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    align-items: start;
+  }
+  .wrap-rail {
+    position: sticky;
+    top: var(--glass-frame-pad);
+    grid-row: 1 / span 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0;
+    border-inline-end: 1px solid var(--glass-rule);
+    min-block-size: calc(100vh - 2 * var(--glass-frame-pad));
+    box-sizing: border-box;
+  }
+  .wrap-rail .wrap-brand__mark {
+    inline-size: 32px;
+    block-size: 32px;
+    margin-block-end: 8px;
+    border-radius: 8px;
+    font-size: 15px;
+  }
+  .wrap-rail__item {
+    display: grid;
+    place-items: center;
+    inline-size: 40px;
+    block-size: 40px;
+    border-radius: 10px;
+    color: var(--glass-ink-soft);
+  }
+  .wrap-rail__item[aria-current="page"] {
+    background: var(--glass-surface-strong);
+    color: var(--glass-ink);
+    box-shadow: var(--glass-highlight);
+  }
+  .wrap-rail__label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .wrap-top {
+    position: sticky;
+    top: var(--glass-frame-pad);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    block-size: var(--wrap-bar-height);
+    padding: 0 var(--wrap-pad);
+    box-sizing: border-box;
+    border-block-end: 1px solid var(--glass-rule);
+    border-start-end-radius: 16px;
+    background: var(--glass-surface-float);
+    -webkit-backdrop-filter: var(--glass-filter-float);
+    backdrop-filter: var(--glass-filter-float);
+  }
+  .wrap-mask {
+    position: fixed;
+    inset-inline: 0;
+    z-index: 4;
+    block-size: var(--glass-frame-pad);
+    background:
+      var(--glass-frame-wash),
+      var(--glass-frame-image) -47.27px -128.73px / 1396.36px 785.45px no-repeat,
+      var(--glass-frame-fallback);
+    background-attachment: fixed;
+    pointer-events: none;
+  }
+  .wrap-mask--top {
+    top: 0;
+  }
+  .wrap-mask--bottom {
+    bottom: 0;
+  }
+  .wrap-main {
+    padding: 12px var(--wrap-pad) 196px;
+    min-inline-size: 0;
+  }
+}

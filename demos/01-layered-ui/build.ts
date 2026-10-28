@@ -21,7 +21,7 @@ export const folder: DemoFolder = {
           js: ["menu.js", "modal.js", "focus-trap.js", "scroll-lock.js", "app.js"],
         },
         sideEffects: ["reset"],
-        shell: { title: "Orders", nav: "orders", context: "orders", outside: ["overlay-root"] },
+        wrapper: { id: "order-queue", outside: ["overlay-root"] },
         styles: ["/portal/01-layered-ui.css"],
         runtimeSelectors: [
           "#t-menu",
@@ -43,7 +43,7 @@ export const folder: DemoFolder = {
         enhancement: { css: "all", js: ["app.js"] },
         instrumentation: ["hooks.js"],
         sideEffects: ["reset"],
-        shell: { title: "Orders", nav: "orders", context: "orders" },
+        wrapper: { id: "order-queue" },
         styles: ["/portal/01-layered-ui.css"],
       }),
     ),

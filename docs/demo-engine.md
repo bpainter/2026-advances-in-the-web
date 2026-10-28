@@ -130,6 +130,19 @@ theme:sync`), and the frame body shows the section image at the slide's alignmen
 785.45 frame px at -47.27, -128.73, fixed) under its wash. `pnpm backgrounds` measures each file's
 text zones into `content/.generated/backgrounds.json` for `pnpm test:contrast` and the walk.
 
+## Wrappers (v5)
+
+The v4 portal shell is replaced by one contextual wrapper per section (`manifest.wrapper`, ids in
+`lib/frames/wrappers/index.ts`). A wrapper's `render()` returns markup before and after the shown
+block, its stylesheets (`public/wrappers/base.css` first) and, for D2 only, a script. The composer
+puts the shown markup, as written, inside `<div class="wrap-shown" data-shown>`, lifts ids in
+`outside` (overlay roots) after the wrapper, and writes `data-wrapper` (and `data-scrolls` for D4)
+on `<html>`. Wrapper markup and CSS use the `wrap-` prefix only, never a link, a focusable element
+or a form control, and never the feature their section demonstrates; `pnpm check` lints them, and
+the walk checks at s0 and on the last step that the shown CSS and the tab order stay inside the
+shown slot, that the blocks fill 85 percent of the frame with no gap over 96 px, and that nothing
+scrolls except D4. Wrapper data lives in `fixtures/portal-context.json` and the existing fixtures.
+
 ## Speaker window
 
 Previews on the left; the notes column on the right, top to bottom: header (eyebrow, title, "Step

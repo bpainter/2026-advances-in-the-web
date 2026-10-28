@@ -1,0 +1,21 @@
+/* D1 order-queue (spec 4.1): the queue rows and the pickup line after the shown 418 row. */
+@layer wrapper {
+  .wrap-queue .wrap-row {
+    grid-template-columns: 84px minmax(0, 1fr) 56px 156px 60px;
+    min-block-size: var(--wrap-row-height);
+  }
+  .wrap-row__item {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .wrap-pickup {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-block-size: 56px;
+    padding: 0 var(--wrap-pad);
+    box-sizing: border-box;
+  }
+}

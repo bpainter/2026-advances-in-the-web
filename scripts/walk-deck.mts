@@ -123,7 +123,9 @@ export async function checkFrameBackground(frame: Frame | null, where: string, b
   else {
     if (!near(size, [1396.36, 785.45])) problems.push(`size ${layer(v.size)[idx]}`);
     if (!near(pos, [-47.27, -128.73])) problems.push(`position ${layer(v.position)[idx]}`);
-    if (!layer(v.attachment)[idx]?.includes("fixed")) problems.push(`attachment ${v.attachment}`);
+    // A shorter list repeats for the remaining layers (CSS Backgrounds 3), as Firefox reports it.
+    const att = layer(v.attachment);
+    if (!att[idx % att.length]?.includes("fixed")) problems.push(`attachment ${v.attachment}`);
   }
   if (problems.length) report.fail(where, `frame background: ${problems.join("; ")}`);
   else report.pass(`frame on ${BACKGROUNDS[background].file} at 1396.36 by 785.45, offset -47.27 -128.73, fixed`);

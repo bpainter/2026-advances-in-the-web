@@ -12,6 +12,7 @@ import { installedWebFeatures } from "@/lib/web-features";
 import { lintTheme } from "@/lib/validate/theme";
 import { validateV5, type V5Context } from "@/lib/validate/v5";
 import type { Background } from "@/content/backgrounds";
+import { validateWrappers, type WrappedBuild } from "@/lib/validate/wrappers";
 
 const wf = installedWebFeatures();
 const FIXTURE_JS = Array.from({ length: 60 }, (_, i) => `const line${i + 1} = ${i + 1};`).join("\n");
@@ -293,6 +294,50 @@ const V5_CASES: [string, (c: V5Context) => void][] = [
   }
 }
 
+// Wrapper rules (lib/validate/wrappers.ts): a clean build passes; each mutation breaks one rule.
+function wrapBase(): WrappedBuild {
+  return {
+    where: "x1/native",
+    wrapperId: "order-queue",
+    known: true,
+    markup: '<div class="wrap"><header class="wrap-bar"><span class="wrap-brand">R</span></header>',
+    css: [{ file: "w.css", text: "@layer wrapper { .wrap-bar { color: var(--glass-ink); } }" }],
+    scripts: [],
+    banned: [{ name: "popover", pattern: /popover/i }],
+    shownHasMain: true,
+  };
+}
+const WRAP_CASES: [string, (b: WrappedBuild) => void][] = [
+  ["wrapper-missing", (b) => (b.wrapperId = null)],
+  ["wrapper-unknown", (b) => (b.known = false)],
+  ["wrapper-lint", (b) => (b.css = [{ file: "w.css", text: "@layer wrapper { .wrap p { color: #f00; } }" }])],
+  ["wrapper-markup", (b) => (b.markup += '<span class="wrap-x" tabindex="0">x</span>')],
+  ["wrapper-banned", (b) => (b.markup += '<div class="wrap-menu" popover></div>')],
+];
+{
+  const clean = validateWrappers([wrapBase()], [{ path: "files/index.html", text: "<main></main>" }]);
+  if (clean.length) {
+    failed++;
+    console.log(`✖ wrappers: the clean fixture fails: ${clean.map((i) => `${i.rule} ${i.message}`).join("; ")}`);
+  } else console.log("✓ wrappers: the clean fixture passes");
+  for (const [rule, mutate] of WRAP_CASES) {
+    const b = wrapBase();
+    mutate(b);
+    const hit = validateWrappers([b], []).filter((i) => i.rule === rule);
+    if (hit.length) console.log(`✓ ${rule}: ${hit[0].message}`);
+    else {
+      failed++;
+      console.log(`✖ ${rule}: not reported`);
+    }
+  }
+  const shown = validateWrappers([wrapBase()], [{ path: "files/index.html", text: '<div class="wrap-card"></div>' }]).filter((i) => i.rule === "wrapper-shown");
+  if (shown.length) console.log(`✓ wrapper-shown: ${shown[0].message}`);
+  else {
+    failed++;
+    console.log("✖ wrapper-shown: not reported");
+  }
+}
+
 function computeSupportSafe(s: DemoSection, ctx: ValidateContext) {
   try {
     return computeSupport([s], wf.data, wf.version, {});
@@ -301,5 +346,5 @@ function computeSupportSafe(s: DemoSection, ctx: ValidateContext) {
   }
 }
 
-console.log(`\n${CASES.length + THEME_CASES.length + V5_CASES.length + 3 - failed} passed, ${failed} failed`);
+console.log(`\n${CASES.length + THEME_CASES.length + V5_CASES.length + WRAP_CASES.length + 5 - failed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

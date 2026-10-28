@@ -1,4 +1,5 @@
 import type { ServerRoute } from "./routes";
+import type { WrapperId } from "./wrappers/types";
 
 /** PRD Part A, section 8.4. One manifest per build of a demo folder. */
 export interface BuildManifest {
@@ -22,7 +23,13 @@ export interface BuildManifest {
    * public/portal/. It sits in @layer portal-layout, is linted like the theme and never toggles.
    */
   styles?: string[];
-  /** The portal shell to wrap the markup in (docs/design/demo-glass-spec.md, 8); portal builds only. */
+  /**
+   * The contextual wrapper around the shown markup (PRD v5, 2 and 4.4): composed at serve time,
+   * never shown. `outside` lifts ids (overlay roots) out of the shown slot; `scrolls` lets the
+   * document scroll (D4 only, because scroll restore is part of that demo).
+   */
+  wrapper?: { id: WrapperId; outside?: string[]; scrolls?: boolean };
+  /** The v4 portal shell (docs/design/demo-glass-spec.md, 8); replaced by `wrapper` in v5. */
   shell?: { title: string; nav: "orders" | "products" | "support" | "content" | "reports"; outside?: string[]; context?: "orders" | "cases" | "products" };
   /** Overrides the base CSP (D5). `ORIGIN` and `PRESENTER` are substituted. */
   csp?: string;
