@@ -10,6 +10,8 @@ import { validate, type ValidateContext } from "@/lib/validate/rules";
 import { computeSupport } from "@/lib/support-data";
 import { installedWebFeatures } from "@/lib/web-features";
 import { lintTheme } from "@/lib/validate/theme";
+import { validateV5, type V5Context } from "@/lib/validate/v5";
+import type { Background } from "@/content/backgrounds";
 
 const wf = installedWebFeatures();
 const FIXTURE_JS = Array.from({ length: 60 }, (_, i) => `const line${i + 1} = ${i + 1};`).join("\n");
@@ -19,6 +21,7 @@ function base(): DemoSection {
     id: "x1-fixture",
     order: 1,
     label: "Fixture row",
+    background: "d1",
     feature: "Dialog element",
     scenario: "A row opens a dialog.",
     support: { kind: "web-features", id: "dialog", alsoUses: ["popover"] },
@@ -231,6 +234,65 @@ for (const [name, css] of THEME_CASES) {
   }
 }
 
+// PRD v5 deck rules (lib/validate/v5.ts): a clean context passes; each mutation breaks one rule.
+function v5Base(): V5Context {
+  const bg = (file: string, lead: Background["lead"]): Background => ({ file, tone: "light", lead, hues: [lead], textZone: [] });
+  const registry: Record<string, Background> = { title: bg("title.jpg", "navy"), d1: bg("d1.jpg", "cyan"), d2: bg("d2.jpg", "beige") };
+  const files: Record<string, { width: number; height: number; bytes: number; sha256: string }> = {
+    "title.jpg": { width: 1920, height: 1080, bytes: 400_000, sha256: "a" },
+    "d1.jpg": { width: 1920, height: 1080, bytes: 400_000, sha256: "b" },
+    "d2.jpg": { width: 1920, height: 1080, bytes: 400_000, sha256: "c" },
+  };
+  const px = new Uint8Array([1, 2, 3]);
+  return {
+    slides: [{ id: "title", background: "title" }],
+    sections: [
+      { id: "d1-x", background: "d1" },
+      { id: "d2-x", background: "d2" },
+    ],
+    registry,
+    fileInfo: (f) => files[f] ?? null,
+    backgroundsDir: ["v5", "README.md"],
+    glassMentions: [],
+    stats: { title: { file: "title.jpg", sha256: "a" }, d1: { file: "d1.jpg", sha256: "b" }, d2: { file: "d2.jpg", sha256: "c" } },
+    grain: { committed: px, fresh: px },
+    qr: { committed: "<svg/>", fresh: "<svg/>" },
+  };
+}
+const V5_CASES: [string, (c: V5Context) => void][] = [
+  ["bg-missing", (c) => (c.slides[0].background = undefined)],
+  ["bg-unknown", (c) => (c.slides[0].background = "nope")],
+  ["bg-unused", (c) => (c.registry.d3 = { ...c.registry.d1, file: "d1.jpg" })],
+  ["bg-shared", (c) => (c.sections[1].background = "d1")],
+  ["bg-adjacent", (c) => (c.registry.d2 = { ...c.registry.d2, lead: "cyan" })],
+  ["bg-file", (c) => (c.fileInfo = (f) => (f === "d2.jpg" ? null : { width: 1920, height: 1080, bytes: 1, sha256: f }))],
+  ["bg-size", (c) => (c.fileInfo = (f) => ({ width: 2048, height: 1152, bytes: 1, sha256: f }))],
+  ["bg-bytes", (c) => (c.fileInfo = (f) => ({ width: 1920, height: 1080, bytes: 2_000_000, sha256: f }))],
+  ["bg-duplicate", (c) => (c.fileInfo = () => ({ width: 1920, height: 1080, bytes: 1, sha256: "same" }))],
+  ["bg-stats", (c) => (c.stats = { ...c.stats!, d1: { file: "d1.jpg", sha256: "stale" } })],
+  ["bg-leftover", (c) => (c.backgroundsDir = [...c.backgroundsDir, "old-fan.jpg"])],
+  ["bg-glass", (c) => (c.glassMentions = ["styles/x.css"])],
+  ["grain", (c) => (c.grain = { committed: new Uint8Array([1, 2, 4]), fresh: new Uint8Array([1, 2, 3]) })],
+  ["qr", (c) => (c.qr = { committed: "<svg/>", fresh: "<svg></svg>" })],
+];
+{
+  const clean = validateV5(v5Base());
+  if (clean.length) {
+    failed++;
+    console.log(`✖ v5: the clean fixture fails: ${clean.map((i) => `${i.rule} ${i.message}`).join("; ")}`);
+  } else console.log("✓ v5: the clean fixture passes");
+  for (const [rule, mutate] of V5_CASES) {
+    const c = v5Base();
+    mutate(c);
+    const hit = validateV5(c).filter((i) => i.rule === rule);
+    if (hit.length) console.log(`✓ ${rule}: ${hit[0].message}`);
+    else {
+      failed++;
+      console.log(`✖ ${rule}: not reported`);
+    }
+  }
+}
+
 function computeSupportSafe(s: DemoSection, ctx: ValidateContext) {
   try {
     return computeSupport([s], wf.data, wf.version, {});
@@ -239,5 +301,5 @@ function computeSupportSafe(s: DemoSection, ctx: ValidateContext) {
   }
 }
 
-console.log(`\n${CASES.length + THEME_CASES.length + 2 - failed} passed, ${failed} failed`);
+console.log(`\n${CASES.length + THEME_CASES.length + V5_CASES.length + 3 - failed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

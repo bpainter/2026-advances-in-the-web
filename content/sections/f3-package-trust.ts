@@ -7,6 +7,7 @@ const T = (a: number, b: number): Action => ({ type: "terminal", lines: [a, b] }
 /** F3: blanket script bans and a stored token, then pnpm permissions, a release-age gate and staged publishing. */
 export const section: DemoSection = {
   id: "f3-package-trust",
+  background: "f3",
   order: 9,
   label: "Package trust",
   feature: "Package trust",

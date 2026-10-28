@@ -3,6 +3,7 @@ import type { DemoSection } from "@/content/demo-schema";
 /** F1: five features worth prototyping now, one tile at a time (PRD v4, 2.3). */
 export const section: DemoSection = {
   id: "f1-still-in-motion",
+  background: "f1",
   order: 7,
   label: "Still in motion",
   scenario: "Five features worth trying now that are not ready to recommend for production.",

@@ -40,7 +40,7 @@ export async function DemoPageSlide({ slide, mode }: Props) {
     return (
       <>
         <IntroSlide section={section} page={page} />
-        {warm ? <FrameWarm route={warm.route} flags={warm.flags} sandbox={manifestFor(warm.route)?.sandbox ?? "allow-scripts allow-same-origin"} /> : null}
+        {warm ? <FrameWarm route={warm.route} flags={warm.flags} background={section.background} sandbox={manifestFor(warm.route)?.sandbox ?? "allow-scripts allow-same-origin"} /> : null}
       </>
     );
   }
@@ -80,7 +80,7 @@ export async function DemoPageSlide({ slide, mode }: Props) {
           </p>
         ) : null}
       </header>
-      <PageBody page={page} files={files} sandbox={manifest?.sandbox ?? "allow-scripts allow-same-origin"} sideEffects={manifest?.sideEffects ?? []} mode={mode} slot={split ? SLOT.split : SLOT.full} meters={meters} posters={posters} />
+      <PageBody page={page} files={files} sandbox={manifest?.sandbox ?? "allow-scripts allow-same-origin"} sideEffects={manifest?.sideEffects ?? []} mode={mode} slot={split ? SLOT.split : SLOT.full} meters={meters} posters={posters} background={section.background} />
     </article>
   );
 }

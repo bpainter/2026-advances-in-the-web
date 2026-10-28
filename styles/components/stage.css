@@ -27,3 +27,41 @@
 .stage[data-blank="true"] .stage__canvas {
   visibility: hidden;
 }
+
+/* Backgrounds and grain (PRD v5, 1.2 and 1.3; spec 8). The stage draws the slide's background
+   and, in the audience window only, the shared grain tile above it and below every slide element.
+   The grain belongs to the stage, not the slide, so nothing doubles it. Nothing between the two
+   layers may set isolation, opacity or a filter, or the overlay blend breaks. */
+.stage__bg {
+  @apply absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--slide-bg-image) center / cover no-repeat, var(--glass-frame-fallback);
+}
+.stage__grain {
+  @apply absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url("/theme/grain.png");
+  background-repeat: repeat;
+  /* One tile pixel per device pixel at any stage scale. */
+  background-size: calc(256px / (var(--stage-scale) * var(--dpr)));
+  image-rendering: pixelated;
+  mix-blend-mode: var(--grain-blend);
+  opacity: var(--grain-opacity);
+}
+.stage__slide {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+}
+:root[data-glass="off"] .stage__grain {
+  opacity: 0;
+}
+@media (prefers-reduced-transparency: reduce), (forced-colors: active) {
+  .stage__grain {
+    opacity: 0;
+  }
+}

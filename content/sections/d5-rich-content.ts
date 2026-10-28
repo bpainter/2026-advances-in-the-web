@@ -6,6 +6,7 @@ const TODAY = "demos/05-trusted-types/today";
 /** D5: scattered HTML sinks and a helper nobody must forget, then one Trusted Types policy the browser enforces. */
 export const section: DemoSection = {
   id: "d5-rich-content",
+  background: "d5",
   order: 5,
   label: "Rich content",
   feature: "Trusted Types",

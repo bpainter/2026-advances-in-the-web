@@ -6,6 +6,7 @@ const TODAY = "demos/11-customizable-select/today";
 /** D6: a hand-rolled combobox, then a customizable select that falls back to a normal one (PRD v4, 2.2). */
 export const section: DemoSection = {
   id: "d6-variant-picker",
+  background: "d6",
   order: 6,
   label: "Variant picker",
   feature: "Customizable select",

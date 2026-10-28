@@ -10,10 +10,8 @@
   box-sizing: border-box;
   color: var(--glass-ink);
   font-family: var(--font-sans);
-  background:
-    var(--chrome-wash),
-    var(--chrome-image) center / cover no-repeat,
-    var(--glass-frame-fallback);
+  /* The stage draws the section background under the slide (PRD v5, 1.6); the page adds the wash. */
+  background: var(--chrome-wash);
 }
 .page__header {
   @apply contents;
@@ -135,16 +133,18 @@
   border: var(--chrome-card-border);
   border-radius: var(--chrome-card-radius);
   box-shadow: var(--chrome-card-highlight), var(--chrome-card-shadow);
-  /* The frame background shows where a hook narrows the frame (design review M5). */
+  /* The frame background shows where a hook narrows the frame (design review M5): the slide's
+     image at the slide's own alignment (the card's content box starts at stage x 65, y 177), under
+     the frame wash, so the strip matches the frame beside it (PRD v5, 4.2). */
   background:
     linear-gradient(rgb(255 255 255 / 0.4), rgb(255 255 255 / 0.4)),
-    url("/backgrounds/glass-fan.jpg") center / cover;
+    var(--slide-bg-image) -65px -177px / 1920px 1080px no-repeat;
 }
 .page-frame[data-build="today"],
 .page-frame[data-build="framework"] {
   background:
     linear-gradient(rgb(240 238 250 / 0.55), rgb(240 238 250 / 0.55)),
-    url("/backgrounds/glass-petal.jpg") center / cover;
+    var(--slide-bg-image) -65px -177px / 1920px 1080px no-repeat;
 }
 .page-frame__edge {
   @apply absolute;

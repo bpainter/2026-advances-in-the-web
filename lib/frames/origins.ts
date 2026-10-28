@@ -16,6 +16,18 @@ export function frameUrl(route: string): { origin: string; url: string } {
   return { origin: DEMO_ORIGIN, url: `${DEMO_ORIGIN}${route}` };
 }
 
+/**
+ * The query of a frame document: `?flags=` and, on demo-origin frames, `bg=<section background>`
+ * (PRD v5, 4.2). Framework frames get no `bg`: their apps write their own data-section-bg.
+ */
+export function frameQuery(route: string, flags: Record<string, boolean> | undefined, bg?: string): string {
+  const parts: string[] = [];
+  const q = flagsQuery(flags);
+  if (q) parts.push(`flags=${q}`);
+  if (bg && !route.startsWith("/framework")) parts.push(`bg=${encodeURIComponent(bg)}`);
+  return parts.length ? `?${parts.join("&")}` : "";
+}
+
 /** Flags as the `?flags=` query the frame routes read (`enhance-css:0,enhance-js:1`). */
 export function flagsQuery(flags: Record<string, boolean> | undefined): string {
   const entries = Object.entries(flags ?? {});

@@ -6,6 +6,7 @@ const TODAY = "demos/02-container-card/today";
 /** D2: viewport media queries, variant props and a resize observer, then a size container, container query units, @scope and :has(). */
 export const section: DemoSection = {
   id: "d2-product-card",
+  background: "d2",
   order: 2,
   label: "Product card",
   feature: "Container queries",

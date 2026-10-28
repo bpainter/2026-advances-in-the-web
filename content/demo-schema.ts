@@ -3,6 +3,8 @@
 // from v3. Removed from v3: `DemoSupportLabel`, `DemoTier`, free-text walk-page titles,
 // `DemoPage.notes` (`open`, `bridge`) and `Step.notes`; the validator fails on any of those names.
 
+import type { BackgroundId } from "./backgrounds";
+
 export type Stage = "intro" | "used-to" | "now" | "single";
 export type Browser = "chrome" | "edge" | "firefox" | "safari";
 
@@ -10,6 +12,7 @@ export interface DemoSection {
   id: string;                      // "d6-variant-picker"
   order: number;                   // 1..n in the demo section
   label: string;                   // scenario label, speaker window only: "Order actions"
+  background: BackgroundId;        // PRD v5, 1.3: every page of the section shares this file
   feature?: string;                // intro title and eyebrow: "Dialog element"; required with an intro page
   scenario: string;                // one sentence, speaker window only
   support?: SupportSource;         // required with an intro page

@@ -7,6 +7,7 @@ const REQUEST = { type: "hook", name: "requestPage" } as const;
 /** F2: route-level freshness flags in Next.js, then Cache Components with use cache and tags. */
 export const section: DemoSection = {
   id: "f2-caching",
+  background: "f2",
   order: 8,
   label: "Caching",
   feature: "Cache Components",

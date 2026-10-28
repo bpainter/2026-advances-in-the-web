@@ -17,11 +17,14 @@ export const metadata: Metadata = {
  */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-build="native" suppressHydrationWarning>
+    <html lang="en" data-build="native" data-section-bg="f2" suppressHydrationWarning>
       <head>
         {/* The shared portal theme (PRD v4, 6.2), copied in by pnpm theme:sync. */}
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link rel="stylesheet" href="/theme/portal-glass.css" />
+        {/* The F2 section background (PRD v5, 4.2), also from pnpm theme:sync. */}
+        {/* eslint-disable-next-line @next/next/no-css-tags */}
+        <link rel="stylesheet" href="/theme/backgrounds.css" />
       </head>
       <body>
         {/* Synchronous on purpose: the hooks must exist before the frame runtime asks for them. */}

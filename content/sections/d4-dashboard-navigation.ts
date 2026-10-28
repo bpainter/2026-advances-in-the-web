@@ -8,6 +8,7 @@ const LINK_419 = 'nav a[href="/orders/419"]';
 /** D4: a hand-written router, then one navigate event with intercept. */
 export const section: DemoSection = {
   id: "d4-dashboard-navigation",
+  background: "d4",
   order: 4,
   label: "Dashboard navigation",
   feature: "Navigation API",

@@ -1,21 +1,14 @@
-/* Intro slide (PRD v4 1.1; docs/design/demo-glass-spec.md 7): navy, so each section opens with a
-   clear break from the light walk pages. No blur anywhere on the slide. */
+/* Intro slide (PRD v4 1.1; v5 1.6; docs/design/demo-wrappers-spec.md 5): the section background
+   with grain, a light glass card holding the still on the left and one dark glass panel holding
+   the text on the right. */
 .intro {
   @apply grid relative;
-  grid-template-columns: 880px 848px;
-  column-gap: 64px;
+  grid-template-columns: 880px 880px;
+  column-gap: 32px;
   width: var(--stage-width);
   height: var(--stage-height);
   padding: 64px;
   box-sizing: border-box;
-  background:
-    /* A navy scrim under the text column: body and soft text hold 4.5:1 over the brightest arc
-       of glass-navy.jpg (scripts/contrast-test.mts). */
-    linear-gradient(90deg, rgb(15 28 65 / 0) 0, rgb(15 28 65 / 0) 944px, rgb(15 28 65 / 0.45) 1008px),
-    linear-gradient(var(--intro-wash), var(--intro-wash)),
-    var(--intro-image) center / cover no-repeat,
-    var(--glass-dark-solid);
-  color: var(--glass-dark-ink);
   font-family: var(--font-sans);
 }
 .intro__visual {
@@ -24,13 +17,12 @@
   height: 952px;
   padding: 0 24px;
   box-sizing: border-box;
-  border: 1px solid rgb(255 255 255 / 0.24);
+  border: var(--chrome-card-border);
   border-radius: var(--chrome-card-radius);
-  background: var(--intro-visual-image, var(--intro-visual-image-a)) center / cover no-repeat;
-  box-shadow: var(--glass-dark-shadow);
-}
-.intro[data-accent="b"] .intro__visual {
-  --intro-visual-image: var(--intro-visual-image-b);
+  background: rgb(255 255 255 / 0.4);
+  backdrop-filter: var(--glass-filter-pane);
+  -webkit-backdrop-filter: var(--glass-filter-pane);
+  box-shadow: var(--chrome-card-highlight), var(--chrome-card-shadow);
 }
 .intro__image {
   @apply block;
@@ -39,16 +31,26 @@
   object-fit: contain;
   border: 1px solid rgb(255 255 255 / 0.6);
   border-radius: 16px;
-  box-shadow: 0 24px 64px rgb(15 28 65 / 0.32);
+  box-shadow: 0 24px 64px rgb(15 28 65 / 0.24);
 }
 .intro__missing {
   margin: 0;
   font-size: 24px;
-  color: var(--glass-dark-ink-body);
+  color: var(--glass-ink);
 }
 .intro__text {
   @apply flex flex-col justify-center;
   min-width: 0;
+  height: 952px;
+  padding: 0 48px;
+  box-sizing: border-box;
+  border: 1px solid var(--glass-dark-border-color);
+  border-radius: var(--chrome-card-radius);
+  background: var(--glass-dark-surface-strong);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  box-shadow: var(--glass-dark-highlight), var(--glass-dark-shadow);
+  color: var(--glass-dark-ink);
 }
 .intro__title {
   margin: 0;
@@ -66,10 +68,12 @@
   margin: 32px 0 0;
   font-size: 24px;
   line-height: 32px;
-  color: var(--glass-dark-ink-soft);
+  /* Body ink, not ink-soft: #B8C0D9 on navy 0.72 over a near-white section file is under 4.5:1
+     (scripts/contrast-test.mts); #D6DCEC holds it. */
+  color: var(--glass-dark-ink-body);
 }
 
-/* Support row: 196 px tiles, 21 px apart. A missing browser keeps the row height, with a dashed
+/* Support row: 184 px tiles, 16 px apart (spec 5). A missing browser keeps the row height, with a dashed
    edge, a grayscale logo and "Not yet", so color is never the only signal. */
 .support-row {
   @apply flex;
@@ -91,8 +95,8 @@
   animation-delay: calc(120ms + var(--tile-index) * 80ms);
 }
 .support-row__logo {
-  width: 72px;
-  height: 72px;
+  width: var(--intro-logo-size);
+  height: var(--intro-logo-size);
 }
 .support-row__version {
   margin-top: 12px;
@@ -115,6 +119,10 @@
 .support-row__tile[data-supported="false"] .support-row__logo {
   filter: grayscale(1);
   opacity: 0.4;
+}
+/* A "Not yet" tile has no fill, so its browser name sits on the panel and takes body ink. */
+.support-row__tile[data-supported="false"] .support-row__name {
+  color: var(--glass-dark-ink-body);
 }
 .support-row__tile[data-supported="false"] .support-row__version {
   font-size: 36px;

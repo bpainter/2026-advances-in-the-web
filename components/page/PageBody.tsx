@@ -22,10 +22,12 @@ interface Props {
   meters: Record<string, string | null>;
   /** Poster path per step id, null when the file is not in public/. */
   posters: Record<string, string | null>;
+  /** The section's background id (PRD v5, 4.2). */
+  background?: string;
 }
 
 /** The body of a demo page: frame (live or poster on the speaker's preview), meter, and the code panel. */
-export function PageBody({ page, files, sandbox, sideEffects, mode, slot, meters, posters }: Props) {
+export function PageBody({ page, files, sandbox, sideEffects, mode, slot, meters, posters, background }: Props) {
   const { stepIndex, setDemoStatus, setStepResult } = useStage();
   const step = page.steps[stepIndex];
   // The meter shows from its step to the end of the page (used-to: the last step; now: the
@@ -52,7 +54,7 @@ export function PageBody({ page, files, sandbox, sideEffects, mode, slot, meters
             <p className="page__poster-label">{step ? step.label : page.title}</p>
           </div>
         ) : (
-          <PageFrame page={page} sandbox={sandbox} sideEffects={sideEffects} mode={mode} slot={slot} onStatus={onStatus} onStepResult={onStepResult} />
+          <PageFrame page={page} sandbox={sandbox} sideEffects={sideEffects} mode={mode} slot={slot} onStatus={onStatus} onStepResult={onStepResult} background={background} />
         )}
       </div>
       {page.steps.length > 1 ? (

@@ -1,4 +1,5 @@
 import type { DemoPage, DemoSection } from "./demo-schema";
+import type { BackgroundId } from "./backgrounds";
 
 // Canonical slide schema. Field names are the contract between content (Part B) and the app (Part A).
 // The first block is SLIDE_SCHEMA.md verbatim; additions from PRD Part A section 9.4 follow.
@@ -115,6 +116,7 @@ export interface Slide {
   speakerNotes: string;    // 3-5 sentences
   timing: { minutes: number; cumulative: number };
   cutPriority?: number;    // 1 = cut first if running long
+  background: BackgroundId; // PRD v5, 4.1: the registry file behind the slide; demo pages take their section's
 
   // Part A additions (section 9.4)
   stepThrough?: "steps-first" | "slide-only";

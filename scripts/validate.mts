@@ -9,7 +9,8 @@
  *
  * Errors exit 1; warnings exit 1 only with --strict.
  */
-import { existsSync, readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { sections } from "@/lib/content";
 import { DEMO_SECTION_START } from "@/content/sections";
@@ -19,6 +20,11 @@ import { TIMING_TABLE, LAST_PAGE_BY } from "@/lib/validate/timing";
 import { themeIssues } from "@/lib/validate/theme";
 import type { SupportFile } from "@/lib/support-data";
 import { installedWebFeatures } from "@/lib/web-features";
+import { slides } from "@/lib/content";
+import { BACKGROUNDS } from "@/content/backgrounds";
+import { jpegSize, validateV5 } from "@/lib/validate/v5";
+import { decodeGrainPng, grainPixels } from "@/lib/grain";
+import { BACKGROUND_BY_DEMO } from "@/lib/frames/compose";
 
 const args = process.argv.slice(2);
 const strict = args.includes("--strict");
@@ -52,7 +58,49 @@ const all = validate(sections, {
   repoFile: (p) => (existsSync(path.join(root, p)) ? readFileSync(path.join(root, p), "utf8") : null),
   build,
 });
-const issues: Issue[] = [...all, ...(only ? [] : themeIssues(root))];
+// PRD v5, 4.7: backgrounds, grain and (from M7) the QR code.
+function filesUnder(dir: string, exts: RegExp): string[] {
+  const out: string[] = [];
+  if (!existsSync(dir)) return out;
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
+    if (["node_modules", ".next", ".next-capture", ".git", "recordings", "work"].includes(e.name)) continue;
+    const abs = path.join(dir, e.name);
+    if (e.isDirectory()) out.push(...filesUnder(abs, exts));
+    else if (exts.test(e.name)) out.push(abs);
+  }
+  return out;
+}
+const SOURCE_DIRS = ["app", "components", "lib", "content", "scripts", "styles", "demos", "public/theme", "public/portal", "public/runtime"];
+const glassMentions = SOURCE_DIRS.flatMap((d) => filesUnder(path.join(root, d), /\.(tsx?|mts|css|js|mjs|html|json)$/))
+  .filter((f) => !f.includes(`${path.sep}.generated${path.sep}`) && /\bglass-(fan|petal|lavender|navy|blue)\.jpg/.test(readFileSync(f, "utf8")))
+  .map((f) => path.relative(root, f));
+const bgDir = path.join(root, "public", "backgrounds");
+const v5Issues = validateV5({
+  slides: slides.filter((s) => s.layout !== "demo-page").map((s) => ({ id: s.id, background: s.background })),
+  sections: sections.map((s) => ({ id: s.id, background: s.background })),
+  registry: BACKGROUNDS,
+  fileInfo: (file) => {
+    const abs = path.join(bgDir, "v5", file);
+    if (!existsSync(abs)) return null;
+    const buf = readFileSync(abs);
+    const size = jpegSize(buf);
+    return { width: size?.width ?? 0, height: size?.height ?? 0, bytes: statSync(abs).size, sha256: createHash("sha256").update(buf).digest("hex") };
+  },
+  backgroundsDir: existsSync(bgDir) ? readdirSync(bgDir).filter((n) => !n.startsWith(".")) : [],
+  glassMentions,
+  stats: readJson(path.join(root, "content", ".generated", "backgrounds.json")),
+  // The closing slide (PRD v5, 4.6) lands in M7; its background is registered from M2.
+  pending: slides.some((s) => s.id === "closing") ? [] : ["closing"],
+  grain: { committed: existsSync(path.join(root, "public", "theme", "grain.png")) ? decodeGrainPng(readFileSync(path.join(root, "public", "theme", "grain.png"))) : null, fresh: grainPixels() },
+});
+// Frames default to their demo folder's section background (lib/frames/compose.ts): keep it in step.
+for (const s of sections) {
+  for (const p of s.pages) {
+    const m = "frame" in p ? /^\/demos\/([\w-]+)\//.exec(p.frame.route) : null;
+    if (m && BACKGROUND_BY_DEMO[m[1]] !== s.background) v5Issues.push({ rule: "bg-frame", where: p.id, message: `frames of ${m[1]} default to "${BACKGROUND_BY_DEMO[m[1]] ?? "none"}"; the section uses "${s.background}" (lib/frames/compose.ts)`, level: "error" });
+  }
+}
+const issues: Issue[] = [...all, ...(only ? [] : [...themeIssues(root), ...v5Issues])];
 
 const inScope = (i: Issue) => !only || i.where.startsWith(only.split("-")[0]) || i.where === only;
 let errors = 0;

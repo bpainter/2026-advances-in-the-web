@@ -3,6 +3,7 @@ import type { DemoSection } from "@/content/demo-schema";
 /** F5: what each core demo lets a team delete, with one npm pull and a not-yet column. */
 export const section: DemoSection = {
   id: "f5-what-you-can-delete",
+  background: "f5",
   order: 11,
   label: "What you can delete",
   scenario: "One table maps each core demo to the libraries it replaces, from one npm pull.",

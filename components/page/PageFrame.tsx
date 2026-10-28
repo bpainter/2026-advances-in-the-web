@@ -6,7 +6,7 @@ import type { Mode } from "@/lib/mode";
 import { FrameHandle, type StepResult } from "@/lib/engine/frame";
 import { installInputRelay, withInput } from "@/lib/engine/input-relay";
 import { flagsAt, replaySteps, segments, selectorsFor } from "@/lib/engine/steps";
-import { flagsQuery, frameUrl, glassFlags } from "@/lib/frames/origins";
+import { frameQuery, frameUrl, glassFlags } from "@/lib/frames/origins";
 import { useStage } from "@/lib/stage-context";
 import { Overlay } from "./Overlay";
 
@@ -20,16 +20,17 @@ interface Props {
   slot: { width: number; height: number };
   onStatus?: (status: "loading" | "ready" | "error") => void;
   onStepResult?: (stepId: string, result: StepResult) => void;
+  /** The section's background id (PRD v5, 4.2), passed to the frame as `bg`. */
+  background?: string;
 }
 
 /** How long the code highlight shows before a step's playback starts (docs/design/demo-flow-cx.md, 4). */
 const CODE_LEAD_MS = 400;
 
-function documentUrl(page: FramePage, flags: Record<string, boolean>): { origin: string; url: string } {
+function documentUrl(page: FramePage, flags: Record<string, boolean>, background?: string): { origin: string; url: string } {
   const route = page.frame!.route;
   const { origin, url } = frameUrl(route.endsWith("/") ? `${route}index.html` : route.includes(".") ? route : `${route}/index.html`);
-  const q = flagsQuery(glassFlags(flags));
-  return { origin, url: q ? `${url}?flags=${q}` : url };
+  return { origin, url: `${url}${frameQuery(route, glassFlags(flags), background)}` };
 }
 
 /**
@@ -37,7 +38,7 @@ function documentUrl(page: FramePage, flags: Record<string, boolean>): { origin:
  * previous step plays the step animated in the active document; any other move mounts a fresh
  * document beneath, replays `s0..sN` instantly and swaps. Reloading toggles split a step.
  */
-export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, onStepResult }: Props) {
+export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, onStepResult, background }: Props) {
   const { stepIndex, handsOn, live, reloadToken, rehearsal, registerPlayback, dispatchKey, reportPlaying } = useStage();
   const slotRef = useRef<HTMLDivElement>(null);
   const [handle, setHandle] = useState<FrameHandle | null>(null);
@@ -67,7 +68,7 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
   /** Mounts a fresh document with `flags`; hidden until shown. */
   const mount = useCallback(
     (flags: Record<string, boolean>, visible: boolean): FrameHandle => {
-      const { origin, url } = documentUrl(page, flags);
+      const { origin, url } = documentUrl(page, flags, background);
       const iframe = document.createElement("iframe");
       iframe.className = "page-frame__iframe";
       iframe.title = `Live demo: ${page.title}`;
@@ -86,7 +87,7 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
       iframe.src = url;
       return h;
     },
-    [page, sandbox, mode, handsOn, reducedMotion, sideEffects, dispatchKey],
+    [page, sandbox, mode, handsOn, reducedMotion, sideEffects, dispatchKey, background],
   );
 
   const show = useCallback(

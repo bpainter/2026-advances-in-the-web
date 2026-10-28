@@ -2,6 +2,7 @@ import { hasFrame } from "@/content/demo-schema";
 import type { Slide } from "@/content/schema";
 import type { Mode } from "@/lib/mode";
 import { slides, neighbours } from "@/lib/content";
+import { backgroundUrl } from "@/content/backgrounds";
 import { Stage } from "./Stage";
 import { SlideRouter } from "./SlideRouter";
 
@@ -30,6 +31,8 @@ export function SlidePage({ slide, mode, canonicalPath, embedded, passive }: Pro
       firstId={slides[0].id}
       lastId={slides[slides.length - 1].id}
       slideIds={slides.map((s) => s.id)}
+      background={backgroundUrl(slide.background)}
+      neighbourBackgrounds={[prev, next].flatMap((n) => (n ? [backgroundUrl(n.background)] : []))}
       steps={slide.page?.steps.map((s) => ({ label: s.label })) ?? []}
       frameRoute={slide.page && hasFrame(slide.page) ? slide.page.frame.route : undefined}
       mode={mode}

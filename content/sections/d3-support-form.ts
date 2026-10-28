@@ -8,6 +8,7 @@ const LONG_DETAILS =
 /** D3: a mirror element and a scrollHeight loop, then field-sizing with line-height limits. */
 export const section: DemoSection = {
   id: "d3-support-form",
+  background: "d3",
   order: 3,
   label: "Support form",
   feature: "Field sizing",

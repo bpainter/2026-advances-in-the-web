@@ -11,4 +11,5 @@ export const slide: Slide = {
   citations: [],
   speakerNotes: "The statement slide. Let it sit for a beat; this is the frame for everything that follows.",
   timing: { minutes: 0.5, cumulative: 4.5 },
+  background: "keep-humanity",
 };

@@ -11,4 +11,5 @@ export const slide: Slide = {
   citations: [],
   speakerNotes: "The agenda: HTML, CSS and JavaScript; frameworks and metaframeworks; build tools and package managers. Say where the demos sit (part one) and that part three is the shortest.",
   timing: { minutes: 0.5, cumulative: 6.5 },
+  background: "what-we-cover",
 };

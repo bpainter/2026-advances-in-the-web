@@ -26,6 +26,7 @@ function pageSlide(section: DemoSection, page: DemoPage): Slide {
     speakerNotes: page.intro,
     timing: { minutes: page.timing.minutes, cumulative: page.timing.cumulative ?? 0 },
     cutPriority: page.cutPriority,
+    background: section.background,
   };
 }
 

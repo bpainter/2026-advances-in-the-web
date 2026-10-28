@@ -4,9 +4,26 @@ import path from "node:path";
 import { PRESENTER_ORIGIN } from "./origins";
 import type { BuildDef } from "./types";
 import { wrapInShell } from "./shell";
+import { isBackgroundId, type BackgroundId } from "@/content/backgrounds";
 
 /** The shared portal theme (PRD v4, 6.2), copied from styles/glass-tokens.css by pnpm theme:sync. */
 export const THEME_HREF = "/theme/portal-glass.css";
+/** Per-section frame images (PRD v5, 4.2), written from content/backgrounds.ts by pnpm theme:sync. */
+export const BACKGROUNDS_HREF = "/theme/backgrounds.css";
+
+/** The section background of each demo folder's frames (PRD v5, 1.3); `pnpm check` keeps it in step with content. */
+export const BACKGROUND_BY_DEMO: Record<string, BackgroundId> = {
+  "01-layered-ui": "d1",
+  "02-container-card": "d2",
+  "03-content-sized-form": "d3",
+  "04-navigation-api": "d4",
+  "05-trusted-types": "d5",
+  "11-customizable-select": "d6",
+  "08-fast-follows": "f1",
+  "07-package-workflow": "f3",
+  "09-vite-8": "f4",
+  "10-delete": "f5",
+};
 
 /** Base CSP for frame documents (PRD Part A, 14.1); `ORIGIN` and `PRESENTER` are substituted. */
 export const BASE_CSP =
@@ -24,6 +41,8 @@ export interface ComposeOptions {
   /** Body HTML; defaults to the build's index.html. */
   body?: string;
   title?: string;
+  /** The section background id from `?bg=`; ignored unless it is a registry id (PRD v5, 4.2). */
+  bg?: string | null;
 }
 
 /**
@@ -63,13 +82,17 @@ export function composeFrame(def: BuildDef, opts: ComposeOptions): string {
     .map(([k, v]) => `${k}:${v ? 1 : 0}`)
     .join(",");
   const mode = typeof cssMode === "string" ? cssMode : "files";
+  // `?bg=` names the section; documents the frame loads itself (D4's script-off links, F3's
+  // timeline) carry none, so the demo folder's section is the default.
+  const bg = opts.bg && isBackgroundId(opts.bg) ? opts.bg : (BACKGROUND_BY_DEMO[manifest.demo] ?? null);
   return [
     "<!doctype html>",
-    `<html lang="en" data-demo="${escapeAttr(manifest.demo)}" data-build="${manifest.build}" data-flags="${escapeAttr(flagsAttr)}" data-enhance-css-mode="${mode}">`,
+    `<html lang="en" data-demo="${escapeAttr(manifest.demo)}" data-build="${manifest.build}" data-flags="${escapeAttr(flagsAttr)}" data-enhance-css-mode="${mode}"${bg ? ` data-section-bg="${bg}"` : ""}>`,
     "<head>",
     // The theme comes first, so every build's own CSS (shown CSS is unlayered) wins over it. The
     // enhance-css flag never touches it: it is not tagged.
     `<link rel="stylesheet" href="${THEME_HREF}">`,
+    `<link rel="stylesheet" href="${BACKGROUNDS_HREF}">`,
     ...(manifest.styles ?? []).map((href) => `<link rel="stylesheet" href="${escapeAttr(href)}">`),
     '<meta charset="utf-8">',
     '<meta name="viewport" content="width=device-width, initial-scale=1">',

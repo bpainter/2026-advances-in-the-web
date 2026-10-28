@@ -36,7 +36,7 @@ async function handle(req: Request, ctx: Ctx): Promise<Response> {
   const rest = path.join("/");
   if (req.method === "GET" && (rest === "" || rest === "index.html")) {
     const flags = { ...Object.fromEntries(Object.keys(def.manifest.flags).map((k) => [k, true])), ...parseFlags(url.searchParams.get("flags")) };
-    return frameResponse(composeFrame(def, { flags, origin }), def, origin, flags);
+    return frameResponse(composeFrame(def, { flags, origin, bg: url.searchParams.get("bg") }), def, origin, flags);
   }
   if (req.method === "GET") {
     const file = buildFile(def, rest);

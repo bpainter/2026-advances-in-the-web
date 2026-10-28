@@ -117,6 +117,19 @@ and a panel that scales in. `pnpm walk fixtures` checks the radii, the fade time
 motion there; the deck walk samples every forward step and fails when a shown box is off its
 target.
 
+## Backgrounds and grain (v5)
+
+`content/backgrounds.ts` registers 21 files under `public/backgrounds/v5/` (1920 by 1080): one per
+opening and closing slide and one per demo section (`Slide.background`, `DemoSection.background`;
+demo pages take their section's). The stage draws `.stage__bg` from the slide's file and, in the
+audience window only, `.stage__grain` (`public/theme/grain.png`, one tile pixel per device pixel,
+`--grain-opacity` 0.10 with `--grain-blend` overlay; `pnpm grain` writes it from a fixed seed). The
+audience window decodes the neighbouring slides' backgrounds ahead. Frames get `?bg=<section>`;
+the composer writes `data-section-bg` and links `/theme/backgrounds.css` (written by `pnpm
+theme:sync`), and the frame body shows the section image at the slide's alignment (1396.36 by
+785.45 frame px at -47.27, -128.73, fixed) under its wash. `pnpm backgrounds` measures each file's
+text zones into `content/.generated/backgrounds.json` for `pnpm test:contrast` and the walk.
+
 ## Speaker window
 
 Previews on the left; the notes column on the right, top to bottom: header (eyebrow, title, "Step

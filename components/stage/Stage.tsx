@@ -14,6 +14,20 @@ import { GotoDialog } from "@/components/chrome/GotoDialog";
 
 const CANVAS = { width: 1920, height: 1080 };
 
+const decoded = new Map<string, Promise<void>>();
+/** Fetches and decodes a background once per window (PRD v5, 1.6). */
+function decodeBackground(src: string): Promise<void> {
+  let p = decoded.get(src);
+  if (!p) {
+    const img = new Image();
+    img.src = src;
+    p = img.decode().catch(() => {});
+    decoded.set(src, p);
+    (window as unknown as { __decodedBackgrounds?: string[] }).__decodedBackgrounds = [...decoded.keys()];
+  }
+  return p;
+}
+
 interface Props {
   slideId: string;
   slideTitle: string;
@@ -24,6 +38,10 @@ interface Props {
   firstId: string;
   lastId: string;
   slideIds: string[];
+  /** The slide's background file (PRD v5, 1.3), drawn by the stage under the slide. */
+  background: string;
+  /** The previous and next slides' backgrounds, decoded ahead so no slide arrives without one. */
+  neighbourBackgrounds: string[];
   /** The page's steps (labels only), empty on other slides. */
   steps: { label: string }[];
   /** The page frame's route, for `o`. */
@@ -56,7 +74,7 @@ function stepFromUrl(stepCount: number): number {
  * here. Remounted per slide (keyed on slide id).
  */
 export function Stage(props: Props) {
-  const { slideId, slideTitle, slideIndex, total, prevId, nextId, firstId, lastId, slideIds, steps, frameRoute, mode, canonicalPath, embedded, passive, children } = props;
+  const { slideId, slideTitle, slideIndex, total, prevId, nextId, firstId, lastId, slideIds, background, neighbourBackgrounds, steps, frameRoute, mode, canonicalPath, embedded, passive, children } = props;
   const router = useRouter();
   const presenter = usePresenter();
   const shared = Boolean(presenter) && !passive;
@@ -379,20 +397,67 @@ export function Stage(props: Props) {
 
   const focusStage = useCallback(() => canvasRef.current?.focus({ preventScroll: true }), []);
 
+  // The audience keyboard belongs to the stage on arrival. When the focused frame of the previous
+  // slide is removed, the browser can hand focus to another iframe (the hidden warming frame of an
+  // intro slide), where the clicker's keys would be lost. A page frame takes focus again when its
+  // document is shown, so claiming it here is safe on every slide.
+  useEffect(() => {
+    if (mode !== "audience" || passive) return;
+    const claim = () => {
+      const a = document.activeElement;
+      const lost = !a || a === document.body || (a instanceof HTMLIFrameElement && !a.classList.contains("page-frame__iframe"));
+      if (lost) canvasRef.current?.focus({ preventScroll: true });
+    };
+    claim();
+    const t = window.setTimeout(claim, 450);
+    const t2 = window.setTimeout(claim, 1200);
+    return () => {
+      window.clearTimeout(t);
+      window.clearTimeout(t2);
+    };
+  }, [mode, passive]);
+
   const ctx = useMemo<StageState>(
     () => ({ stepIndex, stepCount, handsOn, live, reloadToken, rehearsal, demoStatus, stepResults, setStepIndex, setDemoStatus, setStepResult, reportPlaying, registerPlayback, dispatchKey, focusStage }),
     [stepIndex, stepCount, handsOn, live, reloadToken, rehearsal, demoStatus, stepResults, setStepIndex, setDemoStatus, setStepResult, reportPlaying, registerPlayback, dispatchKey, focusStage],
   );
 
-  const style = { "--stage-scale": scale } as CSSProperties;
+  // Device pixels per CSS pixel, so the grain tile maps one tile pixel to one device pixel.
+  const [dpr, setDpr] = useState(1);
+  useEffect(() => {
+    const update = () => setDpr(window.devicePixelRatio || 1);
+    update();
+    const mq = window.matchMedia(`(resolution: ${window.devicePixelRatio || 1}dppx)`);
+    mq.addEventListener("change", update);
+    window.addEventListener("resize", update);
+    return () => {
+      mq.removeEventListener("change", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
+
+  // Decode the neighbours' backgrounds ahead of time (PRD v5, 1.6). Kept in a module cache so a
+  // decoded image is never fetched twice.
+  const neighbourKey = neighbourBackgrounds.join("|");
+  useEffect(() => {
+    if (mode !== "audience" || passive) return;
+    for (const src of neighbourKey.split("|").filter(Boolean)) decodeBackground(src);
+  }, [neighbourKey, mode, passive]);
+
+  const style = { "--stage-scale": scale, "--dpr": dpr } as CSSProperties;
+  const canvasStyle = { "--slide-bg-image": `url("${background}")` } as CSSProperties;
+  // The grain is the audience window's alone: previews and other modes draw none (PRD v5, 1.2).
+  const grain = mode === "audience" && !embedded && !passive;
   const showBlank = blank && mode === "audience";
   const last = stepResults[slideId]?.result;
 
   return (
     <StageContext.Provider value={ctx}>
       <div className={embedded ? "stage stage--embedded" : "stage"} ref={wrapperRef} data-blank={showBlank} data-mode={mode} data-idle={idle} data-hands-on={handsOn} style={style}>
-        <div className="stage__canvas" id={passive ? undefined : "stage"} ref={canvasRef} tabIndex={-1}>
-          {children}
+        <div className="stage__canvas" id={passive ? undefined : "stage"} ref={canvasRef} tabIndex={-1} style={canvasStyle} data-background={background}>
+          <div className="stage__bg" aria-hidden="true" />
+          {grain ? <div className="stage__grain" aria-hidden="true" /> : null}
+          <div className="stage__slide">{children}</div>
         </div>
         {passive ? null : <div className="stage__announcer" aria-live="polite" aria-atomic="true" ref={announcerRef} />}
         {rehearsal && !passive ? (

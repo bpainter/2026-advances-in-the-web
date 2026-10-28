@@ -11,4 +11,5 @@ export const slide: Slide = {
   citations: [],
   speakerNotes: "Three people in every room: the greybeards who want the reason before the tool (why), the line toers who make the mandate useful (how), and the new luddites weighing what the trade costs (should we). All three are in this audience; speak to each once.",
   timing: { minutes: 1.5, cumulative: 3 },
+  background: "three-reactions",
 };

@@ -15,6 +15,8 @@ import { hasFrame, type DemoPage, type DemoSection } from "@/content/demo-schema
 import type { SupportFile } from "@/lib/support-data";
 import { sections } from "@/lib/content";
 import type { StepResult } from "@/lib/engine/frame";
+import { checkDistinct, checkFrameBackground, walkDeck } from "./walk-deck.mts";
+import { slides as deckSlides } from "@/lib/content";
 import { PROTOCOL_WATCH, checkProtocol, finishDeckSampler, startDeckSampler, walkFixture } from "./walk-spotlight.mts";
 
 const BASE = process.env.DECK_URL ?? "http://localhost:3000";
@@ -166,6 +168,9 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
     return;
   }
   await checkGeometry(page, demoPage, where);
+  await page.waitForSelector('.page-frame__iframe[data-visible="true"]', { timeout: 15000 }).catch(() => null);
+  await page.waitForTimeout(800);
+  await checkFrameBackground(await visibleFrame(page), where, section.background, { fail, pass });
   const forward: (string | null)[] = [];
   for (let i = 0; i < demoPage.steps.length; i++) {
     const step = demoPage.steps[i];
@@ -294,7 +299,12 @@ async function main() {
 
   // The spotlight fixture (PRD v5, 3.4) runs first on a full walk, and alone with `pnpm walk fixtures`.
   if (!only || only === "fixtures") await walkFixture(browser, BASE, { fail, pass });
-  if (only === "fixtures") {
+  // The whole deck in order (PRD v5, 4.8), on a full walk or with `pnpm walk deck`.
+  if (!only || only === "deck") {
+    checkDistinct({ fail, pass });
+    await walkDeck(page, BASE, deckSlides, { fail, pass });
+  }
+  if (only === "fixtures" || only === "deck") {
     await browser.close();
     console.log(`\n${browserName}: ${checks} check(s) passed, ${failures.length} failure(s)`);
     for (const f of failures) console.log(`  ✖ ${f}`);

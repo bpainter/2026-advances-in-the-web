@@ -170,8 +170,9 @@
     --glass-stagger-tile: 80ms;
     --glass-dur-tile: 200ms;
 
-    /* Frame backgrounds: now, native, static and terminal builds */
-    --glass-frame-image: url("/backgrounds/glass-fan.jpg");
+    /* Frame backgrounds (PRD v5, 4.2): the section's file comes from /theme/backgrounds.css on
+       data-section-bg; frames show it at the slide's alignment under the wash. */
+    --glass-frame-image: none;
     --glass-frame-wash: linear-gradient(rgb(255 255 255 / 0.4), rgb(255 255 255 / 0.4));
     --glass-frame-fallback: linear-gradient(135deg, #c9d8fb 0%, #e9eefb 45%, #d3f4f8 100%);
 
@@ -188,8 +189,12 @@
     --glass-dark-focus: #1be1f2;
     --glass-dark-solid: #16234d;
 
-    /* Slide chrome on the 1920 by 1080 canvas (stage px) */
-    --chrome-image: url("/backgrounds/glass-fan.jpg");
+    /* Grain overlay on audience slides (PRD v5, 1.2): tune 0 to 0.16 at the projector check. */
+    --grain-opacity: 0.1;
+    --grain-blend: overlay;
+
+    /* Slide chrome on the 1920 by 1080 canvas (stage px); the stage sets --slide-bg-image. */
+    --chrome-image: var(--slide-bg-image, none);
     --chrome-wash: linear-gradient(
       180deg,
       rgb(255 255 255 / 0.78) 0,
@@ -227,19 +232,16 @@
     --chrome-callout-ink: #ffffff;
     --chrome-callout-leader: #0c62fb;
 
-    /* Intro slide (navy) */
-    --intro-image: url("/backgrounds/glass-navy.jpg");
-    --intro-wash: rgb(15 28 65 / 0.35);
-    --intro-visual-image-a: url("/backgrounds/glass-blue.jpg");
-    --intro-visual-image-b: url("/backgrounds/glass-lavender.jpg");
+    /* Intro slide (PRD v5, 1.6; spec 5): the section background, a light visual card and a dark
+       glass text panel. */
     --intro-title-size: 88px;
     --intro-title-leading: 96px;
     --intro-body-size: 36px;
     --intro-body-leading: 50px;
-    --intro-tile-size: 196px;
-    --intro-tile-gap: 21px;
+    --intro-tile-size: 184px;
+    --intro-tile-gap: 16px;
     --intro-tile-radius: 20px;
-    --intro-logo-size: 72px;
+    --intro-logo-size: 64px;
     --intro-version-size: 48px;
     --intro-name-size: 24px;
     --intro-also-size: 24px;
@@ -249,7 +251,6 @@
 
   /* Used-to frames: a quieter, lavender-gray world so old reads differently from new. */
   :root[data-build="today"] {
-    --glass-frame-image: url("/backgrounds/glass-petal.jpg");
     --glass-frame-wash: linear-gradient(rgb(240 238 250 / 0.55), rgb(240 238 250 / 0.55));
     --glass-frame-fallback: linear-gradient(135deg, #d9d3f5 0%, #eceaf6 50%, #d6dcef 100%);
   }
@@ -288,9 +289,12 @@
     padding: var(--glass-frame-pad);
     color: var(--glass-ink);
     font: 400 var(--glass-text-md) / var(--glass-leading-md) var(--glass-font);
+    /* The section image at the slide's alignment (PRD v5, 4.2): both slots start at stage x 65,
+       y 177 inside the card border and frames are scaled 1.375, so the 1920 by 1080 slide is
+       1396.36 by 785.45 frame px, offset -47.27 and -128.73. Fixed, so a scrolling frame keeps it. */
     background:
       var(--glass-frame-wash),
-      var(--glass-frame-image) center / cover no-repeat,
+      var(--glass-frame-image) -47.27px -128.73px / 1396.36px 785.45px no-repeat,
       var(--glass-frame-fallback);
     background-attachment: fixed;
     -webkit-font-smoothing: antialiased;

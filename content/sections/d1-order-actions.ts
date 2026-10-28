@@ -6,6 +6,7 @@ const TODAY = "demos/01-layered-ui/today";
 /** D1: a hand-rolled menu and modal, then popover, dialog and invoker commands. Shown native files live in ./d1-order-actions/files/. */
 export const section: DemoSection = {
   id: "d1-order-actions",
+  background: "d1",
   order: 1,
   label: "Order actions",
   feature: "Dialog element",

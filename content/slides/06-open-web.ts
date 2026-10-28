@@ -11,4 +11,5 @@ export const slide: Slide = {
   citations: [],
   speakerNotes: "Agents will browse, buy and build on the web next. Six properties keep it worth building on whoever the user turns out to be: interoperability, user control, durable access, accessibility, security and trust, innovation without permission. One sentence each; do not read the subtitles.",
   timing: { minutes: 1.5, cumulative: 6 },
+  background: "open-web",
 };

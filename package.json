@@ -23,6 +23,8 @@
     "support": "node --conditions=react-server --import tsx scripts/support-data.mts",
     "excerpt": "node --import tsx scripts/excerpt.mts",
     "visuals": "node --conditions=react-server --import tsx scripts/visuals.mts",
+    "grain": "node --import tsx scripts/grain.mts",
+    "backgrounds": "node --import tsx scripts/background-stats.mts",
     "theme:sync": "node --import tsx scripts/theme.mts sync",
     "theme:lint": "node --import tsx scripts/theme.mts lint",
     "measure:vite": "node --import tsx scripts/measure-vite.mts",

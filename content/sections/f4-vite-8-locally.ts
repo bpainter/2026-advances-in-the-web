@@ -3,6 +3,7 @@ import type { DemoSection } from "@/content/demo-schema";
 /** F4: the same repository under the existing Vite setup and Vite 8, measured on this laptop. */
 export const section: DemoSection = {
   id: "f4-vite-8-locally",
+  background: "f4",
   order: 10,
   label: "Vite 8 locally",
   scenario:

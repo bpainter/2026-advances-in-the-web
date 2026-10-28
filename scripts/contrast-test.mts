@@ -1,14 +1,16 @@
 /**
- * Contrast unit test (PRD v4, 6.4; docs/design/demo-glass-spec.md, 5). Composites each text token
- * over each surface it may sit on, over the wash, over every palette color and the darkest pixel
- * of the portal background, and fails below 4.5:1 for text on glass and 7:1 for code. Token values
- * are read from styles/glass-tokens.css, so the test follows the theme.
+ * Contrast unit test (PRD v4, 6.4; v5, 1.5). Composites each text token over each surface it may
+ * sit on, over the wash, over every palette color and over both extremes (darkest and brightest
+ * pixel) of the background zone under it, from content/.generated/backgrounds.json (pnpm
+ * backgrounds). Fails below 4.5:1 for text and 7:1 for code. Token values are read from
+ * styles/glass-tokens.css, so the test follows the theme.
  *
  *   pnpm test:contrast
  */
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { CODE_COLORS } from "@/lib/highlight-colors";
+import { BACKGROUNDS, type BackgroundId } from "@/content/backgrounds";
 
 type RGBA = [number, number, number, number];
 const css = readFileSync(path.join(process.cwd(), "styles", "glass-tokens.css"), "utf8");
@@ -55,20 +57,32 @@ const PALETTE: Record<string, RGBA> = {
   chartreuse: token("--chartreuse"),
   coral: token("--coral"),
   white: token("--white"),
-  "darkest background pixel": [4, 21, 211, 1],
 };
 const WASH_FRAME: RGBA = [255, 255, 255, 0.4];
 const WASH_TODAY: RGBA = [240, 238, 250, 0.55];
 /** The chrome wash is 0.78 over the eyebrow and title band (y 0 to 168) and 0.45 below it. */
 const WASH_CHROME_TOP: RGBA = [255, 255, 255, 0.78];
 const WASH_CHROME: RGBA = [255, 255, 255, 0.45];
-const WASH_INTRO = token("--intro-wash");
-const INTRO_TEXT_SCRIM: RGBA = [15, 28, 65, 0.45];
+
+type Stats = Record<BackgroundId, { zones: { name: string; darkest: [number, number, number]; brightest: [number, number, number] }[] }>;
+const statsFile = path.join(process.cwd(), "content", ".generated", "backgrounds.json");
+if (!existsSync(statsFile)) {
+  console.log("✖ content/.generated/backgrounds.json is missing; run pnpm backgrounds");
+  process.exit(1);
+}
+const stats = JSON.parse(readFileSync(statsFile, "utf8")) as Stats;
+/** Both extremes of one zone of one background, as bases to composite over. */
+function zoneBases(id: BackgroundId, zone: string): Record<string, RGBA> {
+  const z = stats[id]?.zones.find((x) => x.name === zone);
+  if (!z) throw new Error(`no stats for ${id} ${zone}; run pnpm backgrounds`);
+  return { [`darkest ${id} pixel`]: [...z.darkest, 1], [`brightest ${id} pixel`]: [...z.brightest, 1] };
+}
+const SECTION_IDS = (Object.keys(BACKGROUNDS) as BackgroundId[]).filter((id) => /^[df]\d$/.test(id));
+/** Frames show the section image under the wash: palette colors plus the frame slot's extremes. */
+const FRAME_BASES: Record<string, RGBA> = { ...PALETTE, ...Object.assign({}, ...SECTION_IDS.map((id) => zoneBases(id, "frame slot"))) };
 
 let failed = 0;
 let checks = 0;
-/** Intro slides sit on glass-navy.jpg: its brightest pixel (measured, rgb(195 120 177)) and navy. */
-const INTRO_BASES: Record<string, RGBA> = { navy: token("--navy"), "brightest pixel of glass-navy.jpg": [195, 120, 177, 1] };
 
 function expect(label: string, fg: RGBA, layers: RGBA[], min: number, bases: Record<string, RGBA> = PALETTE) {
   let worst = Infinity;
@@ -95,33 +109,61 @@ for (const [wash, wn] of [
   [WASH_FRAME, "now frame"],
   [WASH_TODAY, "used-to frame"],
 ] as const) {
-  expect(`ink on the pane (${wn})`, ink, [pane, wash], 4.5);
+  expect(`ink on the pane (${wn})`, ink, [pane, wash], 4.5, FRAME_BASES);
   for (const s of ["--glass-surface", "--glass-surface-strong", "--glass-surface-field"]) {
-    expect(`ink on ${s} in the pane (${wn})`, ink, [token(s), pane, wash], 4.5);
-    expect(`ink-soft on ${s} in the pane (${wn})`, soft, [token(s), pane, wash], 4.5);
-    expect(`link on ${s} in the pane (${wn})`, link, [token(s), pane, wash], 4.5);
+    expect(`ink on ${s} in the pane (${wn})`, ink, [token(s), pane, wash], 4.5, FRAME_BASES);
+    expect(`ink-soft on ${s} in the pane (${wn})`, soft, [token(s), pane, wash], 4.5, FRAME_BASES);
+    expect(`link on ${s} in the pane (${wn})`, link, [token(s), pane, wash], 4.5, FRAME_BASES);
   }
-  expect(`ink on --glass-surface-float, no pane (${wn})`, ink, [token("--glass-surface-float"), wash], 4.5);
-  expect(`ink-soft on --glass-surface-float, no pane (${wn})`, soft, [token("--glass-surface-float"), wash], 4.5);
+  expect(`ink on --glass-surface-float, no pane (${wn})`, ink, [token("--glass-surface-float"), wash], 4.5, FRAME_BASES);
+  expect(`ink-soft on --glass-surface-float, no pane (${wn})`, soft, [token("--glass-surface-float"), wash], 4.5, FRAME_BASES);
 }
 expect("white on a Slalom Blue button", token("--white"), [token("--slalom-blue")], 4.5);
 for (const fill of ["--coral", "--cyan", "--purple", "--chartreuse"]) expect(`navy on ${fill} fill`, ink, [token(fill)], 4.5);
 
-// Slide chrome: eyebrow, title and meter on the wash; code on the code card.
-expect("eyebrow (dark blue) on the chrome wash", token("--dark-blue"), [WASH_CHROME_TOP], 4.5);
-expect("title (navy) on the chrome wash", ink, [WASH_CHROME_TOP], 4.5);
-expect("meter value (dark blue) on the chrome wash", token("--dark-blue"), [WASH_CHROME_TOP], 4.5);
+// Slide chrome (walk and single pages): eyebrow, title and meter on the wash over each section's
+// title band; code on the code card.
+for (const id of SECTION_IDS) {
+  const band = zoneBases(id, "walk-page title band");
+  expect(`${id}: eyebrow (dark blue) on the chrome wash`, token("--dark-blue"), [WASH_CHROME_TOP], 4.5, band);
+  expect(`${id}: title (navy) on the chrome wash`, ink, [WASH_CHROME_TOP], 4.5, band);
+  expect(`${id}: step label (ink-soft) on the chrome wash`, soft, [WASH_CHROME_TOP], 4.5, band);
+}
 const code = token("--chrome-code-surface");
-for (const [name, hex] of Object.entries(CODE_COLORS)) expect(`code ${name} on the code card`, parse(hex), [code, WASH_CHROME], 7);
-expect("code ink on a highlighted line", parse(CODE_COLORS.ink), [token("--chrome-code-highlight-bg"), code, WASH_CHROME], 7);
+for (const [name, hex] of Object.entries(CODE_COLORS)) expect(`code ${name} on the code card`, parse(hex), [code, WASH_CHROME], 7, FRAME_BASES);
+expect("code ink on a highlighted line", parse(CODE_COLORS.ink), [token("--chrome-code-highlight-bg"), code, WASH_CHROME], 7, FRAME_BASES);
 
-// Intro slide (navy): white, body and soft text on dark tiles over the intro wash.
-const dark = token("--glass-dark-surface");
-for (const t of ["--glass-dark-ink", "--glass-dark-ink-body", "--glass-dark-ink-soft"]) {
-  expect(`${t} on a dark tile`, token(t), [dark, WASH_INTRO], 4.5, INTRO_BASES);
-  // The right column carries a navy scrim (styles/components/intro.css) so its text holds 4.5:1
-  // over the brightest arc of the background.
-  expect(`${t} on the intro text column`, token(t), [INTRO_TEXT_SCRIM, WASH_INTRO], 4.5, INTRO_BASES);
+// Intro slides (PRD v5, 1.6): the text sits in one dark glass panel (navy 0.72, blurred) over the
+// section background; tiles add navy 0.56 on top of the panel.
+const strong = token("--glass-dark-surface-strong");
+const darkTile = token("--glass-dark-surface");
+for (const id of SECTION_IDS) {
+  const panel = zoneBases(id, "intro text panel");
+  // Title, description and also-uses sit on the panel; ink-soft (browser names) only on tiles.
+  for (const t of ["--glass-dark-ink", "--glass-dark-ink-body"]) expect(`${id}: ${t} on the intro text panel`, token(t), [strong], 4.5, panel);
+  for (const t of ["--glass-dark-ink", "--glass-dark-ink-body", "--glass-dark-ink-soft"]) expect(`${id}: ${t} on a support tile`, token(t), [darkTile, strong], 4.5, panel);
+}
+
+// Opening and closing slides (PRD v5, 1.5; spec 6): text on the field, on light glass cards
+// (white 0.72) or on dark glass (navy 0.72), over each zone's extremes. They are native layouts
+// from M6 on; until then they keep their own fills (content/designed/) and are not tested here.
+if (!existsSync(path.join(process.cwd(), "content", "designed"))) {
+  const lightCard = token("--glass-surface-strong");
+  for (const id of (Object.keys(BACKGROUNDS) as BackgroundId[]).filter((x) => !SECTION_IDS.includes(x))) {
+    for (const z of BACKGROUNDS[id].textZone) {
+      const bases = zoneBases(id, z.name);
+      if (z.on === "field") expect(`${id}: ${z.name} (${z.ink}) on the field`, z.ink === "white" ? token("--white") : ink, [], 4.5, bases);
+      else if (z.on === "light-card") {
+        expect(`${id}: ${z.name} ink on light glass`, ink, [lightCard], 4.5, bases);
+        expect(`${id}: ${z.name} ink-soft on light glass`, soft, [lightCard], 4.5, bases);
+        expect(`${id}: ${z.name} link on light glass`, link, [lightCard], 4.5, bases);
+      } else if (z.on === "dark-panel") {
+        expect(`${id}: ${z.name} white on dark glass`, token("--glass-dark-ink"), [strong], 4.5, bases);
+        expect(`${id}: ${z.name} body on dark glass`, token("--glass-dark-ink-body"), [strong], 4.5, bases);
+        expect(`${id}: ${z.name} cyan on dark glass`, token("--cyan"), [strong], 4.5, bases);
+      }
+    }
+  }
 }
 
 console.log(`\n${checks - failed} passed, ${failed} failed`);

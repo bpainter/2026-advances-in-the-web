@@ -1,13 +1,15 @@
 /**
  * The portal theme (PRD v4, 6.2):
  *
- *   pnpm theme:sync   copies styles/glass-tokens.css to public/theme/portal-glass.css and, with the
- *                     portal backgrounds and the two Slalom Sans faces, into each F2 app's public/
+ *   pnpm theme:sync   copies styles/glass-tokens.css to public/theme/portal-glass.css, writes
+ *                     public/theme/backgrounds.css from content/backgrounds.ts (PRD v5, 4.1) and
+ *                     copies both, the F2 section background and the two Slalom Sans faces into
+ *                     each F2 app's public/
  *   pnpm theme:lint   lints the theme (lib/validate/theme.ts)
  */
-import { copyFileSync, mkdirSync, readFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { BACKGROUNDS, F2_APPS, FONTS, THEME_PUBLIC, THEME_SOURCE, lintTheme } from "@/lib/validate/theme";
+import { BACKGROUNDS_PUBLIC, F2_APPS, F2_BACKGROUND, FONTS, THEME_PUBLIC, THEME_SOURCE, backgroundsCss, lintTheme } from "@/lib/validate/theme";
 
 const root = process.cwd();
 const cmd = process.argv[2];
@@ -18,9 +20,11 @@ const copy = (from: string, to: string) => {
 
 if (cmd === "sync") {
   copy(THEME_SOURCE, THEME_PUBLIC);
+  writeFileSync(path.join(root, BACKGROUNDS_PUBLIC), backgroundsCss());
   for (const app of F2_APPS) {
     copy(THEME_SOURCE, `${app}/public/theme/portal-glass.css`);
-    for (const f of BACKGROUNDS) copy(`public/backgrounds/${f}`, `${app}/public/backgrounds/${f}`);
+    copy(BACKGROUNDS_PUBLIC, `${app}/${BACKGROUNDS_PUBLIC}`);
+    copy(`public/backgrounds/v5/${F2_BACKGROUND}`, `${app}/public/backgrounds/v5/${F2_BACKGROUND}`);
     for (const f of FONTS) copy(`public/fonts/${f}`, `${app}/public/fonts/${f}`);
   }
   console.log(`synced ${THEME_SOURCE} to ${THEME_PUBLIC} and ${F2_APPS.length} F2 apps`);

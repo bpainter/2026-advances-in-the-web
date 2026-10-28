@@ -11,4 +11,5 @@ export const slide: Slide = {
   citations: [],
   speakerNotes: "Two quotes nine years apart: Berners-Lee's neutral space where everyone could create, share, debate, innovate, learn and dream, and the W3C strategy team's line about keeping humanity at the centre while agents act on our behalf. Read both slowly.",
   timing: { minutes: 1, cumulative: 4 },
+  background: "two-perspectives",
 };

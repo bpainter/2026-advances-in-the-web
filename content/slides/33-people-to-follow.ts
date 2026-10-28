@@ -11,4 +11,5 @@ export const slide: Slide = {
   citations: [],
   speakerNotes: "Twelve people whose writing covers everything in this talk. Point at two or three you read every week, then thank the room; this is the last slide.",
   timing: { minutes: 1, cumulative: 36 },
+  background: "people-to-follow",
 };

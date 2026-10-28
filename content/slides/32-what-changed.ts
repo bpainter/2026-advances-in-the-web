@@ -11,4 +11,5 @@ export const slide: Slide = {
   citations: [],
   speakerNotes: "Six takeaways: the browser does more; Baseline and Interop settle support; frameworks rethink rendering and caching; build tools go native; installs are a security decision; abstractions are maintenance decisions. Land the last one: every layer you add is a layer you keep.",
   timing: { minutes: 1.5, cumulative: 35 },
+  background: "what-changed",
 };
