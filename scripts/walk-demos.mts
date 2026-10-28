@@ -228,6 +228,10 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
     else pass(`back ${step.id}: asserts pass, digest ${r.digest}`);
   }
   await checkProtocol(page, where, { fail, pass });
+  // No box was forced in after 2000 ms on this page (PRD v5, 3.2 rule 6; M8's rehearsal criterion).
+  const forced = (await page.evaluate("(window.__spotlightForced || []).map((f) => f.stepId)").catch(() => [])) as string[];
+  if (forced.length) fail(where, `spotlight forced after 2000 ms on ${forced.join(", ")}`);
+  else pass("no spotlight forced");
 }
 
 /** The frame the audience sees on a walk or single page. */
