@@ -41,7 +41,7 @@ export function AdminBarForm({
   return (
     <div className="admin" data-presenter-chrome="">
       <label className="admin__field">
-        <span>user</span>
+        <span>User</span>
         <select
           name="user"
           value={currentUser}
@@ -58,7 +58,7 @@ export function AdminBarForm({
         </select>
       </label>
       <label className="admin__field">
-        <span>region</span>
+        <span>Region</span>
         <select
           name="region"
           value={currentRegion}
@@ -77,7 +77,7 @@ export function AdminBarForm({
       <form className="admin__form" action={saveCopyForm} data-demo-save="">
         <input type="hidden" name="id" value={id} />
         <label className="admin__field admin__field--grow">
-          <span>copy</span>
+          <span>Copy</span>
           <input type="text" name="copy" defaultValue={copy} aria-label="Product copy" />
         </label>
         <button type="submit">Save</button>

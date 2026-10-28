@@ -2,17 +2,18 @@
 <link rel="stylesheet" href="styles.css">
 <main class="measure">
   <header class="measure__head">
-    <h1 class="measure__title">Same repository, two builds</h1>
+    <h1 class="measure__title">One fixture app, two builds</h1>
     <p class="measure__meta" id="measure-meta">Not measured</p>
   </header>
+  <div class="measure__card">
   <table id="measure-table">
     <thead>
       <tr>
         <th scope="col">Measure</th>
         <th scope="col">
-          Existing setup <span class="version" id="v-existing">Not measured</span>
+          Before <span class="version" id="v-existing">Not measured</span>
         </th>
-        <th scope="col">Vite 8 <span class="version" id="v-vite8">Not measured</span></th>
+        <th scope="col">After <span class="version" id="v-vite8">Not measured</span></th>
       </tr>
     </thead>
     <tbody>
@@ -43,6 +44,7 @@
       </tr>
     </tbody>
   </table>
-  <p class="measure__foot" id="measure-foot">Values arrive from pnpm measure:vite at rehearsal.</p>
+  </div>
+  <p class="measure__foot" id="measure-foot" hidden></p>
 </main>
 <script type="module" src="measure.js"></script>

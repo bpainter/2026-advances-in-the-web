@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { RequestLog } from "@/components/request-log";
 import { PRESENTER_ORIGIN, RUNTIME_SRC } from "@/lib/origins";
+import { PortalShell } from "@/components/portal-shell";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -27,12 +28,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           data-presenter-origin={PRESENTER_ORIGIN}
           data-runtime={RUNTIME_SRC}
         />
-        <div className="shell">
-          <header className="topbar">
-            <p className="brand">
-              <span className="brand__name">Ridgeline Outfitters</span>
-              <span className="brand__mode">Next.js 16 · cacheComponents off</span>
-            </p>
+        <PortalShell title="Products">
+          <div className="topbar">
+            <p className="brand__mode">Next.js 16 · Cache Components off</p>
             <div className="admin" data-presenter-chrome="">
               <button type="button" data-demo-reload="">
                 Reload
@@ -41,10 +39,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 Reset
               </button>
             </div>
-          </header>
+          </div>
           <main className="product">{children}</main>
           <RequestLog />
-        </div>
+                </PortalShell>
       </body>
     </html>
   );

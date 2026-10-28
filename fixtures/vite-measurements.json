@@ -1,22 +1,23 @@
 {
-  "note": "Not measured. pnpm measure:vite overwrites this file at rehearsal (median of five runs on the presenting laptop); values are never typed by hand and never taken from vendor posts. Null means not measured.",
-  "measuredAt": null,
-  "machine": null,
-  "node": null,
+  "note": "Measured by pnpm measure:vite (scripts/measure-vite.mts) on the machine named below: fixtures/vite-measure/app built with Vite 7 and Vite 8 and the same plugins. Median of five runs. Cold: Vite's cache and the output removed. Warm: cache kept. Never typed by hand.",
+  "measuredAt": "2026-10-28T15:44:55.378Z",
+  "machine": "Apple M4, 10 cores, macOS 15.7.3",
+  "node": "20.20.0",
+  "plugins": "@vitejs/plugin-react 5.2.0, vite-plugin-svgr 4.5.0, rollup-plugin-visualizer 6.0.11",
   "existing": {
-    "vite": null,
-    "coldMs": null,
-    "warmMs": null,
-    "outputKb": null,
-    "warnings": null,
-    "failingPlugins": null
+    "vite": "7.3.7",
+    "coldMs": 625,
+    "warmMs": 639,
+    "outputKb": 224,
+    "warnings": 0,
+    "failingPlugins": []
   },
   "vite8": {
-    "vite": null,
-    "coldMs": null,
-    "warmMs": null,
-    "outputKb": null,
-    "warnings": null,
-    "failingPlugins": null
+    "vite": "8.3.5",
+    "coldMs": 280,
+    "warmMs": 280,
+    "outputKb": 222,
+    "warnings": 0,
+    "failingPlugins": []
   }
 }

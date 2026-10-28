@@ -14,7 +14,7 @@ export const section: DemoSection = {
       badge: { text: "Vite 7 and Vite 8, measured here" },
       title: "Vite 8 locally",
       intro:
-        "Vite 8 uses one bundler, Rolldown, for development and builds. We measured our own repository on this laptop.",
+        "Vite 8 uses one bundler, Rolldown, for development and builds. We measured one fixture app on this laptop.",
       frame: {
         build: "static",
         route: "/demos/09-vite-8/static",
@@ -38,14 +38,14 @@ export const section: DemoSection = {
           ],
           spotlight: ["#row-cold", "#row-warm"],
           ifKeyboard: "If asked, run pnpm measure:vite and show the JSON.",
-          bullets: ["Cold build, then warm build. Read both numbers aloud."],
+          bullets: ["Cold and warm builds. On this laptop, Vite 8 takes less than half the time."],
         },
         {
           id: "s2",
           label: "Output size",
           actions: [{ type: "reveal", target: "#row-size" }],
           spotlight: ["#row-size"],
-          bullets: ["Output size, from the same build."],
+          bullets: ["The output is about the same size."],
         },
         {
           id: "s3",
@@ -58,8 +58,8 @@ export const section: DemoSection = {
           ],
           spotlight: ["#row-warnings", "#row-plugins"],
           bullets: [
-            "Warnings and broken plugins are the cost of the upgrade.",
-            "These numbers are ours. Your plugins decide yours.",
+            "No warnings and no failing plugins with these three plugins.",
+            "These are our numbers on one small app. Your plugins decide yours.",
           ],
         },
       ],

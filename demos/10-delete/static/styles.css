@@ -1,133 +1,84 @@
-/* F5 What you can delete. Authored for a 1296 x 856 frame. */
+/* F5 What you can delete, on the portal glass (design review H1, H8, M13). The theme supplies the
+   body, the background and Slalom Sans; the table is a glass card with fixed columns, so nothing
+   moves as rows arrive, and seven rows fit the 628 px frame. */
 [hidden] {
   display: none !important;
 }
-
-html,
-body {
-  margin: 0;
-  block-size: 100%;
-}
-
-body {
-  color: #0f1c41;
-  background: #fff;
-  font:
-    1.25rem/1.35 system-ui,
-    sans-serif;
-}
-
 .delete {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  block-size: 100%;
-  padding: 2rem 2.5rem;
+  display: grid;
+  align-content: start;
+  gap: 12px;
 }
-
 .delete__head {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 2rem;
+  gap: 8px 24px;
 }
-
 .delete__title {
   margin: 0;
-  font-size: 1.875rem;
-  font-weight: 650;
+  font-size: var(--glass-text-xl);
+  line-height: var(--glass-leading-xl);
 }
-
 .delete__meta {
   margin: 0;
-  font-size: 1.125rem;
-  color: #4a5675;
+  font-size: 18px;
+  color: var(--glass-ink-soft);
 }
-
+.delete__card {
+  padding: 4px 16px;
+  border: var(--glass-border);
+  border-radius: var(--glass-radius-card);
+  background: var(--glass-surface-strong);
+  box-shadow: var(--glass-highlight), var(--glass-shadow-card);
+}
 #delete-table {
   inline-size: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 18px;
+  line-height: 24px;
 }
-
 #delete-table th,
 #delete-table td {
-  padding: 0.75rem 1rem;
+  padding: 8px 10px;
   text-align: start;
   vertical-align: top;
-  border-block-end: 1px solid #c9cfdb;
 }
-
 #delete-table thead th {
-  padding-block: 0.5rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #4a5675;
-  border-block-end: 2px solid #0f1c41;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--glass-ink-soft);
+  border-bottom: 1px solid var(--glass-rule);
 }
-
+#delete-table tbody tr + tr th,
+#delete-table tbody tr + tr td {
+  border-top: 1px solid var(--glass-rule);
+}
 #delete-table tbody th {
-  inline-size: 15%;
-  font-weight: 650;
+  font-weight: 700;
 }
-
-#delete-table td:nth-child(2) {
-  inline-size: 19%;
-}
-
-#delete-table td:nth-child(3) {
-  inline-size: 27%;
-}
-
-#delete-table td.num {
-  inline-size: 11%;
-}
-
 #delete-table .num {
   text-align: end;
-  font-variant-numeric: tabular-nums;
 }
-
-#delete-table tbody tr:not([hidden]) {
-  opacity: 1;
-  transition: opacity 250ms ease-out;
-  @starting-style {
-    opacity: 0;
-  }
-}
-
 .pkgs,
 .weekly {
   margin: 0;
   padding: 0;
   list-style: none;
 }
-
-.pkgs li,
-.weekly li {
-  line-height: 1.5;
-  white-space: nowrap;
-}
-
 .weekly li[data-pulled] {
-  color: #0c62fb;
-  font-weight: 600;
-}
-
-code {
-  font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: 0.92em;
-}
-
-.keep {
-  color: #0c62fb;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  color: var(--glass-link);
 }
-
+code {
+  font-family: var(--glass-font-mono);
+  font-size: 0.9em;
+}
+.keep {
+  font-weight: 700;
+}
 .not-yet {
-  color: #4a5675;
+  color: var(--glass-ink-soft);
 }

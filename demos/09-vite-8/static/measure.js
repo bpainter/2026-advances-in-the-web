@@ -32,11 +32,11 @@ function formatCell(key, value) {
   return String(value);
 }
 
-function fill(cell, formatted) {
+function fill(cell, formatted, reason) {
   cell.replaceChildren();
   cell.removeAttribute("data-unmeasured");
   if (formatted === null) {
-    cell.textContent = NOT_MEASURED;
+    cell.textContent = reason || NOT_MEASURED;
     cell.setAttribute("data-unmeasured", "");
   } else if (Array.isArray(formatted)) {
     formatted.forEach((name, i) => {
@@ -54,7 +54,8 @@ function render(data) {
   const setups = { existing: data.existing || {}, vite8: data.vite8 || {} };
   for (const cell of document.querySelectorAll("#measure-table td[data-cell]")) {
     const [setup, key] = cell.getAttribute("data-cell").split(".");
-    fill(cell, formatCell(key, setups[setup][key]));
+    // A cell that could not be measured says why, from the setup's recorded error.
+    fill(cell, formatCell(key, setups[setup][key]), setups[setup].error ? `Not measured: ${setups[setup].error}` : null);
   }
   for (const [setup, el] of [
     ["existing", document.querySelector("#v-existing")],
@@ -68,12 +69,13 @@ function render(data) {
     const parts = [`Measured ${dateFormat.format(when)}`];
     if (data.machine) parts.push(String(data.machine));
     if (data.node) parts.push(`Node ${data.node}`);
+    parts.push("median of five runs");
     meta.textContent = parts.join(" · ");
-    foot.textContent =
-      "Median of five runs. Cold: a fresh clone with caches cleared. Warm: a second run with caches kept.";
+    foot.hidden = true;
   } else {
     meta.textContent = NOT_MEASURED;
-    foot.textContent = "Values arrive from pnpm measure:vite at rehearsal.";
+    foot.hidden = false;
+    foot.textContent = data.error ? `Not measured: ${data.error}` : "Not measured: run pnpm measure:vite on this machine.";
   }
 }
 
@@ -81,3 +83,7 @@ fetch("measurements.json", { headers: { Accept: "application/json" } })
   .then((r) => (r.ok ? r.json() : { measured: false }))
   .then(render)
   .catch(() => render({ measured: false }));
+
+// The engine remounts a fresh document on reset, so the hook has nothing to clear; it must exist,
+// or an instant replay stops at the s0 `reset` action.
+window.demoHooks = { reset() {} };

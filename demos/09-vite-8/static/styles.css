@@ -1,120 +1,80 @@
-/* F4 Vite 8 locally. Authored for a 1296 x 856 frame. */
+/* F4 Vite 8 locally, on the portal glass (design review H1, B3). The theme supplies the body,
+   the background and Slalom Sans; the table is a glass card. */
 [hidden] {
   display: none !important;
 }
-
-html,
-body {
-  margin: 0;
-  block-size: 100%;
-}
-
-body {
-  color: #0f1c41;
-  background: #fff;
-  font:
-    1.375rem/1.4 system-ui,
-    sans-serif;
-}
-
 .measure {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  block-size: 100%;
-  padding: 2.5rem 3rem;
+  display: grid;
+  align-content: start;
+  gap: 16px;
 }
-
 .measure__head {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 2rem;
+  gap: 8px 24px;
 }
-
 .measure__title {
   margin: 0;
-  font-size: 2rem;
-  font-weight: 650;
+  font-size: var(--glass-text-xl);
+  line-height: var(--glass-leading-xl);
 }
-
 .measure__meta {
   margin: 0;
-  font-size: 1.125rem;
-  color: #4a5675;
+  font-size: 18px;
+  color: var(--glass-ink-soft);
 }
-
+.measure__card {
+  padding: 8px 24px;
+  border: var(--glass-border);
+  border-radius: var(--glass-radius-card);
+  background: var(--glass-surface-strong);
+  box-shadow: var(--glass-highlight), var(--glass-shadow-card);
+}
 #measure-table {
   inline-size: 100%;
   border-collapse: collapse;
-  font-size: 1.5rem;
+  table-layout: fixed;
+  font-size: 24px;
 }
-
 #measure-table th,
 #measure-table td {
-  padding: 1.125rem 1.25rem;
+  padding: 14px 12px;
   text-align: start;
-  vertical-align: top;
-  border-block-end: 1px solid #c9cfdb;
+  vertical-align: baseline;
 }
-
 #measure-table thead th {
-  font-size: 1.125rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #4a5675;
-  border-block-end: 2px solid #0f1c41;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--glass-ink-soft);
+  border-bottom: 1px solid var(--glass-rule);
 }
-
-#measure-table thead th:nth-child(3) {
-  color: #0c62fb;
+#measure-table tbody tr + tr th,
+#measure-table tbody tr + tr td {
+  border-top: 1px solid var(--glass-rule);
 }
-
-#measure-table thead th:first-child,
 #measure-table tbody th {
-  inline-size: 28%;
+  font-weight: 700;
 }
-
-#measure-table tbody th {
-  font-weight: 650;
+#measure-table td {
+  font-variant-numeric: normal;
 }
-
-#measure-table tbody td {
-  font-variant-numeric: tabular-nums;
-}
-
 #measure-table td[data-unmeasured] {
-  color: #8a93a8;
-  font-style: italic;
+  color: var(--glass-ink-soft);
+  font-size: 18px;
 }
-
-#measure-table tbody tr:not([hidden]) {
-  opacity: 1;
-  transition: opacity 250ms ease-out;
-  @starting-style {
-    opacity: 0;
-  }
-}
-
 .version {
   display: block;
-  margin-block-start: 0.125rem;
-  font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: 1.125rem;
-  font-weight: 500;
-  letter-spacing: 0;
-  text-transform: none;
+  font-size: 16px;
+  font-weight: 400;
 }
-
 code {
-  font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: 0.95em;
+  font-family: var(--glass-font-mono);
+  font-size: 0.85em;
 }
-
 .measure__foot {
-  margin: auto 0 0;
-  font-size: 1.125rem;
-  color: #4a5675;
+  margin: 0;
+  font-size: 16px;
+  color: var(--glass-ink-soft);
 }

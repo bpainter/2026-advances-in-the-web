@@ -3,6 +3,7 @@
 // without this script, with a dash in every count.
 const compact = new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 });
 const dateFormat = new Intl.DateTimeFormat("en-GB", {
+  timeZone: "UTC",
   day: "numeric",
   month: "short",
   year: "numeric",
@@ -29,3 +30,7 @@ fetch("npm-pull.json", { headers: { Accept: "application/json" } })
   .then((r) => (r.ok ? r.json() : { pulled: false }))
   .then(render)
   .catch(() => render({ pulled: false }));
+
+// The engine remounts a fresh document on reset, so the hook has nothing to clear; it must exist,
+// or an instant replay stops at the s0 `reset` action.
+window.demoHooks = { reset() {} };

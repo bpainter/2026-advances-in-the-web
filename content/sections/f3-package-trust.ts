@@ -118,7 +118,7 @@ export const section: DemoSection = {
       eyebrow: "Package trust",
       title: "How we do it now",
       intro:
-        "This is a recorded session against a test registry. The policy and the workflow are on the right.",
+        "The install steps were recorded on this laptop against a test registry. The release steps are an example. The policy and workflow files are on the right.",
       frame: {
         build: "terminal",
         route: "/demos/07-package-workflow/terminal/session",
@@ -141,17 +141,17 @@ export const section: DemoSection = {
         {
           id: "s0",
           label: "Policy file",
-          actions: [{ type: "hook", name: "reset" }, T(1, 5)],
+          actions: [{ type: "hook", name: "reset" }, T(1, 4)],
           code: { file: "pnpm-workspace.yaml", lines: [] },
           bullets: [],
         },
         {
           id: "s1",
           label: "Script blocked",
-          actions: [T(6, 12)],
+          actions: [T(5, 10)],
           code: { file: "pnpm-workspace.yaml", lines: [[7, 9]] },
           ifKeyboard:
-            "Run pnpm add report-exporter, then ls .marker. Press Next once to sync the frame.",
+            "Run pnpm add -w report-exporter, then ls .marker. Press Next once to sync the frame.",
           bullets: [
             "Adding the package stops at its install script. Nothing ran.",
             "The workspace file lists what each package may run. This one starts at no.",
@@ -161,7 +161,7 @@ export const section: DemoSection = {
           id: "s2",
           label: "Review and approve",
           key: true,
-          actions: [T(13, 27)],
+          actions: [T(11, 30)],
           code: { file: "pnpm-workspace.yaml", lines: [[7, 9]] },
           proof: "Show the permission entry in version control so the decision is reviewable.",
           ifKeyboard:
@@ -174,18 +174,18 @@ export const section: DemoSection = {
         {
           id: "s3",
           label: "Too new to install",
-          actions: [T(28, 43)],
+          actions: [T(31, 49)],
           code: { file: "pnpm-workspace.yaml", lines: [[4, 5]] },
           bullets: [
-            "A version published ten minutes ago is held back for a day.",
+            "Version 1.3.0 is minutes old, so pnpm refuses it until it is a day old.",
             "Attacks were live for hours, so a one-day wait skips most of them.",
-            "npm also refuses packages from a plain web address.",
+            "npm refuses a package from a plain web address.",
           ],
         },
         {
           id: "s4",
           label: "Stage the release",
-          actions: [T(44, 63)],
+          actions: [T(50, 69)],
           code: {
             file: "publish.yml",
             lines: [
@@ -194,15 +194,15 @@ export const section: DemoSection = {
             ],
           },
           bullets: [
-            "CI signs in with a short-lived token and stops at a staged release.",
-            "No long-lived token is stored anywhere.",
+            "This part is an example, not a recording. CI stops at a staged release.",
+            "CI signs in with a short-lived token. No long-lived token is stored.",
             "A maintainer downloads the exact package and reads its files.",
           ],
         },
         {
           id: "s5",
           label: "Approve and check",
-          actions: [T(64, 69)],
+          actions: [T(70, 74)],
           code: { file: "publish.yml", lines: [30] },
           proof:
             "Inspect the staged tarball before approval and show the provenance or trusted-publishing record.",

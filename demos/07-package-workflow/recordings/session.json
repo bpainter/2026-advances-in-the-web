@@ -1,54 +1,73 @@
 {
   "id": "session",
-  "capturedAt": "2026-10-26T22:40:00-04:00",
+  "capturedAt": "2026-10-28",
+  "recorded": "A to C were recorded by scripts/record-f3.mts against Verdaccio on this machine. D is an example, not a recording.",
   "env": {
-    "os": "macOS 26.0",
-    "node": "24.11.0",
+    "os": "macOS 15.7.3",
+    "node": "20.20.0",
     "pnpm": "12.11.0",
     "npm": "11.15.0",
     "registry": "http://localhost:4873/"
+  },
+  "parts": {
+    "A": [
+      1,
+      30
+    ],
+    "B": [
+      31,
+      41
+    ],
+    "C": [
+      42,
+      49
+    ],
+    "D": [
+      50,
+      74
+    ]
   },
   "lines": [
     {
       "line": 1,
       "delay": 300,
-      "text": "# ILLUSTRATIVE: replace with the recording",
+      "text": "# A: install intake, pnpm 12.11",
       "kind": "comment"
     },
     {
       "line": 2,
       "delay": 300,
-      "text": "# A: install intake, pnpm 12.11",
-      "kind": "comment"
-    },
-    {
-      "line": 3,
-      "delay": 300,
       "text": "# test registry: localhost:4873",
       "kind": "comment"
     },
     {
-      "line": 4,
+      "line": 3,
       "delay": 650,
       "text": "$ pnpm -v",
       "kind": "cmd"
     },
     {
-      "line": 5,
-      "delay": 260,
+      "line": 4,
+      "delay": 900,
       "text": "12.11.0",
       "kind": "out"
     },
     {
-      "line": 6,
+      "line": 5,
       "delay": 650,
-      "text": "$ pnpm add report-exporter",
+      "text": "$ pnpm add -w report-exporter",
       "kind": "cmd"
     },
     {
-      "line": 7,
+      "line": 6,
       "delay": 900,
       "text": "Packages: +1",
+      "kind": "out"
+    },
+    {
+      "line": 7,
+      "delay": 110,
+      "text": "dependencies:",
       "kind": "out"
     },
     {
@@ -59,369 +78,424 @@
     },
     {
       "line": 9,
-      "delay": 110,
-      "text": "report-exporter has a postinstall script.",
-      "kind": "out"
-    },
-    {
-      "line": 10,
-      "delay": 110,
-      "text": "Not run. Recorded as build: false.",
-      "kind": "out"
-    },
-    {
-      "line": 11,
       "delay": 650,
       "text": "$ ls .marker",
       "kind": "cmd"
     },
     {
-      "line": 12,
-      "delay": 260,
+      "line": 10,
+      "delay": 900,
       "text": "ls: .marker: No such file or directory",
       "kind": "out"
     },
     {
-      "line": 13,
+      "line": 11,
       "delay": 650,
-      "text": "$ pnpm permissions",
+      "text": "$ pnpm permissions list",
       "kind": "cmd"
     },
     {
-      "line": 14,
-      "delay": 260,
-      "text": "report-exporter 1.2.0",
+      "line": 12,
+      "delay": 900,
+      "text": "Denied:",
       "kind": "out"
     },
     {
-      "line": 15,
+      "line": 13,
       "delay": 110,
-      "text": "  build: false (postinstall)",
+      "text": "  report-exporter  build",
+      "kind": "out"
+    },
+    {
+      "line": 14,
+      "delay": 650,
+      "text": "$ pnpm approve report-exporter",
+      "kind": "cmd"
+    },
+    {
+      "line": 15,
+      "delay": 900,
+      "text": "[WARN] The following packages are not awaiting approval: report-exporter",
       "kind": "out"
     },
     {
       "line": 16,
-      "delay": 110,
-      "text": "  skills: none",
-      "kind": "out"
-    },
-    {
-      "line": 17,
-      "delay": 650,
-      "text": "$ pnpm approve",
-      "kind": "cmd"
-    },
-    {
-      "line": 18,
-      "delay": 260,
-      "text": "? Allow build for report-exporter? Yes",
-      "kind": "out"
-    },
-    {
-      "line": 19,
-      "delay": 110,
-      "text": "Updated pnpm-workspace.yaml",
-      "kind": "out"
-    },
-    {
-      "line": 20,
       "delay": 650,
       "text": "$ git diff pnpm-workspace.yaml",
       "kind": "cmd"
     },
     {
-      "line": 21,
-      "delay": 260,
-      "text": "   report-exporter:",
+      "line": 17,
+      "delay": 900,
+      "text": "@@ -9 +9,2 @@ permissions:",
       "kind": "out"
     },
     {
-      "line": 22,
+      "line": 18,
       "delay": 110,
       "text": "-    build: false",
       "kind": "out"
     },
     {
-      "line": 23,
+      "line": 19,
       "delay": 110,
       "text": "+    build: true",
       "kind": "out"
     },
     {
-      "line": 24,
+      "line": 20,
+      "delay": 110,
+      "text": "+    skills: true",
+      "kind": "out"
+    },
+    {
+      "line": 21,
       "delay": 650,
       "text": "$ pnpm install",
       "kind": "cmd"
     },
     {
-      "line": 25,
+      "line": 22,
       "delay": 900,
-      "text": "report-exporter postinstall: wrote .marker",
+      "text": "Scope: all 2 workspace projects",
+      "kind": "out"
+    },
+    {
+      "line": 23,
+      "delay": 110,
+      "text": "✓ Lockfile passes supply-chain policies (verified 78ms ago)",
+      "kind": "out"
+    },
+    {
+      "line": 24,
+      "delay": 110,
+      "text": "Lockfile is up to date, resolution step is skipped",
+      "kind": "out"
+    },
+    {
+      "line": 25,
+      "delay": 110,
+      "text": "Already up to date",
       "kind": "out"
     },
     {
       "line": 26,
+      "delay": 110,
+      "text": ".../node_modules/report-exporter postinstall$ node write-marker.js",
+      "kind": "out"
+    },
+    {
+      "line": 27,
+      "delay": 110,
+      "text": ".../node_modules/report-exporter postinstall: report-exporter postinstall: wrote .marker",
+      "kind": "out"
+    },
+    {
+      "line": 28,
+      "delay": 110,
+      "text": ".../node_modules/report-exporter postinstall: Done",
+      "kind": "out"
+    },
+    {
+      "line": 29,
       "delay": 650,
       "text": "$ cat .marker",
       "kind": "cmd"
     },
     {
-      "line": 27,
-      "delay": 260,
+      "line": 30,
+      "delay": 900,
       "text": "written by report-exporter postinstall",
       "kind": "out"
     },
     {
-      "line": 28,
+      "line": 31,
       "delay": 300,
       "text": "# B: a version that is too new",
       "kind": "comment"
     },
     {
-      "line": 29,
-      "delay": 650,
-      "text": "$ pnpm view report-exporter time --json",
-      "kind": "cmd"
-    },
-    {
-      "line": 30,
-      "delay": 900,
-      "text": "  \"1.2.0\": \"<two weeks before recording>\",",
-      "kind": "out"
-    },
-    {
-      "line": 31,
-      "delay": 110,
-      "text": "  \"1.3.0\": \"<ten minutes before recording>\"",
-      "kind": "out"
-    },
-    {
       "line": 32,
       "delay": 650,
-      "text": "$ pnpm add report-exporter@latest",
+      "text": "$ pnpm add -w report-exporter@1.3.0",
       "kind": "cmd"
     },
     {
       "line": 33,
       "delay": 900,
-      "text": "1.3.0 is younger than minimumReleaseAge",
+      "text": "✓ Lockfile passes supply-chain policies (verified 127ms ago)",
       "kind": "out"
     },
     {
       "line": 34,
       "delay": 110,
-      "text": "(1440 minutes). Using 1.2.0.",
+      "text": "Error: ERR_PNPM_NO_MATURE_MATCHING_VERSION",
       "kind": "out"
     },
     {
       "line": 35,
       "delay": 110,
-      "text": "+ report-exporter 1.2.0",
+      "text": "  × adding a new package",
       "kind": "out"
     },
     {
       "line": 36,
+      "delay": 110,
+      "text": "  ╰─▶ 1 version does not meet the minimumReleaseAge constraint:",
+      "kind": "out"
+    },
+    {
+      "line": 37,
+      "delay": 110,
+      "text": "        report-exporter@1.3.0 was published at 2026-10-28T15:52:11.651Z,",
+      "kind": "out"
+    },
+    {
+      "line": 38,
+      "delay": 110,
+      "text": "      within the minimumReleaseAge cutoff (2026-10-27T15:52:37.412Z)",
+      "kind": "out"
+    },
+    {
+      "line": 39,
+      "delay": 110,
+      "text": "  help: Run the install interactively to approve these picks, add them to",
+      "kind": "out"
+    },
+    {
+      "line": 40,
+      "delay": 110,
+      "text": "        minimumReleaseAgeExclude in pnpm-workspace.yaml, or wait for the",
+      "kind": "out"
+    },
+    {
+      "line": 41,
+      "delay": 110,
+      "text": "        packages to mature.",
+      "kind": "out"
+    },
+    {
+      "line": 42,
       "delay": 300,
       "text": "# C: npm 11.15 install sources",
       "kind": "comment"
     },
     {
-      "line": 37,
+      "line": 43,
       "delay": 650,
       "text": "$ npm -v",
       "kind": "cmd"
     },
     {
-      "line": 38,
-      "delay": 260,
+      "line": 44,
+      "delay": 900,
       "text": "11.15.0",
       "kind": "out"
     },
     {
-      "line": 39,
+      "line": 45,
       "delay": 650,
       "text": "$ npm config get allow-remote",
       "kind": "cmd"
     },
     {
-      "line": 40,
-      "delay": 260,
+      "line": 46,
+      "delay": 900,
       "text": "none",
       "kind": "out"
     },
     {
-      "line": 41,
+      "line": 47,
       "delay": 650,
       "text": "$ npm install https://cdn.example/x.tgz",
       "kind": "cmd"
     },
     {
-      "line": 42,
-      "delay": 900,
-      "text": "npm error Remote URL sources are not",
-      "kind": "out"
-    },
-    {
-      "line": 43,
-      "delay": 110,
-      "text": "npm error allowed. Use --allow-remote.",
-      "kind": "out"
-    },
-    {
-      "line": 44,
-      "delay": 300,
-      "text": "# D: staged publish, test registry",
-      "kind": "comment"
-    },
-    {
-      "line": 45,
-      "delay": 300,
-      "text": "# CI log excerpt, publish job",
-      "kind": "comment"
-    },
-    {
-      "line": 46,
-      "delay": 650,
-      "text": "$ npm stage publish",
-      "kind": "cmd"
-    },
-    {
-      "line": 47,
-      "delay": 900,
-      "text": "Staged @portal/ui@2.4.0 as stg_7f3a",
-      "kind": "out"
-    },
-    {
       "line": 48,
-      "delay": 110,
-      "text": "Provenance: signed by GitHub Actions",
+      "delay": 900,
+      "text": "npm error code EALLOWREMOTE",
       "kind": "out"
     },
     {
       "line": 49,
-      "delay": 300,
-      "text": "# maintainer laptop",
-      "kind": "comment"
+      "delay": 110,
+      "text": "npm error Fetching packages of type \"remote\" have been disabled",
+      "kind": "out"
     },
     {
       "line": 50,
-      "delay": 650,
-      "text": "$ npm stage list",
-      "kind": "cmd"
+      "delay": 300,
+      "text": "# D: example, not recorded: staged publish",
+      "kind": "comment",
+      "example": true
     },
     {
       "line": 51,
-      "delay": 900,
-      "text": "stg_7f3a  @portal/ui@2.4.0  CI  3m ago",
-      "kind": "out"
+      "delay": 300,
+      "text": "# CI log excerpt, publish job",
+      "kind": "comment",
+      "example": true
     },
     {
       "line": 52,
       "delay": 650,
-      "text": "$ npm stage view stg_7f3a",
-      "kind": "cmd"
+      "text": "$ npm stage publish",
+      "kind": "cmd",
+      "example": true
     },
     {
       "line": 53,
-      "delay": 260,
-      "text": "version:  2.4.0",
-      "kind": "out"
+      "delay": 900,
+      "text": "Staged @portal/ui@2.4.0 as stg_7f3a",
+      "kind": "out",
+      "example": true
     },
     {
       "line": 54,
       "delay": 110,
-      "text": "workflow: .github/workflows/publish.yml",
-      "kind": "out"
+      "text": "Provenance: signed by GitHub Actions",
+      "kind": "out",
+      "example": true
     },
     {
       "line": 55,
-      "delay": 110,
-      "text": "ref:      refs/heads/main",
-      "kind": "out"
+      "delay": 300,
+      "text": "# maintainer laptop",
+      "kind": "comment",
+      "example": true
     },
     {
       "line": 56,
-      "delay": 110,
-      "text": "files:    14 (61.2 kB unpacked)",
-      "kind": "out"
+      "delay": 650,
+      "text": "$ npm stage list",
+      "kind": "cmd",
+      "example": true
     },
     {
       "line": 57,
-      "delay": 650,
-      "text": "$ npm stage download stg_7f3a",
-      "kind": "cmd"
+      "delay": 900,
+      "text": "stg_7f3a  @portal/ui@2.4.0  CI  3m ago",
+      "kind": "out",
+      "example": true
     },
     {
       "line": 58,
-      "delay": 900,
-      "text": "portal-ui-2.4.0.tgz",
-      "kind": "out"
+      "delay": 650,
+      "text": "$ npm stage view stg_7f3a",
+      "kind": "cmd",
+      "example": true
     },
     {
       "line": 59,
-      "delay": 650,
-      "text": "$ tar -tzf portal-ui-2.4.0.tgz | head -4",
-      "kind": "cmd"
+      "delay": 260,
+      "text": "version:  2.4.0",
+      "kind": "out",
+      "example": true
     },
     {
       "line": 60,
-      "delay": 260,
-      "text": "package/package.json",
-      "kind": "out"
+      "delay": 110,
+      "text": "workflow: .github/workflows/publish.yml",
+      "kind": "out",
+      "example": true
     },
     {
       "line": 61,
       "delay": 110,
-      "text": "package/dist/index.js",
-      "kind": "out"
+      "text": "ref:      refs/heads/main",
+      "kind": "out",
+      "example": true
     },
     {
       "line": 62,
       "delay": 110,
-      "text": "package/dist/index.d.ts",
-      "kind": "out"
+      "text": "files:    14 (61.2 kB unpacked)",
+      "kind": "out",
+      "example": true
     },
     {
       "line": 63,
-      "delay": 110,
-      "text": "package/README.md",
-      "kind": "out"
+      "delay": 650,
+      "text": "$ npm stage download stg_7f3a",
+      "kind": "cmd",
+      "example": true
     },
     {
       "line": 64,
-      "delay": 650,
-      "text": "$ npm stage approve stg_7f3a",
-      "kind": "cmd"
+      "delay": 900,
+      "text": "portal-ui-2.4.0.tgz",
+      "kind": "out",
+      "example": true
     },
     {
       "line": 65,
-      "delay": 260,
-      "text": "Enter one-time password: ******",
-      "kind": "out"
+      "delay": 650,
+      "text": "$ tar -tzf portal-ui-2.4.0.tgz | head -4",
+      "kind": "cmd",
+      "example": true
     },
     {
       "line": 66,
-      "delay": 500,
-      "text": "Published @portal/ui@2.4.0",
-      "kind": "out"
+      "delay": 260,
+      "text": "package/package.json",
+      "kind": "out",
+      "example": true
     },
     {
       "line": 67,
-      "delay": 650,
-      "text": "$ npm audit signatures",
-      "kind": "cmd"
+      "delay": 110,
+      "text": "package/dist/index.js",
+      "kind": "out",
+      "example": true
     },
     {
       "line": 68,
-      "delay": 900,
-      "text": "1 package has a verified attestation",
-      "kind": "out"
+      "delay": 110,
+      "text": "package/dist/index.d.ts",
+      "kind": "out",
+      "example": true
     },
     {
       "line": 69,
-      "delay": 300,
-      "text": "# end of recording",
-      "kind": "comment"
+      "delay": 110,
+      "text": "package/README.md",
+      "kind": "out",
+      "example": true
+    },
+    {
+      "line": 70,
+      "delay": 650,
+      "text": "$ npm stage approve stg_7f3a",
+      "kind": "cmd",
+      "example": true
+    },
+    {
+      "line": 71,
+      "delay": 260,
+      "text": "Enter one-time password: ******",
+      "kind": "out",
+      "example": true
+    },
+    {
+      "line": 72,
+      "delay": 500,
+      "text": "Published @portal/ui@2.4.0",
+      "kind": "out",
+      "example": true
+    },
+    {
+      "line": 73,
+      "delay": 650,
+      "text": "$ npm audit signatures",
+      "kind": "cmd",
+      "example": true
+    },
+    {
+      "line": 74,
+      "delay": 900,
+      "text": "1 package has a verified attestation",
+      "kind": "out",
+      "example": true
     }
   ]
 }

@@ -22,7 +22,7 @@ export interface TerminalRecording {
   id: string;
   capturedAt: string;
   env: { os: string; node: string; pnpm: string; npm: string; registry: string };
-  lines: { line: number; delay: number; text: string; kind: "cmd" | "out" | "comment" }[];
+  lines: { line: number; delay: number; text: string; kind: "cmd" | "out" | "comment"; example?: boolean }[];
 }
 
 const builds = {
@@ -83,7 +83,8 @@ export function renderLines(rec: TerminalRecording): string {
       const text = l.kind === "cmd" ? l.text.replace(/^\$ /, "") : l.text;
       const prompt =
         l.kind === "cmd" ? '<span class="term__prompt" aria-hidden="true">$ </span>' : "";
-      return `<li data-line="${l.line}" data-kind="${l.kind}" data-delay="${l.delay}" style="--n: ${text.length}" hidden>${prompt}<span class="term__text">${escapeHtml(text)}</span></li>`;
+      const example = l.example ? " data-example" : "";
+      return `<li data-line="${l.line}" data-kind="${l.kind}" data-delay="${l.delay}"${example} style="--n: ${text.length}" hidden>${prompt}<span class="term__text">${escapeHtml(text)}</span></li>`;
     })
     .join("\n      ");
 }
@@ -103,8 +104,10 @@ function renderCaptured(rec: TerminalRecording): string {
   const d = new Date(rec.capturedAt);
   const label = Number.isNaN(d.getTime())
     ? rec.capturedAt
-    : d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
-  return `<time datetime="${escapeHtml(rec.capturedAt)}">${escapeHtml(label)}</time>`;
+    : d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+  // "Recorded <date>" while recorded lines are on screen; "Example session" once an example line is
+  // revealed (the CSS swaps them), so nothing illustrative claims to be a recording.
+  return `<span class="term__chip-recorded">Recorded <time datetime="${escapeHtml(rec.capturedAt)}">${escapeHtml(label)}</time></span><span class="term__chip-example">Example session</span>`;
 }
 
 /** The terminal document for one recording: the build's index.html with its placeholders filled. */

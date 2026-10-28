@@ -5,12 +5,14 @@
     <h1 class="delete__title">What the core demos let you delete</h1>
     <p class="delete__meta" id="pull-date">npm, one pull the week of the talk</p>
   </header>
+  <div class="delete__card">
   <table id="delete-table">
+    <colgroup><col style="width: 16%"><col style="width: 20%"><col style="width: 28%"><col style="width: 10%"><col style="width: 26%"></colgroup>
     <thead>
       <tr>
         <th scope="col">Demo</th>
-        <th scope="col">Today plumbing</th>
-        <th scope="col">Stands in for</th>
+        <th scope="col">Code it replaces</th>
+        <th scope="col">Libraries</th>
         <th scope="col" class="num">Weekly</th>
         <th scope="col">Not yet</th>
       </tr>
@@ -21,20 +23,14 @@
         <td>Open state, focus trap, portal</td>
         <td>
           <ul class="pkgs">
-            <li><code>@headlessui/react</code></li>
             <li><code>@radix-ui/react-dialog</code></li>
             <li><code>@radix-ui/react-popover</code></li>
-            <li><code>focus-trap</code></li>
-            <li><code>react-modal</code></li>
           </ul>
         </td>
         <td class="num">
           <ul class="weekly">
-            <li data-package="@headlessui/react">—</li>
             <li data-package="@radix-ui/react-dialog">—</li>
             <li data-package="@radix-ui/react-popover">—</li>
-            <li data-package="focus-trap">—</li>
-            <li data-package="react-modal">—</li>
           </ul>
         </td>
         <td class="not-yet">Floating UI, until anchor positioning settles</td>
@@ -61,21 +57,21 @@
         <td>Height-measuring script</td>
         <td>
           <ul class="pkgs">
-            <li><code>autosize</code></li>
             <li><code>react-textarea-autosize</code></li>
+            <li><code>autosize</code></li>
           </ul>
         </td>
         <td class="num">
           <ul class="weekly">
-            <li data-package="autosize">—</li>
             <li data-package="react-textarea-autosize">—</li>
+            <li data-package="autosize">—</li>
           </ul>
         </td>
         <td class="not-yet"></td>
       </tr>
       <tr id="row-d4" hidden>
         <th scope="row">Dashboard navigation</th>
-        <td>Click handler, History glue</td>
+        <td>Click handler, history code</td>
         <td>
           <ul class="pkgs">
             <li><code>page.js</code></li>
@@ -93,9 +89,7 @@
         <td>Scattered sanitizer calls</td>
         <td>
           <ul class="pkgs">
-            <li>
-              <code>DOMPurify</code>: <strong class="keep">keep</strong> it, behind one policy
-            </li>
+            <li><code>DOMPurify</code>: <strong class="keep">Keep</strong> it, behind one policy</li>
           </ul>
         </td>
         <td class="num">
@@ -110,16 +104,14 @@
         <td>Combobox keys, hidden input</td>
         <td>
           <ul class="pkgs">
-            <li><code>react-select</code></li>
-            <li><code>downshift</code></li>
             <li><code>@radix-ui/react-select</code></li>
+            <li><code>react-select</code></li>
           </ul>
         </td>
         <td class="num">
           <ul class="weekly">
-            <li data-package="react-select">—</li>
-            <li data-package="downshift">—</li>
             <li data-package="@radix-ui/react-select">—</li>
+            <li data-package="react-select">—</li>
           </ul>
         </td>
         <td class="not-yet">Firefox, until it ships</td>
@@ -129,23 +121,20 @@
         <td>Date math and formatting</td>
         <td>
           <ul class="pkgs">
-            <li><code>moment</code></li>
-            <li><code>dayjs</code></li>
             <li><code>date-fns</code></li>
-            <li><code>luxon</code></li>
+            <li><code>dayjs</code></li>
           </ul>
         </td>
         <td class="num">
           <ul class="weekly">
-            <li data-package="moment">—</li>
-            <li data-package="dayjs">—</li>
             <li data-package="date-fns">—</li>
-            <li data-package="luxon">—</li>
+            <li data-package="dayjs">—</li>
           </ul>
         </td>
         <td class="not-yet">Keep, until Temporal reaches Safari</td>
       </tr>
     </tbody>
   </table>
+  </div>
 </main>
 <script type="module" src="pull.js"></script>

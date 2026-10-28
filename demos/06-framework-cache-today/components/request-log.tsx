@@ -13,9 +13,9 @@ export function RequestLog() {
   return (
     <aside id="request-log" aria-label="Request log">
       <div className="log-head" role="row">
-        <span>request</span>
-        <span>query</span>
-        <span>cached?</span>
+        <span>Request</span>
+        <span>Query</span>
+        <span>Cached</span>
       </div>
       <Suspense fallback={null}>
         <Rows />

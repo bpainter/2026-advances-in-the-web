@@ -1,108 +1,95 @@
-/* F3 terminal player: navy field, white monospace, a "recorded" chip.
-   Authored for 1296 x 856. Lines are server-rendered hidden; the engine's
-   `terminal` action reveals a range and the command text types in. */
-
-:root {
-  --navy: #0f1c41;
-  --blue: #0c62fb;
-  --cyan: #00c2ff;
-  --coral: #ff6b5b;
-  --fg: #ffffff;
-  --fg-dim: rgb(255 255 255 / 0.55);
-  --rule: rgb(255 255 255 / 0.14);
-  color-scheme: dark;
-}
-
-html,
-body {
-  height: 100%;
-  margin: 0;
-}
-
-body {
-  background: var(--navy);
-  color: var(--fg);
-  font:
-    21px/1.45 ui-monospace,
-    "SF Mono",
-    Menlo,
-    Consolas,
-    "Liberation Mono",
-    monospace;
-  overflow: hidden;
-}
-
+/* F3 terminal player as a dark glass surface on the portal background (design review H3): the theme
+   supplies the body, its background and the frame padding; the terminal is a navy card with radius
+   16 and the dark shadow. Lines are server-rendered hidden; the engine's `terminal` action reveals
+   a range and the command text types in. Authored for the 640 by 628 walk-page frame. */
 .term {
+  --fg: #ffffff;
+  --fg-dim: #b8c0d9;
+  --rule: rgb(255 255 255 / 0.14);
+  --cyan: #1be1f2;
   box-sizing: border-box;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
-  height: 100vh;
-  padding: 26px 40px 22px;
+  height: calc(100vh - 2 * var(--glass-frame-pad));
+  padding: 14px 18px 12px;
+  border: 1px solid var(--glass-dark-border-color);
+  border-radius: 16px;
+  background: rgb(15 28 65 / 0.94);
+  box-shadow: var(--glass-dark-highlight), var(--glass-dark-shadow);
+  color: var(--fg);
+  font: 15px/1.45 var(--glass-font-mono);
+  color-scheme: dark;
+  overflow: hidden;
 }
 
-/* Title bar */
-
+/* Title bar: dots and the title on one line, the chip on its own row under it. */
 .term__bar {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  gap: 18px;
-  padding-bottom: 16px;
+  gap: 8px 12px;
+  padding-bottom: 10px;
   border-bottom: 1px solid var(--rule);
 }
-
 .term__dots {
   display: inline-flex;
-  gap: 8px;
+  gap: 6px;
 }
-
 .term__dots i {
-  width: 13px;
-  height: 13px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: rgb(255 255 255 / 0.22);
 }
-
 .term__title {
   margin: 0;
-  font: inherit;
-  font-size: 19px;
-  color: rgb(255 255 255 / 0.85);
+  font: 700 15px/20px var(--glass-font);
+  color: var(--fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
 .term__chip {
+  grid-column: 1 / -1;
+  justify-self: start;
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  margin-left: auto;
-  padding: 5px 14px;
+  gap: 8px;
+  padding: 3px 12px;
   border-radius: 999px;
-  background: var(--blue);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  background: var(--slalom-blue);
+  font: 700 14px/20px var(--glass-font);
   white-space: nowrap;
 }
-
 .term__chip::before {
   content: "";
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--coral);
 }
-
-.term__chip time {
-  font-weight: 400;
-  letter-spacing: 0;
-  text-transform: none;
+/* Once an example line is on screen, the chip says so instead of "Recorded". */
+.term__chip-example {
+  display: none;
+}
+.term:has(.term__lines li[data-example]:not([hidden])) .term__chip {
+  background: rgb(255 255 255 / 0.16);
+}
+.term:has(.term__lines li[data-example]:not([hidden])) .term__chip::before {
+  background: var(--fg-dim);
+}
+.term:has(.term__lines li[data-example]:not([hidden])) .term__chip-recorded {
+  display: none;
+}
+.term:has(.term__lines li[data-example]:not([hidden])) .term__chip-example {
+  display: inline;
 }
 
 /* The scroller the runtime keeps at its latest line */
 
 .term__scroll {
   overflow-y: auto;
-  padding: 18px 0;
+  padding: 10px 0;
   scrollbar-width: none;
 }
 
@@ -114,7 +101,8 @@ body {
 
 .term__lines li {
   min-height: 1.45em;
-  white-space: pre;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .term__lines li[hidden] {
@@ -168,16 +156,16 @@ body {
 .term__env {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 28px;
-  padding-top: 14px;
+  gap: 4px 18px;
+  padding-top: 8px;
   border-top: 1px solid var(--rule);
-  font-size: 15px;
+  font-size: 13px;
   color: var(--fg-dim);
 }
 
 .term__env span b {
   font-weight: 400;
-  color: rgb(255 255 255 / 0.8);
+  color: var(--fg);
 }
 
 /* `l` on the stage: a flat navy field with the title, so the speaker can put

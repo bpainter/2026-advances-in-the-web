@@ -23,21 +23,13 @@ export const section: DemoSection = {
       steps: [
         {
           id: "s0",
-          label: "Table header",
-          actions: [{ type: "hook", name: "reset" }],
-          bullets: [],
+          label: "Order actions",
+          actions: [{ type: "hook", name: "reset" }, { type: "reveal", target: "#row-d1" }],
+          spotlight: ["#row-d1"],
+          bullets: ["Dialog and popover replace modal and focus-trap libraries. Floating UI stays for now."],
         },
         {
           id: "s1",
-          label: "Order actions",
-          actions: [{ type: "reveal", target: "#row-d1" }],
-          spotlight: ["#row-d1"],
-          bullets: [
-            "Dialog and popover replace modal and focus-trap libraries. Floating UI stays for now.",
-          ],
-        },
-        {
-          id: "s2",
           label: "Card and form",
           actions: [
             { type: "reveal", target: "#row-d2" },
@@ -50,7 +42,7 @@ export const section: DemoSection = {
           ],
         },
         {
-          id: "s3",
+          id: "s2",
           label: "Navigation and content",
           actions: [
             { type: "reveal", target: "#row-d4" },
@@ -63,7 +55,7 @@ export const section: DemoSection = {
           ],
         },
         {
-          id: "s4",
+          id: "s3",
           label: "Variant picker",
           actions: [{ type: "reveal", target: "#row-d6" }],
           spotlight: ["#row-d6"],
@@ -72,7 +64,7 @@ export const section: DemoSection = {
           ],
         },
         {
-          id: "s5",
+          id: "s4",
           label: "Not yet: dates",
           key: true,
           actions: [{ type: "reveal", target: "#row-dates" }],
