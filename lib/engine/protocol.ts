@@ -1,7 +1,12 @@
 import type { Action } from "@/content/demo-schema";
 
+/** Protocol version (PRD v5, 3.3). Both directions carry it; any other version is rejected. */
+export const PROTOCOL_VERSION = 2;
+
+/** Corner radii in frame px, clockwise from the top left (PRD v5, 3.1). */
+export type Radii = [tl: number, tr: number, br: number, bl: number];
 /** PRD Part A, 5.3. Rectangles are frame CSS pixels. */
-export type Rect = { x: number; y: number; w: number; h: number; r?: number };
+export type Rect = { x: number; y: number; w: number; h: number; radii: Radii };
 export type Flags = Record<string, boolean>;
 export type RunMode = "animated" | "instant";
 export type Cursor = { step: number; action: number };
@@ -33,33 +38,44 @@ export type Cue =
   | { kind: "caption"; text: string; ms: number };
 
 export type ToRuntime =
-  | { v: 1; type: "init"; frameId: string; mirror: boolean; handsOn: boolean; reducedMotion: boolean; pace: Pace; flags: Flags; sideEffects: string[] }
-  | { v: 1; type: "run-step"; frameId: string; runId: number; stepId: string; actions: Action[]; mode: RunMode; startAt: number }
-  | { v: 1; type: "replay-to"; frameId: string; runId: number; steps: { stepId: string; actions: Action[] }[]; from: Cursor }
-  | { v: 1; type: "finish"; frameId: string; runId: number }
-  | { v: 1; type: "reset"; frameId: string }
-  | { v: 1; type: "set-flag"; frameId: string; flag: string; on: boolean }
-  | { v: 1; type: "set-mode"; frameId: string; handsOn: boolean }
-  | { v: 1; type: "set-live"; frameId: string; on: boolean }
-  | { v: 1; type: "watch"; frameId: string; selectors: string[]; live: boolean };
+  | { v: 2; type: "init"; frameId: string; mirror: boolean; handsOn: boolean; reducedMotion: boolean; pace: Pace; flags: Flags; sideEffects: string[] }
+  | { v: 2; type: "run-step"; frameId: string; runId: number; stepId: string; actions: Action[]; mode: RunMode; startAt: number }
+  | { v: 2; type: "replay-to"; frameId: string; runId: number; steps: { stepId: string; actions: Action[] }[]; from: Cursor }
+  | { v: 2; type: "finish"; frameId: string; runId: number }
+  | { v: 2; type: "reset"; frameId: string }
+  | { v: 2; type: "set-flag"; frameId: string; flag: string; on: boolean }
+  | { v: 2; type: "set-mode"; frameId: string; handsOn: boolean }
+  | { v: 2; type: "set-live"; frameId: string; on: boolean }
+  | { v: 2; type: "watch"; frameId: string; selectors: string[]; live: boolean };
 
 export type FromRuntime =
-  | { v: 1; type: "ready"; frameId: string | null; build: string; url: string; title: string; supports: Record<string, boolean>; hooks: string[]; flags: Flags }
-  | { v: 1; type: "rects"; frameId: string; seq: number; viewport: { w: number; h: number }; rects: Record<string, Rect[]>; focus: Rect | null; focusVisibleNative: boolean }
-  | { v: 1; type: "cue"; frameId: string; runId: number; index: number; cue: Cue }
-  | { v: 1; type: "unloading"; frameId: string; runId: number; cursor: Cursor }
-  | { v: 1; type: "step-done"; frameId: string; runId: number; stepId: string; asserts: AssertResult[]; digest: string; ms: number; finished: boolean }
-  | { v: 1; type: "error"; frameId: string; runId?: number; code: ErrorCode; message: string; action?: number; selector?: string }
-  | { v: 1; type: "key"; frameId: string; key: string; shift: boolean; alt: boolean; meta: boolean; ctrl: boolean }
-  | { v: 1; type: "resize-viewport"; frameId: string; inlineSize: string; ms: number };
+  | { v: 2; type: "ready"; frameId: string | null; build: string; url: string; title: string; supports: Record<string, boolean>; hooks: string[]; flags: Flags }
+  | { v: 2; type: "rects"; frameId: string; seq: number; viewport: { w: number; h: number }; rects: Record<string, Rect[]>; focus: Rect | null; focusVisibleNative: boolean; animating: boolean }
+  | { v: 2; type: "cue"; frameId: string; runId: number; index: number; cue: Cue }
+  | { v: 2; type: "unloading"; frameId: string; runId: number; cursor: Cursor }
+  | { v: 2; type: "step-done"; frameId: string; runId: number; stepId: string; asserts: AssertResult[]; digest: string; ms: number; finished: boolean }
+  | { v: 2; type: "error"; frameId: string; runId?: number; code: ErrorCode; message: string; action?: number; selector?: string }
+  | { v: 2; type: "key"; frameId: string; key: string; shift: boolean; alt: boolean; meta: boolean; ctrl: boolean }
+  | { v: 2; type: "resize-viewport"; frameId: string; inlineSize: string; ms: number };
 
+let warnedVersion = false;
 const FROM_TYPES = new Set(["ready", "rects", "cue", "unloading", "step-done", "error", "key", "resize-viewport"]);
 
-/** Strict enough for a trusted-origin message: version, a known type, and a string or null frame id. */
+/**
+ * Strict enough for a trusted-origin message: version 2, a known type, and a string or null frame
+ * id. A version 1 message (a stale cached runtime) is rejected and logged once, so it fails loudly.
+ */
 export function parseFromRuntime(data: unknown): FromRuntime | null {
   if (typeof data !== "object" || data === null) return null;
   const d = data as Record<string, unknown>;
-  if (d.v !== 1 || typeof d.type !== "string" || !FROM_TYPES.has(d.type)) return null;
+  if (typeof d.type !== "string" || !FROM_TYPES.has(d.type)) return null;
+  if (d.v !== PROTOCOL_VERSION) {
+    if (typeof d.v === "number" && !warnedVersion) {
+      warnedVersion = true;
+      console.error(`Frame runtime speaks protocol v${String(d.v)}; the presenter needs v${PROTOCOL_VERSION}. Reload the frame to fetch the current runtime.`);
+    }
+    return null;
+  }
   if (!(typeof d.frameId === "string" || d.frameId === null)) return null;
   return d as unknown as FromRuntime;
 }

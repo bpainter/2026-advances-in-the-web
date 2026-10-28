@@ -298,28 +298,85 @@
   inset: 0;
   pointer-events: none;
   font-family: var(--font-sans);
+  --spot-ring: var(--color-slalom-blue);
+  --spot-halo: rgb(255 255 255 / 0.9);
+  --spot-fade-out: 100ms;
+  --spot-fade-in: 160ms;
+  --spot-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+/* Spotlight boxes (PRD v5, 3; spec 9). The box covers the target with its four corner radii and
+   has no paint; three concentric bands are borders on its pseudo-elements, so the arcs stay
+   concentric in every engine. Only opacity animates, keyed on data-state from the settle gate:
+   out over 100 ms, in over 160 ms. Position and size are never transitioned. */
+.overlay__spotlight,
+.overlay__focus,
+.overlay__callout {
+  opacity: 0;
+  transition: opacity var(--spot-fade-out) var(--spot-ease-out);
+}
+.overlay__spotlight[data-state="shown"],
+.overlay__focus[data-state="shown"],
+.overlay__callout[data-state="shown"] {
+  opacity: 1;
+  transition-duration: var(--spot-fade-in);
+  transition-timing-function: var(--ease-brand);
 }
 .overlay__spotlight {
   @apply absolute;
   box-sizing: border-box;
-  outline: 3px solid var(--color-slalom-blue);
-  outline-offset: 4px;
-  box-shadow: 0 0 0 6px rgb(255 255 255 / 0.9);
-  border-radius: 4px;
-  /* Only opacity animates (spec 10); position and size snap per step. */
-  animation: overlay-spot-in 160ms var(--ease-brand) both;
+  border-radius: var(--r-tl) var(--r-tr) var(--r-br) var(--r-bl);
 }
-@keyframes overlay-spot-in {
-  from {
-    opacity: 0;
-  }
+.overlay__spotlight::before,
+.overlay__spotlight::after {
+  content: "";
+  @apply absolute;
+  box-sizing: border-box;
 }
+.overlay__spotlight::before {
+  inset: -7px;
+  border: 3px solid var(--spot-ring);
+  border-radius: var(--ring-tl) var(--ring-tr) var(--ring-br) var(--ring-bl);
+  box-shadow: 0 0 0 2px var(--spot-halo);
+}
+.overlay__spotlight::after {
+  inset: -4px;
+  border: 4px solid var(--spot-halo);
+  border-radius: var(--halo-tl) var(--halo-tr) var(--halo-br) var(--halo-bl);
+}
+/* Inset mode (spec 9.4): a target at the frame edge gets its ring inside the box. */
+.overlay__spotlight[data-mode="inset"]::before {
+  inset: 0;
+  box-shadow: none;
+}
+.overlay__spotlight[data-mode="inset"]::after {
+  inset: 3px;
+  border-width: 2px;
+}
+/* The overlay focus ring: 2 px at -4 with a 2 px white halo outside (spec 9.5). */
 .overlay__focus {
   @apply absolute;
   box-sizing: border-box;
-  outline: 2px solid var(--color-slalom-blue);
-  outline-offset: 2px;
-  border-radius: 3px;
+}
+.overlay__focus::before {
+  content: "";
+  @apply absolute;
+  box-sizing: border-box;
+  inset: -4px;
+  border: 2px solid var(--spot-ring);
+  border-radius: var(--focus-tl) var(--focus-tr) var(--focus-br) var(--focus-bl);
+  box-shadow: 0 0 0 2px var(--spot-halo);
+}
+@media (prefers-reduced-motion: reduce) {
+  .overlay__spotlight,
+  .overlay__focus,
+  .overlay__callout {
+    transition: none;
+  }
+}
+.overlay[data-reduced="true"] .overlay__spotlight,
+.overlay[data-reduced="true"] .overlay__focus,
+.overlay[data-reduced="true"] .overlay__callout {
+  transition: none;
 }
 .overlay__callout {
   @apply absolute;

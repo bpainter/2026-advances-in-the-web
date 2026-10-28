@@ -1,16 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Step } from "@/content/demo-schema";
-import type { Cue, Rect } from "@/lib/engine/protocol";
+import type { Cue, Radii, Rect } from "@/lib/engine/protocol";
 import type { FrameHandle, RectsMessage } from "@/lib/engine/frame";
+import { MAX_HOLD_MS, SpotlightGate, type GateView } from "@/lib/engine/settle";
 
 interface Props {
   handle: FrameHandle | null;
   step: Step | undefined;
+  /** The step's playback has finished (or there was none): boxes may appear (PRD v5, 3.2 rule 5). */
+  ready: boolean;
   /** Hands-on mode hides the ghost cursor and keycaps. */
   handsOn: boolean;
   reducedMotion: boolean;
+  /** Rehearsal mode logs a forced spotlight (PRD v5, 3.2 rule 6). */
+  rehearsal?: boolean;
 }
 
 interface CursorState {
@@ -18,22 +23,99 @@ interface CursorState {
   visible: boolean;
 }
 
+type Side = "top" | "right" | "bottom" | "left";
+interface Spot {
+  r: Rect;
+  inset: boolean;
+}
+interface Callout {
+  target: string;
+  text: string;
+  side: Side;
+  r: Rect;
+}
+/** Everything the gate shows and hides together: spotlights, callouts and the focus ring. */
+interface Geometry {
+  spots: Spot[];
+  callouts: Callout[];
+  focus: Rect | null;
+  viewport: { w: number; h: number };
+}
+
+declare global {
+  interface Window {
+    __spotlightForced?: { stepId: string | null; at: number }[];
+  }
+}
+
 /**
  * Presenter chrome drawn above the frame inside the scaled wrapper (PRD Part A, 3.1, 5.2): ghost
  * cursor, ripple, keycaps and captions, spotlights, callouts and the focus ring. Coordinates are
- * frame CSS pixels because the wrapper carries the scale.
+ * frame CSS pixels because the wrapper carries the scale. Spotlights, callouts and the focus ring
+ * pass through the settle gate (lib/engine/settle.ts): they fade out while their targets move and
+ * fade back in at the latest geometry once the rects settle. The cursor, ripple and keycaps are
+ * not gated.
  */
-export function Overlay({ handle, step, handsOn, reducedMotion }: Props) {
-  const [rects, setRects] = useState<RectsMessage | null>(handle?.lastRects ?? null);
+export function Overlay({ handle, step, ready, handsOn, reducedMotion, rehearsal = false }: Props) {
   const [cursor, setCursor] = useState<CursorState>({ at: null, visible: false });
   const [ripple, setRipple] = useState<{ at: Rect; key: number } | null>(null);
   const [cap, setCap] = useState<{ text: string; key: number } | null>(null);
+  const [view, setView] = useState<GateView<Geometry>>({ shown: false, payload: null, nextAt: null, forced: false });
+  const gate = useRef<SpotlightGate<Geometry> | null>(null);
+  const timer = useRef(0);
+  const again = useRef<() => void>(() => {});
+  const stepRef = useRef(step);
+  const handsOnRef = useRef(handsOn);
+  const rehearsalRef = useRef(rehearsal);
+  useEffect(() => {
+    stepRef.current = step;
+    handsOnRef.current = handsOn;
+    rehearsalRef.current = rehearsal;
+  }, [step, handsOn, rehearsal]);
+
+  const evaluate = useCallback(() => {
+    const g = gate.current;
+    if (!g) return;
+    window.clearTimeout(timer.current);
+    const v = g.view();
+    if (v.forced) {
+      const stepId = stepRef.current?.id ?? null;
+      (window.__spotlightForced ??= []).push({ stepId, at: Date.now() });
+      if (rehearsalRef.current) console.warn(`Spotlight forced after ${MAX_HOLD_MS} ms`, stepId);
+    }
+    setView(v);
+    if (v.nextAt !== null) timer.current = window.setTimeout(() => again.current(), Math.max(0, v.nextAt - performance.now()) + 1);
+  }, []);
+  useEffect(() => {
+    again.current = evaluate;
+  }, [evaluate]);
+
+  const feed = useCallback(
+    (msg: RectsMessage | null) => {
+      const g = gate.current;
+      if (!g || !msg) return;
+      const geo = geometryOf(msg, stepRef.current, handsOnRef.current);
+      g.update(geo, flatten(geo), msg.animating);
+      evaluate();
+    },
+    [evaluate],
+  );
+
+  // One gate for the overlay's life; a new document or a new step resets it (hidden until ready).
+  useEffect(() => {
+    gate.current = new SpotlightGate<Geometry>(() => performance.now());
+    return () => window.clearTimeout(timer.current);
+  }, []);
 
   useEffect(() => {
     if (!handle) return;
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setRects(handle.lastRects);
-    const offRects = handle.onRects(setRects);
+    gate.current?.reset();
+    feed(handle.lastRects);
+    const offRects = handle.onRects(feed);
+    const offViewport = handle.onViewport(() => {
+      gate.current?.disturb();
+      evaluate();
+    });
     let hideTimer = 0;
     const offCue = handle.onCue((cue: Cue) => {
       if (cue.kind === "cursor") {
@@ -54,31 +136,40 @@ export function Overlay({ handle, step, handsOn, reducedMotion }: Props) {
     });
     return () => {
       offRects();
+      offViewport();
       offCue();
       window.clearTimeout(hideTimer);
     };
-  }, [handle]);
+  }, [handle, feed, evaluate]);
 
-  // A new step clears the held keycap.
+  // A new step: the previous step's boxes fade out, the held keycap clears, and the new step's
+  // boxes wait for `ready` and the first settle after it.
   const stepId = step?.id;
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCap(null);
-  }, [stepId]);
+    gate.current?.reset();
+    feed(handle?.lastRects ?? null);
+    evaluate();
+  }, [stepId, handle, feed, evaluate]);
 
-  const spotlights = mergeRects((step?.spotlight ?? []).flatMap((sel) => rects?.rects[sel] ?? [])).map((r, i) => ({ sel: "spot", r, i }));
-  const viewport = rects?.viewport ?? { w: 0, h: 0 };
-  const callouts = (step?.callouts ?? []).map((c) => ({ ...c, r: rects?.rects[c.target]?.[0] ?? null })).filter((c) => c.r);
-  const focusRing = rects?.focus && !rects.focusVisibleNative && !handsOn ? rects.focus : null;
+  useEffect(() => {
+    gate.current?.setReady(ready);
+    evaluate();
+  }, [ready, stepId, handle, evaluate]);
+
+  const geo = view.payload;
+  const state = view.shown ? "shown" : "hidden";
+  const viewport = geo?.viewport ?? { w: 0, h: 0 };
 
   return (
-    <div className="overlay" aria-hidden="true" data-reduced={reducedMotion} data-hands-on={handsOn}>
-      {spotlights.map(({ sel, r, i }) => (
-        <div className="overlay__spotlight" key={`${sel}:${i}`} style={{ left: r.x, top: r.y, width: r.w, height: r.h, borderRadius: (r.r ?? 0) + 4 }} />
+    <div className="overlay" aria-hidden="true" data-reduced={reducedMotion} data-hands-on={handsOn} data-motion={view.shown ? "settled" : "moving"}>
+      {geo?.spots.map((s, i) => (
+        <div className="overlay__spotlight" key={`spot:${i}`} data-state={state} data-mode={s.inset ? "inset" : "ring"} style={boxStyle(s.r, s.inset)} />
       ))}
-      {focusRing ? <div className="overlay__focus" style={{ left: focusRing.x, top: focusRing.y, width: focusRing.w, height: focusRing.h }} /> : null}
-      {callouts.map((c) => (
-        <div className="overlay__callout" key={`${c.target}:${c.text}`} data-side={c.side} style={calloutStyle(c.side, c.r!, viewport)}>
+      {geo?.focus ? <div className="overlay__focus" data-state={state} style={boxStyle(geo.focus, false)} /> : null}
+      {geo?.callouts.map((c) => (
+        <div className="overlay__callout" key={`${c.target}:${c.text}`} data-side={c.side} data-state={state} style={calloutStyle(c.side, c.r, viewport)}>
           <span className="overlay__callout-text">{c.text}</span>
         </div>
       ))}
@@ -99,26 +190,86 @@ export function Overlay({ handle, step, handsOn, reducedMotion }: Props) {
   );
 }
 
+const ZERO: Radii = [0, 0, 0, 0];
+/** The ring's full extent outside the target (spec 9.1); closer to an edge than this, it insets. */
+const RING_EXTENT = 9;
+
+function geometryOf(msg: RectsMessage, step: Step | undefined, handsOn: boolean): Geometry {
+  const vp = msg.viewport;
+  const spots = mergeRects((step?.spotlight ?? []).flatMap((sel) => msg.rects[sel] ?? [])).map((r) => fitToViewport(r, vp));
+  const callouts = (step?.callouts ?? []).flatMap((c) => {
+    const r = msg.rects[c.target]?.[0];
+    return r ? [{ target: c.target, text: c.text, side: c.side, r }] : [];
+  });
+  const focus = msg.focus && !msg.focusVisibleNative && !handsOn ? msg.focus : null;
+  return { spots, callouts, focus, viewport: vp };
+}
+
+function flatten(g: Geometry): Rect[] {
+  return [...g.spots.map((s) => s.r), ...g.callouts.map((c) => c.r), ...(g.focus ? [g.focus] : [])];
+}
+
+/**
+ * Inset mode (spec 9.4): a ring that would cross the frame's edge is clipped to the viewport and
+ * drawn inside the target; clipped sides get square corners.
+ */
+function fitToViewport(r: Rect, vp: { w: number; h: number }): Spot {
+  if (!vp.w || !vp.h) return { r, inset: false };
+  const near = r.x < RING_EXTENT || r.y < RING_EXTENT || r.x + r.w > vp.w - RING_EXTENT || r.y + r.h > vp.h - RING_EXTENT;
+  if (!near) return { r, inset: false };
+  const x = Math.max(r.x, 0);
+  const y = Math.max(r.y, 0);
+  const w = Math.max(Math.min(r.x + r.w, vp.w) - x, 0);
+  const h = Math.max(Math.min(r.y + r.h, vp.h) - y, 0);
+  const [tl, tr, br, bl] = r.radii ?? ZERO;
+  const top = r.y < 0;
+  const bottom = r.y + r.h > vp.h;
+  const left = r.x < 0;
+  const right = r.x + r.w > vp.w;
+  const radii: Radii = [top || left ? 0 : tl, top || right ? 0 : tr, bottom || right ? 0 : br, bottom || left ? 0 : bl];
+  return { r: { x, y, w, h, radii }, inset: true };
+}
+
+/** Left, top, size and the per-corner radii of the box, its ring and its halo (spec 9.1). */
+function boxStyle(r: Rect, inset: boolean): React.CSSProperties {
+  const radii = r.radii ?? ZERO;
+  const names = ["tl", "tr", "br", "bl"] as const;
+  const style: Record<string, string | number> = { left: r.x, top: r.y, width: r.w, height: r.h };
+  names.forEach((n, i) => {
+    const v = radii[i];
+    style[`--r-${n}`] = `${v}px`;
+    style[`--halo-${n}`] = inset ? `${Math.max(v - 3, 0)}px` : `${v ? v + 4 : 0}px`;
+    style[`--ring-${n}`] = inset ? `${v}px` : `${v ? v + 7 : 0}px`;
+    style[`--focus-${n}`] = `${v ? v + 4 : 0}px`;
+  });
+  return style as React.CSSProperties;
+}
+
 /** The cursor tip lands near the bottom right of a target, not on its label (design review L2). */
 function aim(r: Rect): React.CSSProperties {
   return { left: r.x + Math.max(r.w - 12, r.w / 2), top: r.y + Math.max(r.h - 8, r.h / 2) };
 }
 
-/** Spotlights within 12 frame px of each other merge into one outline (design review M3). */
+/**
+ * Spotlights within 12 frame px of each other merge into one box (design review M3); the union
+ * takes the radii of its largest member by area (PRD v5, 3.1).
+ */
 function mergeRects(list: Rect[]): Rect[] {
-  const out: Rect[] = [];
+  const out: { r: Rect; area: number }[] = [];
   for (const r of list) {
-    const near = out.findIndex((o) => r.x <= o.x + o.w + 12 && o.x <= r.x + r.w + 12 && r.y <= o.y + o.h + 12 && o.y <= r.y + r.h + 12);
+    const near = out.findIndex(({ r: o }) => r.x <= o.x + o.w + 12 && o.x <= r.x + r.w + 12 && r.y <= o.y + o.h + 12 && o.y <= r.y + r.h + 12);
+    const area = r.w * r.h;
     if (near === -1) {
-      out.push({ ...r });
+      out.push({ r: { ...r, radii: r.radii ?? ZERO }, area });
       continue;
     }
     const o = out[near];
-    const x = Math.min(o.x, r.x);
-    const y = Math.min(o.y, r.y);
-    out[near] = { x, y, w: Math.max(o.x + o.w, r.x + r.w) - x, h: Math.max(o.y + o.h, r.y + r.h) - y, r: Math.min(o.r ?? 0, r.r ?? 0) };
+    const x = Math.min(o.r.x, r.x);
+    const y = Math.min(o.r.y, r.y);
+    const radii = area > o.area ? (r.radii ?? ZERO) : o.r.radii;
+    out[near] = { r: { x, y, w: Math.max(o.r.x + o.r.w, r.x + r.w) - x, h: Math.max(o.r.y + o.r.h, r.y + r.h) - y, radii }, area: Math.max(area, o.area) };
   }
-  return out;
+  return out.map((o) => o.r);
 }
 
 /** A callout that would leave the frame flips to the opposite side; its anchor stays inside the frame. */

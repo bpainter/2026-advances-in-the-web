@@ -38,12 +38,14 @@ function documentUrl(page: FramePage, flags: Record<string, boolean>): { origin:
  * document beneath, replays `s0..sN` instantly and swaps. Reloading toggles split a step.
  */
 export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, onStepResult }: Props) {
-  const { stepIndex, handsOn, live, reloadToken, registerPlayback, dispatchKey, reportPlaying } = useStage();
+  const { stepIndex, handsOn, live, reloadToken, rehearsal, registerPlayback, dispatchKey, reportPlaying } = useStage();
   const slotRef = useRef<HTMLDivElement>(null);
   const [handle, setHandle] = useState<FrameHandle | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [viewportWidth, setViewportWidth] = useState<number | null>(null);
   const [viewportMs, setViewportMs] = useState(0);
+  /** The step whose playback (animated or replayed) has finished; spotlights wait for it. */
+  const [doneStep, setDoneStep] = useState<{ index: number } | null>(null);
   const current = useRef<{ handle: FrameHandle; stepIndex: number; flags: Record<string, boolean> } | null>(null);
   const generation = useRef(0);
   const run = useRef<{ finish: () => void; cancel: () => void; playing: () => boolean } | null>(null);
@@ -105,6 +107,9 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
   useEffect(() => {
     const gen = ++generation.current;
     const target = step;
+    // Spotlights for this entry wait until its playback has finished (PRD v5, 3.2 rule 5).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setDoneStep(null);
     if (!target) return;
     const cur = current.current;
     const watchList = selectorsFor(target);
@@ -136,7 +141,10 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
           if (i === segs.length - 1 && gen === generation.current) current.current = { handle: h, stepIndex, flags: seg.flags };
         }
         run.current = null;
-        if (gen === generation.current) reportPlaying(false);
+        if (gen === generation.current) {
+          reportPlaying(false);
+          setDoneStep({ index: stepIndex });
+        }
         if (last && gen === generation.current) onStepResult?.(target.id, last);
       })();
       return;
@@ -179,6 +187,7 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
       show(fresh, stepIndex, flags);
       report("ready");
       reportPlaying(false);
+      setDoneStep({ index: stepIndex });
       onStepResult?.(target.id, result);
     });
     return () => window.clearTimeout(timeout);
@@ -232,7 +241,7 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
     <div className="page-frame" data-status={status} data-build={frame.build} style={frameStyle}>
       <div className="page-frame__scaled">
         <div className="page-frame__slot" ref={slotRef} />
-        <Overlay handle={handle} step={step} handsOn={handsOn} reducedMotion={reducedMotion} />
+        <Overlay handle={handle} step={step} ready={doneStep !== null && doneStep.index === stepIndex} handsOn={handsOn} reducedMotion={reducedMotion} rehearsal={rehearsal} />
       </div>
       {narrowed ? <div className="page-frame__edge" style={{ left: `calc(${viewportWidth}px * ${scale})` }} aria-hidden="true" /> : null}
       {status === "loading" ? <p className="page-frame__status">Loading demo…</p> : null}

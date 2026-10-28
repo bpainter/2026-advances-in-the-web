@@ -15,6 +15,7 @@ import { hasFrame, type DemoPage, type DemoSection } from "@/content/demo-schema
 import type { SupportFile } from "@/lib/support-data";
 import { sections } from "@/lib/content";
 import type { StepResult } from "@/lib/engine/frame";
+import { PROTOCOL_WATCH, checkProtocol, finishDeckSampler, startDeckSampler, walkFixture } from "./walk-spotlight.mts";
 
 const BASE = process.env.DECK_URL ?? "http://localhost:3000";
 const args = process.argv.slice(2);
@@ -169,8 +170,19 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
   for (let i = 0; i < demoPage.steps.length; i++) {
     const step = demoPage.steps[i];
     const seq = i === 0 ? 0 : await lastSeq(page);
+    // The deck invariant (PRD v5, 3.4): sample the boxes and their targets through the step.
+    const sampleFrame = i > 0 && step.spotlight?.length ? await visibleFrame(page) : null;
+    // The previous step's boxes are on the previous step's targets until they fade out.
+    const sampling = i > 0 ? await startDeckSampler(page, sampleFrame, [demoPage.steps[i - 1].spotlight ?? [], step.spotlight ?? []]) : false;
     if (i > 0) await page.keyboard.press("ArrowRight");
     const r = await waitForResult(page, `${demoPage.id}:${step.id}`, seq, i === 0 ? 15000 : 8000);
+    if (sampling) {
+      // The boxes fade in after the settle that follows step-done; keep sampling through it.
+      await page.waitForTimeout(500);
+      const inv = await finishDeckSampler(page, sampleFrame);
+      if (inv && inv.violations.length) fail(where, `${step.id}: spotlight off its target in ${inv.violations.length} sample(s), e.g. ${inv.violations[0]}`);
+      else if (inv) pass(`${step.id}: spotlight boxes on target in all ${inv.visible} visible sample(s) of ${inv.samples}`);
+    }
     if (!r) {
       fail(where, `${step.id}: no step result (frame not ready or the step did not finish)`);
       forward.push(null);
@@ -200,6 +212,13 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
     else if (forward[i] && r.digest !== forward[i]) console.log(`    · back ${step.id}: digest ${r.digest} differs from forward ${forward[i]} (asserts pass)`);
     else pass(`back ${step.id}: asserts pass, digest ${r.digest}`);
   }
+  await checkProtocol(page, where, { fail, pass });
+}
+
+/** The frame the audience sees on a walk or single page. */
+async function visibleFrame(page: Page) {
+  const el = await page.$(".page-frame__iframe[data-visible=\"true\"]");
+  return (await el?.contentFrame()) ?? null;
 }
 
 const support = JSON.parse(readFileSync(path.join(process.cwd(), "content", ".generated", "support.json"), "utf8")) as SupportFile;
@@ -271,6 +290,16 @@ async function main() {
     await page.bringToFront();
   }
   page.on("pageerror", (err) => fail("page", `uncaught error: ${err.message}`));
+  await page.addInitScript(PROTOCOL_WATCH);
+
+  // The spotlight fixture (PRD v5, 3.4) runs first on a full walk, and alone with `pnpm walk fixtures`.
+  if (!only || only === "fixtures") await walkFixture(browser, BASE, { fail, pass });
+  if (only === "fixtures") {
+    await browser.close();
+    console.log(`\n${browserName}: ${checks} check(s) passed, ${failures.length} failure(s)`);
+    for (const f of failures) console.log(`  ✖ ${f}`);
+    process.exit(failures.length ? 1 : 0);
+  }
   page.on("console", (msg) => {
     if (msg.type() === "error" && !/favicon/.test(msg.text())) console.log(`    console: ${msg.text().slice(0, 160)}`);
   });

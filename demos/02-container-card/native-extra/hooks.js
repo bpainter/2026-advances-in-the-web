@@ -18,7 +18,7 @@ function setViewportWidth(px, { instant = false } = {}) {
   if (!embedded) return undefined;
   const ms = instant ? 0 : 560;
   window.parent.postMessage(
-    { v: 1, type: "resize-viewport", frameId: null, inlineSize: `${px}px`, ms },
+    { v: 2, type: "resize-viewport", frameId: null, inlineSize: `${px}px`, ms },
     presenterOrigin,
   );
   return new Promise((resolve) => {

@@ -92,6 +92,31 @@ fresh document there; a forward run, which has the real key press, restores it. 
 the next page's frame is loaded once in a hidden iframe to warm it (never for F2, whose apps log
 every request).
 
+## Spotlights (v5)
+
+Protocol v2 (`lib/engine/protocol.ts`): every rect carries `radii: [tl, tr, br, bl]` in frame px,
+resolved from computed style (percentages against the box, the smaller value per corner, corners
+scaled down together when they overrun a side), and every rects message carries `animating`
+(a finite animation or transition is running). The runtime samples rects every animation frame
+while `animating` holds and posts on transition and animation end. Version 1 messages are
+rejected with one console error.
+
+The overlay draws each box from the target's four radii: a 3 px ring at a 4 px offset and white
+halos, as borders on pseudo-elements so the arcs stay concentric. Spotlights, callouts and the
+overlay focus ring pass through the settle gate (`lib/engine/settle.ts`): they fade out over 100 ms
+when a rect moves by more than 0.5 px, the count changes, `animating` turns on or a
+`resize-viewport` message arrives; they keep their last geometry while hidden; and they fade back
+in over 160 ms at the latest geometry once nothing has moved for 120 ms. A new step's boxes wait
+for its playback to finish. After 2000 ms without a settle they show anyway and follow the rects
+(`window.__spotlightForced`; rehearsal mode logs "Spotlight forced after 2000 ms"). Reduced motion
+makes the fades instant. Targets at the frame edge get an inset ring.
+
+`/fixtures/spotlight` (development only) renders a page frame over `demos/00-fixtures/spotlight/`:
+radius 0, 8, 16, 999, `12px 12px 0 0` and 50 percent targets, a button whose width transitions
+and a panel that scales in. `pnpm walk fixtures` checks the radii, the fade timeline and reduced
+motion there; the deck walk samples every forward step and fails when a shown box is off its
+target.
+
 ## Speaker window
 
 Previews on the left; the notes column on the right, top to bottom: header (eyebrow, title, "Step
@@ -114,7 +139,7 @@ only this file; logos are local (`public/logos/`).
 | Command | What it does |
 |---|---|
 | `pnpm check [--strict] [section]` | The validator (`lib/validate/rules.ts`): page order, step caps, proofs, bullets, word budgets, writing rules (dashes, "!", sentence and bullet length, banned words, "X, not Y", no TODO), code on every walk step, highlights of 12 lines spanning 20 at most, 44 columns and 40 lines, excerpt fidelity, intro support and visuals, eyebrow and title, callouts, meters, viewports, the timing table (`lib/validate/timing.ts`), v3 field names, theme lint and hashes. |
-| `pnpm test` | `test:validator` (one broken fixture per rule, theme lint included), `test:support` (the PRD 3.2 table), `test:contrast` (every text token over its surfaces, washes and palette). |
+| `pnpm test` | `test:settle` (the spotlight gate with a fake clock), `test:validator` (one broken fixture per rule, theme lint included), `test:support` (the PRD 3.2 table), `test:contrast` (every text token over its surfaces, washes and palette). |
 | `pnpm validate` | typecheck, lint, meters, test, check. |
 | `pnpm walk [page, section or prefix] [--browser=webkit\|firefox] [--capture] [--no-speaker]` | Drives the audience window with the arrow keys: step asserts, forward and back digests, intro tiles against support.json, the theme in every frame, slot geometry and a 44 by 40 fixture, and (Chromium) a speaker window at 1440 by 900 for notes visibility and hands-on. `pnpm walk d6 --browser=firefox --capture` saves `public/posters/d6-firefox.png`. Needs `pnpm dev`. |
 | `pnpm visuals [section]` | Replays each intro's `visual.capture` step and saves the frame as a 2x PNG in `public/intro/`. |

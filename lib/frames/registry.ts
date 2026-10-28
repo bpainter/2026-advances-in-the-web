@@ -11,14 +11,18 @@ import { folder as d08 } from "@/demos/08-fast-follows/build";
 import { folder as d09 } from "@/demos/09-vite-8/build";
 import { folder as d10 } from "@/demos/10-delete/build";
 import { folder as d11 } from "@/demos/11-customizable-select/build";
+import { folder as d00 } from "@/demos/00-fixtures/build";
 
 export { nativeBuild, folderBuild, manifestDefaults, BASE_SANDBOX, FORMS_SANDBOX } from "./build-helpers";
 
 /** Every demo folder the frame routes can serve, keyed by folder name. */
 export const DEMO_FOLDERS: Record<string, DemoFolder> = Object.fromEntries([d01, d02, d03, d04, d05, d07, d08, d09, d10, d11].map((f) => [f.demo, f]));
 
+/** Engine fixtures (demos/00-fixtures) are served in development only (PRD v5, 3.4). */
+const DEV_FOLDERS: Record<string, DemoFolder> = process.env.NODE_ENV === "production" ? {} : { [d00.demo]: d00 };
+
 export function demoFolder(demo: string): DemoFolder | undefined {
-  return DEMO_FOLDERS[demo];
+  return DEMO_FOLDERS[demo] ?? DEV_FOLDERS[demo];
 }
 
 /**
@@ -28,7 +32,7 @@ export function demoFolder(demo: string): DemoFolder | undefined {
  */
 export function manifestFor(route: string): BuildManifest | null {
   const m = /^\/demos\/([\w-]+)\/(today|native|static|terminal)/.exec(route);
-  if (m) return DEMO_FOLDERS[m[1]]?.builds[m[2] as "today"]?.manifest ?? null;
+  if (m) return (DEMO_FOLDERS[m[1]] ?? DEV_FOLDERS[m[1]])?.builds[m[2] as "today"]?.manifest ?? null;
   if (route.startsWith("/framework")) return null;
   const pathname = route.split("?")[0];
   for (const f of Object.values(DEMO_FOLDERS)) {

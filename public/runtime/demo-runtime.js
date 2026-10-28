@@ -42,7 +42,7 @@
 
   function post(msg) {
     if (!embedded || !PRESENTER) return;
-    msg.v = 1;
+    msg.v = 2;
     msg.frameId = frameId;
     window.parent.postMessage(msg, PRESENTER);
   }
@@ -107,11 +107,54 @@
     e.selector = selector;
     return e;
   }
+  // The four corner radii in frame px (PRD v5, 3.1): a percentage resolves against the box
+  // (horizontal against the width, vertical against the height), each corner takes the smaller of
+  // its two values, and corners that overrun a side scale down together, as CSS does.
+  function cornerOf(value, w, h) {
+    var parts = String(value || "0").trim().split(/\s+/);
+    function len(p, base) {
+      var n = parseFloat(p);
+      if (!isFinite(n)) return 0;
+      return p.indexOf("%") === p.length - 1 ? (n * base) / 100 : n;
+    }
+    var hr = len(parts[0], w);
+    var vr = len(parts.length > 1 ? parts[1] : parts[0], h);
+    return Math.max(0, Math.min(hr, vr));
+  }
+  function radiiOf(el, w, h) {
+    var cs = getComputedStyle(el);
+    var c = [cornerOf(cs.borderTopLeftRadius, w, h), cornerOf(cs.borderTopRightRadius, w, h), cornerOf(cs.borderBottomRightRadius, w, h), cornerOf(cs.borderBottomLeftRadius, w, h)];
+    var f = 1;
+    function fit(sum, side) {
+      if (sum > side && sum > 0) f = Math.min(f, side / sum);
+    }
+    fit(c[0] + c[1], w);
+    fit(c[3] + c[2], w);
+    fit(c[0] + c[3], h);
+    fit(c[1] + c[2], h);
+    return c.map(function (v) {
+      return Math.round(v * f * 100) / 100;
+    });
+  }
   function rectOf(el) {
     var r = el.getBoundingClientRect();
-    // The radius lets the spotlight follow the target's corners (design review M2).
-    var radius = parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0;
-    return { x: r.left, y: r.top, w: r.width, h: r.height, r: radius };
+    return { x: r.left, y: r.top, w: r.width, h: r.height, radii: radiiOf(el, r.width, r.height) };
+  }
+  // A finite animation or transition is running (infinite ones, such as a blinking caret, do not
+  // count): the presenter keeps spotlights hidden meanwhile (PRD v5, 3.2).
+  function isAnimating() {
+    try {
+      var list = document.getAnimations();
+      for (var i = 0; i < list.length; i++) {
+        var a = list[i];
+        if (a.playState !== "running" || !a.effect) continue;
+        var t = a.effect.getComputedTiming();
+        if (isFinite(t.endTime) && isFinite(t.activeDuration)) return true;
+      }
+    } catch (e) {
+      /* no WAAPI */
+    }
+    return false;
   }
   function sleep(ms) {
     return new Promise(function (r) {
@@ -324,7 +367,7 @@
     } catch (e) {
       fv = false;
     }
-    return { rects: rects, focus: focus, focusVisible: fv };
+    return { rects: rects, focus: focus, focusVisible: fv, animating: isAnimating() };
   }
   function postRects(force) {
     if (!frameId) return;
@@ -332,7 +375,7 @@
     var json = JSON.stringify(data);
     if (!force && json === lastRectsJson) return;
     lastRectsJson = json;
-    post({ type: "rects", seq: ++rectsSeq, viewport: { w: window.innerWidth, h: window.innerHeight }, rects: data.rects, focus: data.focus, focusVisibleNative: data.focusVisible || focusVisibleNative === true });
+    post({ type: "rects", seq: ++rectsSeq, viewport: { w: window.innerWidth, h: window.innerHeight }, rects: data.rects, focus: data.focus, focusVisibleNative: data.focusVisible || focusVisibleNative === true, animating: data.animating });
   }
   var rafPending = false;
   function scheduleRects() {
@@ -358,8 +401,14 @@
     }
     document.addEventListener("focusin", scheduleRects);
     document.addEventListener("focusout", scheduleRects);
+    // Animations and transitions: their start, and their end so the final geometry always arrives.
+    ["transitionrun", "transitionend", "transitioncancel", "animationstart", "animationend", "animationcancel"].forEach(function (type) {
+      document.addEventListener(type, scheduleRects, true);
+    });
+    // While a finite animation runs, rects are sampled every animation frame: a transform
+    // animation fires no observer, so its rects would otherwise go stale (PRD v5, 3.3).
     (function loop() {
-      if (liveRects || Date.now() < activeUntil) scheduleRects();
+      if (liveRects || Date.now() < activeUntil || isAnimating()) scheduleRects();
       requestAnimationFrame(loop);
     })();
   }
@@ -1003,7 +1052,7 @@
   }
 
   function valid(data) {
-    return data && typeof data === "object" && data.v === 1 && typeof data.type === "string";
+    return data && typeof data === "object" && data.v === 2 && typeof data.type === "string";
   }
 
   window.addEventListener("message", function (e) {

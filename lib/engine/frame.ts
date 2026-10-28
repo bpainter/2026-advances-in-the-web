@@ -22,6 +22,8 @@ export interface RectsMessage {
   focus: Rect | null;
   focusVisibleNative: boolean;
   viewport: { w: number; h: number };
+  /** A finite animation or transition is running in the document (PRD v5, 3.3). */
+  animating: boolean;
 }
 
 type Listener<T> = (value: T) => void;
@@ -113,8 +115,8 @@ export class FrameHandle {
       case "ready": {
         this.supports = msg.supports;
         this.hooks = msg.hooks;
-        this.post({ v: 1, type: "init", frameId: this.id, mirror: this.opts.mirror, handsOn: this.opts.handsOn, reducedMotion: this.opts.reducedMotion, pace: DEFAULT_PACE, flags: this.opts.flags, sideEffects: this.opts.sideEffects });
-        if (this.watched.length) this.post({ v: 1, type: "watch", frameId: this.id, selectors: this.watched, live: this.live });
+        this.post({ v: 2, type: "init", frameId: this.id, mirror: this.opts.mirror, handsOn: this.opts.handsOn, reducedMotion: this.opts.reducedMotion, pace: DEFAULT_PACE, flags: this.opts.flags, sideEffects: this.opts.sideEffects });
+        if (this.watched.length) this.post({ v: 2, type: "watch", frameId: this.id, selectors: this.watched, live: this.live });
         this.isReady = true;
         this.readyResolvers.splice(0).forEach((r) => r());
         this.readyListeners.forEach((l) => l());
@@ -122,13 +124,13 @@ export class FrameHandle {
         if (this.pendingResume && this.run) {
           const resume = this.pendingResume;
           this.pendingResume = null;
-          if (resume.kind === "run") this.post({ v: 1, type: "run-step", frameId: this.id, runId: this.run.runId, stepId: this.run.stepId, actions: this.run.actions, mode: this.run.mode, startAt: resume.cursor.action });
-          else this.post({ v: 1, type: "replay-to", frameId: this.id, runId: this.run.runId, steps: this.run.steps ?? [], from: resume.cursor });
+          if (resume.kind === "run") this.post({ v: 2, type: "run-step", frameId: this.id, runId: this.run.runId, stepId: this.run.stepId, actions: this.run.actions, mode: this.run.mode, startAt: resume.cursor.action });
+          else this.post({ v: 2, type: "replay-to", frameId: this.id, runId: this.run.runId, steps: this.run.steps ?? [], from: resume.cursor });
         }
         return;
       }
       case "rects":
-        this.lastRects = { rects: msg.rects, focus: msg.focus, focusVisibleNative: msg.focusVisibleNative, viewport: msg.viewport };
+        this.lastRects = { rects: msg.rects, focus: msg.focus, focusVisibleNative: msg.focusVisibleNative, viewport: msg.viewport, animating: msg.animating };
         this.rectListeners.forEach((l) => l(this.lastRects!));
         return;
       case "cue":
@@ -171,14 +173,14 @@ export class FrameHandle {
     this.run = run;
     void this.ready.then(() => {
       if (this.run !== run) return;
-      this.post({ v: 1, type: "run-step", frameId: this.id, runId, stepId: step.id, actions: step.actions, mode, startAt });
+      this.post({ v: 2, type: "run-step", frameId: this.id, runId, stepId: step.id, actions: step.actions, mode, startAt });
     });
     return {
       runId,
       get playing() {
         return run.playing;
       },
-      finish: () => this.post({ v: 1, type: "finish", frameId: this.id, runId }),
+      finish: () => this.post({ v: 2, type: "finish", frameId: this.id, runId }),
       cancel: () => {
         if (this.run === run) {
           this.run = null;
@@ -199,7 +201,7 @@ export class FrameHandle {
       // Posted in the caller's task when the frame is ready, so a press it carries reaches the frame.
       const post = () => {
         if (!this.run || this.run.runId !== runId) return;
-        this.post({ v: 1, type: "replay-to", frameId: this.id, runId, steps: list, from });
+        this.post({ v: 2, type: "replay-to", frameId: this.id, runId, steps: list, from });
       };
       if (this.isReady) post();
       else void this.ready.then(post);
@@ -207,22 +209,22 @@ export class FrameHandle {
   }
 
   setFlag(flag: string, on: boolean) {
-    this.post({ v: 1, type: "set-flag", frameId: this.id, flag, on });
+    this.post({ v: 2, type: "set-flag", frameId: this.id, flag, on });
   }
   setMode(handsOn: boolean) {
     this.opts.handsOn = handsOn;
-    this.post({ v: 1, type: "set-mode", frameId: this.id, handsOn });
+    this.post({ v: 2, type: "set-mode", frameId: this.id, handsOn });
   }
   reset() {
-    this.post({ v: 1, type: "reset", frameId: this.id });
+    this.post({ v: 2, type: "reset", frameId: this.id });
   }
   setLive(on: boolean) {
-    this.post({ v: 1, type: "set-live", frameId: this.id, on });
+    this.post({ v: 2, type: "set-live", frameId: this.id, on });
   }
   watch(selectors: string[], live: boolean) {
     this.watched = selectors;
     this.live = live;
-    if (this.isReady) this.post({ v: 1, type: "watch", frameId: this.id, selectors, live });
+    if (this.isReady) this.post({ v: 2, type: "watch", frameId: this.id, selectors, live });
   }
   focus() {
     this.iframe.focus();

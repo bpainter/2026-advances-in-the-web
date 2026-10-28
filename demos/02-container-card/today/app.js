@@ -73,7 +73,7 @@ const embedded =
 function postViewport(px, ms) {
   window.parent.postMessage(
     {
-      v: 1,
+      v: 2,
       type: "resize-viewport",
       frameId: null,
       inlineSize: `${px}px`,
