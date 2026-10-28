@@ -3,10 +3,12 @@
 Presenter app for Bermon Painter's FITC Web Unleashed 2026 talk. Next.js App Router, TypeScript,
 Tailwind 4 behind `@apply` only (JSX carries semantic class names), Slalom design-system tokens.
 
-The deck is the Claude Design opening (7 slides), the demo section (10 sections, 24 pages, each
-page a scripted frame the presenter drives with the clicker) and the Claude Design closing. The
-demo engine follows `PRD_Demos.md` (schema v3); `docs/demo-engine.md` explains it. Still to come:
-the print route and PDF export, generated images, posters for the speaker previews.
+The deck is the Claude Design opening (7 slides), the demo section (11 sections, 27 pages: an
+intro slide, "How we used to do it" and "How we do it now" for D1 to D6, F2 and F3, and single
+pages for F1, F4 and F5, each frame driven by the clicker) and the Claude Design closing. The demo
+section follows `docs/PRD-demos-v4.md` (schema v4) in the glass look of
+`docs/design/demo-glass-spec.md`; `docs/demo-engine.md` explains it. Still to come: the print route
+and PDF export, posters for the speaker previews.
 
 ## Presenting
 
@@ -17,7 +19,11 @@ bar stays hidden until you press "Timer" in the status bar (the choice is rememb
 clock there shows elapsed time and whether you are over or under the slide's target. Both windows share one state over `BroadcastChannel` with a
 `localStorage` fallback: page, step, blank, hands-on and the timer. A refresh of either
 window resumes where it was. `/speaker?rehearse=1` enlarges the preview and logs seconds per slide
-to `localStorage`, exportable as JSON from the controls.
+to `localStorage`, exportable as JSON from the controls. The notes column shows the page intro on
+step 0, the step's bullets (the key step's last bullet in bold), Proof and Key point chips,
+`ifKeyboard` in hands-on mode, cautions on a now page's last step, and Next pinned at the bottom;
+citations and action summaries sit in the collapsed Reference. Add `?glass=off` to both windows
+if the laptop drops frames: surfaces turn solid in the slides and in every frame.
 
 ## Run
 
@@ -28,15 +34,20 @@ pnpm dev
 
 Open <http://localhost:3000>. `pnpm build && pnpm start` serves the same deck offline.
 
-`pnpm validate` runs typecheck, lint, `pnpm meters` and `pnpm check` (the content validator); `pnpm walk` drives
-every demo page in Playwright and asserts the frames' step results. See `docs/demo-engine.md`.
+`pnpm validate` runs typecheck, lint, `pnpm meters`, `pnpm test` (validator fixtures, support
+data, contrast) and `pnpm check` (the content validator); `pnpm walk` drives every demo page in
+Playwright, with a speaker window beside it, and asserts the frames' step results. `pnpm support`
+refreshes the browser support data from the pinned `web-features` package (refresh the package the
+week of the talk), `pnpm visuals` recaptures the intro stills, `pnpm theme:sync` copies the portal
+theme to `public/theme/` and the F2 apps (`pnpm dev` and `pnpm build` run it first). See
+`docs/demo-engine.md`.
 
 ## Framework demo apps (F2 caching)
 
 The caching demo's frames are two separate Next.js 16 apps, not frames of this app (PRD Part A,
 8.1 and 10.3): `demos/06-framework-cache/` runs with Cache Components on at
-<http://localhost:3106> (the `f2-now` and `f2-code` pages) and `demos/06-framework-cache-today/`
-runs with Cache Components off at <http://localhost:3107> (the `f2-today` page), because the old
+<http://localhost:3106> (the `f2-now` page) and `demos/06-framework-cache-today/`
+runs with Cache Components off at <http://localhost:3107> (the `f2-used-to` page), because the old
 route segment configs throw once the flag is on. Each is its own pnpm project with the same
 pinned `next`, `react` and `react-dom` versions as this one; install them once with
 `pnpm --dir demos/06-framework-cache install` and `pnpm --dir demos/06-framework-cache-today install`.
@@ -82,12 +93,14 @@ server-sent events) and `POST /__demo/reset`. The today app's meter is printed b
 - `content/schema.ts` — the slide schema (SLIDE_SCHEMA.md verbatim plus Part A additions and `demoView`).
 - `content/slides/*.ts` — one slide per file; `index.ts` sets the order. Generated from the PRD by
   `scripts/extract-prd.mts` + `scripts/import-prd.mts`; edit the generated files directly from here on.
-- `content/sections/<id>.ts` + `content/sections/<id>/files/` — the ten demo sections (schema v3) and their shown code files, extracted from the PRD.
+- `content/sections/<id>.ts` + `content/sections/<id>/files/` — the eleven demo sections (schema v4) and their shown code files. Edit them directly; the v3 extractor is gone.
+- `content/.generated/support.json` — browser and tool support for the intro slides (`pnpm support`).
+- `styles/glass-tokens.css` — the glass tokens and the portal theme injected into every frame; `public/portal/` holds per-demo portal CSS; `public/logos/`, `public/intro/`, `public/backgrounds/` the slide assets.
 - `demos/<nn-name>/` — each demo's builds (today, native extras, static, terminal) and `build.ts` registration.
 - `public/runtime/demo-runtime.js` — the in-frame runtime; `lib/engine/` the presenter-side player; `lib/frames/` the composer, registry and routes.
 - `public/images/[slide-id].{avif,webp,jpg,png}` — generated stills; a placeholder renders until they exist.
 - `components/layouts/` — `SlideShell`, `ContentSlide` (`list`), `DemoSplitSlide`, `PlaceholderSlide`.
-- `components/page/` — the demo page layout, frame player, overlay, code panel and badge.
+- `components/page/` — the intro slide and support row, the walk-page layout, frame player, overlay and code panel.
 - `components/stage/Stage.tsx` — canvas scaling, key map, step and view state, URL sync. Under
   `/present` and `/speaker` it reads and writes the shared store instead of local state.
 - `lib/presenter/` — presenter state, the sync transport and the provider; `components/presenter/`

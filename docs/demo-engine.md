@@ -1,84 +1,111 @@
-# Demo engine (schema v3)
+# Demo engine (schema v4)
 
 How the demo section of the deck works, where its pieces live, and how to build a demo for it.
-The specification is `PRD_Demos.md` (Part A, engine; Part B, content); the contract between the
-two is `content/demo-schema.ts`.
+The specification is `docs/PRD-demos-v4.md`, with the speaker's fixed requirements in
+`docs/design/feedback-2026-10-28.md`, the audience and notes guidance in
+`docs/design/demo-flow-cx.md` and the visual spec in `docs/design/demo-glass-spec.md`. The
+contract between engine and content is `content/demo-schema.ts`. v4 extends the v3 engine; it does
+not replace it.
 
 ## Pages, not slides
 
-The demo section is ten `DemoSection`s (`content/sections/`), each with three pages (today, now,
-code) or one single page. Every page is a slide of layout `demo-page` (`content/slides/index.ts`
-assembles the deck: the Claude Design opening, the 24 demo pages, the Claude Design closing).
-A page has a title, a frame, optional code files, and steps. Step 0 is the entry state.
+The demo section is eleven `DemoSection`s (`content/sections/`): six core demos (D1 to D6), then
+F1 to F5. Core demos, F2 and F3 have three pages; F1, F4 and F5 have one.
 
-Each step carries `actions` (pointer, click, key, focus, type, paste, resize, toggle, navigate,
-network, hook, terminal, reveal, wait, assert), optional `spotlight` selectors, `code` lines on
-code pages, `callouts` and a `meter` on today and now pages, and the speaker's `notes`.
+| Stage | Page | What is on it |
+|---|---|---|
+| `intro` | Intro slide | Feature name, one-sentence description plus the generated support sentence, the browser (or tool) tiles, the "also uses" line, a captured still. No frame, no code, one step. |
+| `used-to` | How we used to do it | The today build on the left, excerpts of its code on the right (50/50), three steps (HTML, CSS, JavaScript), the meter on the last step. No callouts. |
+| `now` | How we do it now | The native build on the left, its shown files on the right, five steps at most with code and behavior together, two proofs at most, cautions on the last step (speaker window only). |
+| `single` | One page | F1, F4, F5: one 1792 by 864 slot. |
 
-## Frames
+`content/slides/index.ts` assembles the deck: the Claude Design opening, the 27 demo pages, the
+Claude Design closing. `timing.cumulative` is never typed: `content/sections/index.ts` computes it
+from the authored minutes (the section starts at 5.0); the closing starts after the section
+buffer at 31.0.
 
-A frame is an iframe on the demo origin (`http://127.0.0.1:3000` offline; the presenter is
-`http://localhost:3000`, so the two cannot read each other). `lib/frames/origins.ts` resolves
-`Frame.route` to a URL; `/framework/` and `/framework-today/` prefixes resolve to the F2 apps on
-ports 3106 and 3107.
+Each step has `actions` (pointer, click, key, focus, type, paste, resize, toggle, navigate,
+network, hook, terminal, reveal, wait, assert), `code` (file, lines, `off` for enhancement-off
+proofs) on every walk-page step, optional `spotlight`, at most one `callout` on now pages, a
+`meter` (used-to: last step; now: the JavaScript step), `bullets`, `key` (the one point to stress
+per page), `proof`, `ifKeyboard` and `poster`.
 
-Documents are composed by `lib/frames/compose.ts` from a build's `index.html` (inserted verbatim)
-plus a shell: charset, viewport, the presenter origin, `/runtime/demo-runtime.js`, flag metadata,
-and the manifest's instrumentation scripts at the end of the body. They are served by
-`app/demos/[demo]/[build]/[[...path]]/route.ts` at `/demos/<demo>/<build>/index.html` (relative
-links resolve there), with the build's files at `/demos/<demo>/<build>/<file>` and extra routes
-from the folder's `routes` (today addresses, submit handlers). Root-level addresses (`/orders`,
-`/cases`, `/api/...`) are thin app routes that delegate to the same `routes`.
+## Layout
 
-- `demos/<nn-name>/build.ts` registers the folder: `today`, `native`, `static` or `terminal`
-  builds with their manifests (`lib/frames/types.ts`), and extra routes. Helpers in
-  `lib/frames/build-helpers.ts`; the map in `lib/frames/registry.ts`.
-- Native builds compose the section's shown files from `content/sections/<id>/files/`, so the
-  code on screen is the code that runs. Unshown hooks and instrumentation live in
-  `demos/<nn>/native-extra/` and are listed in the manifest's `instrumentation`.
-- Today builds live in `demos/<nn>/today/` and are working, hand-rolled implementations of the
-  plan's "what teams commonly maintain" lists; `pnpm meters` counts their JavaScript.
-- Flags: `enhance-css` disables the tagged stylesheets in place (mode `all`) or removes top-level
-  `@supports` rules through the CSSOM (mode `supports-blocks`); `enhance-js` serves the document
-  without the enhancement scripts (reload); `csp-enforce` switches D5's header (reload). Flags
-  arrive as `?flags=enhance-css:0`.
-- CSP per frame is `BASE_CSP` in `lib/frames/compose.ts`, overridable per build; sandbox per
-  manifest. The runtime is Trusted Types safe.
+On the 1920 by 1080 canvas: eyebrow at y 48 (with the step indicator at the right), title at y 88
+(with the meter at the right), body at y 176. Walk pages split the body into two 880 by 864 cards
+32 px apart. Frames are authored at 640 by 628 and scaled by 1.375; single pages use 1304 by 628.
+The code card shows 24 px code (21 lines of 36 px, 44 columns), file-name tabs, a highlight that
+leads playback by 400 ms, elision lines dimmed and italic, and an "Off" chip on enhancement-off
+steps.
+
+## Frames and the theme
+
+Frames run on the demo origin (`http://127.0.0.1:3000`; the presenter is `http://localhost:3000`).
+`lib/frames/compose.ts` builds every document from a build's `index.html` (inserted as written)
+plus a shell: the portal theme `<link>` first in the head, any per-demo portal CSS
+(`manifest.styles`, under `public/portal/`), charset, viewport, the presenter origin, the
+runtime, flag metadata and instrumentation scripts.
+
+- **Theme.** `styles/glass-tokens.css` (the design agent's file) is the one theme. `pnpm
+  theme:sync` copies it to `public/theme/portal-glass.css` and, with the backgrounds and two font
+  faces, into both F2 apps (`predev`, `prebuild` and the framework scripts run it; the copies are
+  gitignored). `@layer portal-theme` is paint only; `@layer portal-layout` lays out `.portal*` and
+  `.glass-*` classes only. Shown CSS is unlayered, so it always wins. `pnpm theme:lint` enforces
+  the PRD 6.2 bans (and runs inside `pnpm check`, with the copies' hashes).
+- **Portal shell.** `manifest.shell` wraps portal builds in the Ridgeline shell (nav rail, top bar)
+  at compose time, so the shown code stays about the feature. The markup is wrapped as written,
+  never reparsed; ids in `shell.outside` (overlay roots) are lifted out of `.portal`.
+- **Glass off.** `?glass=off` on `/present` or `/speaker` sets `data-glass="off"` on the window and
+  passes `glass:0` to every frame; surfaces turn solid.
+- Native builds compose the section's shown files (`content/sections/<id>/files/`); today builds
+  live in `demos/<nn>/today/` and are formatted with Prettier at 44 columns (`.prettierrc`).
+  Used-to pages show `excerpt()`s of them: chosen ranges joined by generated elision lines
+  (`lib/excerpt.ts`), checked line by line against the source.
+- Flags: `enhance-css`, `enhance-js`, `csp-enforce` as in v3; the `supports-blocks` mode never
+  touches the theme sheet.
 
 ## The runtime and the player
 
-`public/runtime/demo-runtime.js` runs inside every frame. It does nothing until the presenter
-sends `init`, then executes `run-step` (animated or instant) and `replay-to`, posts `cue`s for the
-overlay (cursor, ripple, keycap, caption), `rects` for watched selectors, `step-done` with assert
-results and a state digest, `error`, and forwards clicker keys. `key` actions run through the DOM
-API named in `via` (synthetic key events are untrusted); clicks focus the target first.
-
-`components/page/PageFrame.tsx` is the player. Next from the previous step plays the step animated
-in the active document. Any other move (Prev, jump, hands-on off, `r`) mounts a fresh document
-beneath, replays `s0..sN` instantly and swaps, so state is exact. Reloading toggles split a step:
-the actions before run, the document remounts with the new flags, the rest run there.
-`components/page/Overlay.tsx` draws the chrome above the iframe inside the scaled wrapper.
-
-Hands-on (`h`): steps stop playing, the ghost cursor hides, the frame gets the keyboard, Next and
-Prev change spotlights and highlights only; turning it off replays to the current step.
+Unchanged from v3: `public/runtime/demo-runtime.js` runs the scripted actions; Next from the
+previous step animates in the active document, any other move mounts a fresh document and replays
+`s0..sN` instantly. Hands-on mode (`h`) gives the frame the keyboard. While an intro slide shows,
+the next page's frame is loaded once in a hidden iframe to warm it (never for F2, whose apps log
+every request).
 
 ## Speaker window
 
-`/speaker` shows the current and next page previews (posters or labels; no live mirror), the notes
-for the exact step (`open` on step 0, the step's `notes`, `bridge` on the last step, `ifKeyboard`
-in hands-on mode, cautions on the last code step, citations, a step list that jumps), the next
-press, counters, the frame's health, and the timer.
+Previews on the left; the notes column on the right, top to bottom: header (eyebrow, title, "Step
+n of m: label", Proof and Key point chips), the hands-on box (`ifKeyboard`), the page intro on step
+0, the bullets (40 px, 28 to 56; the key step's last bullet in bold), cautions on the now page's
+last step, a collapsed Reference (support, citations, step list, action summaries). Next is pinned
+under the column; `d` adds the next step's actions under it. The timer stays hidden by default.
+
+## Support data
+
+`pnpm support` reads the installed `web-features` package and writes
+`content/.generated/support.json` (committed): tiles, the "available since" sentence and the "also
+uses" line. `pnpm support --tools` adds tool release dates from the npm registry. Intro slides read
+only this file; logos are local (`public/logos/`).
 
 ## Scripts
 
 | Command | What it does |
 |---|---|
-| `pnpm extract:demos` | Re-extracts the ten sections from `~/Downloads/PRD_Demos.md` (overwrites `content/sections/`). |
-| `pnpm meters` | Counts today builds' JavaScript into `content/.generated/meters.json`. |
-| `pnpm check [--strict] [section]` | The content validator (titles, stages, callouts, notes, timing, code lines, `via`, flags, meters, selectors against the builds). |
-| `pnpm validate` | typecheck, lint, meters, check. |
-| `pnpm walk [page or section] [--browser=webkit|firefox]` | Drives every page with the arrow keys in Playwright and asserts step results and forward/back digests. Needs `pnpm dev`. |
+| `pnpm check [--strict] [section]` | The validator (`lib/validate/rules.ts`): page order, step caps, proofs, bullets, word budgets, writing rules (dashes, "!", sentence and bullet length, banned words, "X, not Y", no TODO), code on every walk step, 44 columns and 40 lines, excerpt fidelity, intro support and visuals, eyebrow and title, callouts, meters, viewports, the timing table (`lib/validate/timing.ts`), v3 field names, theme lint and hashes. |
+| `pnpm test` | `test:validator` (one broken fixture per rule, theme lint included), `test:support` (the PRD 3.2 table), `test:contrast` (every text token over its surfaces, washes and palette). |
+| `pnpm validate` | typecheck, lint, meters, test, check. |
+| `pnpm walk [page, section or prefix] [--browser=webkit\|firefox] [--capture] [--no-speaker]` | Drives the audience window with the arrow keys: step asserts, forward and back digests, intro tiles against support.json, the theme in every frame, slot geometry and a 44 by 40 fixture, and (Chromium) a speaker window at 1440 by 900 for notes visibility and hands-on. `pnpm walk d6 --browser=firefox --capture` saves `public/posters/d6-firefox.png`. Needs `pnpm dev`. |
+| `pnpm visuals [section]` | Replays each intro's `visual.capture` step and saves the frame as a 2x PNG in `public/intro/`. |
+| `pnpm meters` | Counts today builds' and native shown JavaScript at printWidth 80 into `content/.generated/meters.json`. |
+| `pnpm support [--tools]` | Writes `content/.generated/support.json`. |
+| `pnpm axe [section]` | axe-core in every frame with `glass:0`. |
+| `pnpm excerpt <file> <a-b> ...` | Prints an excerpt with the shown line numbers `code.lines` uses. |
+| `pnpm theme:sync`, `pnpm theme:lint` | See Frames and the theme. |
+
+Rehearsal mode (`d` in the audience window) shows the step id, digest, duration, failed asserts and
+the 95th percentile frame time (the budget is 20 ms).
 
 Talk day: `pnpm dev` (or `pnpm build && pnpm start`) serves the presenter on `localhost:3000` and
-the frames on `127.0.0.1:3000`; the F2 apps start separately on 3106 and 3107 (see
-`demos/06-framework-cache/`). Open `http://localhost:3000/speaker`.
+the frames on `127.0.0.1:3000`; the F2 apps start separately on 3106 and 3107 (`pnpm
+dev:framework`, `pnpm dev:framework-today`). Open `http://localhost:3000/speaker`.
