@@ -1,5 +1,4 @@
 import "server-only";
-import { parseHTML } from "linkedom";
 
 /**
  * The Ridgeline Outfitters portal shell (docs/design/demo-glass-spec.md, section 8), wrapped around
@@ -48,18 +47,22 @@ function shellHtml(opts: ShellOptions): { before: string; after: string } {
   return { before, after: "</div></div>" };
 }
 
-/** Wraps `body` (the build's markup) in the shell; scripts and the `outside` ids follow the shell. */
+/**
+ * Wraps `body` (the build's markup) in the shell. The markup is never reparsed: an HTML library's
+ * parser can restructure new syntax (a customizable select's button and option content), so the
+ * string is wrapped as written. Elements named in `outside` (simple elements such as an empty
+ * overlay root) are lifted out of the shell to follow it.
+ */
 export function wrapInShell(body: string, opts: ShellOptions): string {
-  const { document } = parseHTML(`<!doctype html><html><body>${body}</body></html>`);
-  const outside = new Set(opts.outside ?? []);
-  const inner: string[] = [];
+  let inner = body;
   const after: string[] = [];
-  for (const node of [...document.body.childNodes]) {
-    const el = node as unknown as { nodeType: number; tagName?: string; id?: string; outerHTML?: string; textContent?: string };
-    const html = el.nodeType === 1 ? el.outerHTML! : el.nodeType === 3 ? el.textContent!.replace(/&/g, "&amp;").replace(/</g, "&lt;") : el.nodeType === 8 ? `<!--${el.textContent}-->` : "";
-    if (el.nodeType === 1 && (el.tagName === "SCRIPT" || (el.id && outside.has(el.id)))) after.push(html);
-    else inner.push(html);
+  for (const id of opts.outside ?? []) {
+    const re = new RegExp(`<([a-z][\\w-]*)\\b[^>]*\\bid="${id}"[^>]*>[\\s\\S]*?</\\1>\\s*`, "i");
+    const m = re.exec(inner);
+    if (!m) throw new Error(`shell: no element with id "${id}" to place outside the portal`);
+    after.push(m[0].trim());
+    inner = inner.slice(0, m.index) + inner.slice(m.index + m[0].length);
   }
   const shell = shellHtml(opts);
-  return `${shell.before}${inner.join("")}${shell.after}\n${after.join("\n")}`;
+  return `${shell.before}\n${inner}\n${shell.after}\n${after.join("\n")}`;
 }

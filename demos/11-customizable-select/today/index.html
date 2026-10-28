@@ -1,0 +1,38 @@
+<!-- prettier-ignore -->
+<link rel="stylesheet" href="styles.css">
+<form
+  id="t-variant"
+  class="variant"
+  action="variants"
+  method="post"
+>
+  <h1>Trail Runner 2</h1>
+  <span id="t-color-label">Color</span>
+  <div class="combo">
+    <div
+      id="t-color"
+      class="combo__button"
+      role="combobox"
+      tabindex="0"
+      aria-labelledby="t-color-label"
+      aria-controls="t-color-list"
+      aria-expanded="false"
+      aria-haspopup="listbox"
+    ></div>
+    <ul
+      id="t-color-list"
+      class="combo__list"
+      role="listbox"
+      aria-labelledby="t-color-label"
+      hidden
+    ></ul>
+    <input
+      type="hidden"
+      name="color"
+      id="t-color-input"
+    />
+  </div>
+  <button>Save</button>
+</form>
+<p id="t-status" role="status"></p>
+<script type="module" src="app.js"></script>

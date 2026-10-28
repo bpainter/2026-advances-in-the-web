@@ -1,0 +1,38 @@
+/* D6 portal content (unshown): the open-picker replica and the Firefox capture panel. */
+@layer portal-layout {
+  .picker-replica {
+    position: absolute;
+    min-inline-size: 12rem;
+    margin-block-start: 4px;
+  }
+  .picker-replica__option {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .firefox-capture {
+    position: fixed;
+    inset-block-end: 16px;
+    inset-inline-end: 16px;
+    inline-size: 300px;
+    margin: 0;
+    padding: 8px;
+  }
+  .firefox-capture img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    border-radius: 8px;
+  }
+}
+@layer portal-theme {
+  .picker-replica__option.is-active {
+    font-weight: 700;
+    background: var(--glass-surface-selected);
+  }
+  .firefox-capture figcaption {
+    padding: 6px 4px 0;
+    font-size: var(--glass-text-sm);
+    font-weight: 700;
+  }
+}

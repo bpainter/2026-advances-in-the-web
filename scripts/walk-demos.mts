@@ -9,7 +9,7 @@
  * Needs `pnpm dev` at DECK_URL (default http://localhost:3000) with the demo origin reachable.
  */
 import { chromium, firefox, webkit, type Browser, type Page } from "@playwright/test";
-import { readFileSync } from "node:fs";
+import { mkdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { hasFrame, type DemoPage, type DemoSection } from "@/content/demo-schema";
 import type { SupportFile } from "@/lib/support-data";
@@ -54,6 +54,29 @@ async function lastSeq(page: Page): Promise<number> {
 }
 
 let speaker: Page | null = null;
+
+/**
+ * D6 (PRD v4, 2.2 and 7.6): in Firefox the select is a normal select and the saved form posted the
+ * chosen color (the step's own assert); with --capture, the Firefox frame is saved as the poster
+ * the s5 step reveals (public/posters/d6-firefox.png).
+ */
+async function checkD6(page: Page, where: string) {
+  const frame = page.frames().find((f) => f.url().includes("/11-customizable-select/native/"));
+  if (!frame) return fail(where, "D6 frame not found");
+  const appearance = (await frame.evaluate(`getComputedStyle(document.querySelector("#color")).appearance`)) as string;
+  if (browserName === "firefox") {
+    if (appearance === "base-select") fail(where, "Firefox: the select is customized; expected a normal select");
+    else pass(`Firefox: the select is a normal select (appearance ${appearance}) and the color posted`);
+    if (args.includes("--capture")) {
+      const out = path.join(process.cwd(), "public", "posters", "d6-firefox.png");
+      mkdirSync(path.dirname(out), { recursive: true });
+      await page.addStyleTag({ content: ".overlay { display: none !important; }" });
+      await page.locator('.page-frame__iframe[data-visible="true"]').screenshot({ path: out });
+      await page.addStyleTag({ content: ".overlay { display: block !important; }" });
+      pass(`captured ${path.relative(process.cwd(), out)} from Firefox`);
+    }
+  } else pass(`${browserName}: select appearance ${appearance}`);
+}
 
 /** Every frame carries the portal theme (PRD v4, 7.6): computed --glass-surface is set on its root. */
 async function checkTheme(page: Page, where: string, stepId: string) {
@@ -144,6 +167,7 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
     else pass(`${step.id} ${step.label}: ${r.asserts.filter((a) => a.stepId === step.id).length} assert(s) ok, ${r.ms}ms`);
     forward.push(r.digest);
     if (i === 0 || i === demoPage.steps.length - 1) await checkTheme(page, where, step.id);
+    if (demoPage.id === "d6-now" && step.id === "s4") await checkD6(page, where);
     await checkSpeaker(where, demoPage, section, i);
     await checkHandsOn(page, where, demoPage, i);
   }
@@ -237,7 +261,8 @@ async function main() {
     if (msg.type() === "error" && !/favicon/.test(msg.text())) console.log(`    console: ${msg.text().slice(0, 160)}`);
   });
 
-  const targets = sections.flatMap((s) => s.pages.filter((p) => !only || p.id === only || s.id === only).map((p) => ({ s, p })));
+  // A page id, a section id, or its short prefix ("d6" for d6-variant-picker).
+  const targets = sections.flatMap((s) => s.pages.filter((p) => !only || p.id === only || s.id === only || s.id.startsWith(`${only}-`)).map((p) => ({ s, p })));
   if (targets.length === 0) {
     console.error(only ? `No page or section "${only}"` : "No pages");
     process.exit(2);

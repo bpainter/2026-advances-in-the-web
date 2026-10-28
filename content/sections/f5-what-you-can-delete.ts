@@ -1,127 +1,88 @@
 import type { DemoSection } from "@/content/demo-schema";
 
-/** Schema v4 (docs/PRD-demos-v4.md); shown code files live in ./f5-what-you-can-delete/files/. */
+/** F5: what each core demo lets a team delete, with one npm pull and a not-yet column. */
 export const section: DemoSection = {
   id: "f5-what-you-can-delete",
   order: 11,
   label: "What you can delete",
-  scenario:
-    "TODO rewrite: One table maps each core demo's today plumbing to the libraries it stands in for, with one fresh npm pull and an honest not-yet column.",
+  scenario: "One table maps each core demo to the libraries it can replace, with one npm pull.",
   pages: [
     {
       id: "f5-single",
       stage: "single",
       title: "What you can delete",
       intro:
-        "TODO rewrite: Each core demo stood in for libraries teams carry today. Here is the list, with the honest exceptions.",
+        "Each core demo stood in for code teams carry today. This table names it, with the exceptions.",
       frame: {
         build: "static",
         route: "/demos/10-delete/static",
-        viewport: {
-          width: 1304,
-          height: 628,
-        },
+        viewport: { width: 1304, height: 628 },
         hooks: ["reset"],
-        poster: "/posters/f5-s4.png",
       },
       steps: [
         {
           id: "s0",
           label: "Table header",
-          actions: [
-            {
-              type: "hook",
-              name: "reset",
-            },
-          ],
-          bullets: ["TODO rewrite: One row per core demo, and one row that stays."],
+          actions: [{ type: "hook", name: "reset" }],
+          bullets: [],
         },
         {
           id: "s1",
-          label: "Order actions row",
-          actions: [
-            {
-              type: "reveal",
-              target: "#row-d1",
-            },
-          ],
+          label: "Order actions",
+          actions: [{ type: "reveal", target: "#row-d1" }],
           spotlight: ["#row-d1"],
           bullets: [
-            "TODO rewrite: Order actions stood in for dialog and popover components, focus trapping and modal libraries.",
-            "TODO rewrite: Floating UI stays until anchor positioning settles.",
+            "Dialog and popover replace modal and focus-trap libraries. Floating UI stays for now.",
           ],
-          ifKeyboard: "TODO rewrite: Same.",
         },
         {
           id: "s2",
-          label: "Product card and form rows",
+          label: "Card and form",
           actions: [
-            {
-              type: "reveal",
-              target: "#row-d2",
-            },
-            {
-              type: "wait",
-              ms: 250,
-            },
-            {
-              type: "reveal",
-              target: "#row-d3",
-            },
+            { type: "reveal", target: "#row-d2" },
+            { type: "wait", ms: 250 },
+            { type: "reveal", target: "#row-d3" },
           ],
           spotlight: ["#row-d2", "#row-d3"],
           bullets: [
-            "TODO rewrite: The product card replaces ResizeObserver element-query code.",
-            "TODO rewrite: The support form replaces textarea autosizing scripts.",
+            "Container queries replace resize observers. Field sizing replaces autosize scripts.",
           ],
-          ifKeyboard: "TODO rewrite: Same.",
         },
         {
           id: "s3",
-          label: "Navigation and content rows",
+          label: "Navigation and content",
           actions: [
-            {
-              type: "reveal",
-              target: "#row-d4",
-            },
-            {
-              type: "wait",
-              ms: 250,
-            },
-            {
-              type: "reveal",
-              target: "#row-d5",
-            },
+            { type: "reveal", target: "#row-d4" },
+            { type: "wait", ms: 250 },
+            { type: "reveal", target: "#row-d5" },
           ],
           spotlight: ["#row-d4", "#row-d5"],
           bullets: [
-            "TODO rewrite: Dashboard navigation replaces the click handler and History glue a small router library provides.",
-            "TODO rewrite: Rich content keeps DOMPurify and changes how you use it: one reviewed policy instead of scattered calls.",
-            "TODO rewrite: The Sanitizer API's setHTML() would remove it, but it is not in Safari as of October.",
+            "The Navigation API replaces small routers. DOMPurify stays, behind one policy.",
           ],
-          ifKeyboard: "TODO rewrite: Same.",
         },
         {
           id: "s4",
-          label: "Not yet: dates",
-          actions: [
-            {
-              type: "reveal",
-              target: "#row-dates",
-            },
+          label: "Variant picker",
+          actions: [{ type: "reveal", target: "#row-d6" }],
+          spotlight: ["#row-d6"],
+          bullets: [
+            "Customizable select can replace custom select libraries once Firefox ships it.",
           ],
+        },
+        {
+          id: "s5",
+          label: "Not yet: dates",
+          key: true,
+          actions: [{ type: "reveal", target: "#row-dates" }],
           spotlight: ["#row-dates"],
           bullets: [
-            "TODO rewrite: Date libraries stay until Temporal reaches Safari.",
-            "TODO rewrite: Intl covers formatting today.",
-            "TODO rewrite: The counts come from one npm pull this week and include CI and agent installs, so compare ratios between rows.",
+            "Date libraries stay until Temporal reaches Safari.",
+            "The counts are one npm pull and include CI installs. Compare rows, not totals.",
           ],
-          ifKeyboard: "TODO rewrite: Same.",
         },
       ],
-      timing: {
-        minutes: 0.75,
-      },
+      timing: { minutes: 0.75 },
       cutPriority: 1,
     },
   ],

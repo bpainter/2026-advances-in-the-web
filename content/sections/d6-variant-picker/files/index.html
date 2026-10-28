@@ -1,4 +1,7 @@
-<form id="variant">
+<link rel="stylesheet" href="select.css">
+<form id="variant" class="variant"
+  action="variants" method="post">
+  <h1>Trail Runner 2</h1>
   <label for="color">Color</label>
   <select id="color" name="color">
     <button>
@@ -17,4 +20,7 @@
       Sand
     </option>
   </select>
+  <button>Save</button>
 </form>
+<p id="status" role="status"></p>
+<script type="module" src="app.js"></script>

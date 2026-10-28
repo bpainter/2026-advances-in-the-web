@@ -10,11 +10,12 @@ import { folder as d07 } from "@/demos/07-package-workflow/build";
 import { folder as d08 } from "@/demos/08-fast-follows/build";
 import { folder as d09 } from "@/demos/09-vite-8/build";
 import { folder as d10 } from "@/demos/10-delete/build";
+import { folder as d11 } from "@/demos/11-customizable-select/build";
 
 export { nativeBuild, folderBuild, manifestDefaults, BASE_SANDBOX, FORMS_SANDBOX } from "./build-helpers";
 
 /** Every demo folder the frame routes can serve, keyed by folder name. */
-export const DEMO_FOLDERS: Record<string, DemoFolder> = Object.fromEntries([d01, d02, d03, d04, d05, d07, d08, d09, d10].map((f) => [f.demo, f]));
+export const DEMO_FOLDERS: Record<string, DemoFolder> = Object.fromEntries([d01, d02, d03, d04, d05, d07, d08, d09, d10, d11].map((f) => [f.demo, f]));
 
 export function demoFolder(demo: string): DemoFolder | undefined {
   return DEMO_FOLDERS[demo];
