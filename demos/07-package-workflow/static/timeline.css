@@ -1,5 +1,6 @@
-/* F3 today: eight dated markers on one axis, authored for 1296 x 856.
-   Markers start hidden; the engine's `reveal` action shows them one by one. */
+/* F3 today: eight dated markers, the shown block of the advisory-feed wrapper (PRD v5, 4.9),
+   which supplies the page, the card and its padding. Markers start hidden; the engine's `reveal`
+   action shows them one by one. */
 
 :root {
   --navy: #0f1c41;
@@ -30,8 +31,6 @@ body {
   box-sizing: border-box;
   display: grid;
   grid-template-rows: auto 1fr auto auto;
-  height: 100vh;
-  padding: 44px 48px 36px;
 }
 
 /* Head */
@@ -39,15 +38,6 @@ body {
 .tl__head {
   display: grid;
   gap: 4px;
-}
-
-.tl__eyebrow {
-  margin: 0;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--blue);
 }
 
 .tl__title {
@@ -212,7 +202,6 @@ body {
   text-align: center;
   font-size: 18px;
   font-weight: 700;
-  letter-spacing: 0.08em;
 }
 
 /* Legend */
@@ -254,12 +243,12 @@ body {
 @media (max-width: 900px) {
   .tl {
     gap: 12px;
-    padding: 16px 20px;
   }
   .tl__title {
     font-size: 26px;
   }
   .tl__axis {
+    height: auto;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: repeat(4, auto);
     grid-auto-flow: column;

@@ -33,6 +33,7 @@ const builds = {
     manifestDefaults({
       enhancement: { css: { files: [] }, js: [] },
       sideEffects: ["reset"],
+      wrapper: { id: "advisory-feed" },
     }),
   ),
   terminal: folderBuild(
@@ -43,6 +44,7 @@ const builds = {
       enhancement: { css: { files: [] }, js: [] },
       sideEffects: ["reset"],
       scrollers: ["[data-terminal]"],
+      wrapper: { id: "terminal-window" },
     }),
   ),
 };
@@ -89,15 +91,15 @@ export function renderLines(rec: TerminalRecording): string {
     .join("\n      ");
 }
 
+/** The terminal-window wrapper's status bar (spec 4.10): registry first, then the pinned tools. */
 function renderEnv(rec: TerminalRecording): string {
   const entries: [string, string][] = [
-    ["os", rec.env.os],
-    ["node", rec.env.node],
+    ["registry", rec.env.registry.replace(/^https?:\/\//, "").replace(/\/$/, "")],
     ["pnpm", rec.env.pnpm],
     ["npm", rec.env.npm],
-    ["registry", rec.env.registry.replace(/^https?:\/\//, "").replace(/\/$/, "")],
+    ["node", rec.env.node],
   ];
-  return entries.map(([k, v]) => `<span>${k} <b>${escapeHtml(v)}</b></span>`).join("\n    ");
+  return entries.map(([k, v]) => `<span class="wrap-window__pair"><span class="wrap-window__key">${k}</span> <span class="wrap-window__value">${escapeHtml(v)}</span></span>`).join("");
 }
 
 function renderCaptured(rec: TerminalRecording): string {
@@ -107,17 +109,26 @@ function renderCaptured(rec: TerminalRecording): string {
     : d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
   // "Recorded <date>" while recorded lines are on screen; "Example session" once an example line is
   // revealed (the CSS swaps them), so nothing illustrative claims to be a recording.
-  return `<span class="term__chip-recorded">Recorded <time datetime="${escapeHtml(rec.capturedAt)}">${escapeHtml(label)}</time></span><span class="term__chip-example">Example session</span>`;
+  return `<span class="wrap-window__chip-recorded">Recorded <time datetime="${escapeHtml(rec.capturedAt)}">${escapeHtml(label)}</time></span><span class="wrap-window__chip-example">Example session</span>`;
 }
 
-/** The terminal document for one recording: the build's index.html with its placeholders filled. */
+/** The terminal document for one recording: the build's index.html with its lines filled. */
 export function terminalBody(rec: TerminalRecording): string {
   const template = readFileSync(path.join(builds.terminal.dir, "index.html"), "utf8");
-  return template
-    .replace("<!--lines-->", renderLines(rec))
-    .replace("<!--env-->", renderEnv(rec))
-    .replace("<!--captured-->", renderCaptured(rec));
+  return template.replace("<!--lines-->", renderLines(rec));
 }
+
+/** Fills the terminal-window wrapper's placeholders (title, chip, working directory, status bar). */
+export function fillTerminalWrapper(html: string, rec: TerminalRecording): string {
+  return html
+    .replace("<!--term-title-->", escapeHtml(TERMINAL_TITLE))
+    .replace("<!--captured-->", renderCaptured(rec))
+    .replace("<!--term-cwd-->", "~/fixture-workspace")
+    .replace("<!--env-->", renderEnv(rec));
+}
+
+/** The window title (spec 4.10): the pinned tools and the registry the session ran against. */
+const TERMINAL_TITLE = "pnpm 12.11 and npm 11.15, test registry";
 
 function flagsOf(url: URL): Record<string, boolean> {
   return parseFlags(url.searchParams.get("flags"));
@@ -154,12 +165,15 @@ const routes: ServerRoute[] = [
       if (!rec) return notFound("Recording");
       const flags = flagsOf(url);
       const origin = originOf(req, url);
-      const html = composeFrame(builds.terminal, {
-        flags,
-        origin,
-        body: terminalBody(rec),
-        title: `${builds.terminal.title}: ${rec.id}`,
-      });
+      const html = fillTerminalWrapper(
+        composeFrame(builds.terminal, {
+          flags,
+          origin,
+          body: terminalBody(rec),
+          title: `${builds.terminal.title}: ${rec.id}`,
+        }),
+        rec,
+      );
       return frameResponse(html, builds.terminal, origin, flags);
     },
   },

@@ -1,5 +1,5 @@
-/* F4 Vite 8 locally, on the portal glass (design review H1, B3). The theme supplies the body,
-   the background and Slalom Sans; the table is a glass card. */
+/* F4 Vite 8 locally, the shown block of the ci-report wrapper (PRD v5, 4.11): the wrapper draws
+   the sheet, the bar and the run card; the table is the one raised card. */
 [hidden] {
   display: none !important;
 }
@@ -17,8 +17,8 @@
 }
 .measure__title {
   margin: 0;
-  font-size: var(--glass-text-xl);
-  line-height: var(--glass-leading-xl);
+  font-size: 22px;
+  line-height: 28px;
 }
 .measure__meta {
   margin: 0;
@@ -26,11 +26,11 @@
   color: var(--glass-ink-soft);
 }
 .measure__card {
-  padding: 8px 24px;
+  padding: 0 16px;
   border: var(--glass-border);
   border-radius: var(--glass-radius-card);
-  background: var(--glass-surface-strong);
-  box-shadow: var(--glass-highlight), var(--glass-shadow-card);
+  background: var(--wrap-surface-focus);
+  box-shadow: var(--glass-highlight), var(--wrap-shadow-focus);
 }
 #measure-table {
   inline-size: 100%;
@@ -40,9 +40,24 @@
 }
 #measure-table th,
 #measure-table td {
-  padding: 14px 12px;
+  box-sizing: border-box;
+  block-size: 60px;
+  padding: 0 12px;
   text-align: start;
-  vertical-align: baseline;
+  vertical-align: middle;
+}
+#measure-table thead th {
+  block-size: 56px;
+}
+/* A row waits as two skeleton bars under Before and After until its step reveals it. */
+#measure-table tbody tr[hidden] {
+  display: table-row !important;
+  background:
+    linear-gradient(var(--wrap-skeleton), var(--wrap-skeleton)) 36% 50% / 16% 12px no-repeat,
+    linear-gradient(var(--wrap-skeleton), var(--wrap-skeleton)) 69% 50% / 16% 12px no-repeat;
+}
+#measure-table tbody tr[hidden] > * {
+  visibility: hidden;
 }
 #measure-table thead th {
   font-size: 18px;

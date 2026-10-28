@@ -9,7 +9,7 @@
  */
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { BACKGROUNDS_PUBLIC, F2_APPS, F2_BACKGROUND, FONTS, THEME_PUBLIC, THEME_SOURCE, backgroundsCss, lintTheme } from "@/lib/validate/theme";
+import { BACKGROUNDS_PUBLIC, F2_APPS, F2_BACKGROUND, F2_WRAPPER_CSS, FONTS, THEME_PUBLIC, THEME_SOURCE, backgroundsCss, lintTheme } from "@/lib/validate/theme";
 
 const root = process.cwd();
 const cmd = process.argv[2];
@@ -25,6 +25,7 @@ if (cmd === "sync") {
     copy(THEME_SOURCE, `${app}/public/theme/portal-glass.css`);
     copy(BACKGROUNDS_PUBLIC, `${app}/${BACKGROUNDS_PUBLIC}`);
     copy(`public/backgrounds/v5/${F2_BACKGROUND}`, `${app}/public/backgrounds/v5/${F2_BACKGROUND}`);
+    for (const f of F2_WRAPPER_CSS) copy(`public/wrappers/${f}`, `${app}/public/wrappers/${f}`);
     for (const f of FONTS) copy(`public/fonts/${f}`, `${app}/public/fonts/${f}`);
   }
   console.log(`synced ${THEME_SOURCE} to ${THEME_PUBLIC} and ${F2_APPS.length} F2 apps`);

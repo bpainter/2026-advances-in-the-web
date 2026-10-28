@@ -21,4 +21,5 @@ demos/06-framework-cache*/public/theme/*
 # Committed (PRD v5, 1.2): the seeded grain tile; pnpm check compares it with a fresh render.
 !public/theme/grain.png
 demos/06-framework-cache*/public/backgrounds/
+demos/06-framework-cache*/public/wrappers/
 demos/06-framework-cache*/public/fonts/

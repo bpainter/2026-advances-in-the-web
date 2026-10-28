@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { RequestLog } from "@/components/request-log";
 import { PRESENTER_ORIGIN, RUNTIME_SRC } from "@/lib/origins";
-import { PortalShell } from "@/components/portal-shell";
+import { StorefrontShell } from "@/components/storefront-shell";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
  */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-build="today" data-section-bg="f2" suppressHydrationWarning>
+    <html lang="en" data-build="today" data-section-bg="f2" data-wrapper="storefront-product" data-shown-outside="preview-strip request-log" suppressHydrationWarning>
       <head>
         {/* The shared portal theme (PRD v4, 6.2), copied in by pnpm theme:sync. */}
         {/* eslint-disable-next-line @next/next/no-css-tags */}
@@ -23,6 +23,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* The F2 section background (PRD v5, 4.2), also from pnpm theme:sync. */}
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link rel="stylesheet" href="/theme/backgrounds.css" />
+        {/* The storefront-product wrapper (PRD v5, 4.4), also from pnpm theme:sync. */}
+        {/* eslint-disable-next-line @next/next/no-css-tags */}
+        <link rel="stylesheet" href="/wrappers/base.css" />
+        {/* eslint-disable-next-line @next/next/no-css-tags */}
+        <link rel="stylesheet" href="/wrappers/storefront-product.css" />
       </head>
       <body>
         {/* Synchronous on purpose: the hooks must exist before the frame runtime asks for them. */}
@@ -33,21 +38,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           data-presenter-origin={PRESENTER_ORIGIN}
           data-runtime={RUNTIME_SRC}
         />
-        <PortalShell title="Products">
-          <div className="topbar">
-            <p className="brand__mode">Next.js 16 · Cache Components off</p>
-            <div className="admin" data-presenter-chrome="">
-              <button type="button" data-demo-reload="">
-                Reload
-              </button>
-              <button type="button" data-demo-reset="">
-                Reset
-              </button>
-            </div>
-          </div>
+        <StorefrontShell
+          controls={
+            <>
+              <div className="admin" data-presenter-chrome="">
+                <button type="button" data-demo-reload="">
+                  Reload
+                </button>
+                <button type="button" data-demo-reset="">
+                  Reset
+                </button>
+              </div>
+              <span className="wrap-preview__mode">Cache Components off</span>
+            </>
+          }
+          log={<RequestLog />}
+        >
           <main className="product">{children}</main>
-          <RequestLog />
-                </PortalShell>
+        </StorefrontShell>
       </body>
     </html>
   );

@@ -11,7 +11,10 @@ import { RequestLogRows } from "./request-log-live";
  */
 export function RequestLog() {
   return (
-    <aside id="request-log" aria-label="Request log">
+    <aside id="request-log" className="wrap-drawer wrap-log" aria-label="Request log">
+      <ul className="wrap-drawer__tabs" aria-hidden="true">
+        <li className="wrap-drawer__tab wrap-drawer__tab--current">Requests</li>
+      </ul>
       <div className="log-head" role="row">
         <span>Request</span>
         <span>Query</span>

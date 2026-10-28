@@ -105,7 +105,7 @@ for (const s of sections) {
 }
 // Wrappers (PRD v5, 2.1 and 4.7): every frame build's wrapper, its CSS, markup and scripts, and no
 // shown file using the wrap- prefix. Folders still on the v4 shell are pending until M5.
-const PENDING_WRAPPERS = new Set(["07-package-workflow", "08-fast-follows", "09-vite-8", "10-delete"]);
+const PENDING_WRAPPERS = new Set<string>([]);
 const publicText = (href: string) => {
   const abs = path.join(root, "public", href);
   return existsSync(abs) ? readFileSync(abs, "utf8") : "";
@@ -131,10 +131,8 @@ const wrappedBuilds: WrappedBuild[] = Object.values(DEMO_FOLDERS).flatMap((folde
     };
   }),
 );
-const shownFiles = [
-  ...filesUnder(path.join(root, "content", "sections"), /\.(html|css|js|ts|tsx|http|ya?ml)$/).filter((f) => f.includes(`${path.sep}files${path.sep}`)),
-  ...Object.values(DEMO_FOLDERS).flatMap((f) => Object.values(f.builds).filter((d) => d!.manifest.build !== "native").flatMap((d) => filesUnder(d!.dir, /\.(html|css|js)$/))),
-].map((f) => ({ path: path.relative(root, f), text: readFileSync(f, "utf8") }));
+// The code panel's files (shown files and excerpts of the today builds), as the panel shows them.
+const shownFiles = sections.flatMap((sec) => sec.pages.flatMap((pg) => ("files" in pg && pg.files ? pg.files.map((f) => ({ path: `${pg.id}/${f.file}`, text: f.source })) : [])));
 const wrapperIssues = validateWrappers(wrappedBuilds, shownFiles);
 
 const issues: Issue[] = [...all, ...(only ? [] : [...themeIssues(root), ...v5Issues, ...wrapperIssues])];

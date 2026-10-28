@@ -22,7 +22,7 @@ export const section: DemoSection = {
         "Container queries let a component change its layout based on the space it is given.",
       visual: {
         src: "/intro/d2-product-card.png",
-        alt: "The product card laid out horizontally in a wide slot.",
+        alt: "The same product card at three widths: featured, search results and recommended.",
         capture: { pageId: "d2-now", stepId: "s2" },
       },
       steps: [{ id: "s0", label: "Title and support", actions: [], bullets: [] }],

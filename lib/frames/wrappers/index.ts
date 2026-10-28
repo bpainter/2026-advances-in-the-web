@@ -6,6 +6,12 @@ import { storefrontMerch } from "./storefront-merch";
 import { supportCase } from "./support-case";
 import { productPage } from "./product-page";
 import { productEditor } from "./product-editor";
+import { watchList } from "./watch-list";
+import { advisoryFeed } from "./advisory-feed";
+import { terminalWindow } from "./terminal-window";
+import { ciReport } from "./ci-report";
+import { dependencyReview } from "./dependency-review";
+import { storefrontProduct } from "./storefront-product";
 import type { WrapperDef, WrapperId } from "./types";
 
 export type { WrapperDef, WrapperId, WrapperRender, WrapperContext } from "./types";
@@ -18,6 +24,12 @@ export const WRAPPERS: Partial<Record<WrapperId, WrapperDef>> = {
   "support-case": supportCase,
   "product-page": productPage,
   "product-editor": productEditor,
+  "watch-list": watchList,
+  "storefront-product": storefrontProduct,
+  "advisory-feed": advisoryFeed,
+  "terminal-window": terminalWindow,
+  "ci-report": ciReport,
+  "dependency-review": dependencyReview,
   "fixture-bare": fixtureBare,
 };
 

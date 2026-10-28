@@ -1,0 +1,40 @@
+/* F2 storefront-product (spec 4.8), rendered by both F2 apps (components/storefront-shell.tsx):
+   a dark staff preview strip with the demo controls, the storefront header, the shown product
+   page on the focus surface and the request log docked as a drawer on dark glass. */
+@layer wrapper {
+  .wrap--f2 {
+    grid-template-rows: 40px var(--wrap-site-height) minmax(0, 1fr);
+  }
+  .wrap-preview {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    background: var(--wrap-surface-dark);
+    color: var(--wrap-dark-ink-body);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .wrap-preview__label {
+    color: var(--wrap-dark-ink-soft);
+    font-weight: 700;
+  }
+  .wrap-preview__mode {
+    margin-inline-start: auto;
+    color: var(--wrap-dark-ink-soft);
+  }
+  .wrap--f2 .wrap-store-body {
+    min-block-size: 0;
+    padding: 12px 20px 224px;
+  }
+  .wrap--f2 [data-shown] {
+    padding: 16px 20px;
+  }
+  .wrap-log {
+    position: fixed;
+    inset: auto 12px 12px;
+    z-index: 1;
+    block-size: 212px;
+    overflow: hidden;
+  }
+}

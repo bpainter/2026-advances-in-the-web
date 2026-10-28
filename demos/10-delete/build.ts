@@ -39,7 +39,7 @@ export const folder: DemoFolder = {
       DEMO,
       "static",
       "What you can delete",
-      manifestDefaults({ sideEffects: [] }),
+      manifestDefaults({ sideEffects: [], wrapper: { id: "dependency-review" } }),
     ),
   },
   routes: [

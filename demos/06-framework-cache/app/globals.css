@@ -1,45 +1,46 @@
-/* F2 frame inside the Ridgeline portal shell (design review H2). Colors, borders, radii, buttons
-   and fields come from the shared theme (/theme/portal-glass.css, pnpm theme:sync); this file
-   lays out the product, the presenter's admin bar and the request log. Authored for the 640 by 628
-   walk-page frame. */
+/* F2 frame inside the storefront-product wrapper (PRD v5, 4.8; components/storefront-shell.tsx).
+   Colors, borders, radii, buttons and fields come from the shared theme (/theme/portal-glass.css,
+   pnpm theme:sync); this file lays out the product, the preview strip's controls and the request
+   log rows inside the drawer. Authored for the 640 by 628 walk-page frame. */
 html[data-unloading] body {
   opacity: 0.92;
 }
-.topbar {
-  display: grid;
-  gap: var(--glass-space-3);
-}
-.brand__mode {
-  margin: 0;
-  font: 700 var(--glass-text-sm) / var(--glass-leading-sm) var(--glass-font-mono);
-  color: var(--glass-ink-soft);
-}
+/* The demo controls, compact on the dark preview strip. */
 .admin {
   display: flex;
-  flex-wrap: wrap;
-  align-items: end;
-  gap: var(--glass-space-4);
+  align-items: center;
+  gap: 8px;
 }
 .admin__field {
-  display: grid;
-  gap: var(--glass-space-2);
-  font-size: var(--glass-text-sm);
-  font-weight: 700;
-}
-/* The copy field takes its own full row, so its text never clips. */
-.admin__form {
-  order: 10;
-  flex: 1 0 100%;
   display: flex;
-  align-items: end;
-  gap: var(--glass-space-4);
+  align-items: center;
+  gap: 4px;
 }
-.admin__field--grow {
-  flex: 1;
+.admin__field > span {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
 }
-.admin__field--grow input {
-  inline-size: 100%;
+.admin__form {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.admin select,
+.admin input,
+.admin button {
   box-sizing: border-box;
+  block-size: 28px;
+  padding: 0 8px;
+  font-size: 14px;
+}
+.admin input {
+  inline-size: 96px;
+}
+.admin button {
+  padding: 0 6px;
 }
 .product-card {
   padding: var(--glass-space-5) var(--glass-space-6);
@@ -77,25 +78,24 @@ article .stock {
   color: var(--glass-ink-soft);
 }
 #request-log {
-  padding: var(--glass-space-3) var(--glass-space-6);
-  border: var(--glass-border);
-  border-radius: var(--glass-radius-card);
-  background: var(--glass-surface-strong);
-  box-shadow: var(--glass-highlight), var(--glass-shadow-card);
+  color: var(--wrap-dark-ink-body);
 }
 .log-head,
 .log-row {
   display: grid;
   grid-template-columns: 56px minmax(0, 1fr) 72px;
   gap: var(--glass-space-5);
-  align-items: baseline;
-  padding: var(--glass-space-2) 0;
+  align-items: center;
+  padding: 0 14px;
+}
+.log-row {
+  block-size: 36px;
 }
 .log-head {
+  block-size: 28px;
   font-size: var(--glass-text-sm);
   font-weight: 700;
-  color: var(--glass-ink-soft);
-  border-bottom: 1px solid var(--glass-rule);
+  color: var(--wrap-dark-ink-soft);
 }
 .log-head span:last-child,
 .log-row__cached {
@@ -112,36 +112,38 @@ article .stock {
   display: none;
 }
 .log-row + .log-row {
-  border-top: 1px solid var(--glass-rule);
+  border-top: 1px solid var(--wrap-dark-rule);
 }
 .log-row__request {
-  color: var(--glass-ink-soft);
+  color: var(--wrap-dark-ink-soft);
 }
 .log-row__text {
   overflow: hidden;
   font-family: var(--glass-font-mono);
-  font-size: var(--glass-text-md);
+  font-size: 14px;
+  color: var(--wrap-dark-ink);
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 .log-row__cached {
   font-weight: 700;
+  color: var(--wrap-dark-ink);
 }
 .log-row__cached[data-cached="miss"] {
-  color: var(--glass-ink);
+  color: var(--wrap-dark-ink);
 }
 .log-row__cached[data-cached="expired"] {
-  color: var(--glass-link);
+  color: var(--cyan);
 }
 .log-row[data-kind="catalog"],
 .log-row[data-kind="price"] {
-  background: var(--glass-surface-selected);
+  background: rgb(27 225 242 / 0.12);
 }
 .log-row[data-kind="invalidate"] {
   box-shadow: inset 3px 0 0 var(--coral);
 }
 .log-empty {
   margin: 0;
-  padding: var(--glass-space-4) 0;
-  color: var(--glass-ink-soft);
+  padding: var(--glass-space-4) 14px;
+  color: var(--wrap-dark-ink-soft);
 }

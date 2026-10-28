@@ -13,6 +13,7 @@ export const folder: DemoFolder = {
       "Still in motion",
       manifestDefaults({
         sideEffects: [],
+        wrapper: { id: "watch-list" },
       }),
     ),
   },

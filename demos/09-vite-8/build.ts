@@ -36,7 +36,7 @@ function measurements(): Response {
 export const folder: DemoFolder = {
   demo: DEMO,
   builds: {
-    static: folderBuild(DEMO, "static", "Vite 8 locally", manifestDefaults({ sideEffects: [] })),
+    static: folderBuild(DEMO, "static", "Vite 8 locally", manifestDefaults({ sideEffects: [], wrapper: { id: "ci-report" } })),
   },
   routes: [
     {

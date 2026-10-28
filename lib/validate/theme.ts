@@ -26,6 +26,8 @@ export const THEME_PUBLIC = "public/theme/portal-glass.css";
 export const F2_APPS = ["demos/06-framework-cache", "demos/06-framework-cache-today"];
 /** Generated from content/backgrounds.ts by pnpm theme:sync (PRD v5, 4.1). */
 export const BACKGROUNDS_PUBLIC = "public/theme/backgrounds.css";
+/** The F2 wrapper's stylesheets (PRD v5, 4.4), copied into both F2 apps by theme:sync. */
+export const F2_WRAPPER_CSS = ["base.css", "storefront-product.css"];
 /** The F2 section file, copied into both F2 apps. */
 export const F2_BACKGROUND = BACKGROUNDS_REGISTRY.f2.file;
 
@@ -158,6 +160,15 @@ export function themeIssues(root: string): Issue[] {
   for (const copy of [THEME_PUBLIC, ...F2_APPS.map((a) => `${a}/public/theme/portal-glass.css`)]) {
     const abs = path.join(root, copy);
     if (!existsSync(abs) || sha(abs) !== hash) out.push({ rule: "theme-hash", where: copy, message: `differs from ${THEME_SOURCE}; run pnpm theme:sync`, level: "error" });
+  }
+  // The F2 apps carry the same wrapper stylesheets as public/wrappers/.
+  for (const f of F2_WRAPPER_CSS) {
+    const srcCss = path.join(root, "public", "wrappers", f);
+    if (!existsSync(srcCss)) continue;
+    for (const app of F2_APPS) {
+      const abs = path.join(root, app, "public", "wrappers", f);
+      if (!existsSync(abs) || sha(abs) !== sha(srcCss)) out.push({ rule: "theme-hash", where: `${app}/public/wrappers/${f}`, message: `differs from public/wrappers/${f}; run pnpm theme:sync`, level: "error" });
+    }
   }
   // The per-section frame images match the registry, here and in the F2 apps.
   const css = backgroundsCss();

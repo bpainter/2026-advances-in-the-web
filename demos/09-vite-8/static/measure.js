@@ -70,10 +70,11 @@ function render(data) {
     if (data.machine) parts.push(String(data.machine));
     if (data.node) parts.push(`Node ${data.node}`);
     parts.push("median of five runs");
-    meta.textContent = parts.join(" · ");
+    // The ci-report wrapper shows the run's machine and date; a page without it shows them here.
+    if (meta) meta.textContent = parts.join(" · ");
     foot.hidden = true;
   } else {
-    meta.textContent = NOT_MEASURED;
+    if (meta) meta.textContent = NOT_MEASURED;
     foot.hidden = false;
     foot.textContent = data.error ? `Not measured: ${data.error}` : "Not measured: run pnpm measure:vite on this machine.";
   }

@@ -1,95 +1,25 @@
-/* F3 terminal player as a dark glass surface on the portal background (design review H3): the theme
-   supplies the body, its background and the frame padding; the terminal is a navy card with radius
-   16 and the dark shadow. Lines are server-rendered hidden; the engine's `terminal` action reveals
-   a range and the command text types in. Authored for the 640 by 628 walk-page frame. */
+/* F3 terminal player, the shown block inside the terminal-window wrapper (PRD v5, 4.10): the
+   wrapper draws the window, title bar, session tab and status bar; this styles the recorded lines
+   only. Lines are server-rendered hidden; the engine's `terminal` action reveals a range and the
+   command text types in. Authored for the 640 by 628 walk-page frame. */
 .term {
   --fg: #ffffff;
+  --fg-body: #d6dcec;
   --fg-dim: #b8c0d9;
-  --rule: rgb(255 255 255 / 0.14);
   --cyan: #1be1f2;
   box-sizing: border-box;
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  height: calc(100vh - 2 * var(--glass-frame-pad));
-  padding: 14px 18px 12px;
-  border: 1px solid var(--glass-dark-border-color);
-  border-radius: 16px;
-  background: rgb(15 28 65 / 0.94);
-  box-shadow: var(--glass-dark-highlight), var(--glass-dark-shadow);
-  color: var(--fg);
-  font: 15px/1.45 var(--glass-font-mono);
+  block-size: 100%;
+  color: var(--fg-body);
+  font: 15px/22px var(--glass-font-mono);
   color-scheme: dark;
-  overflow: hidden;
-}
-
-/* Title bar: dots and the title on one line, the chip on its own row under it. */
-.term__bar {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  gap: 8px 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--rule);
-}
-.term__dots {
-  display: inline-flex;
-  gap: 6px;
-}
-.term__dots i {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgb(255 255 255 / 0.22);
-}
-.term__title {
-  margin: 0;
-  font: 700 15px/20px var(--glass-font);
-  color: var(--fg);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.term__chip {
-  grid-column: 1 / -1;
-  justify-self: start;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 3px 12px;
-  border-radius: 999px;
-  background: var(--slalom-blue);
-  font: 700 14px/20px var(--glass-font);
-  white-space: nowrap;
-}
-.term__chip::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--coral);
-}
-/* Once an example line is on screen, the chip says so instead of "Recorded". */
-.term__chip-example {
-  display: none;
-}
-.term:has(.term__lines li[data-example]:not([hidden])) .term__chip {
-  background: rgb(255 255 255 / 0.16);
-}
-.term:has(.term__lines li[data-example]:not([hidden])) .term__chip::before {
-  background: var(--fg-dim);
-}
-.term:has(.term__lines li[data-example]:not([hidden])) .term__chip-recorded {
-  display: none;
-}
-.term:has(.term__lines li[data-example]:not([hidden])) .term__chip-example {
-  display: inline;
 }
 
 /* The scroller the runtime keeps at its latest line */
-
 .term__scroll {
+  box-sizing: border-box;
+  block-size: 100%;
   overflow-y: auto;
-  padding: 10px 0;
+  padding: 12px 16px;
   scrollbar-width: none;
 }
 
@@ -100,7 +30,7 @@
 }
 
 .term__lines li {
-  min-height: 1.45em;
+  min-height: 22px;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
@@ -119,6 +49,7 @@
 
 .term__lines [data-kind="cmd"] .term__text {
   display: inline-block;
+  color: var(--fg);
   font-weight: 700;
   animation: type min(calc(var(--n, 1) * 30ms), 350ms) steps(var(--n, 1), end) both;
 }
@@ -132,59 +63,27 @@
   }
 }
 
-/* A block caret on the last revealed line */
-
-.term__lines li:not([hidden]):not(:has(~ li:not([hidden]))) .term__text::after {
-  content: "";
-  display: inline-block;
-  width: 0.6ch;
-  height: 1.05em;
-  margin-left: 0.2ch;
-  background: var(--fg);
-  vertical-align: text-bottom;
-  animation: blink 1s steps(2, start) infinite;
+/* The wrapper's chip says "Recorded <date>" while recorded lines are on screen and "Example
+   session" once an example line is revealed, so nothing illustrative claims to be a recording. */
+.wrap-window__chip-example {
+  display: none;
+}
+:root:has(.term__lines li[data-example]:not([hidden])) .wrap-window__chip-recorded {
+  display: none;
+}
+:root:has(.term__lines li[data-example]:not([hidden])) .wrap-window__chip-example {
+  display: inline;
 }
 
-@keyframes blink {
-  to {
-    visibility: hidden;
-  }
-}
-
-/* Environment strip */
-
-.term__env {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 18px;
-  padding-top: 8px;
-  border-top: 1px solid var(--rule);
-  font-size: 13px;
-  color: var(--fg-dim);
-}
-
-.term__env span b {
-  font-weight: 400;
-  color: var(--fg);
-}
-
-/* `l` on the stage: a flat navy field with the title, so the speaker can put
-   a real terminal in the slot. */
-
-html[data-live] .term__dots,
-html[data-live] .term__chip,
+/* `l` on the stage: the recording hides so the speaker can put a real terminal in the slot. */
 html[data-live] .term__scroll,
-html[data-live] .term__env {
+html[data-live] .wrap-window__chip,
+html[data-live] .wrap-window__status {
   visibility: hidden;
 }
 
-html[data-live] .term__bar {
-  border-bottom-color: transparent;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .term__lines [data-kind="cmd"] .term__text,
-  .term__lines .term__text::after {
+  .term__lines [data-kind="cmd"] .term__text {
     animation: none;
   }
 }

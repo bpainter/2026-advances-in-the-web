@@ -1,6 +1,6 @@
-/* F5 What you can delete, on the portal glass (design review H1, H8, M13). The theme supplies the
-   body, the background and Slalom Sans; the table is a glass card with fixed columns, so nothing
-   moves as rows arrive, and seven rows fit the 628 px frame. */
+/* F5 What you can delete, the shown block of the dependency-review wrapper (PRD v5, 4.12): the
+   wrapper draws the sheet, the Draft bar and the pull request head. The table is the one raised
+   card with fixed columns, so nothing moves as rows arrive; rows wait as skeleton bars. */
 [hidden] {
   display: none !important;
 }
@@ -17,9 +17,12 @@
   gap: 8px 24px;
 }
 .delete__title {
-  margin: 0;
-  font-size: var(--glass-text-xl);
-  line-height: var(--glass-leading-xl);
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 .delete__meta {
   margin: 0;
@@ -27,27 +30,41 @@
   color: var(--glass-ink-soft);
 }
 .delete__card {
-  padding: 4px 16px;
+  padding: 0 16px;
   border: var(--glass-border);
   border-radius: var(--glass-radius-card);
-  background: var(--glass-surface-strong);
-  box-shadow: var(--glass-highlight), var(--glass-shadow-card);
+  background: var(--wrap-surface-focus);
+  box-shadow: var(--glass-highlight), var(--wrap-shadow-focus);
+}
+/* A row waits as two skeleton bars (Libraries and Weekly) until its step reveals it. */
+#delete-table tbody tr[hidden] {
+  display: table-row !important;
+  background:
+    linear-gradient(var(--wrap-skeleton), var(--wrap-skeleton)) 42% 50% / 18% 12px no-repeat,
+    linear-gradient(var(--wrap-skeleton), var(--wrap-skeleton)) 70% 50% / 7% 12px no-repeat;
+}
+#delete-table tbody tr[hidden] > * {
+  visibility: hidden;
 }
 #delete-table {
   inline-size: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 18px;
-  line-height: 24px;
+  font-size: 16px;
+  line-height: 22px;
 }
 #delete-table th,
 #delete-table td {
-  padding: 8px 10px;
+  box-sizing: border-box;
+  block-size: 56px;
+  padding: 5px 10px;
   text-align: start;
   vertical-align: top;
 }
 #delete-table thead th {
-  font-size: 16px;
+  block-size: 44px;
+  vertical-align: middle;
+  font-size: 15px;
   font-weight: 700;
   color: var(--glass-ink-soft);
   border-bottom: 1px solid var(--glass-rule);
@@ -74,7 +91,7 @@
 }
 code {
   font-family: var(--glass-font-mono);
-  font-size: 0.9em;
+  font-size: 15px;
 }
 .keep {
   font-weight: 700;

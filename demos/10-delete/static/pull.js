@@ -21,6 +21,8 @@ function render(data) {
   }
   const start =
     data.window && typeof data.window.start === "string" ? new Date(data.window.start) : null;
+  // The dependency-review wrapper names the pull's week; a page without it names it here.
+  if (!header) return;
   if (start && !Number.isNaN(start.getTime()))
     header.textContent = `npm, week of ${dateFormat.format(start)}`;
   else header.textContent = "npm, one pull the week of the talk";

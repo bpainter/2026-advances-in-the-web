@@ -59,8 +59,8 @@ async function lastSeq(page: Page): Promise<number> {
 
 let speaker: Page | null = null;
 
-/** Sections whose frames must carry a v5 wrapper (all of them once M5 lands). */
-const V5_WRAPPED = new Set(["d1-order-actions", "d2-product-card", "d3-support-form", "d4-dashboard-navigation", "d5-rich-content", "d6-variant-picker"]);
+/** Every section's frames carry a v5 wrapper (PRD v5, 2). */
+const V5_WRAPPED = new Set(sections.map((s) => s.id));
 
 /**
  * D6 (PRD v4, 2.2 and 7.6): in Firefox the select is a normal select and the saved form posted the
@@ -203,7 +203,7 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
     forward.push(r.digest);
     if (i === 0 || i === demoPage.steps.length - 1) {
       await checkTheme(page, where, step.id);
-      // Wrapper checks at s0 and on the last step (PRD v5, 4.8); builds still on the v4 shell are skipped.
+      // Wrapper checks at s0 and on the last step (PRD v5, 4.8).
       const f = await visibleFrame(page);
       const wrapped = f ? await f.evaluate("Boolean(document.documentElement.dataset.wrapper)").catch(() => false) : false;
       if (wrapped || V5_WRAPPED.has(section.id)) await checkWrapper(f, `${where} ${step.id}`, demoPage.files ?? [], demoPage.stage === "single", { fail, pass });

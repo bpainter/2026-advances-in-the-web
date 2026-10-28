@@ -30,8 +30,8 @@ export const section: DemoSection = {
         "Package managers now ask before a package runs code, and a person approves each release.",
       visual: {
         src: "/intro/f3-package-trust.png",
-        alt: "The terminal showing an install script held back until it is approved.",
-        capture: { pageId: "f3-now", stepId: "s1" },
+        alt: "The terminal listing a denied install script, then its one-line approval.",
+        capture: { pageId: "f3-now", stepId: "s2" },
       },
       steps: [{ id: "s0", label: "Title and support", actions: [], bullets: [] }],
       timing: { minutes: 0.25 },

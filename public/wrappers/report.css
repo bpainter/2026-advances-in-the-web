@@ -1,0 +1,80 @@
+/* Report family (spec 4.7, 4.9, 4.11, 4.12): a sheet with a document header bar, used by F1's
+   watch list, F3's advisory feed, F4's benchmark report and F5's pull request. */
+@layer wrapper {
+  .wrap-report {
+    gap: 16px;
+    padding: 20px 24px 16px;
+  }
+  .wrap--watch .wrap-report,
+  .wrap--ci .wrap-report,
+  .wrap--pr .wrap-report {
+    padding: 24px 24px 20px;
+  }
+  .wrap-report > [data-shown] {
+    flex: 1;
+    min-block-size: 0;
+  }
+  .wrap-report__source {
+    flex: none;
+  }
+  .wrap-chip--wait {
+    color: var(--glass-link);
+  }
+
+  /* F3 advisory feed */
+  .wrap-advisory__mark {
+    display: inline-grid;
+    color: var(--glass-ink);
+  }
+  .wrap--advisory .wrap-bar__area {
+    margin-inline-start: -4px;
+  }
+  .wrap-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 24px;
+    margin: 0;
+  }
+  .wrap-filter__key {
+    color: var(--glass-ink);
+    font-weight: 700;
+  }
+  .wrap--advisory .wrap-report > [data-shown] {
+    padding: 20px;
+  }
+
+  /* F4 run card */
+  .wrap-run {
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    justify-content: space-between;
+    gap: 24px;
+    flex: none;
+    min-block-size: 64px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+  }
+  .wrap-run__cell {
+    display: grid;
+    gap: 2px;
+  }
+  .wrap-run__value {
+    color: var(--glass-ink);
+    font-size: 15px;
+    line-height: 20px;
+  }
+
+  /* F5 pull request head */
+  .wrap-pr-head {
+    display: grid;
+    gap: 4px;
+    flex: none;
+  }
+  .wrap-pr-title {
+    margin: 0;
+    color: var(--glass-ink);
+    font-size: 22px;
+    line-height: 28px;
+    font-weight: 700;
+  }
+}
