@@ -18,6 +18,19 @@ import { chromium } from "@playwright/test";
 import { sections } from "@/lib/content";
 
 const BASE = process.env.DECK_URL ?? "http://localhost:3000";
+/**
+ * Only the frame: no overlay (cursor, spotlights) and no dev badge. The frame card's rounded
+ * corners are squared for the capture, so the still has frame content to its edges and no dark
+ * corner pixels; the intro card rounds it again (review v5 H1).
+ */
+const CAPTURE_CSS =
+  ".overlay, nextjs-portal { display: none !important; } .page-frame, .page-frame__scaled, .page-frame__slot, .page-frame__iframe { border-radius: 0 !important; }";
+/** Stills show no focus ring that reads as a spotlight (review v5 L3). */
+async function blurFrameFocus(p: import("@playwright/test").Page) {
+  const el = await p.$('.page-frame__iframe[data-visible="true"]');
+  const f = await el?.contentFrame();
+  await f?.evaluate("document.activeElement && document.activeElement !== document.body && document.activeElement.blur()").catch(() => {});
+}
 const only = process.argv.slice(2).filter((a) => !a.startsWith("--"));
 
 const browser = await chromium.launch();
@@ -55,7 +68,9 @@ for (const section of sections) {
   }
   await page.waitForTimeout(600);
   // Only the frame: no overlay (cursor, spotlights) and no dev-server badge.
-  await page.addStyleTag({ content: ".overlay, nextjs-portal { display: none !important; }" });
+  await page.addStyleTag({ content: CAPTURE_CSS });
+  await blurFrameFocus(page);
+  await page.waitForTimeout(100);
   const out = path.join(process.cwd(), "public", intro.visual.src);
   mkdirSync(path.dirname(out), { recursive: true });
   await page.locator('.page-frame__iframe[data-visible="true"]').screenshot({ path: out, animations: "disabled" });
@@ -71,7 +86,7 @@ async function slotCrop(pageId: string, stepIndex: number): Promise<Buffer | nul
     .catch(() => false);
   if (!ok) return null;
   await page.waitForTimeout(800);
-  await page.addStyleTag({ content: ".overlay, nextjs-portal { display: none !important; }" });
+  await page.addStyleTag({ content: CAPTURE_CSS });
   const iframe = page.locator('.page-frame__iframe[data-visible="true"]');
   const box = await iframe.boundingBox();
   const frame = await (await iframe.elementHandle())?.contentFrame();
@@ -134,7 +149,7 @@ if (process.argv.includes("--posters")) {
           continue;
         }
         await shot.waitForTimeout(500);
-        await shot.addStyleTag({ content: ".overlay, nextjs-portal { display: none !important; }" });
+        await shot.addStyleTag({ content: CAPTURE_CSS });
         const out = path.join(process.cwd(), "public", "posters", p.id, `${step.id}.jpg`);
         mkdirSync(path.dirname(out), { recursive: true });
         await shot.locator('.page-frame__iframe[data-visible="true"]').screenshot({ path: out, type: "jpeg", quality: 72 });

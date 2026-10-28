@@ -26,7 +26,7 @@
   color: var(--glass-ink-soft);
 }
 .measure__card {
-  padding: 0 16px;
+  padding: 0 16px 16px;
   border: var(--glass-border);
   border-radius: var(--glass-radius-card);
   background: var(--wrap-surface-focus);
@@ -49,15 +49,19 @@
 #measure-table thead th {
   block-size: 56px;
 }
-/* A row waits as two skeleton bars under Before and After until its step reveals it. */
+/* A row waits as two skeleton bars under Before and After until its step reveals it (review v5
+   M15). Cells stay painted (a hidden cell paints no background); their text is transparent. */
 #measure-table tbody tr[hidden] {
   display: table-row !important;
-  background:
-    linear-gradient(var(--wrap-skeleton), var(--wrap-skeleton)) 36% 50% / 16% 12px no-repeat,
-    linear-gradient(var(--wrap-skeleton), var(--wrap-skeleton)) 69% 50% / 16% 12px no-repeat;
 }
 #measure-table tbody tr[hidden] > * {
+  color: transparent;
+}
+#measure-table tbody tr[hidden] > * * {
   visibility: hidden;
+}
+#measure-table tbody tr[hidden] > td {
+  background: linear-gradient(var(--wrap-skeleton), var(--wrap-skeleton)) 12px 50% / 45% 12px no-repeat;
 }
 #measure-table thead th {
   font-size: 18px;

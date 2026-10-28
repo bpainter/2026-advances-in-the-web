@@ -65,6 +65,7 @@
   }
   .wrap-window__body {
     min-block-size: 0;
+    padding-block-start: 8px;
   }
   .wrap-window__status {
     display: flex;

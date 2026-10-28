@@ -54,9 +54,10 @@
     justify-items: center;
     gap: 6px;
   }
+  /* 3 by 52 plus 2 gaps of 12 is 180: the tiles fit the card's 184 inner width (review v5 M11). */
   .wrap-editor__swatch {
-    inline-size: 56px;
-    block-size: 56px;
+    inline-size: 52px;
+    block-size: 52px;
     border: 1px solid var(--wrap-chip-edge);
     border-radius: 8px;
   }

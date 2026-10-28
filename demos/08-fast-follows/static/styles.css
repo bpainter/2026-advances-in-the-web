@@ -73,6 +73,12 @@
   font-size: 18px;
   color: var(--glass-ink-soft);
 }
+/* The legend in the bar names both labels, so each tile carries both (review v5 M14). */
+.tile__use::before {
+  content: "Try now: ";
+  font-weight: 700;
+  color: var(--glass-ink);
+}
 .tile__wait {
   margin: auto 0 0;
   padding-top: 10px;

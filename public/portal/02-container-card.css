@@ -1,0 +1,7 @@
+/* D2 shown page (unshown, review v5 M4) for the used-to build: 16 px under each section heading,
+   so a spotlight ring around a slot (9 px out) never covers the heading above it. */
+@layer portal-theme {
+  .section-title {
+    margin-block-end: 16px;
+  }
+}

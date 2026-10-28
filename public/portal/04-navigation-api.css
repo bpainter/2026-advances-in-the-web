@@ -3,6 +3,10 @@
    panel docks as a dark drawer at the bottom of the frame (the real subject, full contrast); the
    order list reads as a portal card. */
 @layer portal-layout {
+  /* Room for the inset spotlight ring inside the content edge (review v5 H7). */
+  #content {
+    padding-inline: 8px;
+  }
   .toolbar {
     position: sticky;
     top: 72px;
@@ -97,7 +101,8 @@
   .demo-panel {
     border: 1px solid var(--wrap-dark-edge);
     border-radius: 12px;
-    background: var(--wrap-surface-dark);
+    /* Near solid: the drawer is the subject, so list rows never read through it (review v5 M10). */
+    background: var(--wrap-surface-dark-strong);
     -webkit-backdrop-filter: var(--glass-filter-float);
     backdrop-filter: var(--glass-filter-float);
     box-shadow: var(--glass-dark-highlight), var(--glass-shadow-float);

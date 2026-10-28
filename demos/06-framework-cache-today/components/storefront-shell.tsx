@@ -43,7 +43,7 @@ export function StorefrontShell({ controls, log, children }: { controls: ReactNo
         </span>
       </header>
       <div className="wrap-store-body">
-        <div className="wrap-shown" data-shown="">
+        <div className="wrap-shown wrap-shown--bare" data-shown="">
           {children}
         </div>
       </div>

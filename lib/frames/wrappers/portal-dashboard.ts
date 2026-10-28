@@ -1,5 +1,5 @@
 import "server-only";
-import { BASE_CSS, ICONS, avatar, brand, context, icon } from "./common";
+import { BASE_CSS, ICONS, avatar, context, esc, icon } from "./common";
 import type { WrapperDef } from "./types";
 
 /**
@@ -29,7 +29,8 @@ export const portalDashboard: WrapperDef = {
     const before = [
       '<div class="wrap wrap--app"><div class="wrap-sheet wrap-app">',
       `<div class="wrap-rail" role="presentation"><span class="wrap-brand__mark" aria-hidden="true">R</span>${rail}</div>`,
-      `<div class="wrap-top" role="presentation">${brand(ctx.store.name)}<span class="wrap-bar__end">${avatar()}</span></div>`,
+      // The rail carries the mark; the top bar has the name only (spec 4.4, review v5 L2).
+      `<div class="wrap-top" role="presentation"><span class="wrap-brand"><span class="wrap-brand__name">${esc(ctx.store.name)}</span></span><span class="wrap-bar__end">${avatar()}</span></div>`,
       '<div class="wrap-main">',
     ].join("");
     // The frame padding stays clear while the document scrolls: two fixed strips repaint the

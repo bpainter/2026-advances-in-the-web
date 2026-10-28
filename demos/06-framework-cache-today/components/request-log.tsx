@@ -9,11 +9,12 @@ import { RequestLogRows } from "./request-log-live";
  * inventory line exists, so they are in the HTML before the frame runtime reports ready; the
  * client keeps them live over SSE.
  */
-export function RequestLog() {
+export function RequestLog({ mode }: { mode: string }) {
   return (
     <aside id="request-log" className="wrap-drawer wrap-log" aria-label="Request log">
       <ul className="wrap-drawer__tabs" aria-hidden="true">
         <li className="wrap-drawer__tab wrap-drawer__tab--current">Requests</li>
+        <li className="wrap-drawer__tab wrap-drawer__mode">{mode}</li>
       </ul>
       <div className="log-head" role="row">
         <span>Request</span>

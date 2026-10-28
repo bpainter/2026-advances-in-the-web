@@ -264,9 +264,13 @@ body {
     grid-row: auto;
     justify-self: stretch;
     display: grid;
-    grid-template-columns: 22px 1fr;
+    /* The marker is part of the item's box, so the ring around the item encloses it and every
+       card starts at the same x (review v5 M6). */
+    grid-template-columns: 40px 1fr;
+    column-gap: 8px;
     grid-template-rows: auto;
     align-items: start;
+    justify-items: start;
     width: auto;
     height: auto;
   }

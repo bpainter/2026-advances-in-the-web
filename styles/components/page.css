@@ -406,6 +406,14 @@
   width: 2px;
   height: 24px;
 }
+/* Above or below a side target, the leader sits at that edge (Overlay placeCallout). */
+.overlay__callout[data-align="end"]::after {
+  left: auto;
+  right: 24px;
+}
+.overlay__callout[data-align="start"]::after {
+  left: 24px;
+}
 .overlay__callout[data-side="left"]::after {
   left: 100%;
   top: 50%;
@@ -482,6 +490,10 @@
   font-weight: var(--weight-bold);
   /* Fades in and stays until the next keycap or step (design review L3). */
   animation: overlay-cap 160ms ease-out both;
+}
+/* D4: the keycap sits above the evidence drawer, never on the request log (review v5 H6). */
+.overlay[data-keycap="above-drawer"] .overlay__keycap {
+  bottom: 218px;
 }
 @keyframes overlay-cap {
   from {

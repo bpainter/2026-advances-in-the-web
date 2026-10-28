@@ -32,7 +32,7 @@
 .term__lines li {
   min-height: 22px;
   white-space: pre-wrap;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .term__lines li[hidden] {

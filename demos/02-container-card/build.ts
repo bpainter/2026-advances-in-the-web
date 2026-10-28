@@ -16,6 +16,7 @@ export const folder: DemoFolder = {
       manifestDefaults({
         enhancement: { css: "all", js: ["app.js", "card.js", "resize-classes.js"] },
         wrapper: { id: "storefront-merch" },
+        styles: ["/portal/02-container-card.css"],
         // The cards are rendered by card.js from props, so none of them is in index.html.
         runtimeSelectors: [
           "#t-grid .c-product-card",

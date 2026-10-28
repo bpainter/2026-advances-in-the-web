@@ -242,7 +242,7 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
     <div className="page-frame" data-status={status} data-build={frame.build} style={frameStyle}>
       <div className="page-frame__scaled">
         <div className="page-frame__slot" ref={slotRef} />
-        <Overlay handle={handle} step={step} ready={doneStep !== null && doneStep.index === stepIndex} handsOn={handsOn} reducedMotion={reducedMotion} rehearsal={rehearsal} />
+        <Overlay handle={handle} step={step} ready={doneStep !== null && doneStep.index === stepIndex} handsOn={handsOn} reducedMotion={reducedMotion} rehearsal={rehearsal} clipBottom={frame.spotlightClip?.bottom} keycap={frame.keycap} />
       </div>
       {narrowed ? <div className="page-frame__edge" style={{ left: `calc(${viewportWidth}px * ${scale})` }} aria-hidden="true" /> : null}
       {status === "loading" ? <p className="page-frame__status">Loading demo…</p> : null}

@@ -39,6 +39,13 @@ function esc(s: string): string {
     .replace(/"/g, "&quot;");
 }
 
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+/** "19 Oct 2026": no numeric dates on screen (CX fixture copy). */
+function day(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  return `${d} ${MONTHS[m - 1]} ${y}`;
+}
+
 function money(n: number): string {
   return Number.isInteger(n) ? `$${n}` : `$${n.toFixed(2)}`;
 }
@@ -88,7 +95,7 @@ export function orderPage(id: string): Rendered {
     found: true,
     main:
       `  <h1>${title}</h1>\n  <dl class="order-detail">\n    <dt>Customer</dt><dd>${esc(order.customer)}</dd>\n` +
-      `    <dt>Placed</dt><dd>${order.placed}</dd>\n    <dt>Status</dt><dd>${order.status}</dd>\n` +
+      `    <dt>Placed</dt><dd>${day(order.placed)}</dd>\n    <dt>Status</dt><dd>${order.status}</dd>\n` +
       `    <dt>Total</dt><dd>${money(order.total)}</dd>\n  </dl>\n  <h2>Items</h2>\n  <ul class="order-items">\n${items}\n  </ul>\n` +
       `  <p><a href="/orders">Back to orders</a></p>\n`,
   };

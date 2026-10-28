@@ -49,10 +49,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   Reset
                 </button>
               </div>
-              <span className="wrap-preview__mode">Cache Components off</span>
             </>
           }
-          log={<RequestLog />}
+          log={<RequestLog mode="Cache Components off" />}
         >
           <main className="product">{children}</main>
         </StorefrontShell>

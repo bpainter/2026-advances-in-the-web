@@ -74,7 +74,7 @@ function frameSamplerStart(selectors: string[]): string {
 const FRAME_SAMPLER_STOP = `(() => { window.__rectSampling = 0; const s = window.__rectSamples || []; window.__rectSamples = []; return { samples: s, vw: innerWidth, vh: innerHeight }; })()`;
 
 /** The overlay's merge rule (within 12 frame px) and its viewport clip, so boxes and targets compare. */
-function merged(list: R[], vw: number, vh: number): R[] {
+function merged(list: R[], vw: number, vhIn: number, clipBottom?: number): R[] {
   const out: R[] = [];
   for (const r of list) {
     const i = out.findIndex((o) => r.x <= o.x + o.w + 12 && o.x <= r.x + r.w + 12 && r.y <= o.y + o.h + 12 && o.y <= r.y + r.h + 12);
@@ -87,6 +87,8 @@ function merged(list: R[], vw: number, vh: number): R[] {
     }
   }
   return out.map((r) => {
+    if (clipBottom && r.y >= clipBottom) return r;
+    const vh = clipBottom ? Math.min(vhIn, clipBottom) : vhIn;
     const near = r.x < 9 || r.y < 9 || r.x + r.w > vw - 9 || r.y + r.h > vh - 9;
     if (!near) return r;
     const x = Math.max(r.x, 0);
@@ -123,7 +125,7 @@ export async function startDeckSampler(page: Page, frame: Frame | null, groups: 
  * the target by the message's own frame: a match against the frame's samples from the last two
  * animation frames counts.
  */
-export async function finishDeckSampler(page: Page, frame: Frame | null): Promise<{ samples: number; visible: number; violations: string[] } | null> {
+export async function finishDeckSampler(page: Page, frame: Frame | null, clipBottom?: number): Promise<{ samples: number; visible: number; violations: string[] } | null> {
   const boxes = (await page.evaluate(BOX_SAMPLER_STOP).catch(() => [])) as BoxSample[];
   if (!frame) return null;
   const res = (await frame.evaluate(FRAME_SAMPLER_STOP).catch(() => null)) as { samples: FrameSample[]; vw: number; vh: number } | null;
@@ -140,10 +142,10 @@ export async function finishDeckSampler(page: Page, frame: Frame | null): Promis
     if (!window.length) continue;
     visible++;
     for (const b of shown) {
-      const ok = window.some((f) => sampledGroups.some((g) => merged(g.flatMap((i) => f.rects[i] ?? []), f.vw, f.vh).some((r) => near1(r, b))));
+      const ok = window.some((f) => sampledGroups.some((g) => merged(g.flatMap((i) => f.rects[i] ?? []), f.vw, f.vh, clipBottom).some((r) => near1(r, b))));
       if (!ok) {
         const lastGroup = sampledGroups[sampledGroups.length - 1] ?? [];
-        const cur = merged(lastGroup.flatMap((i) => window[window.length - 1].rects[i] ?? []), window[window.length - 1].vw, window[window.length - 1].vh)[0];
+        const cur = merged(lastGroup.flatMap((i) => window[window.length - 1].rects[i] ?? []), window[window.length - 1].vw, window[window.length - 1].vh, clipBottom)[0];
         violations.push(`+${(s.t - (boxes[0]?.t ?? s.t)).toFixed(0)} ms ${b.state} box ${b.x.toFixed(1)},${b.y.toFixed(1)} ${b.w.toFixed(1)}x${b.h.toFixed(1)} at opacity ${b.o.toFixed(2)}; target ${cur ? `${cur.x.toFixed(1)},${cur.y.toFixed(1)} ${cur.w.toFixed(1)}x${cur.h.toFixed(1)}` : "gone"}`);
         if (process.env.SPOT_DEBUG && violations.length === 1) console.log("violation at", s.t, "window", JSON.stringify(window.map((f) => [f.t, f.rects])), "groups", JSON.stringify(sampledGroups), "box", JSON.stringify(b));
         break;

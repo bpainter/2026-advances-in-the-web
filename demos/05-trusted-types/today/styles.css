@@ -14,7 +14,10 @@
   max-inline-size: 40rem;
 }
 
+/* The wrapper's product bar names the product line, so the eyebrow is not drawn here (review v5
+   M13: the card ends above the collapsed console drawer). */
 .product__eyebrow {
+  display: none;
   margin: 0;
   font-size: 0.8rem;
   letter-spacing: 0.08em;
@@ -24,7 +27,7 @@
 
 h1 {
   margin: 0 0 0.5rem;
-  font-size: 2rem;
+  font-size: 1.75rem;
   line-height: 1.2;
 }
 
@@ -42,19 +45,24 @@ h1 {
   margin-block-end: 0;
 }
 
+.product__body p,
+.product__body ul {
+  margin-block: 0.5rem;
+}
+
 .product__body img,
 .review__body img {
   max-inline-size: 100%;
 }
 
 .reviews {
-  margin-block-start: 1rem;
-  padding-block-start: 0.75rem;
+  margin-block-start: 0.5rem;
+  padding-block-start: 0.5rem;
   border-block-start: 1px solid #dfe3ea;
 }
 
 .reviews h2 {
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.25rem;
   font-size: 1.1rem;
 }
 
@@ -70,7 +78,7 @@ h1 {
 }
 
 .review {
-  padding-block: 0.375rem;
+  padding-block: 0.25rem;
 }
 
 .review + .review {

@@ -16,6 +16,10 @@ interface Props {
   reducedMotion: boolean;
   /** Rehearsal mode logs a forced spotlight (PRD v5, 3.2 rule 6). */
   rehearsal?: boolean;
+  /** Clip spotlights above this frame y (a docked drawer). */
+  clipBottom?: number;
+  /** Keycap placement: at the frame's foot, or above a docked drawer. */
+  keycap?: "above-drawer";
 }
 
 interface CursorState {
@@ -56,7 +60,7 @@ declare global {
  * fade back in at the latest geometry once the rects settle. The cursor, ripple and keycaps are
  * not gated.
  */
-export function Overlay({ handle, step, ready, handsOn, reducedMotion, rehearsal = false }: Props) {
+export function Overlay({ handle, step, ready, handsOn, reducedMotion, rehearsal = false, clipBottom, keycap }: Props) {
   const [cursor, setCursor] = useState<CursorState>({ at: null, visible: false });
   const [ripple, setRipple] = useState<{ at: Rect; key: number } | null>(null);
   const [cap, setCap] = useState<{ text: string; key: number } | null>(null);
@@ -67,11 +71,13 @@ export function Overlay({ handle, step, ready, handsOn, reducedMotion, rehearsal
   const stepRef = useRef(step);
   const handsOnRef = useRef(handsOn);
   const rehearsalRef = useRef(rehearsal);
+  const clipRef = useRef(clipBottom);
   useEffect(() => {
     stepRef.current = step;
     handsOnRef.current = handsOn;
     rehearsalRef.current = rehearsal;
-  }, [step, handsOn, rehearsal]);
+    clipRef.current = clipBottom;
+  }, [step, handsOn, rehearsal, clipBottom]);
 
   const evaluate = useCallback(() => {
     const g = gate.current;
@@ -94,7 +100,7 @@ export function Overlay({ handle, step, ready, handsOn, reducedMotion, rehearsal
     (msg: RectsMessage | null) => {
       const g = gate.current;
       if (!g || !msg) return;
-      const geo = geometryOf(msg, stepRef.current, handsOnRef.current);
+      const geo = geometryOf(msg, stepRef.current, handsOnRef.current, clipRef.current);
       g.update(geo, flatten(geo), msg.animating);
       evaluate();
     },
@@ -163,16 +169,19 @@ export function Overlay({ handle, step, ready, handsOn, reducedMotion, rehearsal
   const viewport = geo?.viewport ?? { w: 0, h: 0 };
 
   return (
-    <div className="overlay" aria-hidden="true" data-reduced={reducedMotion} data-hands-on={handsOn} data-motion={view.shown ? "settled" : "moving"}>
+    <div className="overlay" aria-hidden="true" data-reduced={reducedMotion} data-hands-on={handsOn} data-motion={view.shown ? "settled" : "moving"} data-keycap={keycap}>
       {geo?.spots.map((s, i) => (
         <div className="overlay__spotlight" key={`spot:${i}`} data-state={state} data-mode={s.inset ? "inset" : "ring"} style={boxStyle(s.r, s.inset)} />
       ))}
       {geo?.focus ? <div className="overlay__focus" data-state={state} style={boxStyle(geo.focus, false)} /> : null}
-      {geo?.callouts.map((c) => (
-        <div className="overlay__callout" key={`${c.target}:${c.text}`} data-side={c.side} data-state={state} style={calloutStyle(c.side, c.r, viewport)}>
-          <span className="overlay__callout-text">{c.text}</span>
-        </div>
-      ))}
+      {geo?.callouts.map((c) => {
+        const placed = placeCallout(c.side, c.r, viewport, c.text);
+        return (
+          <div className="overlay__callout" key={`${c.target}:${c.text}`} data-side={placed.side} data-align={placed.align} data-state={state} style={placed.style}>
+            <span className="overlay__callout-text">{c.text}</span>
+          </div>
+        );
+      })}
       {ripple ? <div className="overlay__ripple" key={ripple.key} style={aim(ripple.at)} /> : null}
       {!handsOn ? (
         <div className="overlay__cursor" data-visible={cursor.visible} style={cursor.at ? aim(cursor.at) : undefined}>
@@ -194,9 +203,11 @@ const ZERO: Radii = [0, 0, 0, 0];
 /** The ring's full extent outside the target (spec 9.1); closer to an edge than this, it insets. */
 const RING_EXTENT = 9;
 
-function geometryOf(msg: RectsMessage, step: Step | undefined, handsOn: boolean): Geometry {
+function geometryOf(msg: RectsMessage, step: Step | undefined, handsOn: boolean, clipBottom?: number): Geometry {
   const vp = msg.viewport;
-  const spots = mergeRects((step?.spotlight ?? []).flatMap((sel) => msg.rects[sel] ?? [])).map((r) => fitToViewport(r, vp));
+  // A docked drawer ends the spotlight area: the ring is clipped and drawn inside above it.
+  const area = clipBottom ? { w: vp.w, h: Math.min(vp.h, clipBottom) } : vp;
+  const spots = mergeRects((step?.spotlight ?? []).flatMap((sel) => msg.rects[sel] ?? [])).map((r) => (clipBottom && r.y >= clipBottom ? { r, inset: false } : fitToViewport(r, area)));
   const callouts = (step?.callouts ?? []).flatMap((c) => {
     const r = msg.rects[c.target]?.[0];
     return r ? [{ target: c.target, text: c.text, side: c.side, r }] : [];
@@ -272,26 +283,44 @@ function mergeRects(list: Rect[]): Rect[] {
   return out.map((o) => o.r);
 }
 
-/** A callout that would leave the frame flips to the opposite side; its anchor stays inside the frame. */
-function calloutStyle(side: "top" | "right" | "bottom" | "left", r: Rect, vp: { w: number; h: number }): React.CSSProperties {
+type CalloutSide = "top" | "right" | "bottom" | "left";
+
+/**
+ * Places a callout on the side it asks for, or the first side where it fits (then above, below,
+ * the opposite side), and clamps it inside the frame viewport with an 8 px margin, so no callout
+ * ever leaves the frame (review v5 H2). Its size is estimated from the text: 19 px bold, padding
+ * 6 by 12. Above or below a side target, it aligns with that edge so the leader points at it.
+ */
+function placeCallout(side: CalloutSide, r: Rect, vp: { w: number; h: number }, text: string): { side: CalloutSide; align: "center" | "start" | "end"; style: React.CSSProperties } {
   const gap = 28;
-  const room = 72;
-  let s = side;
-  if (vp.h && s === "top" && r.y - gap < room) s = "bottom";
-  else if (vp.h && s === "bottom" && r.y + r.h + gap > vp.h - room) s = "top";
-  if (vp.w && s === "left" && r.x - gap < 160) s = "right";
-  else if (vp.w && s === "right" && r.x + r.w + gap > vp.w - 160) s = "left";
-  const cx = vp.w ? Math.min(Math.max(r.x + r.w / 2, 120), vp.w - 120) : r.x + r.w / 2;
-  r = { ...r, x: cx - r.w / 2 };
-  side = s;
-  switch (side) {
-    case "top":
-      return { left: r.x + r.w / 2, top: r.y - gap, transform: "translate(-50%, -100%)" };
-    case "bottom":
-      return { left: r.x + r.w / 2, top: r.y + r.h + gap, transform: "translate(-50%, 0)" };
-    case "left":
-      return { left: r.x - gap, top: r.y + r.h / 2, transform: "translate(-100%, -50%)" };
-    default:
-      return { left: r.x + r.w + gap, top: r.y + r.h / 2, transform: "translate(0, -50%)" };
+  const m = 8;
+  const W = Math.round(text.length * 10.6 + 24);
+  const H = 35;
+  const vw = vp.w || 10000;
+  const vh = vp.h || 10000;
+  const fits = (s: CalloutSide) =>
+    s === "right" ? r.x + r.w + gap + W <= vw - m : s === "left" ? r.x - gap - W >= m : s === "top" ? r.y - gap - H >= m : r.y + r.h + gap + H <= vh - m;
+  const opposite: Record<CalloutSide, CalloutSide> = { top: "bottom", bottom: "top", left: "right", right: "left" };
+  const order: CalloutSide[] = [side, "top", "bottom", opposite[side]];
+  const chosen = order.find(fits) ?? side;
+  const clampX = (x: number) => Math.min(Math.max(x, m), vw - m - W);
+  const clampY = (y: number) => Math.min(Math.max(y, m), vh - m - H);
+  let left: number;
+  let top: number;
+  let align: "center" | "start" | "end" = "center";
+  if (chosen === "top" || chosen === "bottom") {
+    top = chosen === "top" ? r.y - gap - H : r.y + r.h + gap;
+    // A callout that wanted the right or left side keeps to that edge of the target.
+    if (side === "right") {
+      left = r.x + r.w - W;
+      align = "end";
+    } else if (side === "left") {
+      left = r.x;
+      align = "start";
+    } else left = r.x + r.w / 2 - W / 2;
+  } else {
+    left = chosen === "right" ? r.x + r.w + gap : r.x - gap - W;
+    top = r.y + r.h / 2 - H / 2;
   }
+  return { side: chosen, align, style: { left: clampX(left), top: clampY(top), minWidth: W, boxSizing: "border-box", textAlign: "center" } };
 }

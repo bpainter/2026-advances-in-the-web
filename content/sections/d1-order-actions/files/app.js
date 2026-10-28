@@ -2,6 +2,8 @@ const dialog =
   document.querySelector('#cancel-418');
 const live =
   document.querySelector('#status');
+const row =
+  document.querySelector('#order-418 p');
 const orderId = '418';
 
 dialog.addEventListener('close',
@@ -10,6 +12,7 @@ dialog.addEventListener('close',
     dialog.returnValue = '';
     if (choice !== 'confirm') return;
     await cancelOrder(orderId);
+    row.textContent = 'Order 418, canceled';
     announce('Order 418 was canceled');
   });
 

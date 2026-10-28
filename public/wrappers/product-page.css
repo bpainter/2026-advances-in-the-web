@@ -37,7 +37,7 @@
     padding: 12px 20px 0;
   }
   .wrap--pdp [data-shown] {
-    padding: 12px 20px;
+    padding: 8px 20px;
   }
   .wrap-console {
     position: fixed;
@@ -46,14 +46,16 @@
     block-size: 44px;
     overflow: hidden;
   }
+  /* Now page: the drawer is open at 280; the shown card hugs its content (review v5 L5), never
+     shorter than 120 so no gap above the drawer passes 96. */
   .wrap--pdp-open .wrap-console {
-    block-size: 240px;
-  }
-  /* Now page: the shown block reaches down to the open drawer, so no gap opens above it. */
-  .wrap--pdp-open .wrap-store-body {
-    padding-block-end: 264px;
+    block-size: 280px;
   }
   .wrap--pdp-open [data-shown] {
-    flex: 1;
+    min-block-size: 120px;
+  }
+  /* Used-to page: the card stays above the collapsed drawer (review v5 M13). */
+  .wrap--pdp:not(.wrap--pdp-open) .wrap-store-body {
+    padding-block-end: 56px;
   }
 }

@@ -22,9 +22,8 @@ export const storefrontMerch: WrapperDef = {
     const ctx = context();
     const label = w.build === "native" ? '<p class="wrap-context" aria-live="off"></p>' : "";
     const before = [`<div class="wrap wrap--store wrap--merch">`, siteHeader(ctx.store.name, ctx.store.search), `<div class="wrap-store-body">`, label].join("");
-    // The footer line fills the now page (one card); the used-to page's three headed slots fill
-    // the frame themselves and need its 40 px when the narrowed featured card stacks.
-    const foot = w.build === "native" ? `<p class="wrap-site-foot">Free returns within ${esc(ctx.store.returnsDays)} days</p>` : "";
+    // The same footer on both pages (review v5 L4).
+    const foot = `<p class="wrap-site-foot">Free returns within ${esc(ctx.store.returnsDays)} days</p>`;
     const after = ["</div>", foot, "</div>"].join("");
     return {
       before,

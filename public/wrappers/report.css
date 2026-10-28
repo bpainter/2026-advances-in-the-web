@@ -6,9 +6,12 @@
     padding: 20px 24px 16px;
   }
   .wrap--watch .wrap-report,
-  .wrap--ci .wrap-report,
-  .wrap--pr .wrap-report {
+  .wrap--ci .wrap-report {
     padding: 24px 24px 20px;
+  }
+  .wrap--pr .wrap-report {
+    gap: 12px;
+    padding: 20px 24px 16px;
   }
   .wrap-report > [data-shown] {
     flex: 1;

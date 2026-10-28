@@ -44,10 +44,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           controls={
             <>
               <AdminBar />
-              <span className="wrap-preview__mode">Cache Components on</span>
             </>
           }
-          log={<RequestLog />}
+          log={<RequestLog mode="Cache Components on" />}
         >
           <main className="product">{children}</main>
         </StorefrontShell>

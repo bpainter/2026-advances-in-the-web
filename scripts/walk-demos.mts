@@ -188,7 +188,7 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
     if (sampling) {
       // The boxes fade in after the settle that follows step-done; keep sampling through it.
       await page.waitForTimeout(500);
-      const inv = await finishDeckSampler(page, sampleFrame);
+      const inv = await finishDeckSampler(page, sampleFrame, "frame" in demoPage ? demoPage.frame.spotlightClip?.bottom : undefined);
       if (inv && inv.violations.length) fail(where, `${step.id}: spotlight off its target in ${inv.violations.length} sample(s), e.g. ${inv.violations[0]}`);
       else if (inv) pass(`${step.id}: spotlight boxes on target in all ${inv.visible} visible sample(s) of ${inv.samples}`);
     }
@@ -325,7 +325,11 @@ async function main() {
     process.exit(failures.length ? 1 : 0);
   }
   page.on("console", (msg) => {
-    if (msg.type() === "error" && !/favicon/.test(msg.text())) console.log(`    console: ${msg.text().slice(0, 160)}`);
+    if (msg.type() !== "error" || /favicon/.test(msg.text())) return;
+    // D5's CMS payload is an <img src="/missing.png" onerror=...>: the 404 is what fires the
+    // injected handler, so it is expected (review v5 A2).
+    if (/\/missing\.png$/.test(msg.location()?.url ?? "")) console.log("    · expected 404: /missing.png, the D5 injection payload's failing image");
+    else console.log(`    console: ${msg.text().slice(0, 160)}`);
   });
 
   // A page id, a section id, or its short prefix ("d6" for d6-variant-picker).

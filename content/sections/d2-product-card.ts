@@ -165,7 +165,7 @@ export const section: DemoSection = {
               [18, 19],
             ],
           },
-          spotlight: [".product-slot", ".product-card"],
+          spotlight: [".product-card"],
           bullets: [
             "The slot shrinks to rail width, and the card stays stacked.",
             "The slot is the part the page controls. The card markup never changes.",
@@ -180,7 +180,7 @@ export const section: DemoSection = {
             { type: "assert", target: ".product-card", expect: "columns=3" },
           ],
           code: { file: "card.css", lines: [4, [21, 23]] },
-          spotlight: [".product-slot", ".product-card"],
+          spotlight: [".product-card"],
           bullets: [
             "The slot widens, and the card turns horizontal.",
             "The container line makes the slot something the card can measure.",

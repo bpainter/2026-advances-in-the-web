@@ -19,16 +19,13 @@
     color: var(--wrap-dark-ink-soft);
     font-weight: 700;
   }
-  .wrap-preview__mode {
+  .wrap-drawer__mode {
     margin-inline-start: auto;
     color: var(--wrap-dark-ink-soft);
   }
   .wrap--f2 .wrap-store-body {
     min-block-size: 0;
     padding: 12px 20px 224px;
-  }
-  .wrap--f2 [data-shown] {
-    padding: 16px 20px;
   }
   .wrap-log {
     position: fixed;

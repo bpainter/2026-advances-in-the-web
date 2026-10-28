@@ -22,7 +22,10 @@
     u.searchParams.delete("flags");
     u.searchParams.delete("demo-net");
     u.searchParams.delete("bg");
-    return u.pathname + u.search;
+    // The today build serves the same addresses under its build path; the panel shows the app's
+    // own address, as the now build does (review v5 H5).
+    var pathname = u.pathname.replace(/^\/demos\/04-navigation-api\/today(?=\/|$)/, "") || "/";
+    return pathname + u.search;
   }
   function describe(el) {
     if (!el || el === document.body || el === document.documentElement) return "body";

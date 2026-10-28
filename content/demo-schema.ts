@@ -94,6 +94,10 @@ export interface Frame {
   flags?: Record<string, boolean>; // initial enhancement flags, e.g. { "enhance-css": true, "enhance-js": true }
   hooks?: string[];                // named functions the frame runtime exposes, e.g. ["reset", "slowNetwork"]
   poster?: string;                 // static image for the speaker mirror and fallback, e.g. "/posters/d1-now-s3.png"
+  /** Spotlights are clipped above this frame y (a docked drawer the ring must not cross); v5 review H7. */
+  spotlightClip?: { bottom: number };
+  /** Keycaps sit above a docked drawer instead of at the frame's foot; v5 review H6. */
+  keycap?: "above-drawer";
 }
 
 export type DemoCodeLang = "html" | "css" | "js" | "ts" | "tsx" | "http" | "yaml" | "bash";

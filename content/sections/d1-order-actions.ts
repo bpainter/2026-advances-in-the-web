@@ -234,20 +234,20 @@ export const section: DemoSection = {
           code: {
             file: "app.js",
             lines: [
-              [9, 14],
-              [26, 28],
+              [11, 16],
+              [29, 30],
             ],
           },
           spotlight: ["#status"],
           meter: {
             label: "JavaScript",
-            value: "20 lines",
+            value: "22 lines",
             source: "non-blank, non-comment lines in content/sections/d1-order-actions/files/*.js",
           },
           bullets: [
-            "This time we confirm. The status line says Order 418 was canceled.",
+            "This time we confirm. The row and the status line say canceled.",
             "This is the only JavaScript on the page. It waits for the dialog to close.",
-            "If the answer is confirm, it calls the server. That is 20 lines.",
+            "On confirm it calls the server. That is 22 lines.",
           ],
         },
         {
@@ -256,13 +256,22 @@ export const section: DemoSection = {
           actions: [
             { type: "toggle", flag: "enhance-css", on: false },
             { type: "assert", target: "#order-actions-418", expect: ":popover-open" },
+            { type: "wait", ms: 1200 },
+            {
+              type: "key",
+              key: "Escape",
+              target: "#order-actions-418",
+              via: "hidePopover() on the menu (the same close request Escape sends)",
+            },
+            { type: "assert", target: "#actions-418", expect: "focused" },
           ],
           code: { file: "enhance.css", lines: [], off: true },
-          spotlight: ["#order-actions-418"],
+          spotlight: ["#actions-418"],
+          ifKeyboard: "Press Escape. Press Next once to sync the frame.",
           proof: "Remove the enhancement CSS and show that the controls remain semantic and usable.",
           bullets: [
             "The CSS file is off. The menu loses its place under the button.",
-            "It still opens, closes and moves focus. The CSS only sets place and motion.",
+            "Escape still closes it, and focus returns to Actions. The CSS only sets place and motion.",
           ],
         },
       ],

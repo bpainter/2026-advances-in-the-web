@@ -30,21 +30,28 @@
   color: var(--glass-ink-soft);
 }
 .delete__card {
-  padding: 0 16px;
+  padding: 0 16px 16px;
   border: var(--glass-border);
   border-radius: var(--glass-radius-card);
   background: var(--wrap-surface-focus);
   box-shadow: var(--glass-highlight), var(--wrap-shadow-focus);
 }
-/* A row waits as two skeleton bars (Libraries and Weekly) until its step reveals it. */
+/* A row waits as two skeleton bars (Libraries and Weekly) until its step reveals it (review v5
+   M15). Cells stay painted (a hidden cell paints no background); their text is transparent. */
 #delete-table tbody tr[hidden] {
   display: table-row !important;
-  background:
-    linear-gradient(var(--wrap-skeleton), var(--wrap-skeleton)) 42% 50% / 18% 12px no-repeat,
-    linear-gradient(var(--wrap-skeleton), var(--wrap-skeleton)) 70% 50% / 7% 12px no-repeat;
 }
 #delete-table tbody tr[hidden] > * {
+  color: transparent;
+}
+#delete-table tbody tr[hidden] > * * {
   visibility: hidden;
+}
+#delete-table tbody tr[hidden] > td:nth-of-type(2) {
+  background: linear-gradient(var(--wrap-skeleton), var(--wrap-skeleton)) 10px 50% / 70% 12px no-repeat;
+}
+#delete-table tbody tr[hidden] > td:nth-of-type(3) {
+  background: linear-gradient(var(--wrap-skeleton), var(--wrap-skeleton)) right 10px top 50% / 60% 12px no-repeat;
 }
 #delete-table {
   inline-size: 100%;
@@ -56,8 +63,8 @@
 #delete-table th,
 #delete-table td {
   box-sizing: border-box;
-  block-size: 56px;
-  padding: 5px 10px;
+  block-size: 54px;
+  padding: 4px 10px;
   text-align: start;
   vertical-align: top;
 }

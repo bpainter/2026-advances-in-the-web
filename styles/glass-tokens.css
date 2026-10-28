@@ -195,6 +195,7 @@
     --wrap-surface-focus: var(--glass-surface-strong);
     --wrap-shadow-focus: 0 8px 24px rgb(15 28 65 / 0.14), 0 1px 2px rgb(15 28 65 / 0.06);
     --wrap-surface-dark: var(--glass-dark-surface-float);
+    --wrap-surface-dark-strong: rgb(15 28 65 / 0.94);
     --wrap-text-sm: 14px;
     --wrap-leading-sm: 18px;
     --wrap-bar-height: 48px;
