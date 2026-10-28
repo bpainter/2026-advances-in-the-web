@@ -1,50 +1,35 @@
 import type { DemoSection } from "@/content/demo-schema";
-import { sectionFile } from "@/lib/demo-files";
+import { excerpt, sectionFile } from "@/lib/demo-files";
 
-/** Schema v4 (docs/PRD-demos-v4.md); shown code files live in ./f2-caching/files/. */
+const TODAY = "demos/06-framework-cache-today";
+const REQUEST = { type: "hook", name: "requestPage" } as const;
+
+/** F2: route-level freshness flags in Next.js, then Cache Components with use cache and tags. */
 export const section: DemoSection = {
   id: "f2-caching",
   order: 8,
   label: "Caching",
   feature: "Cache Components",
-  scenario:
-    "TODO rewrite: A Next.js 16 product page combines a shared catalog description, a price that changes on a business schedule, and inventory that must be read at request time, with an explicit cache invalidation event.",
+  scenario: "A product page with shared copy, a scheduled price and stock read for each user.",
   support: {
     kind: "tooling",
-    packages: [
-      {
-        name: "Next.js",
-        npm: "next",
-        version: "16",
-        logo: "/logos/nextjs.svg",
-      },
-    ],
+    packages: [{ name: "Next.js", npm: "next", version: "16", logo: "/logos/nextjs.svg" }],
   },
   pages: [
     {
       id: "f2-intro",
       stage: "intro",
-      intro: "TODO rewrite",
-      description: "TODO description",
+      intro:
+        "Frameworks are changing too. This product page has copy everyone shares and stock that is different for each user. The question is what to cache.",
+      description:
+        "Cache Components let you mark exactly which parts of a page are cached, right in the code.",
       visual: {
         src: "/intro/f2-caching.png",
-        alt: "TODO alt",
-        capture: {
-          pageId: "f2-now",
-          stepId: "s1",
-        },
+        alt: "The product page above its request log, where only inventory queries repeat.",
+        capture: { pageId: "f2-now", stepId: "s1" },
       },
-      steps: [
-        {
-          id: "s0",
-          label: "Title and support",
-          actions: [],
-          bullets: [],
-        },
-      ],
-      timing: {
-        minutes: 0.25,
-      },
+      steps: [{ id: "s0", label: "Title and support", actions: [], bullets: [] }],
+      timing: { minutes: 0.25 },
     },
     {
       id: "f2-used-to",
@@ -52,98 +37,68 @@ export const section: DemoSection = {
       eyebrow: "Cache Components",
       title: "How we used to do it",
       intro:
-        "TODO rewrite: The framework section should solve one production problem deeply. Here is a product page built the way many teams still build it: a shared catalog description, a price on a business schedule, and inventory read at request time.",
+        "This is the same page in Next.js 16 with Cache Components off. The log below it lists every query.",
       frame: {
         build: "framework",
         route: "/framework-today/products/ridgeline-trail",
-        viewport: {
-          width: 640,
-          height: 628,
-        },
+        viewport: { width: 640, height: 628 },
         hooks: ["reset", "requestPage"],
-        poster: "/posters/f2-today-s2.png",
       },
-      files: [],
+      files: [
+        excerpt(`${TODAY}/app/products/[id]/page.tsx`, "tsx", [[5, 23]], "page.tsx"),
+        excerpt(`${TODAY}/lib/inventory.ts`, "ts", [
+          [9, 19],
+          [31, 33],
+        ]),
+        excerpt(`${TODAY}/lib/catalog.ts`, "ts", [[1, 12]]),
+      ],
       steps: [
         {
           id: "s0",
-          label: "Product page, empty log",
-          actions: [
-            {
-              type: "hook",
-              name: "reset",
-            },
-          ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          bullets: [
-            "TODO rewrite: A product page and its request log.",
-            "TODO rewrite: Five freshness settings across four files decide what this page caches.",
-          ],
+          label: "Empty log",
+          actions: [{ type: "hook", name: "reset" }],
+          code: { file: "page.tsx", lines: [] },
+          bullets: [],
         },
         {
           id: "s1",
-          label: "Three requests",
-          actions: [
-            {
-              type: "hook",
-              name: "requestPage",
-            },
-            {
-              type: "wait",
-              ms: 400,
-            },
-            {
-              type: "hook",
-              name: "requestPage",
-            },
-            {
-              type: "wait",
-              ms: 400,
-            },
-            {
-              type: "hook",
-              name: "requestPage",
-            },
-          ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
+          label: "Read the route settings",
+          actions: [REQUEST],
+          code: { file: "page.tsx", lines: [[2, 6]] },
           spotlight: ["#request-log"],
           bullets: [
-            "TODO rewrite: Three requests.",
-            "TODO rewrite: The catalog query runs every time, and so does inventory.",
-            "TODO rewrite: The route says revalidate 3600, but the inventory cookie read made the whole route dynamic, and the catalog call is a database query, so nothing caches it.",
+            "The route says regenerate hourly and work it out. Those two settings cover the whole page.",
           ],
-          ifKeyboard: "TODO rewrite: Reload the page three times and point at the log.",
         },
         {
           id: "s2",
-          label: "Which part is cached",
-          actions: [],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          spotlight: ["#request-log .log-head"],
+          label: "Load the page again",
+          actions: [REQUEST, { type: "wait", ms: 400 }, REQUEST],
+          code: { file: "inventory.ts", lines: [9, [14, 16]] },
+          spotlight: ["#request-log"],
           bullets: [
-            "TODO rewrite: Route-level dynamic and revalidation flags whose combined behavior is difficult to explain. fetch options spread across data functions with unclear ownership of freshness.",
-            "TODO rewrite: Price is cached by its fetch option, catalog is not, and you can only tell by reading four files.",
+            "Each load runs the catalog query again. Reading a cookie for stock made the whole route dynamic.",
           ],
-          ifKeyboard: "TODO rewrite: Same.",
+        },
+        {
+          id: "s3",
+          label: "Count the settings",
+          key: true,
+          actions: [REQUEST],
+          code: { file: "catalog.ts", lines: [[4, 11]] },
+          spotlight: ["#request-log"],
           meter: {
             label: "Freshness settings",
             value: "5 in 4 files",
             source: "counted by scripts/count-cache-flags.mjs in apps/f2-today",
           },
+          bullets: [
+            "The catalog has no setting of its own, so it follows the route.",
+            "Five freshness settings in four files decide what caches.",
+          ],
         },
       ],
-      timing: {
-        minutes: 0.75,
-      },
+      timing: { minutes: 0.75 },
     },
     {
       id: "f2-now",
@@ -151,147 +106,88 @@ export const section: DemoSection = {
       eyebrow: "Cache Components",
       title: "How we do it now",
       intro:
-        "TODO rewrite: With Cache Components enabled, pages are dynamic by default unless code opts into caching. Watch which queries repeat.",
+        "This is the same page with one flag on in the config. Now nothing is cached unless the code asks.",
       frame: {
         build: "framework",
         route: "/framework/products/ridgeline-trail",
-        viewport: {
-          width: 640,
-          height: 628,
-        },
+        viewport: { width: 640, height: 628 },
         hooks: ["reset", "requestPage", "invalidateProduct", "switchRegion", "switchUser"],
-        poster: "/posters/f2-code-s5.png",
       },
       files: [
-        {
-          file: "next.config.ts",
-          lang: "ts",
-          source: sectionFile("f2-caching", "next.config.ts"),
-        },
-        {
-          file: "catalog.ts",
-          lang: "ts",
-          source: sectionFile("f2-caching", "catalog.ts"),
-        },
-        {
-          file: "inventory.ts",
-          lang: "ts",
-          source: sectionFile("f2-caching", "inventory.ts"),
-        },
-        {
-          file: "page.tsx",
-          lang: "tsx",
-          source: sectionFile("f2-caching", "page.tsx"),
-        },
-        {
-          file: "actions.ts",
-          lang: "ts",
-          source: sectionFile("f2-caching", "actions.ts"),
-        },
+        { file: "catalog.ts", lang: "ts", source: sectionFile("f2-caching", "catalog.ts") },
+        { file: "page.tsx", lang: "tsx", source: sectionFile("f2-caching", "page.tsx") },
+        { file: "inventory.ts", lang: "ts", source: sectionFile("f2-caching", "inventory.ts") },
       ],
       steps: [
         {
           id: "s0",
           label: "Page loaded",
-          actions: [
-            {
-              type: "hook",
-              name: "reset",
-            },
-            {
-              type: "hook",
-              name: "requestPage",
-            },
-          ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          bullets: [
-            "TODO rewrite: The page from the last step, freshly reset, one request in the log.",
-          ],
+          actions: [{ type: "hook", name: "reset" }, REQUEST],
+          code: { file: "catalog.ts", lines: [] },
+          bullets: [],
         },
         {
           id: "s1",
-          label: "One flag",
-          actions: [
-            {
-              type: "hook",
-              name: "requestPage",
-            },
-          ],
-          code: {
-            file: "next.config.ts",
-            lines: [4],
-          },
+          label: "Cache the catalog",
+          key: true,
+          actions: [REQUEST, { type: "wait", ms: 400 }, REQUEST],
+          code: { file: "catalog.ts", lines: [[11, 14]] },
           spotlight: ["#request-log"],
+          proof:
+            "Log the catalog query and inventory query separately so the audience can see which work repeats.",
+          meter: {
+            label: "Freshness settings",
+            value: "3 in 1 file",
+            source:
+              "use cache, cacheLife and cacheTag in content/sections/f2-caching/files/catalog.ts, counted by hand",
+          },
           bullets: [
-            "TODO rewrite: One flag in next.config.ts.",
-            "TODO rewrite: With Cache Components enabled, pages are dynamic by default unless code opts into caching.",
+            "Two more loads. The catalog query ran once, and only inventory repeats.",
+            "The use cache line caches this function. cacheLife says for how long.",
+            "cacheTag gives the result a name, so we can expire it later.",
           ],
-          ifKeyboard: "TODO rewrite: Reload once.",
         },
         {
           id: "s2",
-          label: "The cached unit",
-          actions: [
-            {
-              type: "hook",
-              name: "requestPage",
-            },
-          ],
-          code: {
-            file: "catalog.ts",
-            lines: [[11, 14]],
-          },
-          spotlight: ["article h1", ".log-row--catalog"],
-          bullets: [
-            "TODO rewrite: The use cache directive, cacheLife(), and cacheTag() make the cached unit and its lifetime visible in code.",
-            "TODO rewrite: The log call sits inside the cached function, so it prints only on a miss, and this request adds no catalog line.",
-          ],
-          ifKeyboard: "TODO rewrite: Reload and point at the log: inventory only.",
-        },
-        {
-          id: "s3",
-          label: "Static shell, streamed stock",
-          actions: [
-            {
-              type: "hook",
-              name: "requestPage",
-              args: [
-                {
-                  inventoryDelayMs: 1200,
-                },
-              ],
-            },
-          ],
+          label: "Stream the stock",
+          actions: [{ type: "hook", name: "requestPage", args: [{ inventoryDelayMs: 1200 }] }],
           code: {
             file: "page.tsx",
             lines: [
               [22, 26],
-              [31, 38],
+              [31, 37],
             ],
           },
           spotlight: [".stock"],
           bullets: [
-            "TODO rewrite: The page can keep a reusable static shell while request-time data resolves within a Suspense boundary.",
-            "TODO rewrite: I slowed inventory down so you can see the name and copy arrive first, then the stock line.",
+            "We slowed inventory down. The name and copy arrive first, then the stock line.",
+            "Suspense lets the cached part show while the stock is still loading.",
           ],
-          ifKeyboard: "TODO rewrite: Reload with ?slow=inventory in the address bar.",
+        },
+        {
+          id: "s3",
+          label: "Expire the tag",
+          actions: [
+            { type: "hook", name: "invalidateProduct", args: ["Now with a recycled rubber sole."] },
+            { type: "wait", ms: 300 },
+            REQUEST,
+          ],
+          code: { file: "catalog.ts", lines: [13] },
+          spotlight: ["article h1 + p", "#request-log"],
+          proof:
+            "Change the product copy, fire the product tag invalidation, and show the next request receiving fresh content.",
+          bullets: [
+            "We save new copy. The next load runs the catalog query once and shows it.",
+            "The save calls updateTag with this tag, so nobody sees the old copy.",
+          ],
         },
         {
           id: "s4",
-          label: "Request-time inventory",
+          label: "Switch user and region",
           actions: [
-            {
-              type: "hook",
-              name: "switchRegion",
-              args: ["eu"],
-            },
-            {
-              type: "hook",
-              name: "requestPage",
-            },
+            { type: "hook", name: "switchUser", args: ["agent-2"] },
+            { type: "hook", name: "switchRegion", args: ["eu"] },
+            REQUEST,
           ],
           code: {
             file: "inventory.ts",
@@ -300,199 +196,14 @@ export const section: DemoSection = {
               [10, 13],
             ],
           },
-          spotlight: [".stock", ".log-row--inventory"],
+          spotlight: [".stock", "#request-log"],
           bullets: [
-            "TODO rewrite: inventory.ts stays request-time because it depends on the user and region.",
-            "TODO rewrite: There is no directive, and the cookie read is why it has to sit inside the Suspense boundary.",
+            "A different user in another region. The stock changes, and the catalog stays cached.",
+            "Inventory reads cookies and is never cached, so one user's data never reaches another.",
           ],
-          ifKeyboard: "TODO rewrite: Switch the region to EU in the demo header and reload.",
-        },
-        {
-          id: "s5",
-          label: "Invalidate by tag",
-          actions: [
-            {
-              type: "hook",
-              name: "invalidateProduct",
-              args: ["Now with a recycled rubber sole."],
-            },
-            {
-              type: "hook",
-              name: "requestPage",
-            },
-          ],
-          code: {
-            file: "actions.ts",
-            lines: [[9, 10]],
-          },
-          spotlight: ["article h1 + p", ".log-row--catalog"],
-          bullets: [
-            "TODO rewrite: updateTag runs in a Server Action after the write.",
-            "TODO rewrite: It expires the product tag, so the next request waits for fresh data instead of serving stale content, and the same tag string is the one catalog.ts set.",
-          ],
-          ifKeyboard: "TODO rewrite: Save new copy in the demo admin field and reload.",
-        },
-        {
-          id: "s6",
-          label: "Production bar",
-          actions: [],
-          code: {
-            file: "catalog.ts",
-            lines: [13],
-          },
-          bullets: [
-            "TODO rewrite: The production bar for any framework demo: state the framework version and runtime version in the repository, show one failure mode, measure a result the audience can inspect, and avoid vendor benchmark claims unless the demo repository reproduces them.",
-            "TODO rewrite: If someone asks about the other frameworks:",
-            "TODO rewrite: React 19.3 has stable ViewTransition and Trusted Types support, Astro 7 has stable route caching, Vite 8, and a faster compiler and Markdown path, and SvelteKit 3 has a migration command that produces code changes and a remaining TODO list.",
-          ],
-          ifKeyboard: "TODO rewrite: Same.",
-        },
-        {
-          id: "s7",
-          label: "TODO cut: Three requests, logged separately",
-          actions: [
-            {
-              type: "hook",
-              name: "requestPage",
-            },
-            {
-              type: "wait",
-              ms: 400,
-            },
-            {
-              type: "hook",
-              name: "requestPage",
-            },
-            {
-              type: "wait",
-              ms: 400,
-            },
-            {
-              type: "hook",
-              name: "requestPage",
-            },
-          ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          spotlight: ["#request-log"],
-          callouts: [
-            {
-              target: ".log-row--catalog",
-              text: "Catalog once",
-              side: "left",
-            },
-            {
-              target: ".log-row--inventory",
-              text: "Inventory every request",
-              side: "left",
-            },
-          ],
-          bullets: [
-            "TODO rewrite: Three requests again.",
-            "TODO rewrite: The catalog query runs once.",
-            "TODO rewrite: Inventory runs on every request, because it depends on the user and region.",
-          ],
-          ifKeyboard: "TODO rewrite: Reload three times and read the log aloud.",
-          proof:
-            "Log the catalog query and inventory query separately so the audience can see which work repeats.",
-        },
-        {
-          id: "s8",
-          label: "TODO cut: Change copy, fire the tag",
-          actions: [
-            {
-              type: "hook",
-              name: "invalidateProduct",
-              args: ["Now with a recycled rubber sole."],
-            },
-            {
-              type: "wait",
-              ms: 300,
-            },
-            {
-              type: "hook",
-              name: "requestPage",
-            },
-          ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          spotlight: ["article h1 + p", ".log-row--catalog"],
-          callouts: [
-            {
-              target: ".log-row--catalog",
-              text: "Tag fired",
-              side: "left",
-            },
-            {
-              target: "article h1 + p",
-              text: "Fresh copy",
-              side: "right",
-            },
-          ],
-          bullets: [
-            "TODO rewrite: Most cache demos prove speed and hide when data becomes stale.",
-            "TODO rewrite: I change the product copy and fire the product tag.",
-            "TODO rewrite: The next request runs the catalog query once and shows the new copy.",
-          ],
-          ifKeyboard:
-            "TODO rewrite: Edit the copy in the demo admin field, press Save, then reload.",
-          proof:
-            "Change the product copy, fire the product tag invalidation, and show the next request receiving fresh content.",
-        },
-        {
-          id: "s9",
-          label: "TODO cut: Switch user and region",
-          actions: [
-            {
-              type: "hook",
-              name: "switchUser",
-              args: ["agent-2"],
-            },
-            {
-              type: "hook",
-              name: "switchRegion",
-              args: ["eu"],
-            },
-            {
-              type: "hook",
-              name: "requestPage",
-            },
-          ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          spotlight: [".stock", ".log-row--inventory"],
-          callouts: [
-            {
-              target: ".stock",
-              text: "Per user, region",
-              side: "right",
-            },
-            {
-              target: ".log-row--catalog",
-              text: "Still cached",
-              side: "left",
-            },
-          ],
-          bullets: [
-            "TODO rewrite: A different user in a different region.",
-            "TODO rewrite: Inventory changes and the catalog stays cached.",
-            "TODO rewrite: Private inventory data is never served from the public cache.",
-          ],
-          ifKeyboard:
-            "TODO rewrite: Use the user and region switchers in the demo header, then reload.",
-          proof:
-            "Switch users or regions and show that private inventory data is never served from the public cache.",
         },
       ],
-      timing: {
-        minutes: 2.25,
-      },
+      timing: { minutes: 2.25 },
     },
   ],
   citations: [
@@ -534,9 +245,8 @@ export const section: DemoSection = {
     },
   ],
   cautions: [
-    "TODO rewrite: State the framework version and runtime version in the repository.",
-    "TODO rewrite: Show one failure mode, such as stale content, accidental private caching, or a migration TODO.",
-    "TODO rewrite: Measure a result the audience can inspect: network calls, cache hits, build time, bundle size, or migration diff.",
-    "TODO rewrite: Avoid vendor benchmark claims in the live narrative unless the same result is reproduced in the demo repository.",
+    "Pin the framework and runtime versions in the repository, and say them if asked.",
+    "Show one failure mode, such as stale copy or private data in a shared cache.",
+    "Do not repeat vendor benchmarks unless your own repository reproduces them.",
   ],
 };

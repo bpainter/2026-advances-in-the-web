@@ -249,3 +249,61 @@ body {
     transition: none;
   }
 }
+
+/* Walk-page frames are 640 px wide (PRD v4, 1.4): the axis runs down the page, two columns of
+   four incidents, one year each. */
+@media (max-width: 900px) {
+  .tl {
+    gap: 12px;
+    padding: 16px 20px;
+  }
+  .tl__title {
+    font-size: 26px;
+  }
+  .tl__axis {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(4, auto);
+    grid-auto-flow: column;
+    gap: 10px 20px;
+    align-content: start;
+  }
+  .tl__axis::before,
+  .tl__years {
+    display: none;
+  }
+  .tl__item,
+  .tl__item:nth-child(even) {
+    grid-row: auto;
+    justify-self: stretch;
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    grid-template-rows: auto;
+    align-items: start;
+    width: auto;
+    height: auto;
+  }
+  .tl__item .tl__marker,
+  .tl__item:nth-child(even) .tl__marker {
+    grid-row: 1;
+    translate: 0 4px;
+  }
+  .tl__item .tl__marker::before {
+    display: none;
+  }
+  .tl__item .tl__card,
+  .tl__item:nth-child(odd) .tl__card,
+  .tl__item:nth-child(even) .tl__card {
+    grid-row: 1;
+    margin: 0;
+    align-self: start;
+    justify-items: start;
+    text-align: start;
+  }
+  .tl__name {
+    font-size: 17px;
+  }
+  .tl__date,
+  .tl__label {
+    font-size: 14px;
+  }
+}

@@ -17,6 +17,15 @@
       "options": {
         "printWidth": 44
       }
+    },
+    {
+      "files": [
+        "demos/06-framework-cache-today/app/products/**/*.tsx",
+        "demos/06-framework-cache-today/lib/{catalog,inventory}.ts"
+      ],
+      "options": {
+        "printWidth": 44
+      }
     }
   ]
 }

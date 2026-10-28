@@ -1,0 +1,16 @@
+name: ci
+on: [pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      # Install with every script blocked
+      - run: npm ci --ignore-scripts
+      # Then rebuild the packages we trust,
+      # one name at a time, by hand
+      - run: npm rebuild esbuild sharp
+      - run: npm test

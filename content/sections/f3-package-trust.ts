@@ -1,56 +1,39 @@
-import type { DemoSection } from "@/content/demo-schema";
-import { sectionFile } from "@/lib/demo-files";
+import type { Action, DemoSection } from "@/content/demo-schema";
+import { repoFile, sectionFile } from "@/lib/demo-files";
 
-/** Schema v4 (docs/PRD-demos-v4.md); shown code files live in ./f3-package-trust/files/. */
+const USED_TO = "demos/07-package-workflow/used-to";
+const T = (a: number, b: number): Action => ({ type: "terminal", lines: [a, b] });
+
+/** F3: blanket script bans and a stored token, then pnpm permissions, a release-age gate and staged publishing. */
 export const section: DemoSection = {
   id: "f3-package-trust",
   order: 9,
   label: "Package trust",
   feature: "Package trust",
   scenario:
-    "TODO rewrite: A small workspace adds a package with an install script, upgrades its build tool, then publishes an internal UI package through CI.",
+    "A workspace adds a package with an install script, then publishes a package through CI.",
   support: {
     kind: "tooling",
     packages: [
-      {
-        name: "pnpm",
-        npm: "pnpm",
-        version: "12.11",
-        logo: "/logos/pnpm.svg",
-      },
-      {
-        name: "npm",
-        npm: "npm",
-        version: "11.15",
-        logo: "/logos/npm.svg",
-      },
+      { name: "pnpm", npm: "pnpm", version: "12.11", logo: "/logos/pnpm.svg" },
+      { name: "npm", npm: "npm", version: "11.15", logo: "/logos/npm.svg" },
     ],
   },
   pages: [
     {
       id: "f3-intro",
       stage: "intro",
-      intro: "TODO rewrite",
-      description: "TODO description",
+      intro:
+        "Package managers changed their defaults this year. We follow one package from install to release. Each step is a recorded terminal session.",
+      description:
+        "Package managers now ask before a package runs code, and they let a person approve each release.",
       visual: {
         src: "/intro/f3-package-trust.png",
-        alt: "TODO alt",
-        capture: {
-          pageId: "f3-now",
-          stepId: "s1",
-        },
+        alt: "The terminal showing an install script held back until it is approved.",
+        capture: { pageId: "f3-now", stepId: "s1" },
       },
-      steps: [
-        {
-          id: "s0",
-          label: "Title and support",
-          actions: [],
-          bullets: [],
-        },
-      ],
-      timing: {
-        minutes: 0.25,
-      },
+      steps: [{ id: "s0", label: "Title and support", actions: [], bullets: [] }],
+      timing: { minutes: 0.25 },
     },
     {
       id: "f3-used-to",
@@ -58,144 +41,76 @@ export const section: DemoSection = {
       eyebrow: "Package trust",
       title: "How we used to do it",
       intro:
-        "TODO rewrite: The package section follows one dependency from intake to release. First, why the install-time defaults changed.",
+        "This timeline shows npm attacks from August 2025 to October 2026. Here is how teams defended.",
       frame: {
         build: "static",
         route: "/demos/07-package-workflow/timeline",
-        viewport: {
-          width: 640,
-          height: 628,
-        },
+        viewport: { width: 640, height: 628 },
         hooks: ["reset"],
-        poster: "/posters/f3-today-s3.png",
       },
-      files: [],
+      files: [
+        repoFile(`${USED_TO}/.npmrc`, "bash"),
+        repoFile(`${USED_TO}/ci.yml`, "yaml"),
+        repoFile(`${USED_TO}/publish.yml`, "yaml"),
+      ],
       steps: [
         {
           id: "s0",
           label: "Empty axis",
-          actions: [
-            {
-              type: "hook",
-              name: "reset",
-            },
-          ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          bullets: ["TODO rewrite: Eighteen months of npm incidents, August 2025 to October 2026."],
+          actions: [{ type: "hook", name: "reset" }],
+          code: { file: ".npmrc", lines: [] },
+          bullets: [],
         },
         {
           id: "s1",
-          label: "2025 incidents",
+          label: "Attacks in 2025",
           actions: [
-            {
-              type: "reveal",
-              target: "#incident-1",
-            },
-            {
-              type: "wait",
-              ms: 250,
-            },
-            {
-              type: "reveal",
-              target: "#incident-2",
-            },
-            {
-              type: "wait",
-              ms: 250,
-            },
-            {
-              type: "reveal",
-              target: "#incident-3",
-            },
-            {
-              type: "wait",
-              ms: 250,
-            },
-            {
-              type: "reveal",
-              target: "#incident-4",
-            },
+            { type: "reveal", target: "#incident-1" },
+            { type: "wait", ms: 250 },
+            { type: "reveal", target: "#incident-2" },
+            { type: "wait", ms: 250 },
+            { type: "reveal", target: "#incident-3" },
+            { type: "wait", ms: 250 },
+            { type: "reveal", target: "#incident-4" },
           ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          spotlight: ["#incident-1", "#incident-2"],
+          code: { file: ".npmrc", lines: [[1, 3]] },
+          spotlight: ["#incident-1", "#incident-4"],
           bullets: [
-            "TODO rewrite: 2025.",
-            "TODO rewrite: Nx in August ran a postinstall that abused installed AI command-line tools, live about eight hours. chalk and debug in September came from a phished maintainer and were live about two hours.",
-            "TODO rewrite: The two Shai-Hulud worms republished themselves through stolen tokens, and the second one ran at preinstall.",
+            "In 2025, install scripts ran malware. Teams turned off every script in one file.",
           ],
-          ifKeyboard: "TODO rewrite: Same.",
         },
         {
           id: "s2",
-          label: "2026 incidents",
+          label: "Attacks in 2026",
           actions: [
-            {
-              type: "reveal",
-              target: "#incident-5",
-            },
-            {
-              type: "wait",
-              ms: 250,
-            },
-            {
-              type: "reveal",
-              target: "#incident-6",
-            },
-            {
-              type: "wait",
-              ms: 250,
-            },
-            {
-              type: "reveal",
-              target: "#incident-7",
-            },
-            {
-              type: "wait",
-              ms: 250,
-            },
-            {
-              type: "reveal",
-              target: "#incident-8",
-            },
+            { type: "reveal", target: "#incident-5" },
+            { type: "wait", ms: 250 },
+            { type: "reveal", target: "#incident-6" },
+            { type: "wait", ms: 250 },
+            { type: "reveal", target: "#incident-7" },
+            { type: "wait", ms: 250 },
+            { type: "reveal", target: "#incident-8" },
           ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
+          code: { file: "ci.yml", lines: [[11, 15]] },
           spotlight: ["#incident-6", "#incident-7"],
           bullets: [
-            "TODO rewrite: 2026.",
-            "TODO rewrite: Axios was live about three hours.",
-            "TODO rewrite: TanStack and ChainDrop shipped with valid provenance, and ChainDrop went after agent credentials on developer laptops.",
-            "TODO rewrite: Every live window was hours.",
+            "Each attack was live for hours. CI blocked scripts, then rebuilt trusted packages by hand.",
           ],
-          ifKeyboard: "TODO rewrite: Same.",
         },
         {
           id: "s3",
-          label: "What teams commonly maintain",
-          actions: [],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
+          label: "The old release",
+          key: true,
+          actions: [{ type: "pointer", to: "#incident-8" }],
+          code: { file: "publish.yml", lines: [[16, 20]] },
+          spotlight: ["#incident-8"],
           bullets: [
-            "TODO rewrite: Install scripts run as a side effect of dependency installation unless a team adds separate controls.",
-            "TODO rewrite: A newly published package version can enter CI immediately after release.",
-            "TODO rewrite: A long-lived registry token publishes directly to the public version stream, and the first person to notice a bad package may be a consumer after publication.",
+            "Releases used a long-lived token stored in CI.",
+            "Anyone who stole it could publish to every user.",
           ],
-          ifKeyboard: "TODO rewrite: Same.",
         },
       ],
-      timing: {
-        minutes: 0.5,
-      },
+      timing: { minutes: 0.5 },
     },
     {
       id: "f3-now",
@@ -203,16 +118,12 @@ export const section: DemoSection = {
       eyebrow: "Package trust",
       title: "How we do it now",
       intro:
-        "TODO rewrite: A small workspace adds a package with an install script, then publishes an internal UI package through CI. The package is a local fixture whose install script writes a marker file and does nothing else.",
+        "This is a recorded session against a test registry. The policy and the workflow are on the right.",
       frame: {
         build: "terminal",
         route: "/demos/07-package-workflow/terminal/session",
-        viewport: {
-          width: 640,
-          height: 628,
-        },
+        viewport: { width: 640, height: 628 },
         hooks: ["reset"],
-        poster: "/posters/f3-code-s5.png",
       },
       files: [
         {
@@ -230,211 +141,78 @@ export const section: DemoSection = {
         {
           id: "s0",
           label: "Policy file",
-          actions: [
-            {
-              type: "hook",
-              name: "reset",
-            },
-            {
-              type: "terminal",
-              lines: [1, 5],
-            },
-          ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          bullets: [
-            "TODO rewrite: The workspace policy on the right, the same recordings on the left.",
-          ],
+          actions: [{ type: "hook", name: "reset" }, T(1, 5)],
+          code: { file: "pnpm-workspace.yaml", lines: [] },
+          bullets: [],
         },
         {
           id: "s1",
-          label: "Permission entry",
-          actions: [
-            {
-              type: "terminal",
-              lines: [6, 23],
-            },
-          ],
-          code: {
-            file: "pnpm-workspace.yaml",
-            lines: [[7, 9]],
-          },
+          label: "Script blocked",
+          actions: [T(6, 12)],
+          code: { file: "pnpm-workspace.yaml", lines: [[7, 9]] },
+          ifKeyboard:
+            "Run pnpm add report-exporter, then ls .marker. Press Next once to sync the frame.",
           bullets: [
-            "TODO rewrite: This is the policy as committed before review: build false. pnpm approve flips that line, and the diff in the terminal is the reviewable decision.",
+            "Adding the package stops at its install script. Nothing ran.",
+            "The workspace file lists what each package may run. This one starts at no.",
           ],
-          ifKeyboard: "TODO rewrite: Open pnpm-workspace.yaml next to git diff.",
         },
         {
           id: "s2",
-          label: "Release-age gate",
-          actions: [
-            {
-              type: "terminal",
-              lines: [24, 43],
-            },
-          ],
-          code: {
-            file: "pnpm-workspace.yaml",
-            lines: [[4, 5]],
-          },
+          label: "Review and approve",
+          key: true,
+          actions: [T(13, 27)],
+          code: { file: "pnpm-workspace.yaml", lines: [[7, 9]] },
+          proof: "Show the permission entry in version control so the decision is reviewable.",
+          ifKeyboard:
+            "Run pnpm permissions, pnpm approve and git diff, then pnpm install. Press Next once to sync.",
           bullets: [
-            "TODO rewrite: minimumReleaseAge is in minutes, so 1440 is one day.",
-            "TODO rewrite: Set the same window in your update bot, or the bot opens pull requests that CI cannot install.",
-            "TODO rewrite: The npm refusal below it comes from the project's .npmrc, which sets remote sources to none.",
+            "We check what the package asks for and approve it. Now the script runs.",
+            "The approval is one line in a committed file, so it gets code review.",
           ],
-          ifKeyboard: "TODO rewrite: Same.",
         },
         {
           id: "s3",
-          label: "OIDC only on publish",
-          actions: [
-            {
-              type: "terminal",
-              lines: [44, 48],
-            },
-          ],
-          code: {
-            file: "publish.yml",
-            lines: [
-              [5, 6],
-              [19, 21],
-            ],
-          },
+          label: "Too new to install",
+          actions: [T(28, 43)],
+          code: { file: "pnpm-workspace.yaml", lines: [[4, 5]] },
           bullets: [
-            "TODO rewrite: The workflow starts read-only. id-token: write appears only on the publish job, which is the OIDC trusted-publishing path GitHub recommends pairing with staging.",
-            "TODO rewrite: Pinning trusted publishing to one workflow file and one branch, with id-token write only on the publish job, is one of the mitigations that held in 2026.",
+            "A version published ten minutes ago is held back for a day.",
+            "Attacks were live for hours, so a one-day wait skips most of them.",
+            "npm also refuses packages from a plain web address.",
           ],
-          ifKeyboard: "TODO rewrite: Open the workflow file in the editor.",
         },
         {
           id: "s4",
-          label: "CI stages the release",
-          actions: [
-            {
-              type: "terminal",
-              lines: [49, 63],
-            },
-          ],
+          label: "Stage the release",
+          actions: [T(44, 63)],
           code: {
             file: "publish.yml",
-            lines: [18, 30],
+            lines: [
+              [19, 21],
+              [29, 30],
+            ],
           },
           bullets: [
-            "TODO rewrite: The publish job ends at npm stage publish.",
-            "TODO rewrite: The environment gives that job its own protection rules, and a maintainer still has to inspect and approve the staged tarball.",
+            "CI signs in with a short-lived token and stops at a staged release.",
+            "No long-lived token is stored anywhere.",
+            "A maintainer downloads the exact package and reads its files.",
           ],
-          ifKeyboard: "TODO rewrite: Same.",
         },
         {
           id: "s5",
-          label: "Approve, then the cautions",
-          actions: [
-            {
-              type: "terminal",
-              lines: [64, 69],
-            },
-          ],
-          code: {
-            file: "publish.yml",
-            lines: [30],
-          },
-          bullets: [
-            "TODO rewrite: Provenance proves where a package was built.",
-            "TODO rewrite: It does not prove who authorised the release, and TanStack and ChainDrop both shipped with valid provenance. pnpm 12.12 can share signed task results and dependency builds through a remote cache; treat that as a separate CI optimization after the trust workflow is clear.",
-            "TODO rewrite: Then the cautions.",
-          ],
-          ifKeyboard: "TODO rewrite: Same.",
-        },
-        {
-          id: "s6",
-          label: "Review and approve",
-          actions: [
-            {
-              type: "terminal",
-              lines: [13, 23],
-            },
-          ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          bullets: [
-            "TODO rewrite: pnpm permissions shows what the package asks for. pnpm approve is the review step, and I allow this one on purpose.",
-            "TODO rewrite: The decision lands in pnpm-workspace.yaml, so it goes through code review like any other change.",
-          ],
-          ifKeyboard:
-            "TODO rewrite: Run pnpm permissions, pnpm approve, then git diff pnpm-workspace.yaml.",
-          proof: "Show the permission entry in version control so the decision is reviewable.",
-        },
-        {
-          id: "s7",
-          label: "TODO cut: Install: script runs",
-          actions: [
-            {
-              type: "terminal",
-              lines: [24, 27],
-            },
-          ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          bullets: [
-            "TODO rewrite: Install again and the script runs.",
-            "TODO rewrite: The marker file shows the whole path: blocked, reviewed, then intentionally allowed.",
-          ],
-          ifKeyboard: "TODO rewrite: Run pnpm install and cat .marker.",
-          proof:
-            "Use a harmless local fixture package whose install script writes a marker file. Show it blocked, reviewed, and then intentionally allowed.",
-        },
-        {
-          id: "s8",
-          label: "TODO cut: Staged, then inspected",
-          actions: [
-            {
-              type: "terminal",
-              lines: [44, 63],
-            },
-          ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          bullets: [
-            "TODO rewrite: npm staged publishing can require an authenticated maintainer to approve a tarball after CI uploads it.",
-            "TODO rewrite: CI staged version 2.4.0.",
-            "TODO rewrite: I list it, view it, download the exact tarball, and read its file list, all against the test registry.",
-          ],
-          ifKeyboard: "TODO rewrite: Play the recording; do not run staging live.",
-          proof:
-            "Use a private test registry or a recorded terminal session for staged publishing. Do not risk a live public release during the talk.",
-        },
-        {
-          id: "s9",
-          label: "TODO cut: Approve, check the record",
-          actions: [
-            {
-              type: "terminal",
-              lines: [64, 69],
-            },
-          ],
-          code: {
-            file: "TODO",
-            lines: [],
-          },
-          bullets: [
-            "TODO rewrite: Approval asks for a one-time password, then the version goes live. npm audit signatures shows the attestation, which ties the release to the workflow and branch that built it.",
-          ],
-          ifKeyboard: "TODO rewrite: Play the recording.",
+          label: "Approve and check",
+          actions: [T(64, 69)],
+          code: { file: "publish.yml", lines: [30] },
           proof:
             "Inspect the staged tarball before approval and show the provenance or trusted-publishing record.",
+          bullets: [
+            "Approval asks for a one-time password, then the version goes live.",
+            "The signature check ties the release to the workflow that built it.",
+          ],
         },
       ],
-      timing: {
-        minutes: 2.25,
-      },
+      timing: { minutes: 2.25 },
     },
   ],
   citations: [
@@ -504,9 +282,8 @@ export const section: DemoSection = {
     },
   ],
   cautions: [
-    "TODO rewrite: Permissions reduce install-time risk. They do not review the package's runtime behavior or remove the need for dependency scanning.",
-    "TODO rewrite: A release-age gate reduces exposure to a brand-new compromise, but it also delays urgent fixes. Document the override path.",
-    "TODO rewrite: Staged publishing adds a human checkpoint. Define who may approve, what evidence they inspect, and how an abandoned stage is removed.",
-    "TODO rewrite: Remote caches need signing, access control, retention, and a clear response when cached output is suspected.",
+    "Permissions limit install scripts. They do not review what the package does when it runs.",
+    "A release-age wait also delays urgent fixes. Write down how to skip it.",
+    "Decide who may approve a staged release and what they check first.",
   ],
 };

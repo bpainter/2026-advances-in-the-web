@@ -14,7 +14,12 @@ export const metadata: Metadata = {
  */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-build="framework">
+    <html lang="en" data-build="today">
+      <head>
+        {/* The shared portal theme (PRD v4, 6.2), copied in by pnpm theme:sync. */}
+        {/* eslint-disable-next-line @next/next/no-css-tags */}
+        <link rel="stylesheet" href="/theme/portal-glass.css" />
+      </head>
       <body>
         <script
           src="/presenter.js"
