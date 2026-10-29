@@ -6,12 +6,14 @@ Styles live in the WS-F files named in PRD 12. This page is the contract between
 
 ## 1. Cover (`styles/components/slides-glass.css`, `.sg--title`)
 
+The speaker asked for the title in two lines again: "2026 advances", then "in the web". It stays 192 px. This replaces the three-line break of PRD r7 4.2; the PRD's 144 px fallback is not needed.
+
 Markup (WS-B, `GlassSlide.tsx`, title branch). Every element is a direct child of the section, in this order:
 
 ```html
 <section class="sg sg--title" data-tone="dark">
   <p class="sg-eyebrow">FITC Web Unleashed 2026, Toronto</p>
-  <h1 class="sg-display sg-title-lines"><span>2026</span><span>advances</span><span>in the web</span></h1>
+  <h1 class="sg-display sg-title-lines"><span>2026 advances</span><span>in the web</span></h1>
   <p class="sg-cover__name"><a href="…linkedin…" target="_blank" rel="me noopener">Bermon Painter<span class="visually-hidden">, opens in a new tab</span></a></p>
   <p class="sg-cover__role">Head of DXP and Commerce, Slalom</p>
   <a class="sg-wordmark" href="https://www.slalom.com" target="_blank" rel="noopener">slalom<span class="visually-hidden">, opens in a new tab</span></a>
@@ -23,18 +25,50 @@ The wordmark may also stay a `<p class="sg-wordmark">` wrapping the link; the CS
 ```text
 Region     x     y     w     h     Contents
 ---------  ----  ----  ----  ----  -------------------------------------------------
-Group      64    174   960   732   flex column, centered in the slide (center y 540)
-  Eyebrow  64    174   560   36    28/36 Bold cyan
-  Title    64    202   960   552   192/184 Bold white, three lines, -8 top margin
-  Name     64    802   900   50    36/50 Bold white, a link
-  Role     64    856   900   50    36/50 Regular white, 4 below the name
+Group      64    266   1373  548   flex column, centered in the slide (center y 540)
+  Eyebrow  64    266   560   36    28/36 Bold cyan
+  Title    64    294   1373  368   192/184 Bold white, two lines, -8 top margin
+    Line 1 64    294   1373  184   "2026 advances", glyphs end at x 1437
+    Line 2 64    478   929   184   "in the web", glyphs end at x 993
+  Name     64    710   900   50    36/50 Bold white, a link
+  Role     64    764   900   50    36/50 Regular white, 4 below the name
 Wordmark   right 64, bottom 64     48/56 Bold white, a link
 ```
 
-- The PRD's 4.3 table places the title at y 218, a 24 px gap that predates the r6 L1 fix. The -8 margin stays, so the group is 732 tall, not 764, and every row moves up by 16 px. The center stays at 540.
+- The -8 margin stays, so the group is 548 tall and its center stays at 540.
 - Gaps: 48 px from the title's line box to the name, 4 px from name to role.
 - The name and role carry the title's soft text shadow, so the three sit as one plain-text group with no card.
-- Text zones in `content/backgrounds.ts` match these rows, padded to whole glyph boxes.
+
+### Wash
+
+Line one ends on the lower left edge of the orange glow. Under the 0.24 navy wash alone, its brightest pixel (rgb 223 158 128, at x 1435) gives white 3.48:1. The cover's `::before` adds one soft layer on top of the existing linear wash:
+
+```css
+radial-gradient(ellipse 560px 360px at 1340px 386px,
+  rgb(15 28 65 / 0.22) 0, rgb(15 28 65 / 0.22) 35%, rgb(15 28 65 / 0.15) 55%,
+  rgb(15 28 65 / 0.06) 78%, rgb(15 28 65 / 0) 100%)
+```
+
+- The plateau (0.22, to 35% of the radii) covers line one's right end, x 1240 to 1437 and y 294 to 478. Over the 0.24 wash it renders as 0.404 to 0.408 navy there.
+- It fades over about 360 px with eased stops, so it reads as the glow starting a little further right, not as a shape. No edge shows at 1920 by 1080 or in the Open Graph image.
+- The linear wash is unchanged: 0.24 to x 1480, then 0 by x 1800.
+
+### Text zones and contrast
+
+Text zones in `content/backgrounds.ts` are the line boxes above. Line one is split at x 1240 so the test can composite the ellipse's floor where it matters:
+
+```text
+Zone                      x     y    w     h    Wash  White on worst pixel (pnpm test:contrast)
+------------------------  ----  ---  ----  ---  ----  -----------------------------------------
+eyebrow                   64    266  560   36   0.24  8.37:1
+title line 1              64    294  1176  184  0.24  4.76:1
+title line 1, glow edge   1240  294  197   184  0.40  4.81:1 (rendered composite: 4.89:1)
+title line 2              64    478  929   184  0.24  6.15:1
+name                      64    710  900   50   0.24  6.17:1
+role                      64    764  900   50   0.24  6.30:1
+```
+
+The eyebrow is cyan (#1BE1F2), not white. The test checks its zone as white; cyan on the same worst pixel under the 0.24 wash is 5.22:1. If the title ever moves or grows, line one must stay inside the ellipse's plateau, and the walk (`scripts/walk-r7.mts`) fails past x 1440 or on any line count but two.
 
 ## 2. Links on slides (`slides-glass.css`)
 

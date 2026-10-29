@@ -735,22 +735,48 @@
    {
     "name": "eyebrow",
     "darkest": [
-     43,
-     52,
-     121
+     69,
+     59,
+     132
     ],
     "brightest": [
-     92,
-     72,
-     133
+     111,
+     78,
+     149
     ]
    },
    {
-    "name": "title",
+    "name": "title line 1",
     "darkest": [
-     46,
-     54,
-     126
+     61,
+     62,
+     142
+    ],
+    "brightest": [
+     150,
+     137,
+     165
+    ]
+   },
+   {
+    "name": "title line 1, glow edge",
+    "darkest": [
+     97,
+     90,
+     131
+    ],
+    "brightest": [
+     223,
+     158,
+     128
+    ]
+   },
+   {
+    "name": "title line 2",
+    "darkest": [
+     48,
+     72,
+     168
     ],
     "brightest": [
      186,
@@ -762,26 +788,26 @@
     "name": "name",
     "darkest": [
      43,
-     60,
-     138
+     70,
+     161
     ],
     "brightest": [
-     195,
-     75,
-     139
+     191,
+     79,
+     153
     ]
    },
    {
     "name": "role",
     "darkest": [
-     39,
-     56,
-     128
+     44,
+     66,
+     149
     ],
     "brightest": [
-     194,
-     72,
-     133
+     195,
+     75,
+     139
     ]
    }
   ]

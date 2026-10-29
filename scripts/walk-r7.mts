@@ -100,7 +100,9 @@ export async function checkSlideR7(page: Page, slide: Slide, report: Report) {
       if (Math.abs(center - 540) > 4) report.fail(where, `cover: the group's center is at y ${center.toFixed(1)}, not within 4 px of 540`);
       else report.pass(`cover: group centered at y ${center.toFixed(1)}`);
     }
-    if (g.right > 1100) report.fail(where, `cover: a title glyph box reaches x ${g.right.toFixed(1)}, past 1100`);
+    // r7-spec 1: two lines, line one ending near x 1437, inside the wash's ellipse (its 0.40 zone ends at 1437).
+    if (g.lines.length !== 2) report.fail(where, `cover: the title has ${g.lines.length} lines, not 2 ("2026 advances", "in the web")`);
+    if (g.right > 1440) report.fail(where, `cover: a title glyph box reaches x ${g.right.toFixed(1)}, past 1440 and out of the wash's ellipse`);
     else report.pass(`cover: title glyphs end at x ${g.right.toFixed(1)} (${g.lines.length} lines)`);
   }
 

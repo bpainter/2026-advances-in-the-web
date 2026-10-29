@@ -136,7 +136,8 @@
 
 /* Washes under text that sits on the field (content/backgrounds.ts, `scrim`): a navy wash across
    the title's width, and a white band behind the people slide's title. The contrast test
-   composites the same values. */
+   composites the same values. On the cover a soft navy ellipse (0.22 on its plateau) sits on top
+   of the 0.24 wash where "advances" meets the orange glow, so the two read as 0.40 there (r7-spec 1). */
 .sg--title::before,
 .sg--people::before {
   content: "";
@@ -145,7 +146,9 @@
   pointer-events: none;
 }
 .sg--title::before {
-  background: linear-gradient(90deg, rgb(15 28 65 / 0.24) 0, rgb(15 28 65 / 0.24) 1480px, rgb(15 28 65 / 0) 1800px);
+  background:
+    radial-gradient(ellipse 560px 360px at 1340px 386px, rgb(15 28 65 / 0.22) 0, rgb(15 28 65 / 0.22) 35%, rgb(15 28 65 / 0.15) 55%, rgb(15 28 65 / 0.06) 78%, rgb(15 28 65 / 0) 100%),
+    linear-gradient(90deg, rgb(15 28 65 / 0.24) 0, rgb(15 28 65 / 0.24) 1480px, rgb(15 28 65 / 0) 1800px);
 }
 .sg--people::before {
   background: linear-gradient(rgb(255 255 255 / 0.5) 0, rgb(255 255 255 / 0.5) 152px, rgb(255 255 255 / 0) 220px);
@@ -154,9 +157,10 @@
   position: relative;
 }
 
-/* Cover (PRD r7 4; docs/design/r7-spec.md 1): eyebrow, a three-line 192 px title, then the
-   speaker's name and job title, as one left-aligned group centered in the slide's height. Three
-   lines keep every glyph left of x 1000, clear of the orange glow top right. Plain text, no card. */
+/* Cover (PRD r7 4; docs/design/r7-spec.md 1): eyebrow, a two-line 192 px title, then the
+   speaker's name and job title, as one left-aligned group centered in the slide's height. Line one
+   ends at x 1437, on the glow's lower left edge; the ellipse in the wash above keeps it 4.5:1 or
+   better. Plain text, no card. */
 .sg--title {
   @apply flex flex-col justify-center items-start;
 }
