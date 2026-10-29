@@ -15,7 +15,7 @@ export const slide: Slide = {
     cards: [
       {
         title: "The Greybeards",
-        body: "Seasoned engineers who want the reason before they want the tool.",
+        body: "Experienced engineers who want to know what problem AI will solve.",
         question: "Why?",
         image: {
           src: "/images/design/c18ba5ceb5f4a9a2dc228deb4d240a17.png",
@@ -24,7 +24,7 @@ export const slide: Slide = {
       },
       {
         title: "The Line Toers",
-        body: "Pragmatists who take the mandate as given and make the tool useful.",
+        body: "Mid-career engineers finding ways to use AI because leadership expects them to.",
         question: "How?",
         image: {
           src: "/images/design/41c92a3370c2ea5a19e31664dfb3f880.png",
@@ -33,7 +33,7 @@ export const slide: Slide = {
       },
       {
         title: "The New Luddites",
-        body: "Early-career skeptics weighing what the trade costs before they buy in.",
+        body: "Early-career engineers concerned about AI’s impact on jobs, society, and the environment.",
         question: "Should we?",
         image: {
           src: "/images/design/7a3f47c0216f32a9a3c35bc46ca6e398.png",
@@ -44,7 +44,7 @@ export const slide: Slide = {
   },
   citations: [],
   speakerNotes:
-    "Three people sit in every room. The greybeards want the reason before the tool. The line toers make the mandate useful. The new luddites weigh what the trade costs. All three are here today, so speak to each once.",
+    "Three people sit in every room. The greybeards want to know what problem AI solves. The line toers use it because leadership expects it. The new luddites worry about jobs, society and the planet. All three are here today, so speak to each once.",
   timing: { minutes: 1.5, cumulative: 3 },
   background: "three-reactions",
 };

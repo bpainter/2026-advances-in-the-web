@@ -290,18 +290,23 @@
   height: 816px;
   padding: 32px;
 }
+/* 472 tall, not 512: a three-line description (the New Luddites) plus the question must fit the
+   816 card without shrinking anything, so every title sits on the same line across the three cards. */
 .sg-portrait {
   display: block;
+  flex: none;
   width: 512px;
-  height: 512px;
+  height: 472px;
   border-radius: 16px;
   object-fit: cover;
+  object-position: 50% 30%;
 }
 .sg--portraits .sg-card__text {
   margin-top: 32px;
 }
 .sg-question {
   margin-top: auto;
+  padding-top: 16px;
   font-size: 64px;
   line-height: 72px;
   font-weight: var(--weight-bold);
