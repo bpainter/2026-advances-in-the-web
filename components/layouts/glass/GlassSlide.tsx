@@ -2,7 +2,7 @@ import type { ComponentType } from "react";
 import { Accessibility, Activity, ClipboardCheck, CodeXml, DoorOpen, GraduationCap, KeyRound, Layers, Link, MonitorSmartphone, Package, ShieldCheck, SlidersHorizontal, UserCheck, Wrench } from "lucide-react";
 import type { GlassContent, Slide } from "@/content/schema";
 import type { Mode } from "@/lib/mode";
-import { deck } from "@/content/deck";
+import { deck, siteHref } from "@/content/deck";
 import { GlassClosing } from "./GlassClosing";
 import { NewTabLink } from "./NewTabLink";
 import { Wordmark } from "./Wordmark";
@@ -44,7 +44,7 @@ function Footer({ slide, tone, mode }: { slide: Slide; tone: "light" | "dark"; m
   return (
     <footer className="sg-footer" data-tone={tone}>
       <p className="sg-pill">
-        <NewTabLink href={deck.site.url} mode={mode}>
+        <NewTabLink href={siteHref(slide.id)} mode={mode}>
           {deck.site.label}
         </NewTabLink>
       </p>

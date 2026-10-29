@@ -1,13 +1,13 @@
-/* Minimal read-later controls, outside the scaled canvas (PRD 2, 4.2): one horizontal pill in the
-   bottom right corner, drawer first (PRD r7, 9.4). The speaker prefers it horizontal over the r7
-   gutter rail. To keep it off the stage it is compact (36 px targets, the counter inline) and sits
-   8 px from the window's bottom edge, so at 1920 x 1080 it reaches about 210 px into the corner and
-   8 px up into a walk page's code card, which keeps 32 px of padding there. It fades when the
-   pointer rests, and wakes on hover. */
+/* Minimal read-later controls, outside the scaled canvas (PRD 2, 4.2): one horizontal pill centered
+   on the bottom edge, drawer first (PRD r7, 9.4). Centered, it sits between the glass footer pills
+   (site left, event right) and below the gap between a walk page's frame and code card, so it no
+   longer covers the event pill's text. It is compact (36 px targets, the counter inline), 8 px from
+   the window's bottom edge, and fades when the pointer rests. */
 .reader-controls {
   @apply fixed flex items-center;
-  right: 8px;
+  left: 50%;
   bottom: 8px;
+  translate: -50% 0;
   gap: 2px;
   padding: 2px;
   border: 1px solid var(--glass-dark-border-color);

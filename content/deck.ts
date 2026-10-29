@@ -19,3 +19,16 @@ export const deck: Deck = {
   org: { name: "Slalom", url: "https://www.slalom.com" },
   targetMinutes: 35,
 };
+
+/**
+ * The footer's link to the site, tagged so the site's Vercel Analytics can attribute each visit to
+ * this talk and the slide it came from. The bare `site.url` stays for structured data.
+ */
+export function siteHref(slideId: string): string {
+  const url = new URL(deck.site.url);
+  url.searchParams.set("utm_source", "2026-advances-in-the-web");
+  url.searchParams.set("utm_medium", "presentation");
+  url.searchParams.set("utm_campaign", "fitc-web-unleashed-2026");
+  url.searchParams.set("utm_content", slideId);
+  return url.toString();
+}

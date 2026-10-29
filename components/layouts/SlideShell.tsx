@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import type { Slide } from "@/content/schema";
 import type { Mode } from "@/lib/mode";
 import { fieldFor } from "@/lib/field";
-import { deck } from "@/content/deck";
+import { deck, siteHref } from "@/content/deck";
 
 interface Props {
   slide: Slide;
@@ -27,7 +27,7 @@ export function SlideFooter({ slide, mode }: { slide: Slide; mode: Mode }) {
   return (
     <footer className="slide__footer">
       {linkSite ? (
-        <a className="slide__footer-link" href={deck.site.url}>
+        <a className="slide__footer-link" href={siteHref(slide.id)}>
           {deck.site.label}
         </a>
       ) : (

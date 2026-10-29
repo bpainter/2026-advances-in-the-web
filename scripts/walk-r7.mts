@@ -11,6 +11,7 @@ import type { Browser, BrowserContext, Frame, Page } from "@playwright/test";
 import { hasFrame, type DemoPage } from "@/content/demo-schema";
 import type { Slide } from "@/content/schema";
 import { deck, sections, slides } from "@/lib/content";
+import { siteHref } from "@/content/deck";
 import type { Report } from "./walk-spotlight.mts";
 
 /** Counts the document's view transitions; installed before any page script runs. */
@@ -70,7 +71,7 @@ export async function checkSlideR7(page: Page, slide: Slide, report: Report) {
   if (menu) report.fail(where, `the audience window renders a menu button under automation (${menu})`);
 
   const footer = (await page.$(".sg-footer")) !== null;
-  if (footer) checkLink(report, where, `${where} footer pill`, await linksIn(page, ".sg-footer"), deck.site.url, ["noopener"]);
+  if (footer) checkLink(report, where, `${where} footer pill`, await linksIn(page, ".sg-footer"), siteHref(slide.id), ["noopener"]);
 
   if (slide.id === slides[0].id) {
     const links = await linksIn(page, ".stage__canvas");
