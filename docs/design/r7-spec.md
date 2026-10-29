@@ -25,18 +25,18 @@ The wordmark may also stay a `<p class="sg-wordmark">` wrapping the link; the CS
 ```text
 Region     x     y     w     h     Contents
 ---------  ----  ----  ----  ----  -------------------------------------------------
-Group      64    266   1373  548   flex column, centered in the slide (center y 540)
-  Eyebrow  64    266   560   36    28/36 Bold cyan
-  Title    64    294   1373  368   192/184 Bold white, two lines, -8 top margin
-    Line 1 64    294   1373  184   "2026 advances", glyphs end at x 1437
-    Line 2 64    478   929   184   "in the web", glyphs end at x 993
-  Name     64    710   900   50    36/50 Bold white, a link
-  Role     64    764   900   50    36/50 Regular white, 4 below the name
+Group      64    261   1373  558   flex column, centered in the slide (center y 540)
+  Eyebrow  64    261   560   36    28/36 Bold cyan
+  Title    64    315   1373  368   192/184 Bold white, two lines, 18 top margin
+    Line 1 64    315   1373  184   "2026 advances", glyphs end at x 1437
+    Line 2 64    499   929   184   "in the web", glyphs end at x 993
+  Name     64    715   900   50    36/50 Bold white, a link
+  Role     64    769   900   50    36/50 Regular white, 4 below the name
 Wordmark   right 64, bottom 64     48/56 Bold white, a link
 ```
 
-- The -8 margin stays, so the group is 548 tall and its center stays at 540.
-- Gaps: 48 px from the title's line box to the name, 4 px from name to role.
+- One visible rhythm, measured ink to ink: 56 px from the eyebrow to the title and 56 px from the title to the name (margins 18 and 32). The name and role stay a tight pair, 4 px apart.
+- The group is 558 tall and its center stays at 540.
 - The name and role carry the title's soft text shadow, so the three sit as one plain-text group with no card.
 
 ### Wash
@@ -44,12 +44,12 @@ Wordmark   right 64, bottom 64     48/56 Bold white, a link
 Line one ends on the lower left edge of the orange glow. Under the 0.24 navy wash alone, its brightest pixel (rgb 223 158 128, at x 1435) gives white 3.48:1. The cover's `::before` adds one soft layer on top of the existing linear wash:
 
 ```css
-radial-gradient(ellipse 560px 360px at 1340px 386px,
+radial-gradient(ellipse 560px 360px at 1340px 407px,
   rgb(15 28 65 / 0.22) 0, rgb(15 28 65 / 0.22) 35%, rgb(15 28 65 / 0.15) 55%,
   rgb(15 28 65 / 0.06) 78%, rgb(15 28 65 / 0) 100%)
 ```
 
-- The plateau (0.22, to 35% of the radii) covers line one's right end, x 1240 to 1437 and y 294 to 478. Over the 0.24 wash it renders as 0.404 to 0.408 navy there.
+- The plateau (0.22, to 35% of the radii) covers line one's right end, x 1240 to 1437 and y 315 to 499. Over the 0.24 wash it renders as 0.404 to 0.408 navy there.
 - It fades over about 360 px with eased stops, so it reads as the glow starting a little further right, not as a shape. No edge shows at 1920 by 1080 or in the Open Graph image.
 - The linear wash is unchanged: 0.24 to x 1480, then 0 by x 1800.
 
@@ -60,12 +60,12 @@ Text zones in `content/backgrounds.ts` are the line boxes above. Line one is spl
 ```text
 Zone                      x     y    w     h    Wash  White on worst pixel (pnpm test:contrast)
 ------------------------  ----  ---  ----  ---  ----  -----------------------------------------
-eyebrow                   64    266  560   36   0.24  8.37:1
-title line 1              64    294  1176  184  0.24  4.76:1
-title line 1, glow edge   1240  294  197   184  0.40  4.81:1 (rendered composite: 4.89:1)
-title line 2              64    478  929   184  0.24  6.15:1
-name                      64    710  900   50   0.24  6.17:1
-role                      64    764  900   50   0.24  6.30:1
+eyebrow                   64    261  560   36   0.24  8.40:1
+title line 1              64    315  1176  184  0.24  4.76:1
+title line 1, glow edge   1240  315  197   184  0.40  4.89:1
+title line 2              64    499  929   184  0.24  6.15:1
+name                      64    715  900   50   0.24  6.17:1
+role                      64    769  900   50   0.24  6.30:1
 ```
 
 The eyebrow is cyan (#1BE1F2), not white. The test checks its zone as white; cyan on the same worst pixel under the 0.24 wash is 5.22:1. If the title ever moves or grows, line one must stay inside the ellipse's plateau, and the walk (`scripts/walk-r7.mts`) fails past x 1440 or on any line count but two.

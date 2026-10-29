@@ -16,8 +16,8 @@ interface Props {
 }
 
 /**
- * Minimal read-later controls: the drawer, previous, counter, next, help (PRD r7, 9.4), top to
- * bottom in a rail in the canvas's right gutter, so they never cover the slide (review r7 L1).
+ * Minimal read-later controls: the drawer, previous, counter, next, help (PRD r7, 9.4), left to
+ * right in a compact pill in the bottom right corner.
  */
 export function ReaderControls({ slideIndex, total, hasPrev, hasNext, onPrev, onNext, onHelp, onWake }: Props) {
   return (

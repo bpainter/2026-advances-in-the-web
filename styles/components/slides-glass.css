@@ -147,7 +147,7 @@
 }
 .sg--title::before {
   background:
-    radial-gradient(ellipse 560px 360px at 1340px 386px, rgb(15 28 65 / 0.22) 0, rgb(15 28 65 / 0.22) 35%, rgb(15 28 65 / 0.15) 55%, rgb(15 28 65 / 0.06) 78%, rgb(15 28 65 / 0) 100%),
+    radial-gradient(ellipse 560px 360px at 1340px 407px, rgb(15 28 65 / 0.22) 0, rgb(15 28 65 / 0.22) 35%, rgb(15 28 65 / 0.15) 55%, rgb(15 28 65 / 0.06) 78%, rgb(15 28 65 / 0) 100%),
     linear-gradient(90deg, rgb(15 28 65 / 0.24) 0, rgb(15 28 65 / 0.24) 1480px, rgb(15 28 65 / 0) 1800px);
 }
 .sg--people::before {
@@ -167,10 +167,11 @@
 .sg--title > :not(.sg-wordmark) {
   position: relative;
 }
-/* The title's line box carries about 40 px above its cap height, so a -8 margin reads as a 32 px
-   gap under the eyebrow (review r6 L1). */
+/* One visible rhythm on the cover: 56 px of clear space from the eyebrow to the title and from the
+   title to the name, measured ink to ink. The title's line box adds about 38 px above its caps, so
+   18 px of margin reads as 56. The name and role stay a tight pair. */
 .sg--title .sg-display {
-  margin-top: -8px;
+  margin-top: 18px;
   font-size: 192px;
   line-height: 184px;
   color: var(--glass-dark-ink);
@@ -184,7 +185,7 @@
   text-shadow: 0 1px 12px rgb(15 28 65 / 0.35);
 }
 .sg-cover__name {
-  margin-top: 48px;
+  margin-top: 32px;
   font-weight: var(--weight-bold);
 }
 /* White, not body ink: #D6DCEC on the worst pixel under the wash is about 4.4:1 (PRD r7 4.3). */

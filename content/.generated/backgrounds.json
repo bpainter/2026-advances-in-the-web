@@ -740,17 +740,17 @@
      132
     ],
     "brightest": [
-     111,
-     78,
-     149
+     120,
+     75,
+     142
     ]
    },
    {
     "name": "title line 1",
     "darkest": [
-     61,
-     62,
-     142
+     54,
+     66,
+     148
     ],
     "brightest": [
      150,
@@ -761,21 +761,21 @@
    {
     "name": "title line 1, glow edge",
     "darkest": [
-     97,
-     90,
-     131
+     89,
+     91,
+     139
     ],
     "brightest": [
-     223,
-     158,
+     221,
+     156,
      128
     ]
    },
    {
     "name": "title line 2",
     "darkest": [
-     48,
-     72,
+     47,
+     73,
      168
     ],
     "brightest": [
@@ -800,9 +800,9 @@
    {
     "name": "role",
     "darkest": [
-     44,
-     66,
-     149
+     47,
+     65,
+     147
     ],
     "brightest": [
      195,

@@ -73,12 +73,12 @@ export const BACKGROUNDS = {
       // The cover group (PRD r7 4.3; docs/design/r7-spec.md 1): centered on y 540, two title lines
       // as line boxes. Line one ends at x 1437, so its right end gets its own zone under the wash's
       // ellipse (0.24 plus 0.22 renders 0.404 or more there; 0.40 is the floor the test composites).
-      { name: "eyebrow", x: 64, y: 266, w: 560, h: 36, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.24 } },
-      { name: "title line 1", x: 64, y: 294, w: 1176, h: 184, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.24 } },
-      { name: "title line 1, glow edge", x: 1240, y: 294, w: 197, h: 184, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.4 } },
-      { name: "title line 2", x: 64, y: 478, w: 929, h: 184, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.24 } },
-      { name: "name", x: 64, y: 710, w: 900, h: 50, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.24 } },
-      { name: "role", x: 64, y: 764, w: 900, h: 50, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.24 } },
+      { name: "eyebrow", x: 64, y: 261, w: 560, h: 36, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.24 } },
+      { name: "title line 1", x: 64, y: 315, w: 1176, h: 184, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.24 } },
+      { name: "title line 1, glow edge", x: 1240, y: 315, w: 197, h: 184, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.4 } },
+      { name: "title line 2", x: 64, y: 499, w: 929, h: 184, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.24 } },
+      { name: "name", x: 64, y: 715, w: 900, h: 50, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.24 } },
+      { name: "role", x: 64, y: 769, w: 900, h: 50, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.24 } },
     ],
   },
   "the-mandate": {
