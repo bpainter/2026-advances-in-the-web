@@ -1,16 +1,42 @@
-/* Minimal read-later controls, outside the scaled canvas (PRD 2, 4.2). */
+/* Minimal read-later controls, outside the scaled canvas (PRD 2, 4.2).
+
+   A vertical rail in the canvas's right gutter (review r7 L1). Every slide keeps its content 64 of
+   1920 units clear of the canvas's right edge (x 1856), while the bottom margin is as thin as 28
+   (glass footers end at y 1052) and walk pages start at y 48. The horizontal pill, five targets
+   wide, could only sit over content: with the menu button it reached x 1618 and covered the code
+   panel's last line. The rail stacks the same controls in the gutter, so nothing on the stage is
+   covered, in reader mode and in the audience window.
+
+   The gutter scales with the stage. The canvas is 1920 x 1080 fit to the window (stage.css), so its
+   width in CSS px is min(100vw, 100dvh * 16 / 9), and the free room right of the content is the
+   side letterbox plus 1/30 of that width (64 / 1920). Buttons take that room less 20 px, from 32 to
+   44 px (44 at 1920 x 1080, where the rail is 48 wide and 8 px from the edge), and the rail centers
+   in the room. Below a 1080 px wide 16:9 window the 32 px floor overlaps the content by a few px. */
 .reader-controls {
-  @apply fixed flex items-center;
-  right: var(--space-4);
-  bottom: var(--space-4);
-  gap: var(--space-2);
-  padding: var(--space-1);
+  --rc-canvas-w: min(100vw, 100dvh * 16 / 9);
+  --rc-letterbox-x: calc((100vw - var(--rc-canvas-w)) / 2);
+  --rc-letterbox-y: calc((100dvh - var(--rc-canvas-w) * 9 / 16) / 2);
+  --rc-room: calc(var(--rc-letterbox-x) + var(--rc-canvas-w) / 30);
+  --rc-button: clamp(32px, var(--rc-room) - 20px, 44px);
+  --rc-pad: 2px;
+  --rc-inset: max(0px, (var(--rc-room) - var(--rc-button) - 2 * var(--rc-pad)) / 2);
+  @apply fixed flex flex-col items-center;
+  right: var(--rc-inset);
+  bottom: calc(var(--rc-letterbox-y) + min(var(--rc-inset), 8px));
+  gap: 2px;
+  padding: var(--rc-pad);
+  border: 1px solid var(--glass-dark-border-color);
   border-radius: var(--radius-pill);
   background: rgb(15 28 65 / 0.85);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-dark-highlight);
   color: var(--color-white);
   font-family: var(--font-sans);
   font-size: 14px;
-  opacity: 0.4;
+  /* At rest the whole rail composites over the slide. 0.75 keeps the white counter at 4.5:1
+     or more over any slide, a white one included (0.72 is the floor; it was 0.4, about 2.2:1). */
+  opacity: 0.75;
   transition: opacity var(--dur-base) var(--ease-brand);
   z-index: 10;
 }
@@ -18,15 +44,17 @@
 .reader-controls:focus-within {
   opacity: 1;
 }
+/* Faded, but still hit-testable: a pointer coming from a live frame moves inside the cross-origin
+   frame, so this window never hears it. With pointer events off, the press fell through and Next
+   did nothing (PRD r7, 6.3); now the rail's own :hover shows it as the pointer arrives. */
 .stage[data-idle="true"] + .reader-controls:not(:hover):not(:focus-within) {
   opacity: 0;
-  pointer-events: none;
 }
 .reader-controls__button {
   @apply inline-flex items-center justify-center;
-  min-width: 44px;
-  height: 44px;
-  padding: 0 var(--space-3);
+  width: var(--rc-button);
+  height: var(--rc-button);
+  padding: 0;
   border: 0;
   border-radius: var(--radius-pill);
   background: transparent;
@@ -45,24 +73,59 @@
   cursor: default;
 }
 .reader-controls__button svg {
-  width: 20px;
-  height: 20px;
+  width: min(20px, var(--rc-button) - 14px);
+  height: min(20px, var(--rc-button) - 14px);
 }
-.reader-controls__group {
-  @apply inline-flex items-center;
-  gap: 2px;
-  padding: 0 var(--space-1);
-  border-left: 1px solid rgb(255 255 255 / 0.2);
-  border-right: 1px solid rgb(255 255 255 / 0.2);
-}
-.reader-controls__group .reader-controls__button {
-  min-width: 36px;
-  height: 36px;
-  font-weight: var(--weight-bold);
-}
+/* The counter stacks the slide number over the total, split by a hairline: "12 / 50" is wider
+   than the rail. Screen readers hear "12 of 50". */
 .reader-controls__counter {
+  @apply flex flex-col items-center;
+  width: var(--rc-button);
   margin: 0;
-  padding: 0 var(--space-3);
+  padding: 4px 0;
+  font-size: 13px;
+  font-weight: var(--weight-bold);
+  line-height: 16px;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+.reader-controls__total {
+  margin-top: 2px;
+  padding-top: 2px;
+  border-top: 1px solid rgb(255 255 255 / 0.4);
+  min-width: 20px;
+  text-align: center;
+  font-weight: var(--weight-regular);
+}
+/* Solid fallbacks (glass spec 11). */
+@media (prefers-reduced-transparency: reduce) {
+  .reader-controls {
+    background: var(--glass-dark-solid);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+:root[data-flags*="glass:0"] .reader-controls,
+:root[data-glass="off"] .reader-controls {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+@media (forced-colors: active) {
+  .reader-controls {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .reader-controls__total {
+    border-top-color: CanvasText;
+  }
+}
+/* Audience window (PRD r7 9.4): the same rail holding only the menu button, a mouse fallback. It
+   shows while the cursor shows and leaves with it after 2 s idle, so nothing sits on the projector
+   at rest. */
+.audience[data-cursor="hidden"] .reader-controls--audience {
+  opacity: 0;
+  pointer-events: none;
 }

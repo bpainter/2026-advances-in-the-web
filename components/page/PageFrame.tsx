@@ -49,7 +49,13 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
   const [doneStep, setDoneStep] = useState<{ index: number } | null>(null);
   const current = useRef<{ handle: FrameHandle; stepIndex: number; flags: Record<string, boolean> } | null>(null);
   const generation = useRef(0);
-  const run = useRef<{ finish: () => void; cancel: () => void; playing: () => boolean } | null>(null);
+  /**
+   * The step run Next talks to (PRD r7, 6.4). `gen` is the entry that owns it, `handle` the
+   * document it plays in (null while the code lead runs), and `leading` marks the 400 ms lead: a
+   * press then cancels the lead and plays the step to its end at once, as a press during playback
+   * does.
+   */
+  const run = useRef<{ gen: number; handle: FrameHandle | null; leading: boolean; finish: () => void; cancel: () => void; playing: () => boolean } | null>(null);
   const reducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const frame = page.frame!;
   // The card has a 1 px border: the frame fills its content box (design review L9).
@@ -130,27 +136,70 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
       const segs = segments(target, cur.flags);
       cur.handle.watch(watchList, true);
       reportPlaying(true);
+      // Only this entry's run is cleared: a newer entry owns `run.current` once it has started.
+      const release = () => {
+        if (run.current?.gen === gen) run.current = null;
+      };
       void (async () => {
         let h = cur.handle;
         let last: StepResult | null = null;
         // The code highlight leads the playback by 400 ms, so the room reads the cause first (CX 4).
-        if (target.code && !reducedMotion) await new Promise((r) => window.setTimeout(r, CODE_LEAD_MS));
-        if (gen !== generation.current) return;
+        // The lead is a run of its own: a press during it plays the step to its end at once, where
+        // it used to find nothing playing and skip the step (PRD r7, 6.3).
+        let finishNow = false;
+        if (target.code && !reducedMotion) {
+          await new Promise<void>((resolve) => {
+            const t = window.setTimeout(resolve, CODE_LEAD_MS);
+            const stop = () => {
+              window.clearTimeout(t);
+              resolve();
+            };
+            run.current = {
+              gen,
+              handle: null,
+              leading: true,
+              playing: () => true,
+              finish: () => {
+                finishNow = true;
+                stop();
+              },
+              cancel: stop,
+            };
+          });
+        }
+        if (gen !== generation.current) return release();
         for (const [i, seg] of segs.entries()) {
-          if (gen !== generation.current) return;
+          if (gen !== generation.current) return release();
           if (seg.reload) {
             const fresh = mount(seg.flags, false);
             fresh.watch(watchList, true);
             await fresh.ready;
+            if (gen !== generation.current) {
+              fresh.dispose();
+              return release();
+            }
             show(fresh, stepIndex, seg.flags);
             h = fresh;
           }
           const stepRun = h.runStep({ ...target, actions: target.actions }, "animated", seg.startAt);
-          run.current = { finish: stepRun.finish, cancel: stepRun.cancel, playing: () => stepRun.playing };
+          const runHandle = h;
+          run.current = {
+            gen,
+            handle: runHandle,
+            leading: false,
+            playing: () => stepRun.playing,
+            finish: () => {
+              finishNow = true;
+              stepRun.finish();
+            },
+            cancel: stepRun.cancel,
+          };
+          // A press during the lead, or during an earlier segment, finishes this segment too.
+          if (finishNow) stepRun.finish();
           last = await stepRun.done;
           if (i === segs.length - 1 && gen === generation.current) current.current = { handle: h, stepIndex, flags: seg.flags };
         }
-        run.current = null;
+        release();
         if (gen === generation.current) {
           reportPlaying(false);
           setDoneStep({ index: stepIndex });
@@ -218,14 +267,48 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
     if (handsOn) h.focus();
   }, [handsOn]);
 
-  // Next while playing finishes the step instead of advancing.
+  // Next while playing finishes the step instead of advancing. A run counts as playing only while
+  // it belongs to the current entry and plays in the shown document: a run left behind by a
+  // replaced entry or a disposed document can never finish, and once it swallowed every Next
+  // (PRD r7, 6.2 H1). The stage's watchdog covers anything else that stops reporting done.
   useEffect(() => {
+    const live = () => {
+      const r = run.current;
+      if (!r) return null;
+      const shown = current.current?.handle ?? null;
+      const stale = r.gen !== generation.current || (r.handle !== null && (r.handle !== shown || r.handle.isDisposed));
+      if (stale || !r.playing()) {
+        if (stale) {
+          r.cancel();
+          run.current = null;
+        }
+        return null;
+      }
+      return r;
+    };
     registerPlayback({
-      isPlaying: () => Boolean(run.current?.playing()),
-      finish: () => run.current?.finish(),
+      isPlaying: () => live() !== null,
+      finish: () => live()?.finish(),
     });
     return () => registerPlayback(null);
   }, [registerPlayback]);
+
+  // Fault injection for `pnpm walk --advance` (PRD r7, 6.5), under automation only: dispose the
+  // shown document mid-run, and the next press must still advance.
+  useEffect(() => {
+    if (typeof navigator === "undefined" || !navigator.webdriver) return;
+    const w = window as unknown as { __disposeShownFrame?: () => boolean };
+    const fn = () => {
+      const h = current.current?.handle;
+      if (!h) return false;
+      h.dispose();
+      return true;
+    };
+    w.__disposeShownFrame = fn;
+    return () => {
+      if (w.__disposeShownFrame === fn) delete w.__disposeShownFrame;
+    };
+  }, []);
 
   // Unmount: drop every frame.
   useLayoutEffect(() => {

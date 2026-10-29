@@ -1,4 +1,23 @@
 import type { NextConfig } from "next";
+import { DEMO_ORIGIN, PRESENTER_ORIGIN } from "./lib/frames/origins";
+
+/**
+ * Production guard (PRD r7, 10.1): canonical URLs, Open Graph URLs and JSON-LD ids are built from
+ * NEXT_PUBLIC_PRESENTER_ORIGIN. A production build without it would point them all at localhost.
+ */
+if (process.env.VERCEL_ENV === "production" && !process.env.NEXT_PUBLIC_PRESENTER_ORIGIN && process.argv.includes("build")) {
+  throw new Error("NEXT_PUBLIC_PRESENTER_ORIGIN is unset on a production build; every canonical URL would point at localhost (docs/deploy.md).");
+}
+
+/**
+ * Every response from the demo host carries `X-Robots-Tag: noindex, nofollow` (PRD r7, 10.4). The
+ * host comes from NEXT_PUBLIC_DEMO_ORIGIN at build (127.0.0.1 locally); Next matches `has` hosts
+ * without the port, so the rule is left out when the two origins share a hostname.
+ */
+const demoHost = new URL(DEMO_ORIGIN).hostname;
+const presenterHost = new URL(PRESENTER_ORIGIN).hostname;
+const demoNoindex =
+  demoHost === presenterHost ? [] : [{ source: "/:path*", has: [{ type: "host" as const, value: demoHost.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") }], headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] }];
 
 // Static assets that sandboxed (opaque-origin) demo documents fetch cross-origin.
 const crossOriginAssets = [
@@ -55,6 +74,7 @@ const nextConfig: NextConfig = {
           { key: "X-Content-Type-Options", value: "nosniff" },
         ],
       },
+      ...demoNoindex,
     ];
   },
 };

@@ -4,6 +4,8 @@ import type { GlassContent, Slide } from "@/content/schema";
 import type { Mode } from "@/lib/mode";
 import { deck } from "@/content/deck";
 import { GlassClosing } from "./GlassClosing";
+import { NewTabLink } from "./NewTabLink";
+import { Wordmark } from "./Wordmark";
 
 interface Props {
   slide: Slide;
@@ -34,24 +36,22 @@ function Icon({ name, size }: { name?: string; size: number }) {
   return I ? <I size={size} strokeWidth={1.75} className="sg-icon" aria-hidden /> : null;
 }
 
-/** Two glass pills at y 1012 (spec 6.1): the site on the left, the event, speaker and slide number on the right. */
-function Footer({ slide, tone }: { slide: Slide; tone: "light" | "dark" }) {
+/**
+ * Two glass pills at y 1012 (spec 6.1): the site on the left, a link (PRD r7, 5.1), and the event,
+ * speaker and slide number on the right.
+ */
+function Footer({ slide, tone, mode }: { slide: Slide; tone: "light" | "dark"; mode: Mode }) {
   return (
     <footer className="sg-footer" data-tone={tone}>
-      <p className="sg-pill">{deck.site.label}</p>
+      <p className="sg-pill">
+        <NewTabLink href={deck.site.url} mode={mode}>
+          {deck.site.label}
+        </NewTabLink>
+      </p>
       <p className="sg-pill">
         FITC Web Unleashed 2026, Bermon Painter, Slalom <span className="sg-pill__num">{slide.index}</span>
       </p>
     </footer>
-  );
-}
-
-/** The Slalom wordmark, white on dark slides. */
-function Wordmark() {
-  return (
-    <p className="sg-wordmark" aria-label="Slalom">
-      slalom
-    </p>
   );
 }
 
@@ -60,7 +60,7 @@ function Wordmark() {
  * the slide's background comes from the stage; these layouts draw text, cards and panels with the
  * glass and chrome tokens only.
  */
-export function GlassSlide({ slide }: Props) {
+export function GlassSlide({ slide, mode }: Props) {
   const g = slide.glass as GlassContent | undefined;
   if (!g) throw new Error(`Slide ${slide.id} has a glass layout but no glass content`);
   switch (g.kind) {
@@ -73,7 +73,16 @@ export function GlassSlide({ slide }: Props) {
               <span key={l}>{l}</span>
             ))}
           </h1>
-          <Wordmark />
+          {/* The name and job title come from content/deck.ts, shared with the closing and the metadata (PRD r7, 4.2). */}
+          <p className="sg-cover__name">
+            <NewTabLink href={deck.speaker.linkedin} mode={mode} rel="me noopener">
+              {deck.speaker.name}
+            </NewTabLink>
+          </p>
+          <p className="sg-cover__role">
+            {deck.speaker.title}, {deck.speaker.org}
+          </p>
+          <Wordmark mode={mode} />
         </section>
       );
     case "grid":
@@ -102,7 +111,7 @@ export function GlassSlide({ slide }: Props) {
               </li>
             ))}
           </ul>
-          <Footer slide={slide} tone={g.tone} />
+          <Footer slide={slide} tone={g.tone} mode={mode} />
         </section>
       );
     case "quotes":
@@ -119,7 +128,7 @@ export function GlassSlide({ slide }: Props) {
               ))}
             </div>
           </div>
-          <Footer slide={slide} tone="dark" />
+          <Footer slide={slide} tone="dark" mode={mode} />
         </section>
       );
     case "statement":
@@ -132,7 +141,7 @@ export function GlassSlide({ slide }: Props) {
               ))}
             </h1>
           </div>
-          <Footer slide={slide} tone="dark" />
+          <Footer slide={slide} tone="dark" mode={mode} />
         </section>
       );
     case "people":
@@ -154,10 +163,10 @@ export function GlassSlide({ slide }: Props) {
               ))}
             </ul>
           </div>
-          <Footer slide={slide} tone="light" />
+          <Footer slide={slide} tone="light" mode={mode} />
         </section>
       );
     case "closing":
-      return <GlassClosing slide={slide} content={g} />;
+      return <GlassClosing slide={slide} content={g} mode={mode} />;
   }
 }

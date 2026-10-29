@@ -1,5 +1,5 @@
 import type { Action, DemoSection } from "@/content/demo-schema";
-import { repoFile, sectionFile } from "@/lib/demo-files";
+import { repoFile, sectionCode } from "@/lib/demo-files";
 
 const USED_TO = "demos/07-package-workflow/used-to";
 const T = (a: number, b: number): Action => ({ type: "terminal", lines: [a, b] });
@@ -8,7 +8,7 @@ const T = (a: number, b: number): Action => ({ type: "terminal", lines: [a, b] }
 export const section: DemoSection = {
   id: "f3-package-trust",
   background: "f3",
-  order: 14,
+  order: 13,
   label: "Package trust",
   feature: "Package trust",
   scenario:
@@ -40,7 +40,7 @@ export const section: DemoSection = {
       id: "f3-used-to",
       stage: "used-to",
       eyebrow: "Package trust",
-      title: "How we used to do it",
+      title: "What we used to do",
       intro:
         "This timeline shows npm attacks from August 2025 to October 2026. Here is how teams defended.",
       frame: {
@@ -117,7 +117,7 @@ export const section: DemoSection = {
       id: "f3-now",
       stage: "now",
       eyebrow: "Package trust",
-      title: "How we do it now",
+      title: "What we can do today",
       intro:
         "The install steps were recorded on this laptop against a test registry. The release steps are an example. The policy and workflow files are on the right.",
       frame: {
@@ -127,16 +127,8 @@ export const section: DemoSection = {
         hooks: ["reset"],
       },
       files: [
-        {
-          file: "pnpm-workspace.yaml",
-          lang: "yaml",
-          source: sectionFile("f3-package-trust", "pnpm-workspace.yaml"),
-        },
-        {
-          file: "publish.yml",
-          lang: "yaml",
-          source: sectionFile("f3-package-trust", "publish.yml"),
-        },
+        sectionCode("f3-package-trust", "pnpm-workspace.yaml", "yaml"),
+        sectionCode("f3-package-trust", "publish.yml", "yaml"),
       ],
       steps: [
         {

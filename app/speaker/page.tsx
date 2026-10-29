@@ -2,14 +2,24 @@ import type { Metadata } from "next";
 import { bySlideId, neighbours, slides, deck, sections } from "@/lib/content";
 import { PresenterProvider } from "@/lib/presenter/context";
 import { SlidePage } from "@/components/stage/SlidePage";
+import { slideMetadata } from "@/lib/seo";
 import { RenderedSlide } from "@/components/presenter/RenderedSlide";
 import { SpeakerView } from "@/components/presenter/SpeakerView";
 
-export const metadata: Metadata = { title: "Speaker · 2026 advances in the web", robots: { index: false } };
 export const dynamic = "force-dynamic";
 
 interface Props {
   searchParams: Promise<{ s?: string; step?: string; rehearse?: string }>;
+}
+
+/**
+ * Not indexed (PRD r7, 10.1). A shared link still unfurls as the slide in `?s=`, with a canonical
+ * to its `/s/<id>` page, and no JSON-LD.
+ */
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const { s } = await searchParams;
+  const slide = (s && bySlideId(s)) || slides[0];
+  return { ...slideMetadata(slide), title: `Speaker · ${deck.title}`, robots: { index: false, follow: true } };
 }
 
 /** Speaker window: current and next previews, notes, timer, demo health, controls (PRD 5.2). */

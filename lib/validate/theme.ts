@@ -97,8 +97,12 @@ export function lintTheme(css: string, file = THEME_SOURCE, opts: { perDemo?: bo
         if (!ok) add(line, `portal-layout selector "${sel}" must use .portal* or .glass-* class selectors only`);
       }
     }
+    // The one exception (PRD r7 7.2): `appearance: none` on native selects, so the theme can draw
+    // one chevron in every engine. The subject must be a select and nothing else.
+    const selectOnly = rule.selectors.every((sel) => /(?<![\w.-])select(?![\w-])/.test(compounds(sel).pop() ?? ""));
     rule.walkDecls((d) => {
       const prop = d.prop.toLowerCase();
+      if (prop === "appearance" && d.value.trim() === "none" && layer === "portal-theme" && selectOnly) return;
       if (DEMO_RELEVANT.test(prop)) add(String(d.source?.start?.line), `${prop} is never allowed in the theme ("${rule.selector}")`);
       else if (layer === "portal-theme" && LAYOUT.test(prop)) add(String(d.source?.start?.line), `${prop} is layout; not allowed in portal-theme ("${rule.selector}")`);
       else if (featureTarget && !PAINT_ONLY.test(prop)) add(String(d.source?.start?.line), `${prop} on "${rule.selector}": feature elements take paint properties only`);

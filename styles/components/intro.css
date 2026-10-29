@@ -56,6 +56,31 @@
   box-shadow: var(--glass-dark-highlight), var(--glass-dark-shadow);
   color: var(--glass-dark-ink);
 }
+/* "Still in motion" (PRD r7 8.3; r7-spec 3): M1 to M5 carry a small cyan chip above the title,
+   the eyebrow style on dark, with a dot so the label is never color alone. */
+.intro__group {
+  @apply inline-flex items-center self-start;
+  gap: 12px;
+  height: 44px;
+  margin: 0 0 24px;
+  padding: 0 20px 0 16px;
+  box-sizing: border-box;
+  border: 1px solid rgb(27 225 242 / 0.4);
+  border-radius: 999px;
+  background: rgb(27 225 242 / 0.12);
+  color: var(--cyan);
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: var(--weight-bold);
+}
+.intro__group::before {
+  content: "";
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: currentColor;
+}
 .intro__title {
   margin: 0;
   font-size: var(--intro-title-size);

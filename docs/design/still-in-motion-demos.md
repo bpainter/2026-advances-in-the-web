@@ -49,6 +49,8 @@ The fictional world: three storefront scenes (M1, M2, M5), the admin product edi
 
 ### 1.2 Opener: F1 "Still in motion" (kept, shortened)
 
+> PRD r7 (8) removed the opener. M1 to M5 intros carry a "Still in motion" chip, and the M1 intro takes over its framing line.
+
 The tile page stays as the group's opener and its safety net. When a demo is cut, its tile still names it. Budget 0.5 minutes, down from 1.0. Page and frame are unchanged (`single`, 1304 by 628, `watch-list` wrapper). Steps drop from four to two.
 
 **Tiles**, in demo order. Each tile has a feature name, a use and a wait signal. Update `demos/08-fast-follows/static/index.html`:
@@ -258,6 +260,7 @@ The top of the Ridgeline Trail product page. Image, name, price and rating summa
 - **Still moving.** The CSS Working Group settled the name in January 2026. Safari 27.2 renamed `flow-tolerance` to `fit-tolerance`. Keyboard focus order across lanes is an open accessibility problem.
 - **Talk browser.** Chrome with the flag on, checked in rehearsal (S0). Plan B, if the flagged build misrenders: a `showSafari` hook. It swaps the frame for a capture of the same steps from Safari 27.2, like D6's Firefox capture. Record it with `pnpm walk m2 --browser=webkit --capture` if Playwright's WebKit has the feature. If not, record it from Safari by hand.
 - **Fallback in the frame.** The wall declares `display: grid` and then `display: grid-lanes`, so browsers without support keep a regular grid. An `@supports not (display: grid-lanes)` block crops every photo to one height, with `object-fit: cover` and quotes clamped to four lines, so the fallback grid stays tidy.
+  > PRD r7 (7.1) changed this: the `@supports not` block now lays the wall out in CSS columns, so browsers without lanes still show a packed wall. The base rules crop every photo square, and that cropped grid is the enhancement-off state (s0).
 - **Intro tiles.** `support: { kind: "web-features", id: "grid-lanes", fallback: { missing: ["chrome", "edge", "firefox"], text: "a regular grid" } }`. The generated sentence will name Safari only. The speaker says the flag part aloud.
 
 ### Intro page (0.25 min)
@@ -606,6 +609,8 @@ Each milestone ends with `pnpm validate` green and `pnpm walk` in Chromium with 
 - **S7, rehearsal.** One full run with both windows on the talk laptop. The group from F1 to the end of M5 should run within 0.5 minutes of 10.5 minutes.
 
 ## 10. Timing
+
+> PRD r7 (8.1) removed the F1 opener: the pages now end at 38.75 and the section at 39.25.
 
 ### Per page
 

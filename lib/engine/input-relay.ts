@@ -11,30 +11,41 @@
  * Other engines need none of this and behave the same either way.
  *
  * The limit: WebKit honours the press only while the frame handles the message and in timers it
- * starts. Focus a page moves later, after a fetch or an animation frame, still has no press behind
- * it in a fresh document, so WebKit 26.0 keeps it on the previous element. A forward run has the
- * real key press inside the frame and restores focus as authored.
+ * starts. Focus a page moves later, after a fetch or an animation frame, has no press behind it in
+ * a fresh document, so WebKit 26.0 keeps it on the previous element. The runtime then asks again
+ * (`focus-request`), and the handle answers with `focus-grant` through `withInput`, so the second
+ * try carries the press while its window is open (review r7 M2). A forward run has the real key
+ * press inside the frame and restores focus as authored.
  */
 const WINDOW_MS = 1000;
 const TICK_MS = 16;
 
 let openUntil = 0;
 let ticking = false;
+/** The chain of the latest press. Older chains stop at their next tick. */
+let chain = 0;
 const queue: Array<() => void> = [];
 
-function tick() {
+function tick(gen: number) {
+  if (gen !== chain) return;
   while (queue.length) queue.shift()!();
-  if (performance.now() < openUntil) window.setTimeout(tick, TICK_MS);
+  if (performance.now() < openUntil) window.setTimeout(() => tick(gen), TICK_MS);
   else ticking = false;
 }
 
-/** Opens the window; call it inside the press, or inside a frame's forwarded-key message event
- *  (WebKit forwards the frame's activation with the message). */
+/**
+ * Opens the window; call it inside the press, or inside a frame's forwarded-key message event
+ * (WebKit forwards the frame's activation with the message). Every press starts a chain of its
+ * own: WebKit carries a press through timers for one second from that press, so a chain kept from
+ * an earlier press stops carrying anything a second after it, even while a later press keeps the
+ * window open. Two Backs under a second apart posted the second replay without a press, and the
+ * replay restored no focus (review r7 M2).
+ */
 export function notePress() {
   openUntil = performance.now() + WINDOW_MS;
-  if (ticking) return;
   ticking = true;
-  window.setTimeout(tick, TICK_MS);
+  const gen = ++chain;
+  window.setTimeout(() => tick(gen), TICK_MS);
 }
 
 let installed = false;

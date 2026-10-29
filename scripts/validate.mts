@@ -22,7 +22,10 @@ import type { SupportFile } from "@/lib/support-data";
 import { installedWebFeatures } from "@/lib/web-features";
 import { slides } from "@/lib/content";
 import { BACKGROUNDS } from "@/content/backgrounds";
-import { jpegSize, slideCopyIssues, validateV5 } from "@/lib/validate/v5";
+import { jpegSize, slideCopyIssues, validateR7, validateV5 } from "@/lib/validate/v5";
+import { deck } from "@/content/deck";
+import { navLinks } from "@/lib/nav";
+import { seoIssues } from "@/lib/validate/seo";
 import { decodeGrainPng, grainPixels } from "@/lib/grain";
 import { qrSvg } from "@/lib/qr";
 import { BACKGROUND_BY_DEMO } from "@/lib/frames/compose";
@@ -150,7 +153,17 @@ const wrapperIssues = validateWrappers(wrappedBuilds, shownFiles);
 const slidesCss = existsSync(path.join(root, "styles", "components", "slides-glass.css")) ? readFileSync(path.join(root, "styles", "components", "slides-glass.css"), "utf8") : "";
 const slideIssues = slideCopyIssues(slides.filter((s) => s.layout !== "demo-page"), slidesCss);
 
-const issues: Issue[] = [...all, ...(only ? [] : [...themeIssues(root), ...v5Issues, ...wrapperIssues, ...slideIssues])];
+// PRD r7: the speaker's links share one source, the "Still in motion" group, the drawer's coverage.
+const closing = slides.find((s) => s.glass?.kind === "closing");
+const r7Issues = validateR7({
+  deck,
+  closingUrl: closing?.glass?.kind === "closing" ? closing.glass.url : null,
+  sections: sections.map((s) => ({ id: s.id, group: s.group, pageIds: s.pages.map((p) => p.id), stages: s.pages.map((p) => p.stage) })),
+  slideIds: slides.map((s) => s.id),
+  nav: navLinks(),
+});
+
+const issues: Issue[] = [...all, ...(only ? [] : [...themeIssues(root), ...v5Issues, ...wrapperIssues, ...slideIssues, ...r7Issues, ...(await seoIssues(root))])];
 
 const inScope = (i: Issue) => !only || i.where.startsWith(only.split("-")[0]) || i.where === only;
 let errors = 0;

@@ -173,7 +173,7 @@ Region          x     y     w     h     Contents
 Background      0     0     1920  1080  glass-fan.jpg cover, --chrome-wash
 Eyebrow         64    48    *     36    feature name, 28/36 Bold, #002FAF, sentence case
 Step indicator  *     48    *     36    right edge at 1856, vertically centered
-Title           64    88    *     72    "How we used to do it" or "How we do it now", 64/72 Bold, navy
+Title           64    88    *     72    "What we used to do" or "What we can do today", 64/72 Bold, navy
 Meter           *     88    *     72    used-to last step only, right edge at 1856
 Frame card      64    176   880   864   radius 24, iframe 640 by 628 scaled 1.375
 Code card       976   176   880   864   radius 24, --chrome-code-surface

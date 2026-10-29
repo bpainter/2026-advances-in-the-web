@@ -9,20 +9,23 @@ not replace it.
 
 ## Pages, not slides
 
-The demo section is eleven `DemoSection`s (`content/sections/`): six core demos (D1 to D6), then
-F1 to F5. Core demos, F2 and F3 have three pages; F1, F4 and F5 have one.
+The demo section is fourteen `DemoSection`s (`content/sections/`): six core demos (D1 to D6), the
+five Still in motion demos (M1 to M5), then F2 to F4. Every section has three pages except F4,
+which has one. M1 to M5 set `group: "still-in-motion"`: their intro slides carry a "Still in
+motion" chip (`.intro__group`), and the navigation drawer lists them under that heading. PRD r7
+removed the F1 opener; the M1 intro takes over its framing line.
 
 | Stage | Page | What is on it |
 |---|---|---|
 | `intro` | Intro slide | Feature name, one-sentence description plus the generated support sentence, the browser (or tool) tiles, the "also uses" line, a captured still. No frame, no code, one step. |
-| `used-to` | How we used to do it | The today build on the left, excerpts of its code on the right (50/50), three steps (HTML, CSS, JavaScript), the meter on the last step. No callouts. |
-| `now` | How we do it now | The native build on the left, its shown files on the right, five steps at most with code and behavior together, two proofs at most, cautions on the last step (speaker window only). |
-| `single` | One page | F1, F4, F5: one 1792 by 864 slot. |
+| `used-to` | What we used to do | The today build on the left, excerpts of its code on the right (50/50), three steps (HTML, CSS, JavaScript), the meter on the last step. No callouts. |
+| `now` | What we can do today | The native build on the left, its shown files on the right, five steps at most with code and behavior together, two proofs at most, cautions on the last step (speaker window only). |
+| `single` | One page | F4: one 1792 by 864 slot. |
 
-`content/slides/index.ts` assembles the deck: the Claude Design opening, the 27 demo pages, the
-Claude Design closing. `timing.cumulative` is never typed: `content/sections/index.ts` computes it
-from the authored minutes (the section starts at 5.0); the closing starts after the section
-buffer at 31.0.
+`content/slides/index.ts` assembles the deck: the native opening (7 slides), the 40 demo pages,
+the native closing (3 slides), 50 slides in all. `timing.cumulative` is never typed:
+`content/sections/index.ts` computes it from the authored minutes (the section starts at 6.5);
+the last page ends at 38.75 and the closing starts after the section buffer at 39.25.
 
 Each step has `actions` (pointer, click, key, focus, type, paste, resize, toggle, navigate,
 network, hook, terminal, reveal, wait, assert), `code` (file, lines, `off` for enhancement-off
@@ -91,10 +94,28 @@ both: its `currentEntry` stays on the first entry after intercepted navigations,
 
 A replaying document takes focus first, and the replay is posted from a task that carries the
 presenter's press (`lib/engine/input-relay.ts`): Safari 26.0 refuses `focus()` in a cross-origin
-frame outside such a task. Focus a page moves later (after a fetch) still cannot be restored in a
-fresh document there; a forward run, which has the real key press, restores it. While an intro slide shows,
+frame outside such a task. Every press starts its own timer chain, because WebKit carries a press
+through timers for one second from that press only: two Backs under a second apart used to post the
+second replay from the first press's chain, after it had expired. Focus a page moves later (D4's
+navigate handler focuses `#content` once the fetch returns) has no press behind it, so the runtime
+notes a `focus()` that did not take during a run and sends `focus-request`; the handle answers
+`focus-grant` through `withInput`, and the runtime repeats the same `focus()` in that handler. That
+holds while the press's one second lasts; focus moved later in a long replay stays where WebKit left
+it (review r7 M2). A forward run, which has the real key press, restores it. While an intro slide shows,
 the next page's frame is loaded once in a hidden iframe to warm it (never for F2, whose apps log
 every request).
+
+Next during playback finishes the step; the next press advances (r7, section 6). A run counts as
+playing only while it belongs to the current step entry and plays in the shown document; a
+disposed document's run stops playing before it resolves. The 400 ms code lead is a run of its
+own, so a press during it plays the step to its end at once instead of skipping it. A `finish` for
+a run the frame has already ended posts its `step-done` again. The runtime's settle wait
+(`quiescence()`) ignores paused and infinite animations, gives up after 2000 ms, and each frame
+wait is an animation frame or 50 ms, whichever comes first, so a hidden window still reports done.
+If a run still reports playing 1500 ms after Next asked it to finish, the stage advances anyway
+(`window.__stuckPlayback`; rehearsal mode logs "Stuck playback on <page> <step>"). Once a step
+moves focus into a frame, the runtime forwards every deck key in scripted mode (Home, End,
+Backspace, Enter, `g`, `s`, `o` and `?` as well as the clicker keys); hands-on mode keeps them.
 
 ## Multi-page builds (M5)
 
@@ -127,7 +148,9 @@ the back/forward cache posts `ready` again (`pageshow` with `persisted`), and `p
 
 Asserts gained `style:<property>=<value>` (computed style). A `supports-blocks` enhancement may
 start off (M2): the runtime removes its `@supports` blocks before the first paint the presenter
-shows. The Chromium walk and `pnpm visuals` launch with `--enable-blink-features=CSSGridLanesLayout`
+shows. Off removes every `@supports` block, positive and negative, and inserts nothing, so M2's s0
+is the base rules alone: the cropped regular grid in every browser (PRD r7, 7.1). On restores both
+blocks: lanes where the browser has them, CSS columns where it does not. The Chromium walk and `pnpm visuals` launch with `--enable-blink-features=CSSGridLanesLayout`
 (Chrome's "CSS Grid Lanes Layout" flag, `chrome://flags/#css-grid-lanes-layout`) for M2.
 
 ## Spotlights (v5)
@@ -193,8 +216,13 @@ scrolls except D4. Wrapper data lives in `fixtures/portal-context.json` and the 
 ## Opening and closing slides (v5)
 
 The opening and closing slides are native glass layouts (`components/layouts/glass/`, text in
-`slide.glass`). The closing slide (`content/slides/34-closing.ts`) is always last: name, role and
-LinkedIn on dark glass and a QR code on solid white. `pnpm qr` (also in `predev` and `prebuild`)
+`slide.glass`). The cover centers the eyebrow, a three-line title and the speaker's name and job
+title as one group. The closing slide (`content/slides/34-closing.ts`) is always last: name, role and
+LinkedIn on dark glass and a QR code on solid white. The speaker's name, job title, LinkedIn URL
+and the Slalom URL live once in `content/deck.ts` (`speaker`, `org`); the validator checks that the
+closing's QR URL equals `deck.speaker.linkedin`. The site pill, both wordmarks, the cover name, the
+LinkedIn line and the QR code are links that open in a new tab (`NewTabLink`, `a[data-deck-link]`):
+in the tab order in reader mode, `tabIndex={-1}` in the audience window and speaker previews. `pnpm qr` (also in `predev` and `prebuild`)
 writes `public/qr/linkedin.svg` offline with the pinned `qrcode` package: error correction M, a
 4-module quiet zone, 14 stage px per module; `pnpm check` fails when a fresh render differs, and
 the walk checks the module size and the three lines.
@@ -220,7 +248,7 @@ only this file; logos are local (`public/logos/`).
 
 | Command | What it does |
 |---|---|
-| `pnpm check [--strict] [section]` | The validator (`lib/validate/rules.ts`): page order, step caps, proofs, bullets, word budgets, writing rules (dashes, "!", sentence and bullet length, banned words, "X, not Y", no TODO), code on every walk step, highlights of 12 lines spanning 20 at most, 44 columns and 40 lines, excerpt fidelity, intro support and visuals, eyebrow and title, callouts, meters, viewports, the timing table (`lib/validate/timing.ts`), v3 field names, theme lint and hashes. |
+| `pnpm check [--strict] [section]` | The validator (`lib/validate/rules.ts`): page order, step caps, proofs, bullets, word budgets, writing rules (dashes, "!", sentence and bullet length, banned words, "X, not Y", no TODO), code on every walk step, highlights of 12 lines spanning 20 at most, 44 columns and 40 lines, excerpt fidelity, intro support and visuals, eyebrow and title, callouts, meters, viewports, the timing table (`lib/validate/timing.ts`), v3 field names, theme lint and hashes, and (r7, `validateR7` in `lib/validate/v5.ts`) one LinkedIn URL for the deck and the QR, the Still in motion group, and the drawer listing every demo section once. |
 | `pnpm test` | `test:settle` (the spotlight gate with a fake clock), `test:validator` (one broken fixture per rule, theme lint included), `test:support` (the PRD 3.2 table), `test:contrast` (every text token over its surfaces, washes and palette). |
 | `pnpm validate` | typecheck, lint, meters, test, check. |
 | `pnpm backgrounds` | Measures every background's text zones into `content/.generated/backgrounds.json`. |
@@ -234,6 +262,10 @@ only this file; logos are local (`public/logos/`).
 | `pnpm meters` | Counts today builds' and native shown JavaScript at printWidth 80 into `content/.generated/meters.json`. |
 | `pnpm support [--tools]` | Writes `content/.generated/support.json`. |
 | `pnpm axe [section]` | axe-core in every frame with `glass:0`. |
+| `pnpm axe --presenter` | axe-core on presenter pages: `/s/title`, `/s/closing`, `/s/d1-intro` with the drawer closed and open, `/speaker` with it open. |
+| `pnpm walk --advance [page or section]` | r7 6.5, Chromium and WebKit: on every framed page, Next after the last step leaves within 1500 ms by key with focus in the frame, the reader Next button and the speaker's Next button, also after a press in the code lead or mid-playback and after the shown document is disposed mid-run; Back from the next slide lands on the last step. |
+| `pnpm walk transitions --fade=1`, `pnpm walk drawer`, `pnpm walk links` | r7 9.3 (the crossfade), 9.8 (the drawer's keyboard contract), 5.3 (the clicker after a slide link). The full walk runs the last two. |
+| `pnpm walk m2 --no-lanes` | Chromium without the Grid Lanes switch: M2's columns fallback (r7 7.1), as `--browser=firefox` checks it. |
 | `pnpm excerpt <file> <a-b> ...` | Prints an excerpt with the shown line numbers `code.lines` uses. |
 | `pnpm theme:sync`, `pnpm theme:lint` | See Frames and the theme. |
 

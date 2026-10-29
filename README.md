@@ -3,9 +3,10 @@
 Presenter app for Bermon Painter's FITC Web Unleashed 2026 talk. Next.js App Router, TypeScript,
 Tailwind 4 behind `@apply` only (JSX carries semantic class names), Slalom design-system tokens.
 
-The deck is the Claude Design opening (7 slides), the demo section (11 sections, 27 pages: an
-intro slide, "How we used to do it" and "How we do it now" for D1 to D6, F2 and F3, and single
-pages for F1, F4 and F5, each frame driven by the clicker) and the Claude Design closing. The demo
+The deck is the Claude Design opening (7 slides), the demo section (14 sections, 40 pages: an
+intro slide, "What we used to do" and "What we can do today" for D1 to D6, M1 to M5, F2 and F3,
+and a single page for F4, each frame driven by the clicker) and the Claude Design closing, 50
+slides in all. The demo
 section follows `docs/PRD-demos-v4.md` (schema v4) in the glass look of
 `docs/design/demo-glass-spec.md`; `docs/demo-engine.md` explains it. Still to come: the print route
 and PDF export, posters for the speaker previews.

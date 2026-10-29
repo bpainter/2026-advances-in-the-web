@@ -171,11 +171,26 @@ export type GlassContent =
   | { kind: "people"; title: string; people: { initials: string; name: string; role: string }[] }
   | { kind: "closing"; eyebrow: string; name: string; role: string; link: string; url: string; caption: string };
 
+/** The event the talk is part of (PRD r7, 10.3): the Event JSON-LD and the eyebrow read it. */
+export interface DeckEvent {
+  name: string;            // "FITC Web Unleashed 2026"
+  /** Derived from the fields below: "FITC Web Unleashed 2026, Toronto" (the cover eyebrow). */
+  label: string;
+  venue?: string;          // unknown until the speaker sends it (PRD r7, open question 2)
+  city: string;
+  region: string;          // "ON"
+  country: string;         // "CA"
+  startDate?: string;      // ISO 8601 with offset; the validator warns while it is unset
+  organizer: { name: string; url: string };
+}
+
 export interface Deck {
   title: string;
-  event: string;
+  event: DeckEvent;
   footerLabel: string;
   site: { label: string; url: string };   // footer link, left side
-  speaker: { name: string; title: string; org: string };
+  /** One source for the cover, the closing slide, the notes and the metadata (PRD r7, 4.2 and 5.1). */
+  speaker: { name: string; title: string; org: string; linkedin: string };
+  org: { name: string; url: string };
   targetMinutes: number;
 }

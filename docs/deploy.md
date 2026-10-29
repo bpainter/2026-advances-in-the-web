@@ -34,7 +34,9 @@ presenter uses decide which host shows what.
 ## Environment variables
 
 Set these for Production and Preview. They are `NEXT_PUBLIC_` values, inlined at build time, so
-a change needs a new deployment. No trailing slash.
+a change needs a new deployment. No trailing slash. A production build (`VERCEL_ENV=production`)
+without `NEXT_PUBLIC_PRESENTER_ORIGIN` fails in `next.config.ts`: every canonical URL, Open Graph
+URL and JSON-LD id is built from it, and would otherwise point at localhost.
 
 | Name | Value |
 |---|---|
@@ -68,6 +70,52 @@ Without the two values a build falls back to the local origins and points frames
   only, and only on Vercel builds. Frame documents come from route handlers, which no layout
   wraps, so they never load it. Windows under automation (Playwright walks and captures) and
   `?capture=1` send nothing.
+
+## Search and social
+
+The presenter's reader pages are meant to be found and shared; everything else is not (PRD r7,
+section 10).
+
+| Route | Indexed | Metadata |
+|---|---|---|
+| `/` | yes | the talk: Open Graph, Twitter card, canonical `/`, JSON-LD of the talk, speaker and session |
+| `/s/<id>` | yes | the slide: its own title and description, canonical `/s/<id>`, per-slide JSON-LD |
+| `/present`, `/speaker` | no (`noindex, follow`) | the `?s=` slide's Open Graph data, canonical to its `/s/<id>`, no JSON-LD |
+| frame documents and files | no | none: route handlers, no layout |
+
+- **Metadata.** `lib/seo.ts` builds every route's metadata in full (title, description, Open
+  Graph, Twitter, canonical, author) on `NEXT_PUBLIC_PRESENTER_ORIGIN`. The JSON-LD renders as a
+  `<script type="application/ld+json">` at the top of `<body>` (the App Router has no per-page
+  head slot for scripts; crawlers read it anywhere).
+- **The share image.** One image, `public/og/cover.jpg` (1200 by 630), captured from the cover
+  and committed: Vercel builds have no browser. `pnpm og` captures it from `pnpm dev` (or
+  `DECK_URL=<server> pnpm og`) and writes `public/og/cover.json`, the SHA-256 of what the cover is
+  drawn from (the title slide, `deck.speaker`, `deck.event`, `title.jpg`, the cover's CSS, the
+  title branch of `GlassSlide.tsx` and its components, the Slalom Sans files). `pnpm check` fails
+  with "The cover changed; run pnpm og" when any of them changes. The image URL carries
+  `?v=<first 8 of the hash>`, so social caches refresh when it does. Commit both files.
+- **Robots.** `/robots.txt` reads the `host` header. The presenter host allows `/` and `/s/`,
+  disallows the windows and the frame routes, and names `/sitemap.xml`. The demo host, and any
+  other host such as a preview, answers `Disallow: /`. Every response from the demo host also
+  carries `X-Robots-Tag: noindex, nofollow` (`next.config.ts`, keyed on the hostname of
+  `NEXT_PUBLIC_DEMO_ORIGIN`; the frame responses set it too).
+- **Sitemap.** `/sitemap.xml` lists `/` and every `/s/<id>` on the presenter origin, dated at
+  build time.
+- **Event data.** `content/deck.ts` `event` feeds the Event JSON-LD. Until `startDate` and `venue`
+  are set, it ships without a date or venue name and `pnpm check` warns.
+
+After a production deploy:
+
+```sh
+curl -s https://2026-advances-in-the-web.vercel.app/s/d1-used-to | rg 'og:image|twitter:card|rel="canonical"|application/ld\+json'
+curl -s https://2026-advances-in-the-web.vercel.app/robots.txt
+curl -s https://2026-advances-in-the-web-demos.vercel.app/robots.txt        # Disallow: /
+curl -sI "https://2026-advances-in-the-web-demos.vercel.app/demos/01-layered-ui/today" | rg -i x-robots-tag
+curl -s https://2026-advances-in-the-web.vercel.app/sitemap.xml | rg -c '<loc>'   # 51
+```
+
+Then run Google's Rich Results Test on `/` and `/s/d1-used-to`, and preview a share in LinkedIn's
+Post Inspector and in Slack. LinkedIn caches a card for about a week; Post Inspector refetches it.
 
 ## Not deployed: the F2 apps
 
@@ -104,6 +152,8 @@ NEXT_PUBLIC_PRESENTER_ORIGIN=http://localhost:3200 NEXT_PUBLIC_DEMO_ORIGIN=http:
 NEXT_PUBLIC_PRESENTER_ORIGIN=http://localhost:3200 NEXT_PUBLIC_DEMO_ORIGIN=http://127.0.0.1:3200 pnpm exec next start -p 3200
 ```
 
-Use `NEXT_DIST_DIR` for a build inside a checkout where `next dev` is running. To see the F2
+Use `NEXT_DIST_DIR` for a build inside a checkout where `next dev` is running. On that build,
+`http://localhost:3200/robots.txt` is the presenter's and `http://127.0.0.1:3200/robots.txt` the
+demo host's, and every `127.0.0.1:3200` response carries `X-Robots-Tag`. To see the F2
 poster fallback, use two `*.localhost` hostnames (for example `http://deck.localhost:3201` and
 `http://frames.localhost:3201`): the presenter is then not local, so the F2 frames are off.

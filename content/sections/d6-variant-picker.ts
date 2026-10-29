@@ -1,5 +1,5 @@
 import type { DemoSection } from "@/content/demo-schema";
-import { excerpt, sectionFile } from "@/lib/demo-files";
+import { excerpt, sectionCode } from "@/lib/demo-files";
 
 const TODAY = "demos/11-customizable-select/today";
 
@@ -37,7 +37,7 @@ export const section: DemoSection = {
       id: "d6-used-to",
       stage: "used-to",
       eyebrow: "Customizable select",
-      title: "How we used to do it",
+      title: "What we used to do",
       intro:
         "The Color field shows a photo beside each name. Teams built their own select for that.",
       frame: {
@@ -129,7 +129,7 @@ export const section: DemoSection = {
       id: "d6-now",
       stage: "now",
       eyebrow: "Customizable select",
-      title: "How we do it now",
+      title: "What we can do today",
       intro:
         "This is a real select with the same photos. It starts plain, the way every browser draws it.",
       frame: {
@@ -140,13 +140,9 @@ export const section: DemoSection = {
         hooks: ["reset", "showFirefox"],
       },
       files: [
-        {
-          file: "index.html",
-          lang: "html",
-          source: sectionFile("d6-variant-picker", "index.html"),
-        },
-        { file: "select.css", lang: "css", source: sectionFile("d6-variant-picker", "select.css") },
-        { file: "app.js", lang: "js", source: sectionFile("d6-variant-picker", "app.js") },
+        sectionCode("d6-variant-picker", "index.html", "html"),
+        sectionCode("d6-variant-picker", "select.css", "css"),
+        sectionCode("d6-variant-picker", "app.js", "js"),
       ],
       steps: [
         {

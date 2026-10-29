@@ -1,5 +1,5 @@
 import type { DemoSection } from "@/content/demo-schema";
-import { excerpt, sectionFile } from "@/lib/demo-files";
+import { excerpt, sectionCode } from "@/lib/demo-files";
 
 const TODAY = "demos/14-scoped-registries/today";
 
@@ -12,8 +12,9 @@ const TODAY = "demos/14-scoped-registries/today";
 export const section: DemoSection = {
   id: "m3-pricing-app",
   background: "m3",
-  order: 10,
+  order: 9,
   label: "Pricing app",
+  group: "still-in-motion",
   feature: "Scoped custom element registries",
   scenario: "Another team's pricing app runs on the editor's pricing tab, on a newer design system.",
   // web-features 3.44.0 predates Firefox 159 (27 Oct 2026); remove the fallback after the bump (3.4).
@@ -42,7 +43,7 @@ export const section: DemoSection = {
       id: "m3-used-to",
       stage: "used-to",
       eyebrow: "Scoped custom element registries",
-      title: "How we used to do it",
+      title: "What we used to do",
       intro: "The editor and a pricing app both use the price field. They need different versions.",
       frame: {
         build: "today",
@@ -127,7 +128,7 @@ export const section: DemoSection = {
       id: "m3-now",
       stage: "now",
       eyebrow: "Scoped custom element registries",
-      title: "How we do it now",
+      title: "What we can do today",
       intro: "This is the same editor with no iframe. The app brings its own registry.",
       frame: {
         build: "native",
@@ -137,12 +138,8 @@ export const section: DemoSection = {
         hooks: ["reset", "loadApp", "addTier", "blurField"],
       },
       files: [
-        { file: "index.html", lang: "html", source: sectionFile("m3-pricing-app", "index.html") },
-        {
-          file: "pricing-app.js",
-          lang: "js",
-          source: sectionFile("m3-pricing-app", "pricing-app.js"),
-        },
+        sectionCode("m3-pricing-app", "index.html", "html"),
+        sectionCode("m3-pricing-app", "pricing-app.js", "js"),
       ],
       steps: [
         {

@@ -6,9 +6,10 @@
   Trusted Types safe: no innerHTML, outerHTML, insertAdjacentHTML, document.write, DOMParser, eval,
   new Function, string timers, on* attribute writes or script src writes.
 
-  Parent -> runtime: init, run-step, replay-to, finish, reset, set-flag, set-mode, watch.
+  Parent -> runtime: init, run-step, replay-to, finish, reset, set-flag, set-mode, watch, focus-grant.
   Runtime -> parent: ready, rects, cue, unloading, step-done, error, key, resize-viewport (extension:
-  the `:viewport` resize target asks the parent to resize the iframe).
+  the `:viewport` resize target asks the parent to resize the iframe), focus-request (a focus()
+  the engine refused during a run; see "focus regain").
 */
 (function () {
   "use strict";
@@ -174,11 +175,18 @@
       setTimeout(r, ms);
     });
   }
+  // One animation frame, or 50 ms, whichever comes first: a hidden or occluded window runs no
+  // animation frames, and a run must still report done there (PRD r7, 6.4).
   function raf() {
     return new Promise(function (r) {
-      requestAnimationFrame(function () {
+      var done = false;
+      var finish = function () {
+        if (done) return;
+        done = true;
         r();
-      });
+      };
+      requestAnimationFrame(finish);
+      setTimeout(finish, 50);
     });
   }
   function focusable(el) {
@@ -186,6 +194,70 @@
     if (el.matches("a[href], button, input, select, textarea, summary, [tabindex], [contenteditable]")) return !el.disabled;
     return false;
   }
+  // ---------------------------------------------------------------- focus regain
+  // WebKit (Safari 26) ignores element.focus() in a cross-origin frame unless the frame is handling
+  // a press: the real key in the frame on a forward run, or the presenter's press carried by the
+  // message that starts a replay (lib/engine/input-relay.ts). Focus a page moves later, after a
+  // fetch, has neither in a fresh document: D4's navigate handler focuses #content once the partial
+  // arrives, so a Back replay left focus on the link (review r7 M2). During a run the runtime notes
+  // a focus() that did not take, and after the action asks the presenter for a `focus-grant`. The
+  // presenter posts it from a task that still carries the press, and the same focus() is made in
+  // its handler. Engines that never refuse never ask; without a press the second try fails as the
+  // first did. One try per refusal.
+  var crossOrigin = (function () {
+    try {
+      void window.top.location.href;
+      return false;
+    } catch (e) {
+      return true;
+    }
+  })();
+  var refusedFocus = null; // { el, native, options }
+  var focusGranted = null; // resolves the pending focus-request
+  var focusWatched = false;
+  function watchFocus() {
+    if (focusWatched) return;
+    focusWatched = true;
+    [window.HTMLElement, window.SVGElement].forEach(function (C) {
+      if (!C || !C.prototype || typeof C.prototype.focus !== "function") return;
+      var native = C.prototype.focus;
+      C.prototype.focus = function () {
+        var result = native.apply(this, arguments);
+        if (run && run.playing && !mirror && crossOrigin && embedded && this.isConnected) {
+          refusedFocus = document.activeElement === this ? null : { el: this, native: native, options: arguments[0] };
+        }
+        return result;
+      };
+    });
+  }
+  async function regainFocus() {
+    var pending = refusedFocus;
+    if (!pending || !frameId) return;
+    await new Promise(function (resolve) {
+      var t = setTimeout(done, 300);
+      function done() {
+        clearTimeout(t);
+        if (focusGranted === done) focusGranted = null;
+        resolve();
+      }
+      focusGranted = done;
+      post({ type: "focus-request", runId: run ? run.runId : undefined });
+    });
+    if (refusedFocus === pending) refusedFocus = null;
+  }
+  function grantFocus() {
+    var f = refusedFocus;
+    refusedFocus = null;
+    if (f && f.el.isConnected && document.activeElement !== f.el) {
+      try {
+        f.native.call(f.el, f.options);
+      } catch (e) {
+        /* not focusable now */
+      }
+    }
+    if (focusGranted) focusGranted();
+  }
+
   function isTextControl(el) {
     return !!el && (el.matches("input:not([type=button]):not([type=submit]):not([type=checkbox]):not([type=radio]), textarea, select") || el.isContentEditable);
   }
@@ -277,19 +349,42 @@
     await raf();
   }
 
+  // Waits for the work a step started: requests, a navigation, finite running animations. Paused
+  // and infinite animations never settle, so they do not count, and the whole wait gives up after
+  // 2000 ms: a step that cannot settle still reports done (PRD r7, 6.2 H1, path 3).
+  var QUIESCENCE_MS = 2000;
+  function settles(a) {
+    try {
+      if (a.playState !== "running" || !a.effect) return false;
+      var t = a.effect.getComputedTiming();
+      return isFinite(t.endTime) && isFinite(t.activeDuration);
+    } catch (e) {
+      return false;
+    }
+  }
   async function quiescence() {
     var start = Date.now();
+    var left = function () {
+      return Math.max(0, QUIESCENCE_MS - (Date.now() - start));
+    };
+    var capped = function (p) {
+      return Promise.race([p, sleep(left())]);
+    };
     while (pendingFetches > 0 && Date.now() - start < 1500) await sleep(20);
     try {
-      if (window.navigation && navigation.transition) await navigation.transition.finished.catch(function () {});
+      if (window.navigation && navigation.transition) await capped(navigation.transition.finished.catch(function () {}));
     } catch (e) {
       /* none */
     }
     try {
-      await Promise.all(
-        timeAnimations().map(function (a) {
-          return a.finished.catch(function () {});
-        }),
+      await capped(
+        Promise.all(
+          timeAnimations()
+            .filter(settles)
+            .map(function (a) {
+              return a.finished.catch(function () {});
+            }),
+        ),
       );
     } catch (e) {
       /* none */
@@ -303,17 +398,17 @@
   function enhancementSheets() {
     return Array.prototype.slice.call(document.querySelectorAll('link[rel="stylesheet"][data-flag="enhance-css"], style[data-flag="enhance-css"]'));
   }
-  var removedSupports = []; // { sheet, rules: [{ index, cssText, inserted }] }
+  var removedSupports = []; // { sheet, rules: [{ index, cssText }] }
   function applyFlag(flag, on) {
     flags[flag] = on;
     if (flag === "enhance-css") {
       var mode = document.documentElement.getAttribute("data-enhance-css-mode") || "all";
       if (mode === "supports-blocks") {
         if (!on) {
-          // Off is what a browser without the feature gets: every positive @supports block goes,
-          // and the body of every `@supports not (...)` block applies unconditionally (M2 s0: the
-          // cropped fallback grid, review r6 motion H1). Pages with positive blocks only (D3)
-          // behave as before.
+          // Off is the base rules only: every @supports block goes, positive and negative, and
+          // nothing is inserted in its place (PRD r7 7.1). M2 s0 is then the cropped regular grid
+          // in every browser, and s1 restores both blocks, so each browser shows what it supports:
+          // lanes, or the columns fallback. Pages with positive blocks only (D3) behave as before.
           removedSupports = [];
           Array.prototype.slice.call(document.styleSheets).forEach(function (sheet) {
             // The portal theme is never part of an enhancement (PRD v4, 6.2).
@@ -323,21 +418,8 @@
               for (var i = sheet.cssRules.length - 1; i >= 0; i--) {
                 var rule = sheet.cssRules[i];
                 if (!(rule instanceof CSSSupportsRule)) continue;
-                var body = /^\s*not[\s(]/i.test(rule.conditionText || "")
-                  ? Array.prototype.map.call(rule.cssRules, function (r) {
-                      return r.cssText;
-                    })
-                  : [];
-                removed.unshift({ index: i, cssText: rule.cssText, inserted: 0 });
+                removed.unshift({ index: i, cssText: rule.cssText });
                 sheet.deleteRule(i);
-                for (var j = 0; j < body.length; j++) {
-                  try {
-                    sheet.insertRule(body[j], i + removed[0].inserted);
-                    removed[0].inserted++;
-                  } catch (e) {
-                    /* unsupported rule */
-                  }
-                }
               }
             } catch (e) {
               /* cross-origin sheet */
@@ -350,7 +432,6 @@
             for (var k = 0; k < entry.rules.length; k++) {
               var r = entry.rules[k];
               try {
-                for (var n = 0; n < r.inserted; n++) entry.sheet.deleteRule(r.index);
                 entry.sheet.insertRule(r.cssText, Math.min(r.index, entry.sheet.cssRules.length));
               } catch (e) {
                 /* unsupported rule */
@@ -1127,6 +1208,7 @@
         } else {
           await exec(msg.actions[i], instant);
         }
+        if (refusedFocus) await regainFocus();
         postRects(true);
         activeUntil = Date.now() + 600;
       }
@@ -1134,6 +1216,7 @@
         await quiescence();
         finishAnimations();
       }
+      if (refusedFocus && !r.cancelled) await regainFocus();
     } catch (err) {
       if (!r.cancelled) post({ type: "error", runId: r.runId, code: err.code || "exception", message: err.message || String(err), action: r.cursor.action, selector: err.selector });
     }
@@ -1141,7 +1224,14 @@
     r.playing = false;
     if (r.cancelled) return; // a newer run owns the document now
     postRects(true);
-    post({ type: "step-done", runId: r.runId, stepId: r.stepId, asserts: asserts.slice(), digest: digest(), ms: Math.round(performance.now() - started), finished: !!r.finishing });
+    postDone({ type: "step-done", runId: r.runId, stepId: r.stepId, asserts: asserts.slice(), digest: digest(), ms: Math.round(performance.now() - started), finished: !!r.finishing });
+  }
+  // The last step-done this document posted. A `finish` for a run that has already ended means the
+  // presenter never heard it (it still shows the run as playing): post it again (PRD r7, 6.4).
+  var lastDone = null;
+  function postDone(msg) {
+    lastDone = msg;
+    post(Object.assign({}, msg));
   }
 
   async function replayTo(msg) {
@@ -1160,10 +1250,12 @@
           if (r.cancelled) break;
           r.cursor.action = a;
           await exec(acts[a], true);
+          if (refusedFocus) await regainFocus();
         }
       }
       await quiescence();
       finishAnimations();
+      if (refusedFocus && !r.cancelled) await regainFocus();
     } catch (err) {
       if (!r.cancelled) post({ type: "error", runId: r.runId, code: err.code || "exception", message: err.message || String(err), action: r.cursor.action, selector: err.selector });
     }
@@ -1171,19 +1263,24 @@
     r.playing = false;
     if (r.cancelled) return; // a newer run owns the document now
     postRects(true);
-    post({ type: "step-done", runId: r.runId, stepId: r.stepId, asserts: asserts.slice(), digest: digest(), ms: Math.round(performance.now() - started), finished: true });
+    postDone({ type: "step-done", runId: r.runId, stepId: r.stepId, asserts: asserts.slice(), digest: digest(), ms: Math.round(performance.now() - started), finished: true });
   }
 
   // ---------------------------------------------------------------- keys
 
   var FORWARD_ALWAYS = ["PageDown", "PageUp"];
   var FORWARD_SCRIPTED = ["ArrowRight", "ArrowLeft", " ", "b", ".", "f", "h", "l", "r", "t", "d", "F5"];
+  // A step can move focus into this frame (D1's Escape returns it to the Actions button), and from
+  // then on the presenter's window hears only what is forwarded. In scripted mode the deck's other
+  // keys go up too, so no clicker or keyboard key dies here; hands-on mode keeps them in the demo
+  // (PRD r7, 6.2 H2).
+  var FORWARD_SCRIPTED_ONLY = ["Home", "End", "Backspace", "Enter", "g", "s", "o", "?"];
   function onKeydown(e) {
     // The runtime's own dispatch(keydown) and hook-driven events are untrusted; let builds see them.
     if (!e.isTrusted) return;
     var key = e.key;
     var inText = isTextControl(document.activeElement);
-    var forward = FORWARD_ALWAYS.indexOf(key) !== -1 || (FORWARD_SCRIPTED.indexOf(key) !== -1 && (!handsOn || !inText));
+    var forward = FORWARD_ALWAYS.indexOf(key) !== -1 || (FORWARD_SCRIPTED.indexOf(key) !== -1 && (!handsOn || !inText)) || (FORWARD_SCRIPTED_ONLY.indexOf(key) !== -1 && !handsOn && !!frameId);
     if (forward) {
       e.preventDefault();
       e.stopPropagation();
@@ -1224,6 +1321,8 @@
         if (run && run.playing && run.runId === msg.runId) {
           run.finishing = true;
           finishAnimations();
+        } else if (lastDone && lastDone.runId === msg.runId) {
+          post(Object.assign({}, lastDone));
         }
         return;
       case "reset": {
@@ -1253,6 +1352,10 @@
           }
         }
         return;
+      case "focus-grant":
+        if (msg.frameId !== frameId) return;
+        grantFocus();
+        return;
       case "watch":
         watched = Array.isArray(msg.selectors) ? msg.selectors.slice() : [];
         liveRects = !!msg.live;
@@ -1281,6 +1384,7 @@
 
   function ready() {
     installFetch();
+    watchFocus();
     startObservers();
     var initialFlags = {};
     var fl = document.documentElement.getAttribute("data-flags");

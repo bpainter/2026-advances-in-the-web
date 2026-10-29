@@ -1,5 +1,5 @@
 import type { DemoSection } from "@/content/demo-schema";
-import { excerpt, sectionFile } from "@/lib/demo-files";
+import { excerpt, sectionCode } from "@/lib/demo-files";
 
 const TODAY = "demos/01-layered-ui/today";
 
@@ -33,7 +33,7 @@ export const section: DemoSection = {
       id: "d1-used-to",
       stage: "used-to",
       eyebrow: "Dialog element",
-      title: "How we used to do it",
+      title: "What we used to do",
       intro:
         "This is an order list, and Cancel order asks you to confirm first. Here is how teams commonly build it. The code lights up as the demo plays.",
       frame: {
@@ -128,7 +128,7 @@ export const section: DemoSection = {
       id: "d1-now",
       stage: "now",
       eyebrow: "Dialog element",
-      title: "How we do it now",
+      title: "What we can do today",
       intro:
         "This is the same order row, built from HTML the browser understands. The menu is a popover. The confirm box is a dialog.",
       frame: {
@@ -140,13 +140,9 @@ export const section: DemoSection = {
         poster: "/posters/d1-now.png",
       },
       files: [
-        { file: "index.html", lang: "html", source: sectionFile("d1-order-actions", "index.html") },
-        {
-          file: "enhance.css",
-          lang: "css",
-          source: sectionFile("d1-order-actions", "enhance.css"),
-        },
-        { file: "app.js", lang: "js", source: sectionFile("d1-order-actions", "app.js") },
+        sectionCode("d1-order-actions", "index.html", "html"),
+        sectionCode("d1-order-actions", "enhance.css", "css"),
+        sectionCode("d1-order-actions", "app.js", "js"),
       ],
       steps: [
         {

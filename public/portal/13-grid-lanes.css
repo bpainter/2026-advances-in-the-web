@@ -40,6 +40,14 @@
     inset: auto 0 0;
     padding: 20px 8px 6px;
   }
+  /* The now wall's cropped squares (s0, and the base grid in any browser) never let a quote run
+     past its photo: four lines at most (PRD r7 7.1; this was in the shown file before). */
+  .wall figcaption {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+  }
   /* Before the first layout (used to, s0), the items sit in source order at their width, the way
      a Masonry.js page looks before its script runs (review r6 motion M5). The shown CSS makes them
      absolute; this holds them in flow until the script has placed them. A held photo (render.ts)

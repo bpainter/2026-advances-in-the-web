@@ -19,7 +19,6 @@ export const BACKGROUND_BY_DEMO: Record<string, BackgroundId> = {
   "04-navigation-api": "d4",
   "05-trusted-types": "d5",
   "11-customizable-select": "d6",
-  "08-fast-follows": "f1",
   "12-anchor-hotspots": "m1",
   "13-grid-lanes": "m2",
   "14-scoped-registries": "m3",
@@ -174,6 +173,9 @@ export function cspFor(def: BuildDef, origin: string, flags: Record<string, bool
   return { header: reportOnly ? "Content-Security-Policy-Report-Only" : "Content-Security-Policy", value };
 }
 
+/** Frame documents and build files never belong in a search index (PRD r7, 10.4). */
+export const ROBOTS_HEADERS = { "X-Robots-Tag": "noindex, nofollow" } as const;
+
 export function frameResponse(html: string, def: BuildDef, origin: string, flags: Record<string, boolean>): Response {
   const csp = cspFor(def, origin, flags);
   return new Response(html, {
@@ -184,6 +186,7 @@ export function frameResponse(html: string, def: BuildDef, origin: string, flags
       "X-Content-Type-Options": "nosniff",
       "Referrer-Policy": "no-referrer",
       "Cache-Control": "no-store",
+      ...ROBOTS_HEADERS,
     },
   });
 }
@@ -221,6 +224,6 @@ export function buildFile(def: BuildDef, file: string): Response | null {
   const ext = abs.split(".").pop() ?? "";
   return new Response(readFileSync(/*turbopackIgnore: true*/ abs), {
     status: 200,
-    headers: { "Content-Type": TYPES[ext] ?? "application/octet-stream", "X-Content-Type-Options": "nosniff", "Cache-Control": "no-store" },
+    headers: { "Content-Type": TYPES[ext] ?? "application/octet-stream", "X-Content-Type-Options": "nosniff", "Cache-Control": "no-store", ...ROBOTS_HEADERS },
   });
 }

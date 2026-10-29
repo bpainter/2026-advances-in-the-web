@@ -37,7 +37,7 @@ export function checkDistinct(report: Report) {
 }
 
 /** Walks the deck slide by slide with Shift+ArrowRight and checks each slide's background and grain. */
-export async function walkDeck(page: Page, base: string, slides: Slide[], report: Report) {
+export async function walkDeck(page: Page, base: string, slides: Slide[], report: Report, perSlide?: (slide: Slide) => Promise<void>) {
   console.log(`\n== deck (${slides.length} slides)`);
   await page.goto(`${base}/present?s=${slides[0].id}`);
   const tokenOpacity = Number((await page.evaluate(`getComputedStyle(document.documentElement).getPropertyValue("--grain-opacity").trim()`)) as string);
@@ -66,6 +66,8 @@ export async function walkDeck(page: Page, base: string, slides: Slide[], report
       else if (Math.abs(v.grain - tokenOpacity) > 0.001 || v.blend !== "overlay") problems.push(`${slide.id}: grain at ${v.grain} ${v.blend}; the token says ${tokenOpacity} overlay`);
       if (i > 0 && !v.decoded.includes(want)) problems.push(`${slide.id}: ${want} was not decoded before arrival`);
       if (slide.id === "closing") await checkClosing(page, report);
+      // Round 7 checks per slide (scripts/walk-r7.mts), on the slide as it arrived.
+      if (perSlide) await perSlide(slide);
     }
     if (i < slides.length - 1) {
       // A frame may take focus while it swaps documents and drop the key; press again until the
@@ -144,7 +146,14 @@ async function checkClosing(page: Page, report: Report) {
     const r = img.getBoundingClientRect();
     const svg = await (await fetch(img.getAttribute("src"))).text();
     const modules = Number(/data-modules="(\\d+)"/.exec(svg)?.[1] || 0);
-    const text = (sel) => document.querySelector(sel)?.textContent?.trim() ?? "";
+    // The visible text only: a new-tab link carries visually hidden ", opens in a new tab" (PRD r7 5.1).
+    const text = (sel) => {
+      const el = document.querySelector(sel);
+      if (!el) return "";
+      const clone = el.cloneNode(true);
+      clone.querySelectorAll(".visually-hidden, .sr-only").forEach((h) => h.remove());
+      return clone.textContent.trim();
+    };
     return { width: r.width / scale, height: r.height / scale, modules, eyebrow: text(".sg-closing .sg-eyebrow"), name: text(".sg-closing__name"), role: text(".sg-closing__role"), link: text(".sg-closing__link") };
   })()`)) as { width: number; height: number; modules: number; eyebrow: string; name: string; role: string; link: string } | null;
   if (!v) return report.fail("closing", "no QR image");

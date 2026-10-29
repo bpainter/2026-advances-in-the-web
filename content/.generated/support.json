@@ -316,7 +316,7 @@
           "date": "2026-03-24"
         }
       ],
-      "since": "It has been available in Safari since March 2026. Chrome, Edge and Firefox show a regular grid.",
+      "since": "It has been available in Safari since March 2026. Chrome, Edge and Firefox show CSS columns.",
       "alsoUses": null
     },
     "m3-pricing-app": {

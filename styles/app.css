@@ -56,5 +56,7 @@
 @import "./components/audience.css";
 @import "./components/speaker.css";
 @import "./components/reader-controls.css";
+@import "./components/nav-drawer.css";
+@import "./components/stage-transition.css";
 @import "./components/keyboard-help.css";
 @import "./components/not-found.css";

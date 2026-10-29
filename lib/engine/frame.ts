@@ -1,5 +1,5 @@
 import type { Action, Step } from "@/content/demo-schema";
-import { notePress } from "./input-relay";
+import { notePress, withInput } from "./input-relay";
 import { DEFAULT_PACE, parseFromRuntime, type AssertResult, type Cursor, type Cue, type Flags, type FromRuntime, type Layer, type Rect, type RunMode, type ToRuntime } from "./protocol";
 
 export interface StepResult {
@@ -78,6 +78,8 @@ export class FrameHandle {
   private readyResolvers: Array<() => void> = [];
   private isReady = false;
   private run: { runId: number; stepId: string; mode: RunMode; actions: Action[]; resolve: (r: StepResult) => void; playing: boolean; steps?: { stepId: string; actions: Action[] }[] } | null = null;
+  /** The handle is gone: no run on it can play again (PRD r7, 6.4). */
+  private disposed = false;
   private pendingResume: { kind: "run" | "replay"; cursor: Cursor } | null = null;
   private watched: string[] = [];
   private live = false;
@@ -163,7 +165,25 @@ export class FrameHandle {
       case "resize-viewport":
         this.viewportListeners.forEach((l) => l({ inlineSize: msg.inlineSize, ms: msg.ms }));
         return;
+      case "focus-request":
+        // A focus() the page made after a fetch did not take in WebKit (review r7 M2). The grant
+        // goes out on the press's timer chain while it is open, so the runtime's second try carries
+        // the press; without one it goes now and the try fails as the first did.
+        withInput(() => {
+          if (!this.disposed) this.post({ v: 2, type: "focus-grant", frameId: this.id });
+        });
+        return;
     }
+  }
+
+  /**
+   * A run this handle no longer tracks can never hear its `step-done`: settle it, so nothing waits
+   * on it or reports it playing (PRD r7, 6.4, the stale "playing" run).
+   */
+  private settle(run: NonNullable<FrameHandle["run"]> | null) {
+    if (!run) return;
+    run.playing = false;
+    run.resolve({ asserts: [], digest: "", ms: 0, finished: false });
   }
 
   /** Plays one step; animated or instant. Resolves on `step-done`. */
@@ -171,24 +191,38 @@ export class FrameHandle {
     const runId = nextRunId++;
     let resolve!: (r: StepResult) => void;
     const done = new Promise<StepResult>((r) => (resolve = r));
-    const run = { runId, stepId: step.id, mode, actions: step.actions, resolve, playing: true };
-    this.run = run;
+    const run = { runId, stepId: step.id, mode, actions: step.actions, resolve, playing: !this.disposed };
+    if (this.disposed) {
+      resolve({ asserts: [], digest: "", ms: 0, finished: false });
+    } else {
+      if (this.run) this.settle(this.run);
+      this.run = run;
+    }
+    // A finish asked for before the run reached the frame (a press during the code lead, or while
+    // the document loads) is posted right after the run, never ahead of it: the runtime drops a
+    // finish for a run it has not started.
+    let posted = false;
+    let finishAsked = false;
+    const postFinish = () => this.post({ v: 2, type: "finish", frameId: this.id, runId });
     void this.ready.then(() => {
       if (this.run !== run) return;
       this.post({ v: 2, type: "run-step", frameId: this.id, runId, stepId: step.id, actions: step.actions, mode, startAt });
+      posted = true;
+      if (finishAsked) postFinish();
     });
     return {
       runId,
       get playing() {
         return run.playing;
       },
-      finish: () => this.post({ v: 2, type: "finish", frameId: this.id, runId }),
+      finish: () => {
+        finishAsked = true;
+        if (posted) postFinish();
+      },
       cancel: () => {
-        if (this.run === run) {
-          this.run = null;
-          run.playing = false;
-          resolve({ asserts: [], digest: "", ms: 0, finished: false });
-        }
+        if (this.run === run) this.run = null;
+        run.playing = false;
+        resolve({ asserts: [], digest: "", ms: 0, finished: false });
       },
       done,
     };
@@ -199,6 +233,8 @@ export class FrameHandle {
     const runId = nextRunId++;
     return new Promise<StepResult>((resolve) => {
       const list = steps.map((s) => ({ stepId: s.id, actions: s.actions }));
+      if (this.disposed) return resolve({ asserts: [], digest: "", ms: 0, finished: false });
+      if (this.run) this.settle(this.run);
       this.run = { runId, stepId: steps[steps.length - 1]?.id ?? "s0", mode: "instant", actions: [], resolve, playing: true, steps: list };
       // Posted in the caller's task when the frame is ready, so a press it carries reaches the frame.
       const post = () => {
@@ -262,11 +298,20 @@ export class FrameHandle {
     return () => this.readyListeners.delete(cb);
   }
 
+  /** True once the handle's frame is removed. */
+  get isDisposed() {
+    return this.disposed;
+  }
+
   dispose() {
+    this.disposed = true;
     byId.delete(this.id);
     if (this.iframe.contentWindow) bySource.delete(this.iframe.contentWindow);
-    this.run?.resolve({ asserts: [], digest: "", ms: 0, finished: false });
+    // `playing` turns false before the run resolves: a disposed run reported playing forever, and
+    // every Next then asked it to finish (PRD r7, 6.2 H1, path 1).
+    const run = this.run;
     this.run = null;
+    this.settle(run);
     this.iframe.remove();
   }
 }

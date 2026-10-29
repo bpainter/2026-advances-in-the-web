@@ -6,7 +6,6 @@ import { storefrontMerch } from "./storefront-merch";
 import { supportCase } from "./support-case";
 import { productPage } from "./product-page";
 import { productEditor } from "./product-editor";
-import { watchList } from "./watch-list";
 import { advisoryFeed } from "./advisory-feed";
 import { terminalWindow } from "./terminal-window";
 import { ciReport } from "./ci-report";
@@ -28,7 +27,6 @@ export const WRAPPERS: Partial<Record<WrapperId, WrapperDef>> = {
   "support-case": supportCase,
   "product-page": productPage,
   "product-editor": productEditor,
-  "watch-list": watchList,
   "storefront-product": storefrontProduct,
   "advisory-feed": advisoryFeed,
   "terminal-window": terminalWindow,

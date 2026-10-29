@@ -4,6 +4,8 @@
  * A and AA, and lists violations. The contrast unit test covers the blurred surfaces.
  *
  *   pnpm axe [section-id]
+ *   pnpm axe --presenter    presenter pages (PRD r7 5.3 and 9.8): /s/title, /s/closing, /s/d1-intro
+ *                           with the drawer closed and open, /speaker with it open
  */
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
@@ -15,6 +17,47 @@ import { flagsQuery, frameUrl } from "@/lib/frames/origins";
 const require = createRequire(import.meta.url);
 const axeSource = readFileSync(require.resolve("axe-core/axe.min.js"), "utf8");
 const only = process.argv.slice(2).find((a) => !a.startsWith("--"));
+const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
+type AxeResult = { violations: { id: string; impact: string; help: string; nodes: { target: string[] }[] }[] };
+
+if (process.argv.includes("--presenter")) {
+  const base = process.env.DECK_URL ?? "http://localhost:3000";
+  const browser = await chromium.launch();
+  const context = await browser.newContext({ viewport: { width: 1600, height: 900 } });
+  const page = await context.newPage();
+  const openDrawer = async () => {
+    await page.locator(".nav-drawer-trigger").first().click();
+    await page.waitForFunction(`document.querySelector("#deck-nav")?.open === true`, null, { timeout: 5000 });
+    // The drawer's entry transition (200 ms) settles before the scan.
+    await page.waitForTimeout(400);
+  };
+  const targets: { where: string; path: string; viewport?: { width: number; height: number }; drawer?: boolean }[] = [
+    { where: "/s/title", path: "/s/title" },
+    { where: "/s/closing", path: "/s/closing" },
+    { where: "/s/d1-intro", path: "/s/d1-intro" },
+    { where: "/s/d1-intro, drawer open", path: "/s/d1-intro", drawer: true },
+    { where: "/speaker, drawer open", path: "/speaker?s=d1-intro", viewport: { width: 1440, height: 900 }, drawer: true },
+  ];
+  let violations = 0;
+  for (const t of targets) {
+    await page.setViewportSize(t.viewport ?? { width: 1600, height: 900 });
+    await page.goto(`${base}${t.path}`);
+    await page.waitForLoadState("networkidle").catch(() => {});
+    await page.waitForTimeout(800);
+    if (t.drawer) await openDrawer();
+    // The live demo frames are scanned on their own (`pnpm axe`); here only the presenter's page.
+    await page.evaluate(axeSource);
+    const result = (await page.evaluate(`axe.run({ exclude: [["iframe.page-frame__iframe"]] }, { runOnly: { type: "tag", values: ${JSON.stringify([...TAGS, "best-practice"])} }, rules: { "region": { enabled: true } } })`)) as AxeResult;
+    if (result.violations.length === 0) console.log(`✓ ${t.where}: no violations`);
+    for (const v of result.violations) {
+      violations++;
+      console.log(`✖ ${t.where}: ${v.id} (${v.impact}) ${v.help}: ${v.nodes.map((n) => n.target.join(" ")).slice(0, 4).join(", ")}`);
+    }
+  }
+  await browser.close();
+  console.log(`\n${targets.length} presenter page(s), ${violations} violation(s)`);
+  process.exit(violations ? 1 : 0);
+}
 
 const seen = new Set<string>();
 const targets: { where: string; url: string; viewport: { width: number; height: number } }[] = [];
@@ -49,7 +92,7 @@ for (const t of targets) {
   await page.goto(t.url);
   await page.waitForTimeout(500);
   await page.evaluate(axeSource);
-  const result = (await page.evaluate(`axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"] } })`)) as { violations: { id: string; impact: string; help: string; nodes: { target: string[] }[] }[] };
+  const result = (await page.evaluate(`axe.run(document, { runOnly: { type: "tag", values: ${JSON.stringify(TAGS)} } })`)) as AxeResult;
   if (result.violations.length === 0) console.log(`✓ ${t.where}: no violations`);
   for (const v of result.violations) {
     violations++;

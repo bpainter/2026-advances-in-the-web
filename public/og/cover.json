@@ -1,0 +1,18 @@
+{
+  "hash": "5bb34881ea8846d525515019e41e1556d41bf74f939f90c70dad386ec67f85fa",
+  "width": 1200,
+  "height": 630,
+  "bytes": 109820,
+  "imageSha256": "811f33316f2ec76ea2c7375543106ec183d21a8aecf99f2c324064411e888230",
+  "source": "/s/title?capture=1",
+  "inputs": {
+    "title slide": "8381c9dcbb9b54e249ba79dd95d28296e1bb002e046974a422ef8831adbef941",
+    "deck.speaker": "9d083c3ff69e78132e6162c3da541615311f976b7c03498a10bb95ef2076116c",
+    "deck.event": "a8f5293b3c033865b8e49ac8bd53ab31562412ca278f096ea05b5f15bd371142",
+    "public/backgrounds/v5/title.jpg": "8da6fd9a54da76c0207d5c46974ab68678898ae12498e3d9743d655acbaf34cd",
+    "styles/components/slides-glass.css (cover rules)": "ec060e8af59aa73544496f27aecb2b15125f0c1a1c0a7f46ab908022e45bbab4",
+    "components/layouts/glass/GlassSlide.tsx (title branch and its components)": "04d906a8c9b5c404f0fde907c553e7e973b7b6454b8f4dc31466acb3b2a2da81",
+    "public/fonts/SlalomSans-Regular.otf": "f7b797d40cbd8995a2594f225e0b5ee4d90e1b162d77d5b30635d7bdfab97f98",
+    "public/fonts/SlalomSans-Bold.otf": "93c60067d85e62423e03a0f97a61fb6b7dc1bed3bd9255e15a8724a0bd5b65ba"
+  }
+}

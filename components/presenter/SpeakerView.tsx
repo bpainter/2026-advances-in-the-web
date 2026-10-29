@@ -3,9 +3,11 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { Slide } from "@/content/schema";
 import { hasFrame, type Action, type DemoPage, type DemoSection, type Step } from "@/content/demo-schema";
+import { Menu } from "lucide-react";
 import { usePresenter } from "@/lib/presenter/context";
 import { frameUrl } from "@/lib/frames/origins";
 import { Timer, TimerBadge } from "./Timer";
+import { NavTrigger, isNavOpen } from "@/components/chrome/NavDrawer";
 
 const NOTES_KEY = "deck:notes-size";
 const TIMER_KEY = "deck:timer-shown";
@@ -143,7 +145,7 @@ export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative,
   // Rehearsal (`d`): the next step's scripted actions also show under Next (PRD v4, 5.1 item 7).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "d" && !e.metaKey && !e.ctrlKey && !e.altKey && !(e.target instanceof HTMLInputElement)) setShowActions((v) => !v);
+      if (e.key === "d" && !isNavOpen() && !e.metaKey && !e.ctrlKey && !e.altKey && !(e.target instanceof HTMLInputElement)) setShowActions((v) => !v);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -332,6 +334,11 @@ export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative,
 
       <footer className="speaker__bottom">
         <nav className="speaker__controls" aria-label="Presenter controls">
+          {/* The drawer (PRD r7, 9.4); the current preview's stage renders the dialog it opens. */}
+          <NavTrigger className="speaker__button">
+            <Menu aria-hidden="true" />
+            Slides
+          </NavTrigger>
           <button type="button" className="speaker__button" onClick={() => perform({ type: "retreat" })}>
             Previous
           </button>

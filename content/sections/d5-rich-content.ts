@@ -1,5 +1,5 @@
 import type { DemoSection } from "@/content/demo-schema";
-import { excerpt, sectionFile } from "@/lib/demo-files";
+import { excerpt, sectionCode } from "@/lib/demo-files";
 
 const TODAY = "demos/05-trusted-types/today";
 
@@ -32,7 +32,7 @@ export const section: DemoSection = {
       id: "d5-used-to",
       stage: "used-to",
       eyebrow: "Trusted Types",
-      title: "How we used to do it",
+      title: "What we used to do",
       split: "60/40",
       intro:
         "This product page shows CMS content in three places. Each place writes HTML its own way.",
@@ -119,7 +119,7 @@ export const section: DemoSection = {
       id: "d5-now",
       stage: "now",
       eyebrow: "Trusted Types",
-      title: "How we do it now",
+      title: "What we can do today",
       split: "60/40",
       intro:
         "This is the same page with one rule in the header. All three places write HTML through one policy we review.",
@@ -132,13 +132,9 @@ export const section: DemoSection = {
         poster: "/posters/d5-now.png",
       },
       files: [
-        {
-          file: "csp-header.http",
-          lang: "http",
-          source: sectionFile("d5-rich-content", "csp-header.http"),
-        },
-        { file: "app.js", lang: "js", source: sectionFile("d5-rich-content", "app.js") },
-        { file: "index.html", lang: "html", source: sectionFile("d5-rich-content", "index.html") },
+        sectionCode("d5-rich-content", "csp-header.http", "http"),
+        sectionCode("d5-rich-content", "app.js", "js"),
+        sectionCode("d5-rich-content", "index.html", "html"),
       ],
       steps: [
         {

@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { deck } from "@/content/deck";
 import { SiteAnalytics } from "@/components/presenter/SiteAnalytics";
+import { baseMetadata } from "@/lib/seo";
 import "@/styles/app.css";
 
-export const metadata: Metadata = {
-  title: deck.title,
-  description: `${deck.event}. ${deck.speaker.name}, ${deck.speaker.title}, ${deck.speaker.org}.`,
-};
+/** The talk's card with no canonical: pages set their own in full (lib/seo.ts, PRD r7 10.1). */
+export const metadata: Metadata = baseMetadata();
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

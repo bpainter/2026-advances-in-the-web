@@ -1,5 +1,5 @@
 import type { DemoSection } from "@/content/demo-schema";
-import { excerpt, sectionFile } from "@/lib/demo-files";
+import { excerpt, sectionCode } from "@/lib/demo-files";
 
 const TODAY = "demos/12-anchor-hotspots/today";
 
@@ -12,8 +12,9 @@ const TODAY = "demos/12-anchor-hotspots/today";
 export const section: DemoSection = {
   id: "m1-shop-the-look",
   background: "m1",
-  order: 8,
+  order: 7,
   label: "Shop the look",
+  group: "still-in-motion",
   feature: "Anchor positioning",
   scenario: "Pins on a store photo open product cards. Cards flip at the edge and follow the photo.",
   // The whole feature waits on two Safari 27 position-visibility values; the tiles read the parts
@@ -28,8 +29,9 @@ export const section: DemoSection = {
     {
       id: "m1-intro",
       stage: "intro",
+      // Said on arrival; it carries the framing of the removed F1 opener (PRD r7, 8.3).
       intro:
-        "Next is a storefront photo you can shop. Each pin opens a product card beside it. Near an edge, the card has to move.",
+        "The next five features are still in motion. Prototype now, and check Baseline before you ship. First, a store photo where each pin opens a product card.",
       description: "Anchor positioning places an element beside another one and moves it when space runs out.",
       visual: {
         src: "/intro/m1-shop-the-look.png",
@@ -44,7 +46,7 @@ export const section: DemoSection = {
       id: "m1-used-to",
       stage: "used-to",
       eyebrow: "Anchor positioning",
-      title: "How we used to do it",
+      title: "What we used to do",
       intro: "Each pin opens a product card. Script decides where it fits.",
       split: "60/40",
       frame: {
@@ -142,7 +144,7 @@ export const section: DemoSection = {
       id: "m1-now",
       stage: "now",
       eyebrow: "Anchor positioning",
-      title: "How we do it now",
+      title: "What we can do today",
       intro: "This is the same photo with no positioning script. Each card is a popover tied to its pin.",
       split: "60/40",
       frame: {
@@ -153,8 +155,8 @@ export const section: DemoSection = {
         hooks: ["reset"],
       },
       files: [
-        { file: "index.html", lang: "html", source: sectionFile("m1-shop-the-look", "index.html") },
-        { file: "look.css", lang: "css", source: sectionFile("m1-shop-the-look", "look.css") },
+        sectionCode("m1-shop-the-look", "index.html", "html"),
+        sectionCode("m1-shop-the-look", "look.css", "css"),
       ],
       steps: [
         {

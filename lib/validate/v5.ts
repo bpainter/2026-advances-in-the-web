@@ -183,3 +183,46 @@ export function slideCopyIssues(slides: { id: string; glass?: GlassContent; spea
   for (const m of css.matchAll(/letter-spacing:\s*([^;]+);/g)) if (!/^(0|normal|-)/.test(m[1].trim())) add("slide-case", "styles/components/slides-glass.css", `sets letter-spacing: ${m[1].trim()} (tracked text)`);
   return out;
 }
+
+/** PRD r7 deck checks: one source for the speaker's links, the "Still in motion" group and the drawer's coverage. */
+export interface R7Context {
+  deck: { site: { url: string }; speaker: { linkedin: string }; org: { url: string } };
+  /** The closing slide's `glass.url` (the QR generator's input), or null when there is no closing slide. */
+  closingUrl: string | null;
+  /** Demo sections in deck order, with their page ids. */
+  sections: { id: string; group?: string; pageIds: string[]; stages: string[] }[];
+  /** Every slide id in the deck. */
+  slideIds: string[];
+  /** The drawer's links in order (lib/nav.ts), or null before it lands. */
+  nav?: { slideId: string; label: string }[] | null;
+}
+
+export function validateR7(ctx: R7Context): Issue[] {
+  const out: Issue[] = [];
+  const err = (rule: string, where: string, message: string) => out.push({ rule, where, message, level: "error" });
+
+  // Links (PRD r7, 5.1): https, and the closing QR reads the same LinkedIn URL as the deck.
+  const urls: [string, string][] = [
+    ["deck.site.url", ctx.deck.site.url],
+    ["deck.speaker.linkedin", ctx.deck.speaker.linkedin],
+    ["deck.org.url", ctx.deck.org.url],
+  ];
+  for (const [field, url] of urls) if (!/^https:\/\/[^\s]+$/.test(url)) err("deck-links", "content/deck.ts", `${field} "${url}" must be an https URL`);
+  if (ctx.closingUrl !== null && ctx.closingUrl !== ctx.deck.speaker.linkedin) err("deck-links", "closing", `glass.url "${ctx.closingUrl}" must equal deck.speaker.linkedin "${ctx.deck.speaker.linkedin}"`);
+
+  // The "Still in motion" chip sits on an intro slide, and the group is one run of sections.
+  const grouped = ctx.sections.map((s, i) => ({ ...s, i })).filter((s) => s.group);
+  for (const s of grouped) if (!s.stages.includes("intro")) err("group", s.id, `group "${s.group}" needs an intro page to carry the chip`);
+  for (let k = 1; k < grouped.length; k++) if (grouped[k].group === grouped[k - 1].group && grouped[k].i !== grouped[k - 1].i + 1) err("group", grouped[k].id, `group "${grouped[k].group}" is split; its sections must follow one another`);
+
+  // The drawer (PRD r7, 9.6): every demo section appears exactly once, and every link target exists.
+  if (ctx.nav) {
+    const known = new Set(ctx.slideIds);
+    for (const l of ctx.nav) if (!known.has(l.slideId)) err("nav", `nav ${l.label}`, `links to "${l.slideId}", which is not a slide`);
+    for (const s of ctx.sections) {
+      const n = ctx.nav.filter((l) => s.pageIds.includes(l.slideId)).length;
+      if (n !== 1) err("nav", s.id, `appears ${n} times in the drawer; expected once`);
+    }
+  }
+  return out;
+}

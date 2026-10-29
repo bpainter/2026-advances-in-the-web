@@ -1,5 +1,5 @@
 import type { DemoSection } from "@/content/demo-schema";
-import { excerpt, sectionFile } from "@/lib/demo-files";
+import { excerpt, sectionCode } from "@/lib/demo-files";
 
 const TODAY = "demos/06-framework-cache-today";
 const REQUEST = { type: "hook", name: "requestPage" } as const;
@@ -8,7 +8,7 @@ const REQUEST = { type: "hook", name: "requestPage" } as const;
 export const section: DemoSection = {
   id: "f2-caching",
   background: "f2",
-  order: 13,
+  order: 12,
   label: "Caching",
   feature: "Cache Components",
   scenario: "A product page with shared copy, a scheduled price and stock read for each user.",
@@ -36,7 +36,7 @@ export const section: DemoSection = {
       id: "f2-used-to",
       stage: "used-to",
       eyebrow: "Cache Components",
-      title: "How we used to do it",
+      title: "What we used to do",
       intro:
         "This is the same page in Next.js 16 with Cache Components off. The log below it lists every query.",
       frame: {
@@ -105,7 +105,7 @@ export const section: DemoSection = {
       id: "f2-now",
       stage: "now",
       eyebrow: "Cache Components",
-      title: "How we do it now",
+      title: "What we can do today",
       intro:
         "This is the same page with one flag on in the config. Now nothing is cached unless the code asks.",
       frame: {
@@ -115,9 +115,9 @@ export const section: DemoSection = {
         hooks: ["reset", "requestPage", "invalidateProduct", "switchRegion", "switchUser"],
       },
       files: [
-        { file: "catalog.ts", lang: "ts", source: sectionFile("f2-caching", "catalog.ts") },
-        { file: "page.tsx", lang: "tsx", source: sectionFile("f2-caching", "page.tsx") },
-        { file: "inventory.ts", lang: "ts", source: sectionFile("f2-caching", "inventory.ts") },
+        sectionCode("f2-caching", "catalog.ts", "ts"),
+        sectionCode("f2-caching", "page.tsx", "tsx"),
+        sectionCode("f2-caching", "inventory.ts", "ts"),
       ],
       steps: [
         {

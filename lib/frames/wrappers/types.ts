@@ -6,7 +6,6 @@ export type WrapperId =
   | "portal-dashboard"
   | "product-page"
   | "product-editor"
-  | "watch-list"
   | "storefront-product"
   | "advisory-feed"
   | "terminal-window"

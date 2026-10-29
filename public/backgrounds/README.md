@@ -10,7 +10,7 @@ at 86 to stay under 900 KB) so the baked grain maps one to one to stage pixels (
 shared overlay `public/theme/grain.png` is the grain of record.
 
 Nine files were reworked after the design review (review-v5.md H8, M3, L8) to remove baked JPEG
-blocks and hard shapes: `o3`, `o5`, `d5`, `f1` and `closing` were blurred (sigma 8 to 16) and
+blocks and hard shapes: `o3`, `o5`, `d5`, `f1` (removed in r7) and `closing` were blurred (sigma 8 to 16) and
 `f4` and `c2` more heavily (26 and 12); `o7` and `d3` were regenerated with Higgsfield and blurred
 lightly. All nine then had the same monochrome grain added (sd 4.4, quality 90, 4:4:4), so their
 fine-detail energy matches the median of the untouched files.
@@ -34,7 +34,6 @@ the direction each was generated from is table 1.4 of `docs/PRD-demos-v5.md`, re
 | `v5/d4.jpg` | D4 dashboard navigation | Pale periwinkle white, dark blue and purple sweep from the lower left | light |
 | `v5/d5.jpg` | D5 rich content | Saturated violet, magenta and pink vertical bands | saturated |
 | `v5/d6.jpg` | D6 variant picker | Pale grey-white top, soft cyan, pink and yellow glows across the lower middle | light |
-| `v5/f1.jpg` | F1 still in motion | Chartreuse lower left, cyan center, pale blue and white right | light |
 | `v5/f2.jpg` | F2 caching | Warm grey field, cobalt blue orb left, orange and yellow glow right | light to mid |
 | `v5/f3.jpg` | F3 package trust | Icy white top, cyan and navy along the bottom with a coral edge lower right | light |
 | `v5/f4.jpg` | F4 Vite 8 locally | Lilac, periwinkle and pink soft blooms on white | light |

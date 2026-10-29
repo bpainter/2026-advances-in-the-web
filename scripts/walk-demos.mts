@@ -5,6 +5,10 @@
  * (reset and replay).
  *
  *   pnpm walk [page-or-section-id] [--browser=chromium|webkit|firefox] [--headed]
+ *   pnpm walk --advance [page-or-section-id]      Next after playback on every framed page (r7 6.5)
+ *   pnpm walk transitions --fade=1                the slide crossfade (r7 9.3)
+ *   pnpm walk m2 --no-lanes                       Chromium without the Grid Lanes switch (r7 7.1)
+ *   pnpm walk drawer | links                      the drawer's keyboard contract (9.8), link focus (5.3)
  *
  * Needs `pnpm dev` at DECK_URL (default http://localhost:3000) with the demo origin reachable.
  */
@@ -19,12 +23,17 @@ import { checkDistinct, checkFrameBackground, walkDeck } from "./walk-deck.mts";
 import { checkWrapper } from "./walk-wrapper.mts";
 import { slides as deckSlides } from "@/lib/content";
 import { PROTOCOL_WATCH, checkProtocol, finishDeckSampler, startDeckSampler, walkFixture } from "./walk-spotlight.mts";
+import { VT_WATCH, checkM2Fallback, checkPageTitle, checkSelect, checkSlideR7, finishDeckR7, walkAdvance, walkDrawer, walkLinkFocus, walkTransitions } from "./walk-r7.mts";
 
 const BASE = process.env.DECK_URL ?? "http://localhost:3000";
 const args = process.argv.slice(2);
 const only = args.find((a) => !a.startsWith("--"));
 const headed = args.includes("--headed");
 const browserName = (args.find((a) => a.startsWith("--browser="))?.slice(10) ?? "chromium") as "chromium" | "webkit" | "firefox";
+/** Chromium without the Grid Lanes switch: M2 shows the columns fallback (PRD r7 7.1). */
+const noLanes = args.includes("--no-lanes");
+/** M2 asserts lanes for the browsers that have them; without lanes the columns checks stand in. */
+const lanesExpected = (pageId: string, a: { expect: string }) => pageId === "m2-now" && a.expect === "style:display=grid-lanes" && (browserName === "firefox" || noLanes);
 
 const failures: string[] = [];
 let checks = 0;
@@ -106,15 +115,18 @@ export const GRID_LANES_SWITCH = "--enable-blink-features=CSSGridLanesLayout";
  * the switch) and WebKit; Firefox shows the regular grid. With --capture in WebKit, each step's
  * photo pane is saved for plan B (public/posters/m2-safari/<step>.png, read by `showSafari`).
  */
+const m2State: { columns?: number } = {};
 async function checkM2(page: Page, where: string, stepId: string) {
-  const frame = page.frames().find((f) => f.url().includes("/13-grid-lanes/native/"));
-  if (!frame) return fail(where, "M2 frame not found");
+  const frame = await visibleFrame(page);
+  if (!frame || !frame.url().includes("/13-grid-lanes/native/")) return fail(where, "M2 frame not found");
   const supports = (await frame.evaluate(`CSS.supports("display", "grid-lanes")`)) as boolean;
   if (stepId === "s0") {
-    if (browserName === "firefox") pass(`Firefox: no Grid Lanes (${supports ? "supported" : "a regular grid"}); the fallback is expected`);
+    if (browserName === "firefox" || noLanes) pass(`${browserName}${noLanes ? " without the switch" : ""}: no Grid Lanes (${supports ? "supported" : "the columns fallback"}) is expected`);
     else if (!supports) fail(where, `${browserName}: CSS.supports("display", "grid-lanes") is false in the M2 now frame${browserName === "chromium" ? `; launch with ${GRID_LANES_SWITCH}` : ""}`);
     else pass(`${browserName}: CSS.supports("display", "grid-lanes") in the M2 now frame`);
   }
+  // Without lanes the shown fallback is CSS columns (PRD r7 7.1).
+  if (!supports) await checkM2Fallback(frame, where, stepId, m2State, { fail, pass });
   if (args.includes("--capture") && browserName === "webkit" && stepId === "s0") await captureM2(page, frame.url().split("?")[0]);
 }
 
@@ -228,7 +240,7 @@ async function replayThenNext(page: Page, where: string, demoPage: DemoPage, i: 
   await page.keyboard.press("ArrowRight");
   let r = await waitForResult(page, `${demoPage.id}:${next.id}`, seq, 10000);
   if (!r) return fail(where, `replay ${here.id} then next ${next.id}: no step result`);
-  const failed = r.asserts.filter((a) => a.stepId === next.id && !a.pass);
+  const failed = r.asserts.filter((a) => a.stepId === next.id && !a.pass && !lanesExpected(demoPage.id, a));
   if (failed.length) fail(where, `replay ${here.id} then next ${next.id}: ${failed.map((a) => `${a.target} ${a.expect} (got ${a.actual})`).join("; ")}`);
   else pass(`replay ${here.id} then next ${next.id}: ${r.asserts.filter((a) => a.stepId === next.id).length} assert(s) ok, ${r.ms}ms`);
   if (next.route) await checkRoute(page, where, `replay ${here.id} then next ${next.id}`, next.route);
@@ -237,7 +249,7 @@ async function replayThenNext(page: Page, where: string, demoPage: DemoPage, i: 
   await page.keyboard.press("ArrowLeft");
   r = await waitForResult(page, `${demoPage.id}:${here.id}`, seq, 10000);
   if (!r) return fail(where, `back ${here.id} again: no step result`);
-  const again = r.asserts.filter((a) => !a.pass);
+  const again = r.asserts.filter((a) => !a.pass && !lanesExpected(demoPage.id, a));
   if (again.length) fail(where, `back ${here.id} again: ${again.map((a) => `${a.target} ${a.expect} (got ${a.actual})`).join("; ")}`);
   if (here.route) await checkRoute(page, where, `back ${here.id} again`, here.route);
 }
@@ -367,7 +379,8 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
       forward.push(null);
       continue;
     }
-    const failed = r.asserts.filter((a) => a.stepId === step.id && !a.pass);
+    // M2 asserts lanes for the browsers that have them; elsewhere the columns checks stand in.
+    const failed = r.asserts.filter((a) => a.stepId === step.id && !a.pass && !lanesExpected(demoPage.id, a));
     if (failed.length) fail(where, `${step.id}: ${failed.map((a) => `${a.target} ${a.expect} (got ${a.actual})`).join("; ")}`);
     else pass(`${step.id} ${step.label}: ${r.asserts.filter((a) => a.stepId === step.id).length} assert(s) ok, ${r.ms}ms`);
     forward.push(r.digest);
@@ -380,6 +393,10 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
     }
     if (demoPage.id === "d6-now" && step.id === "s4") await checkD6(page, where);
     if (demoPage.id === "m2-now") await checkM2(page, where, step.id);
+    // PRD r7 7.2: the status select in all three engines.
+    if (demoPage.id.startsWith("d4-") && demoPage.stage !== "intro" && i === 0) await checkSelect(await visibleFrame(page), where, browserName, { fail, pass });
+    // PRD r7 3.3: the title, on the last step, where the meter shows too.
+    if (i === demoPage.steps.length - 1) await checkPageTitle(page, demoPage, { fail, pass });
     if (demoPage.id === "m3-now") await checkM3(page, where, step.id);
     if (step.route) await checkRoute(page, where, step.id, step.route);
     await checkTransition(page, where, step.id, demoPage, i);
@@ -399,7 +416,7 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
       fail(where, `back ${step.id}: no step result`);
       continue;
     }
-    const failed = r.asserts.filter((a) => !a.pass);
+    const failed = r.asserts.filter((a) => !a.pass && !lanesExpected(demoPage.id, a));
     if (failed.length) fail(where, `back ${step.id}: ${failed.map((a) => `${a.target} ${a.expect} (got ${a.actual})`).join("; ")}`);
     else if (forward[i] && r.digest !== forward[i]) console.log(`    · back ${step.id}: digest ${r.digest} differs from forward ${forward[i]} (asserts pass)`);
     else pass(`back ${step.id}: asserts pass, digest ${r.digest}`);
@@ -407,6 +424,9 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
     if (replayAt.has(i)) await replayThenNext(page, where, demoPage, i);
   }
   await checkProtocol(page, where, { fail, pass });
+  // The stuck-playback watchdog (PRD r7, 6.4) never fires in a clean walk.
+  const stuck = (await page.evaluate("window.__stuckPlayback || []").catch(() => [])) as string[];
+  if (stuck.length) fail(where, `stuck playback: ${stuck.join(", ")}`);
   // No box was forced in after 2000 ms on this page (PRD v5, 3.2 rule 6; M8's rehearsal criterion).
   const forced = (await page.evaluate("(window.__spotlightForced || []).map((f) => f.stepId)").catch(() => [])) as string[];
   if (forced.length) fail(where, `spotlight forced after 2000 ms on ${forced.join(", ")}`);
@@ -478,11 +498,27 @@ async function main() {
   const launcher = { chromium, webkit, firefox }[browserName];
   // Two windows in one context share BroadcastChannel; neither may be throttled as a background tab.
   // GRID_LANES_SWITCH turns on Chrome's "CSS Grid Lanes Layout" flag (M2, plan A).
-  const chromiumArgs = ["--disable-background-timer-throttling", "--disable-renderer-backgrounding", "--disable-backgrounding-occluded-windows", GRID_LANES_SWITCH];
+  const chromiumArgs = ["--disable-background-timer-throttling", "--disable-renderer-backgrounding", "--disable-backgrounding-occluded-windows", ...(noLanes ? [] : [GRID_LANES_SWITCH])];
   // --channel=chrome walks the installed Google Chrome instead of Playwright's Chromium, for
   // features newer than the bundled build (M3's scoped registries need Chrome 146).
   const channel = args.find((a) => a.startsWith("--channel="))?.slice(10);
   const browser: Browser = await launcher.launch({ headless: !headed, ...(browserName === "chromium" ? { args: chromiumArgs, ...(channel ? { channel } : {}) } : {}) });
+  const r7 = { fail, pass };
+  // Round 7 modes that run on their own (PRD r7, section 11).
+  if (args.includes("--advance")) {
+    await walkAdvance(browser, BASE, browserName, only, r7);
+    return finish(browser);
+  }
+  if (only === "transitions") {
+    if (!args.includes("--fade=1")) console.log("  · transitions: pass --fade=1 (the walk turns the fade on with ?fade=1)");
+    await walkTransitions(browser, BASE, r7);
+    return finish(browser);
+  }
+  if (only === "drawer" || only === "links") {
+    if (only === "drawer") await walkDrawer(browser, BASE, r7);
+    else await walkLinkFocus(browser, BASE, r7);
+    return finish(browser);
+  }
   const context = await browser.newContext({ viewport: { width: 1600, height: 900 } });
   const page = await context.newPage();
   // The speaker checks are layout checks; they run in Chromium, where background tabs can be unthrottled.
@@ -496,13 +532,18 @@ async function main() {
   page.on("pageerror", (err) => fail("page", `uncaught error: ${err.message}`));
   await page.addInitScript(PROTOCOL_WATCH);
   await page.addInitScript(REVEAL_WATCH);
+  await page.addInitScript(VT_WATCH);
 
   // The spotlight fixture (PRD v5, 3.4) runs first on a full walk, and alone with `pnpm walk fixtures`.
   if (!only || only === "fixtures") await walkFixture(browser, BASE, { fail, pass });
   // The whole deck in order (PRD v5, 4.8), on a full walk or with `pnpm walk deck`.
   if (!only || only === "deck") {
     checkDistinct({ fail, pass });
-    await walkDeck(page, BASE, deckSlides, { fail, pass });
+    await walkDeck(page, BASE, deckSlides, { fail, pass }, (slide) => checkSlideR7(page, slide, r7));
+    await finishDeckR7(page, BASE, r7);
+    // The drawer's keyboard contract and the clicker after a slide link (PRD r7 9.8 and 5.3).
+    await walkDrawer(browser, BASE, r7);
+    await walkLinkFocus(browser, BASE, r7);
   }
   if (only === "fixtures" || only === "deck") {
     await browser.close();
@@ -531,6 +572,13 @@ async function main() {
       fail(p.id, `walk threw: ${err instanceof Error ? err.message : String(err)}`);
     }
   }
+  await browser.close();
+  console.log(`\n${browserName}: ${checks} check(s) passed, ${failures.length} failure(s)`);
+  for (const f of failures) console.log(`  ✖ ${f}`);
+  process.exit(failures.length ? 1 : 0);
+}
+
+async function finish(browser: Browser) {
   await browser.close();
   console.log(`\n${browserName}: ${checks} check(s) passed, ${failures.length} failure(s)`);
   for (const f of failures) console.log(`  ✖ ${f}`);

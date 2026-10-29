@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { useRouter } from "next/navigation";
 import type { KeyAction } from "@/lib/keys";
 import { createSync, type Sync, type Transport } from "./transport";
+import { slideHref, slideHrefWithStep } from "./url";
 import { isNewer, newWriterId, type DemoHealth, type Playback, type PresenterState, type SyncMessage } from "./types";
 
 export type PresenterMode = "audience" | "speaker";
@@ -148,6 +149,9 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
     setTransport(sync.transport);
     sync.send({ type: "hello", writer });
     const t = window.setTimeout(() => {
+      // The URL's claim is spent once the fallback fires: a window opened later must not have its
+      // first press reverted by this window snapping back to the URL's slide.
+      claimed = true;
       // A peer answered, or this window already wrote state (a press before the fallback fired).
       if (settled || stateRef.current.seq > 0) return;
       const stored = sync.readStored();
@@ -165,18 +169,17 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
   }, [writer]);
 
   // Mirror state into the URL, and navigate when the state names a slide this page did not render.
+  // The navigation goes to `slideHref`, the URL the stage prefetched in full (PRD r7, 9.2), with no
+  // step: the step lives in the shared state, and the mirror adds it once the slide is shown.
   // The step mirror is throttled to one write per 250 ms (leading, then trailing): WebKit and
   // Firefox rate-limit the history API per page, and a clicker burst would otherwise trip it.
   const lastMirror = useRef(0);
   useEffect(() => {
-    const url = new URL(window.location.href);
-    url.searchParams.set("s", state.slideId);
-    if (state.stepIndex > 0) url.searchParams.set("step", String(state.stepIndex));
-    else url.searchParams.delete("step");
     if (state.slideId !== rendered) {
-      router.replace(url.pathname + url.search);
+      router.replace(slideHref(state.slideId));
       return;
     }
+    const url = new URL(slideHrefWithStep(state.slideId, state.stepIndex), window.location.href);
     if (url.href === window.location.href) return;
     const write = () => {
       lastMirror.current = Date.now();

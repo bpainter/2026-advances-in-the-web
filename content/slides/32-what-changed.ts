@@ -3,7 +3,7 @@ import type { Slide } from "@/content/schema";
 /** What changed in 2026, a native glass grid with numbers (PRD v5, 4.5; spec 6.2). */
 export const slide: Slide = {
   id: "what-changed",
-  index: 34,
+  index: 48,
   section: "close",
   layout: "glass-grid",
   title: "What changed in 2026",
@@ -24,6 +24,6 @@ export const slide: Slide = {
   citations: [],
   speakerNotes:
     "Six takeaways. The browser does more. Baseline and Interop settle support. Frameworks rethink rendering and caching. Build tools go native. Installs are a security decision. Land the last one: every layer you add is a layer you keep.",
-  timing: { minutes: 1.5, cumulative: 35 },
+  timing: { minutes: 1.5, cumulative: 40.75 },
   background: "what-changed",
 };

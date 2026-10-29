@@ -1,5 +1,5 @@
 import type { DemoSection } from "@/content/demo-schema";
-import { excerpt, sectionFile } from "@/lib/demo-files";
+import { excerpt, sectionCode } from "@/lib/demo-files";
 
 const TODAY = "demos/02-container-card/today";
 
@@ -32,7 +32,7 @@ export const section: DemoSection = {
       id: "d2-used-to",
       stage: "used-to",
       eyebrow: "Container queries",
-      title: "How we used to do it",
+      title: "What we used to do",
       intro: "One card sits in three places. Each place tells it how to look.",
       frame: {
         build: "today",
@@ -127,7 +127,7 @@ export const section: DemoSection = {
       id: "d2-now",
       stage: "now",
       eyebrow: "Container queries",
-      title: "How we do it now",
+      title: "What we can do today",
       intro:
         "This is the same card with no layout script. Its slot is a container the card can measure. Watch the card as the slot changes width.",
       frame: {
@@ -139,9 +139,9 @@ export const section: DemoSection = {
         poster: "/posters/d2-now.png",
       },
       files: [
-        { file: "index.html", lang: "html", source: sectionFile("d2-product-card", "index.html") },
-        { file: "card.css", lang: "css", source: sectionFile("d2-product-card", "card.css") },
-        { file: "app.js", lang: "js", source: sectionFile("d2-product-card", "app.js") },
+        sectionCode("d2-product-card", "index.html", "html"),
+        sectionCode("d2-product-card", "card.css", "css"),
+        sectionCode("d2-product-card", "app.js", "js"),
       ],
       steps: [
         {

@@ -1,5 +1,5 @@
 import type { Action, DemoSection } from "@/content/demo-schema";
-import { excerpt, sectionFile } from "@/lib/demo-files";
+import { excerpt, sectionCode } from "@/lib/demo-files";
 
 const TODAY = "demos/13-grid-lanes/today";
 
@@ -19,8 +19,9 @@ const needsLanes = (a: Action): Action[] => (SAFARI_PLAN_B ? [] : [a]);
 export const section: DemoSection = {
   id: "m2-trail-photos",
   background: "m2",
-  order: 9,
+  order: 8,
   label: "Trail photos",
+  group: "still-in-motion",
   feature: "Grid Lanes",
   scenario: "Customer photos and quotes of different heights pack into a wall with no gaps.",
   support: {
@@ -29,7 +30,7 @@ export const section: DemoSection = {
     // The whole feature lists no browser, because fit-tolerance ships nowhere yet. The demo uses
     // display: grid-lanes only, which Safari ships (spec 3.2).
     compatKeys: ["css.properties.display.grid-lanes"],
-    fallback: { missing: ["chrome", "edge", "firefox"], text: "a regular grid" },
+    fallback: { missing: ["chrome", "edge", "firefox"], text: "CSS columns" },
   },
   pages: [
     {
@@ -51,7 +52,7 @@ export const section: DemoSection = {
       id: "m2-used-to",
       stage: "used-to",
       eyebrow: "Grid Lanes",
-      title: "How we used to do it",
+      title: "What we used to do",
       intro: "Customer photos sit in a packed wall. Script places every item.",
       split: "60/40",
       frame: {
@@ -145,8 +146,8 @@ export const section: DemoSection = {
       id: "m2-now",
       stage: "now",
       eyebrow: "Grid Lanes",
-      title: "How we do it now",
-      intro: "This is the same wall with no layout script. It starts as a regular grid. Most browsers show that.",
+      title: "What we can do today",
+      intro: "This is the same wall with no layout script. It starts as a regular grid. Browsers without lanes get columns.",
       split: "60/40",
       frame: {
         build: "native",
@@ -156,9 +157,9 @@ export const section: DemoSection = {
         hooks: ["reset", "showSafari", "scrollPhotos"],
       },
       files: [
-        { file: "index.html", lang: "html", source: sectionFile("m2-trail-photos", "index.html") },
-        { file: "wall.css", lang: "css", source: sectionFile("m2-trail-photos", "wall.css") },
-        { file: "app.js", lang: "js", source: sectionFile("m2-trail-photos", "app.js") },
+        sectionCode("m2-trail-photos", "index.html", "html"),
+        sectionCode("m2-trail-photos", "wall.css", "css"),
+        sectionCode("m2-trail-photos", "app.js", "js"),
       ],
       steps: [
         {
@@ -179,14 +180,14 @@ export const section: DemoSection = {
           code: {
             file: "wall.css",
             lines: [
-              [2, 5],
-              [10, 14],
+              [14, 17],
+              [24, 29],
             ],
           },
           spotlight: ["#wall"],
           bullets: [
             "One display value packs the photos into lanes. The gaps close.",
-            "Browsers that do not know grid lanes keep display grid.",
+            "Browsers without lanes get CSS columns. Still packed, read top to bottom.",
             "Each photo goes to the lane with the most room.",
           ],
         },
@@ -220,7 +221,9 @@ export const section: DemoSection = {
           label: "Narrow the page",
           key: true,
           actions: [{ type: "resize", target: "#wall", inlineSize: "66%" }],
-          code: { file: "wall.css", lines: [[4, 6]] },
+          // PRD r7 7.1 asked for [[4, 5], 27]; that spans 24 lines, over the cap of 20 (both ends on
+          // screen). Lines 4 and 5 set the lane count, which the bullets name.
+          code: { file: "wall.css", lines: [[4, 5]] },
           spotlight: [".photos"],
           bullets: [
             "The page narrows, and the wall reflows with no pause.",
@@ -274,6 +277,6 @@ export const section: DemoSection = {
   cautions: [
     "Focus moves in source order across lanes. Test with a keyboard first.",
     "Safari 27.2 renamed flow tolerance to fit tolerance. Expect more renames.",
-    "Crop items to one height in the fallback, so the regular grid stays tidy.",
+    "Without lanes, columns stand in. They read top to bottom, not across.",
   ],
 };

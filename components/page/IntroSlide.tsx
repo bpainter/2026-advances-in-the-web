@@ -9,7 +9,7 @@ import { SupportRow } from "./SupportRow";
  * feature name, the author's one-sentence description plus the generated support sentence, the
  * support row and the "also uses" line on the right. No frame and no code. v5 (PRD 1.6, spec 5):
  * the slide sits on the section background; the still is on a light glass card and the text in
- * one dark glass panel.
+ * one dark glass panel. r7: a "Still in motion" chip above the title on M1 to M5.
  */
 export function IntroSlide({ section, page }: { section: DemoSection; page: IntroPage }) {
   const support = supportEntry(section.id);
@@ -22,6 +22,8 @@ export function IntroSlide({ section, page }: { section: DemoSection; page: Intr
         {visual ? <img className="intro__image" src={visual} alt={page.visual.alt} /> : <figcaption className="intro__missing">Run pnpm visuals to capture this still</figcaption>}
       </figure>
       <div className="intro__text glass-dark">
+        {/* M1 to M5 (PRD r7, 8.3): the chip tells the room these five are not ship-ready yet. */}
+        {section.group === "still-in-motion" ? <p className="intro__group">Still in motion</p> : null}
         <h1 className="intro__title">{section.feature}</h1>
         <p className="intro__description">
           {page.description} {support?.since ?? ""}

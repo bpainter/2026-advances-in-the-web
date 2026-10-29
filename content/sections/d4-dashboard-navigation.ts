@@ -1,5 +1,5 @@
 import type { DemoSection } from "@/content/demo-schema";
-import { excerpt, sectionFile } from "@/lib/demo-files";
+import { excerpt, sectionCode } from "@/lib/demo-files";
 
 const TODAY = "demos/04-navigation-api/today";
 const LINK_418 = 'nav a[href="/orders/418"]';
@@ -35,7 +35,7 @@ export const section: DemoSection = {
       id: "d4-used-to",
       stage: "used-to",
       eyebrow: "Navigation API",
-      title: "How we used to do it",
+      title: "What we used to do",
       split: "60/40",
       intro:
         "This dashboard uses a router written by hand. Links, Back and slow networks each need code.",
@@ -127,7 +127,7 @@ export const section: DemoSection = {
       id: "d4-now",
       stage: "now",
       eyebrow: "Navigation API",
-      title: "How we do it now",
+      title: "What we can do today",
       split: "60/40",
       intro:
         "This is the same dashboard. Every page is a normal server page. One listener makes the moves between them smooth.",
@@ -142,13 +142,9 @@ export const section: DemoSection = {
         poster: "/posters/d4-now.png",
       },
       files: [
-        {
-          file: "index.html",
-          lang: "html",
-          source: sectionFile("d4-dashboard-navigation", "index.html"),
-        },
-        { file: "app.js", lang: "js", source: sectionFile("d4-dashboard-navigation", "app.js") },
-        { file: "app.css", lang: "css", source: sectionFile("d4-dashboard-navigation", "app.css") },
+        sectionCode("d4-dashboard-navigation", "index.html", "html"),
+        sectionCode("d4-dashboard-navigation", "app.js", "js"),
+        sectionCode("d4-dashboard-navigation", "app.css", "css"),
       ],
       steps: [
         {

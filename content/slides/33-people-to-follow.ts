@@ -3,7 +3,7 @@ import type { Slide } from "@/content/schema";
 /** People to follow, a native glass people grid (PRD v5, 4.5; spec 6.2). */
 export const slide: Slide = {
   id: "people-to-follow",
-  index: 35,
+  index: 49,
   section: "close",
   layout: "glass-people",
   title: "People to follow",
@@ -27,6 +27,6 @@ export const slide: Slide = {
   },
   citations: [],
   speakerNotes: "Twelve people whose writing covers everything in this talk. Point at two or three you read every week. The closing slide follows with the QR code.",
-  timing: { minutes: 1, cumulative: 36 },
+  timing: { minutes: 1, cumulative: 41.75 },
   background: "people-to-follow",
 };

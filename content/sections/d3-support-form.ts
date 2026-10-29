@@ -1,5 +1,5 @@
 import type { DemoSection } from "@/content/demo-schema";
-import { excerpt, sectionFile } from "@/lib/demo-files";
+import { excerpt, sectionCode } from "@/lib/demo-files";
 
 const TODAY = "demos/03-content-sized-form/today";
 const LONG_DETAILS =
@@ -33,7 +33,7 @@ export const section: DemoSection = {
       id: "d3-used-to",
       stage: "used-to",
       eyebrow: "Field sizing",
-      title: "How we used to do it",
+      title: "What we used to do",
       intro: "An agent fills in a subject and the details. Both fields grow by script.",
       frame: {
         build: "today",
@@ -123,7 +123,7 @@ export const section: DemoSection = {
       id: "d3-now",
       stage: "now",
       eyebrow: "Field sizing",
-      title: "How we do it now",
+      title: "What we can do today",
       intro:
         "This is the same form with no sizing script. The fields fit their text with one CSS property.",
       frame: {
@@ -135,9 +135,9 @@ export const section: DemoSection = {
         poster: "/posters/d3-now.png",
       },
       files: [
-        { file: "index.html", lang: "html", source: sectionFile("d3-support-form", "index.html") },
-        { file: "form.css", lang: "css", source: sectionFile("d3-support-form", "form.css") },
-        { file: "app.js", lang: "js", source: sectionFile("d3-support-form", "app.js") },
+        sectionCode("d3-support-form", "index.html", "html"),
+        sectionCode("d3-support-form", "form.css", "css"),
+        sectionCode("d3-support-form", "app.js", "js"),
       ],
       steps: [
         {

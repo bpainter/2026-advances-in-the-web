@@ -154,30 +154,91 @@
   position: relative;
 }
 
-/* Title: the eyebrow sits directly over a 192 px title, the pair set bottom left on the 64 margin,
-   level with the wordmark. The bloom above y 560 is too bright for white at this size. */
+/* Cover (PRD r7 4; docs/design/r7-spec.md 1): eyebrow, a three-line 192 px title, then the
+   speaker's name and job title, as one left-aligned group centered in the slide's height. Three
+   lines keep every glyph left of x 1000, clear of the orange glow top right. Plain text, no card. */
 .sg--title {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  @apply flex flex-col justify-center items-start;
+}
+.sg--title > :not(.sg-wordmark) {
+  position: relative;
 }
 /* The title's line box carries about 40 px above its cap height, so a -8 margin reads as a 32 px
    gap under the eyebrow (review r6 L1). */
 .sg--title .sg-display {
-  position: relative;
   margin-top: -8px;
   font-size: 192px;
   line-height: 184px;
   color: var(--glass-dark-ink);
   text-shadow: 0 2px 24px rgb(15 28 65 / 0.35);
 }
-.sg--title .sg-eyebrow {
-  position: relative;
+.sg-cover__name,
+.sg-cover__role {
+  font-size: 36px;
+  line-height: 50px;
+  color: var(--glass-dark-ink);
+  text-shadow: 0 1px 12px rgb(15 28 65 / 0.35);
+}
+.sg-cover__name {
+  margin-top: 48px;
+  font-weight: var(--weight-bold);
+}
+/* White, not body ink: #D6DCEC on the worst pixel under the wash is about 4.4:1 (PRD r7 4.3). */
+.sg-cover__role {
+  margin-top: 4px;
+  font-weight: var(--weight-regular);
 }
 .sg--title .sg-wordmark {
   position: absolute;
   right: 64px;
   bottom: 64px;
+}
+
+/* Links (PRD r7 5.2; r7-spec 2): no paint at rest, so captures and posters do not change. Hover
+   underlines; keyboard focus draws the deck's ring (cyan on dark, Slalom Blue on light). */
+:where(.sg) a {
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  border-radius: 8px;
+}
+:where(.sg) a:hover {
+  text-decoration-line: underline;
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.16em;
+}
+:where(.sg) a:focus-visible {
+  outline: 3px solid var(--glass-dark-focus);
+  outline-offset: 4px;
+}
+:where(.sg[data-tone="light"]) a:focus-visible,
+:where(.sg-footer[data-tone="light"]) a:focus-visible {
+  outline-color: var(--glass-focus);
+}
+:where(.sg-qr) a {
+  display: block;
+}
+:where(.sg-qr) a:hover {
+  text-decoration: none;
+}
+/* A link inside a footer pill rings the whole pill, so the ring follows the pill's shape. */
+:where(.sg-pill) a:focus-visible {
+  outline: none;
+}
+.sg-pill:has(a:focus-visible) {
+  outline: 3px solid var(--glass-dark-focus);
+  outline-offset: 2px;
+}
+.sg-footer[data-tone="light"] .sg-pill:has(a:focus-visible) {
+  outline-color: var(--glass-focus);
+}
+/* The QR sits on solid white, where cyan is under 3:1; Slalom Blue holds it. */
+:where(.sg-qr) a:focus-visible {
+  outline-color: var(--glass-focus);
+}
+/* Speaker previews are pictures (PRD r7 5.2). */
+.stage--embedded .sg a {
+  pointer-events: none;
 }
 
 /* Grids */
@@ -422,8 +483,10 @@
   line-height: 50px;
   color: var(--glass-dark-ink-body);
 }
+/* fit-content: as a link, the line's hit area and focus ring hug the logo and text. */
 .sg-closing__link {
   display: flex;
+  width: fit-content;
   align-items: center;
   gap: 16px;
   margin-top: 32px;

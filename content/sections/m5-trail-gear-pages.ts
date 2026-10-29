@@ -1,5 +1,5 @@
 import type { DemoSection } from "@/content/demo-schema";
-import { excerpt, sectionFile } from "@/lib/demo-files";
+import { excerpt, sectionCode } from "@/lib/demo-files";
 
 const TODAY = "demos/16-cross-document-vt/today";
 
@@ -11,8 +11,9 @@ const TODAY = "demos/16-cross-document-vt/today";
 export const section: DemoSection = {
   id: "m5-trail-gear-pages",
   background: "m5",
-  order: 12,
+  order: 11,
   label: "Trail gear pages",
+  group: "still-in-motion",
   feature: "Cross-document view transitions",
   scenario: "Picking a product grows its photo into the product page, across two real pages.",
   support: {
@@ -39,7 +40,7 @@ export const section: DemoSection = {
       id: "m5-used-to",
       stage: "used-to",
       eyebrow: "Cross-document view transitions",
-      title: "How we used to do it",
+      title: "What we used to do",
       intro: "Picking a product grows its photo into the product page. We built a single-page app for that.",
       split: "60/40",
       frame: {
@@ -129,7 +130,7 @@ export const section: DemoSection = {
       id: "m5-now",
       stage: "now",
       eyebrow: "Cross-document view transitions",
-      title: "How we do it now",
+      title: "What we can do today",
       intro: "These are two plain HTML pages with no router. One CSS rule asks for a transition between them.",
       split: "60/40",
       frame: {
@@ -140,9 +141,9 @@ export const section: DemoSection = {
         hooks: ["reset"],
       },
       files: [
-        { file: "index.html", lang: "html", source: sectionFile("m5-trail-gear-pages", "index.html") },
-        { file: "product.html", lang: "html", source: sectionFile("m5-trail-gear-pages", "product.html") },
-        { file: "transitions.css", lang: "css", source: sectionFile("m5-trail-gear-pages", "transitions.css") },
+        sectionCode("m5-trail-gear-pages", "index.html", "html"),
+        sectionCode("m5-trail-gear-pages", "product.html", "html"),
+        sectionCode("m5-trail-gear-pages", "transitions.css", "css"),
       ],
       steps: [
         {

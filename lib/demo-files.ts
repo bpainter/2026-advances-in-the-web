@@ -29,12 +29,28 @@ export function demoCode(id: string, files: { file: string; lang: CodeLang }[]):
 const SECTIONS_DIR = path.join(process.cwd(), "content", "sections");
 
 /**
- * Source of one code file of a demo section (v3), read from content/sections/<id>/files/<file> when
- * accessed, so edits show in dev without touching the section module. Returns the text with its
- * trailing newline removed, as the code panel and the native composer expect.
+ * Source of one code file of a demo section (v3), read from content/sections/<id>/files/<file> now.
+ * Returns the text with its trailing newline removed, as the code panel and the native composer
+ * expect. Called at module load this reads once; section pages use `sectionCode` instead.
  */
 export function sectionFile(sectionId: string, file: string): string {
   return readFileSync(path.join(SECTIONS_DIR, sectionId, "files", file), "utf8").replace(/\n$/, "");
+}
+
+/**
+ * A shown file of a demo section's page (`files: [sectionCode("m2-trail-photos", "wall.css", "css")]`).
+ * `source` is a getter, like `excerpt` and `repoFile`: content/sections/<id>/files/<file> is read when
+ * the page renders or the validator checks it, not when the section module loads, so an edit shows
+ * on the next request in dev with no restart (review r7 M1). Production reads it at prerender, and
+ * at request time from the traced `content/sections/**` (docs/deploy.md).
+ */
+export function sectionCode(sectionId: string, file: string, lang: DemoCodeLang): DemoCodeFile {
+  const entry = { file, lang } as DemoCodeFile;
+  Object.defineProperty(entry, "source", {
+    enumerable: true,
+    get: () => sectionFile(sectionId, file),
+  });
+  return entry;
 }
 
 /**

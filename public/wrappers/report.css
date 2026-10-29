@@ -1,11 +1,10 @@
-/* Report family (spec 4.7, 4.9, 4.11, 4.12): a sheet with a document header bar, used by F1's
-   watch list, F3's advisory feed, F4's benchmark report and F5's pull request. */
+/* Report family (spec 4.9, 4.11, 4.12): a sheet with a document header bar, used by F3's advisory
+   feed, F4's benchmark report and F5's pull request. PRD r7 removed F1's watch list. */
 @layer wrapper {
   .wrap-report {
     gap: 16px;
     padding: 20px 24px 16px;
   }
-  .wrap--watch .wrap-report,
   .wrap--ci .wrap-report {
     padding: 24px 24px 20px;
   }
@@ -19,9 +18,6 @@
   }
   .wrap-report__source {
     flex: none;
-  }
-  .wrap-chip--wait {
-    color: var(--glass-link);
   }
 
   /* F3 advisory feed */

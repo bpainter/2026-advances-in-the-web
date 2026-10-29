@@ -776,6 +776,25 @@
     box-shadow: none;
   }
 
+  /* Native single selects draw the theme's chevron, so every engine shows one arrow, 20 px from
+     the right edge and on the text's center (PRD r7 7.2). 7 + 20 + 7 + 2 = 36 px, the button height.
+     D6's customizable select has a <button> child and keeps its shown CSS. After the disabled
+     rule, so its background shorthand does not drop the chevron. */
+  :where(:root[data-build]) :where(select:not([multiple], [size]):not(:has(> button))) {
+    appearance: none;
+    padding-inline-end: 36px;
+    line-height: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230f1c41' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    /* 1 px border + 11 + 8 (half the glyph box) puts the center 20 px from the border edge. */
+    background-position: right 11px center;
+    background-size: 16px 16px;
+  }
+
+  :where(:root[data-build]) :where(select:not([multiple], [size]):not(:has(> button)):disabled) {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233e4a6b' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  }
+
   .glass-input::placeholder,
   :where(:root[data-build]) :where(input, textarea)::placeholder {
     color: var(--glass-ink-soft);

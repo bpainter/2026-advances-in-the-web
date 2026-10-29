@@ -1,21 +1,66 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, ViewTransition, type CSSProperties, type MouseEvent, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
+import type { PrefetchOptions } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { actionForKey, isEditableTarget, type KeyAction } from "@/lib/keys";
 import type { Mode } from "@/lib/mode";
+import type { NavGroup } from "@/lib/nav";
 import { usePresenter } from "@/lib/presenter/context";
+import { readerHref, slideHref } from "@/lib/presenter/url";
 import { frameUrl } from "@/lib/frames/origins";
 import type { StepResult } from "@/lib/engine/frame";
 import { StageContext, type DemoStatus, type Playback, type StageState } from "@/lib/stage-context";
 import { ReaderControls } from "@/components/chrome/ReaderControls";
 import { KeyboardHelp } from "@/components/chrome/KeyboardHelp";
 import { GotoDialog } from "@/components/chrome/GotoDialog";
+import { NavDrawer, isNavOpen } from "@/components/chrome/NavDrawer";
 
 const CANVAS = { width: 1920, height: 1080 };
 
+/**
+ * A full prefetch (PRD r7, 9.2). `PrefetchKind` is internal to Next: the default ("auto", PPR)
+ * fetches almost nothing for a `force-dynamic` page, and only "full" fetches the whole payload
+ * (next/dist/client/components/segment-cache/prefetch.js `prefetchRoute`; the enum lives in
+ * next/dist/client/components/router-reducer/router-reducer-types.js).
+ */
+const FULL_PREFETCH = { kind: "full" } as unknown as PrefetchOptions;
+
+/** After Next asks a playing step to finish, a press this much later advances anyway (PRD r7, 6.4). */
+const STUCK_PLAYBACK_MS = 1500;
+
+/**
+ * The slide crossfade (PRD r7, 9.3) runs in the audience window and reader mode, never under
+ * automation or capture, so walks, visuals and captures stay as they were. `?fade=0` turns it off;
+ * `?fade=1` forces it on for the walk that tests it. Decided once per window, on the first client
+ * render: `<ViewTransition>` renders no element, so the server's markup hydrates either way, and a
+ * stable answer never remounts the canvas.
+ */
+let fadeDecision: boolean | null = null;
+function fadeAllowed(): boolean {
+  if (typeof window === "undefined") return false;
+  if (fadeDecision === null) {
+    const q = new URLSearchParams(window.location.search);
+    const forced = q.get("fade");
+    const automated = navigator.webdriver || q.get("capture") === "1" || document.documentElement.dataset.capture === "1";
+    fadeDecision = forced === "1" ? true : forced === "0" ? false : !automated;
+  }
+  return fadeDecision;
+}
+
+/**
+ * The last scale each kind of stage measured in this window. A stage that mounts on a slide change
+ * starts at it, so its first paint is already scaled: the crossfade snapshots the new slide in that
+ * paint, and an unscaled first frame would zoom for the length of the fade (r7 design review).
+ * The first stage of a window starts at 1, as the server rendered it, and measures before paint.
+ */
+const lastScale = new Map<string, number>();
+
+/** Set by a drawer jump: the stage that mounts next takes focus (PRD r7, 9.5). */
+let focusOnArrival = false;
+
 const decoded = new Map<string, Promise<void>>();
-/** Fetches and decodes a background once per window (PRD v5, 1.6). */
+/** Fetches and decodes an image once per window (PRD v5, 1.6; r7, 9.2): backgrounds, stills, posters. */
 function decodeBackground(src: string): Promise<void> {
   let p = decoded.get(src);
   if (!p) {
@@ -23,7 +68,9 @@ function decodeBackground(src: string): Promise<void> {
     img.src = src;
     p = img.decode().catch(() => {});
     decoded.set(src, p);
-    (window as unknown as { __decodedBackgrounds?: string[] }).__decodedBackgrounds = [...decoded.keys()];
+    // Merged, so a module reload in development never drops what this window already decoded.
+    const w = window as unknown as { __decodedBackgrounds?: string[] };
+    w.__decodedBackgrounds = [...new Set([...(w.__decodedBackgrounds ?? []), ...decoded.keys()])];
   }
   return p;
 }
@@ -38,10 +85,18 @@ interface Props {
   firstId: string;
   lastId: string;
   slideIds: string[];
+  /** Step count per slide, in `slideIds` order: a press during a slide change counts from the target. */
+  slideSteps?: number[];
   /** The slide's background file (PRD v5, 1.3), drawn by the stage under the slide. */
   background: string;
   /** The previous and next slides' backgrounds, decoded ahead so no slide arrives without one. */
   neighbourBackgrounds: string[];
+  /** Intro stills and posters the window shows after the next press (PRD r7, 9.2). */
+  neighbourAssets?: string[];
+  /** The previous slide has more than one step, so Back lands on its last step. */
+  prevHasSteps?: boolean;
+  /** The navigation drawer's list and current link (PRD r7, 9.6); null where no drawer renders. */
+  nav?: { groups: NavGroup[]; currentId: string | null } | null;
   /** The page's steps (labels only), empty on other slides. */
   steps: { label: string }[];
   /** The page frame's route, for `o`. */
@@ -74,7 +129,7 @@ function stepFromUrl(stepCount: number): number {
  * here. Remounted per slide (keyed on slide id).
  */
 export function Stage(props: Props) {
-  const { slideId, slideTitle, slideIndex, total, prevId, nextId, firstId, lastId, slideIds, background, neighbourBackgrounds, steps, frameRoute, mode, canonicalPath, embedded, passive, children } = props;
+  const { slideId, slideTitle, slideIndex, total, prevId, nextId, prevHasSteps, firstId, lastId, slideIds, slideSteps = [], background, neighbourBackgrounds, neighbourAssets = [], nav, steps, frameRoute, mode, canonicalPath, embedded, passive, children } = props;
   const router = useRouter();
   const presenter = usePresenter();
   const shared = Boolean(presenter) && !passive;
@@ -84,7 +139,8 @@ export function Stage(props: Props) {
   const announcerRef = useRef<HTMLDivElement>(null);
   const touched = useRef(false);
   const playback = useRef<Playback | null>(null);
-  const [scale, setScale] = useState(1);
+  const scaleKey = `${mode}:${embedded ? "embedded" : "full"}:${passive ? "passive" : "live"}`;
+  const [scale, setScale] = useState(() => lastScale.get(scaleKey) ?? 1);
   const [local, setLocal] = useState<LocalState>({ stepIndex: 0, blank: false, handsOn: false, live: false });
   const localRef = useRef(local);
   const [reloadToken, setReloadToken] = useState(0);
@@ -146,8 +202,11 @@ export function Stage(props: Props) {
   useEffect(() => {
     playState.current = { slideId, stepIndex };
   }, [slideId, stepIndex]);
+  /** When Next first asked the playing step to finish, for the stuck-playback watchdog. */
+  const finishAsked = useRef<{ stepIndex: number; at: number } | null>(null);
   const reportPlaying = useCallback(
     (playing: boolean) => {
+      if (!playing) finishAsked.current = null;
       if (shared && mode === "audience") presenterRef.current?.reportPlayback({ ...playState.current, playing });
     },
     [shared, mode],
@@ -156,10 +215,14 @@ export function Stage(props: Props) {
     playback.current = p;
   }, []);
 
-  // A shared "-1" step means "land on the last step"; resolve it once the step count is known.
+  // A shared "-1" step means "land on the last step"; resolve it once the step count is known. Only
+  // the stage that shows the target slide resolves it: the outgoing stage still renders while the
+  // next one loads, and its step count is the wrong one (PRD r7, 6.3).
+  const sharedSlideId = shared ? presenter!.state.slideId : null;
+  const sharedStep = shared ? presenter!.state.stepIndex : null;
   useEffect(() => {
-    if (shared && presenter!.state.stepIndex === -1) presenter!.update({ stepIndex: Math.max(stepCount - 1, 0) });
-  }, [shared, presenter, stepCount]);
+    if (shared && sharedStep === -1 && sharedSlideId === slideId) presenterRef.current!.update({ stepIndex: Math.max(stepCount - 1, 0) });
+  }, [shared, sharedStep, sharedSlideId, slideId, stepCount]);
 
   // ----- rehearsal: 95th percentile frame time (PRD v4, 6.6: under 20 ms during playback) -----
   const [p95, setP95] = useState<number | null>(null);
@@ -184,12 +247,15 @@ export function Stage(props: Props) {
   }, [rehearsal]);
 
   // ----- canvas scaling (PRD v2 6.2) -----
-  useEffect(() => {
+  // Measured before paint, and remembered for the next stage of the same kind (see `lastScale`).
+  useLayoutEffect(() => {
     const el = wrapperRef.current;
     if (!el) return;
     const update = () => {
       const r = el.getBoundingClientRect();
-      setScale(Math.min(r.width / CANVAS.width, r.height / CANVAS.height));
+      const next = Math.min(r.width / CANVAS.width, r.height / CANVAS.height);
+      if (next > 0) lastScale.set(scaleKey, next);
+      setScale(next);
     };
     update();
     const ro = new ResizeObserver(update);
@@ -199,7 +265,7 @@ export function Stage(props: Props) {
       ro.disconnect();
       document.removeEventListener("fullscreenchange", update);
     };
-  }, []);
+  }, [scaleKey]);
 
   // ----- reader mode: restore step from the URL, canonicalise `/` -----
   useEffect(() => {
@@ -238,7 +304,9 @@ export function Stage(props: Props) {
     return () => window.clearTimeout(t);
   }, [passive, slideTitle]);
 
-  // Reader controls fade out after a short idle period.
+  // Reader controls fade out after a short idle period. Keys a frame forwards and the pointer
+  // reaching the pill wake them too (PRD r7, 6.4): events inside a frame never reach this window.
+  const wakeRef = useRef<() => void>(() => {});
   useEffect(() => {
     if (mode !== "reader") return;
     let timer = window.setTimeout(() => setIdle(true), 2500);
@@ -247,22 +315,25 @@ export function Stage(props: Props) {
       window.clearTimeout(timer);
       timer = window.setTimeout(() => setIdle(true), 2500);
     };
+    wakeRef.current = wake;
     window.addEventListener("pointermove", wake);
     window.addEventListener("keydown", wake);
     return () => {
+      wakeRef.current = () => {};
       window.clearTimeout(timer);
       window.removeEventListener("pointermove", wake);
       window.removeEventListener("keydown", wake);
     };
   }, [mode]);
+  const wake = useCallback(() => wakeRef.current(), []);
 
-  // Prefetch neighbours.
+  // Prefetch the neighbours in full (PRD r7, 9.2), at the exact URLs a press navigates to, so the
+  // press starts no page or RSC request. The presenter windows keep their other parameters.
   useEffect(() => {
     if (passive) return;
-    const base = shared ? `${window.location.pathname}?s=` : "/s/";
-    if (prevId) router.prefetch(`${base}${prevId}`);
-    if (nextId) router.prefetch(`${base}${nextId}`);
-  }, [passive, shared, router, prevId, nextId]);
+    const hrefs = shared ? [prevId, nextId].flatMap((id) => (id ? [slideHref(id)] : [])) : [...(prevId ? [readerHref(prevId, { last: prevHasSteps })] : []), ...(nextId ? [readerHref(nextId)] : [])];
+    for (const href of hrefs) router.prefetch(href, FULL_PREFETCH);
+  }, [passive, shared, router, prevId, nextId, prevHasSteps]);
 
   const go = useCallback(
     (id: string | undefined, step?: "last") => {
@@ -273,10 +344,11 @@ export function Stage(props: Props) {
         const startTimer = slideIndex === 1 && p.state.startedAt === null && id === nextId;
         p.update({ slideId: id, stepIndex: step === "last" ? -1 : 0, ...(startTimer ? { startedAt: Date.now(), pausedAt: null } : {}) });
       } else {
-        router.push(`/s/${id}${step ? `?step=${step}` : ""}`);
+        // Back lands on the last step; a slide with one step has no other, and the bare URL is the prefetched one.
+        router.push(readerHref(id, { last: step === "last" && (id !== prevId || prevHasSteps) }));
       }
     },
-    [shared, presenter, router, slideIndex, nextId],
+    [shared, presenter, router, slideIndex, nextId, prevId, prevHasSteps],
   );
 
   const toggleTimer = useCallback(() => {
@@ -290,14 +362,40 @@ export function Stage(props: Props) {
 
   const perform = useCallback(
     (action: KeyAction) => {
+      // A press while the previous press's slide is still on its way counts from that slide, not
+      // from the one this stage shows, so two quick presses land two slides on (PRD r7, 9.3).
+      const pending = shared ? presenter!.getState() : null;
+      if (pending && pending.slideId !== slideId && (action.type === "advance" || action.type === "retreat" || action.type === "next-slide" || action.type === "prev-slide")) {
+        const i = slideIds.indexOf(pending.slideId);
+        if (i >= 0) {
+          const count = slideSteps[i] ?? 0;
+          const at = pending.stepIndex < 0 ? Math.max(count - 1, 0) : pending.stepIndex;
+          if (action.type === "advance" && at < count - 1) presenter!.update({ stepIndex: at + 1 });
+          else if (action.type === "retreat" && at > 0) presenter!.update({ stepIndex: at - 1 });
+          else if (action.type === "advance" || action.type === "next-slide") go(slideIds[i + 1]);
+          else go(slideIds[i - 1], action.type === "retreat" ? "last" : undefined);
+          return;
+        }
+      }
       switch (action.type) {
         case "advance": {
           // Next during playback completes the step; a second press advances (Part A, 4.1).
-          if (playback.current?.isPlaying()) {
-            playback.current.finish();
-            break;
-          }
           const c = current();
+          if (playback.current?.isPlaying()) {
+            // Watchdog (PRD r7, 6.4): a run that still reports playing 1500 ms after it was asked to
+            // finish is stuck, and this press advances anyway.
+            const asked = finishAsked.current;
+            const now = performance.now();
+            if (!asked || asked.stepIndex !== c.stepIndex) finishAsked.current = { stepIndex: c.stepIndex, at: now };
+            if (!asked || asked.stepIndex !== c.stepIndex || now - asked.at < STUCK_PLAYBACK_MS) {
+              playback.current.finish();
+              break;
+            }
+            finishAsked.current = null;
+            const w = window as unknown as { __stuckPlayback?: string[] };
+            w.__stuckPlayback = [...(w.__stuckPlayback ?? []), `${slideId} s${c.stepIndex}`];
+            if (rehearsal || new URLSearchParams(window.location.search).get("rehearse") === "1") console.warn(`Stuck playback on ${slideId} s${c.stepIndex}`);
+          } else finishAsked.current = null;
           if (stepsFirst && c.stepIndex < c.stepCount - 1) setStepIndex(c.stepIndex + 1);
           else go(nextId);
           break;
@@ -362,7 +460,7 @@ export function Stage(props: Props) {
           break;
       }
     },
-    [mode, stepsFirst, current, setStepIndex, patch, go, nextId, prevId, firstId, lastId, blank, handsOn, live, frameRoute, helpOpen, gotoOpen, presenter, toggleTimer],
+    [mode, shared, slideIds, slideSteps, stepsFirst, current, setStepIndex, patch, go, nextId, prevId, firstId, lastId, blank, handsOn, live, frameRoute, helpOpen, gotoOpen, presenter, toggleTimer, slideId, rehearsal],
   );
 
   useEffect(() => {
@@ -380,6 +478,9 @@ export function Stage(props: Props) {
   useEffect(() => {
     if (passive) return;
     const onKey = (e: KeyboardEvent) => {
+      // The drawer owns every key while it is open (PRD r7, 9.5): Escape is its own, PageUp and
+      // PageDown close it (NavDrawer), and nothing moves the deck.
+      if (isNavOpen()) return;
       if (isEditableTarget(e.target) || (gotoOpen && e.key !== "Escape")) return;
       const action = actionForKey(e);
       if (!action) return;
@@ -390,12 +491,47 @@ export function Stage(props: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [passive, perform, gotoOpen]);
 
-  const dispatchKey = useCallback((key: string, shiftKey: boolean) => {
-    const action = actionForKey({ key: key === "Space" ? " " : key, shiftKey, metaKey: false, ctrlKey: false, altKey: false });
-    if (action) performRef.current(action);
-  }, []);
+  const dispatchKey = useCallback(
+    (key: string, shiftKey: boolean) => {
+      wake();
+      if (isNavOpen()) return;
+      const action = actionForKey({ key: key === "Space" ? " " : key, shiftKey, metaKey: false, ctrlKey: false, altKey: false });
+      if (action) performRef.current(action);
+    },
+    [wake],
+  );
 
   const focusStage = useCallback(() => canvasRef.current?.focus({ preventScroll: true }), []);
+
+  // A drawer jump hands the keyboard to the stage that shows the target slide.
+  useEffect(() => {
+    if (passive || !focusOnArrival) return;
+    focusOnArrival = false;
+    canvasRef.current?.focus({ preventScroll: true });
+  }, [passive]);
+  const jump = useCallback(
+    (id: string) => {
+      if (id !== slideId) focusOnArrival = true;
+      focusStage();
+      go(id);
+    },
+    [slideId, focusStage, go],
+  );
+
+  // Links on the slides (PRD r7, 5.2). In the audience window a click opens the link and the stage
+  // takes the keyboard back, so the clicker keeps working. A speaker preview is a picture.
+  const onCanvasClick = useCallback(
+    (e: MouseEvent<HTMLDivElement>) => {
+      const link = e.target instanceof Element ? e.target.closest("a[href]") : null;
+      if (!link) return;
+      if (embedded || passive) {
+        e.preventDefault();
+        return;
+      }
+      if (mode === "audience") window.setTimeout(focusStage, 0);
+    },
+    [embedded, passive, mode, focusStage],
+  );
 
   // The audience keyboard belongs to the stage on arrival. When the focused frame of the previous
   // slide is removed, the browser can hand focus to another iframe (the hidden warming frame of an
@@ -443,6 +579,16 @@ export function Stage(props: Props) {
     if (mode !== "audience" || passive) return;
     for (const src of neighbourKey.split("|").filter(Boolean)) decodeBackground(src);
   }, [neighbourKey, mode, passive]);
+  // The next slide's still or first poster (audience), or the posters the speaker's previews show
+  // after the next press (PRD r7, 9.2). Once the slide has settled, so they never compete with it.
+  const assetKey = neighbourAssets.join("|");
+  useEffect(() => {
+    if (passive || !assetKey) return;
+    const t = window.setTimeout(() => {
+      for (const src of assetKey.split("|")) decodeBackground(src);
+    }, 300);
+    return () => window.clearTimeout(t);
+  }, [assetKey, passive]);
 
   const style = { "--stage-scale": scale, "--dpr": dpr } as CSSProperties;
   const canvasStyle = { "--slide-bg-image": `url("${background}")` } as CSSProperties;
@@ -450,15 +596,29 @@ export function Stage(props: Props) {
   const grain = mode === "audience" && !embedded && !passive;
   const showBlank = blank && mode === "audience";
   const last = stepResults[slideId]?.result;
+  // The crossfade wraps the canvas only, so the pill and dialogs never fade (PRD r7, 9.3).
+  const fade = (mode === "audience" || mode === "reader") && !embedded && !passive && fadeAllowed();
+  const canvas = (
+    <div className="stage__canvas" id={passive ? undefined : "stage"} ref={canvasRef} tabIndex={-1} style={canvasStyle} data-background={background} onClick={onCanvasClick}>
+      <div className="stage__bg" aria-hidden="true" />
+      {grain ? <div className="stage__grain" aria-hidden="true" /> : null}
+      {/* The slide is the page's main landmark (axe `region`); a speaker preview sits inside the speaker's own layout. */}
+      <div className="stage__slide" role={embedded || passive ? undefined : "main"}>
+        {children}
+      </div>
+    </div>
+  );
 
   return (
     <StageContext.Provider value={ctx}>
       <div className={embedded ? "stage stage--embedded" : "stage"} ref={wrapperRef} data-blank={showBlank} data-mode={mode} data-idle={idle} data-hands-on={handsOn} style={style}>
-        <div className="stage__canvas" id={passive ? undefined : "stage"} ref={canvasRef} tabIndex={-1} style={canvasStyle} data-background={background}>
-          <div className="stage__bg" aria-hidden="true" />
-          {grain ? <div className="stage__grain" aria-hidden="true" /> : null}
-          <div className="stage__slide">{children}</div>
-        </div>
+        {fade ? (
+          <ViewTransition name="deck-slide" share="deck-fade" enter="none" exit="none" update="none" default="none">
+            {canvas}
+          </ViewTransition>
+        ) : (
+          canvas
+        )}
         {passive ? null : <div className="stage__announcer" aria-live="polite" aria-atomic="true" ref={announcerRef} />}
         {rehearsal && !passive ? (
           <p className="stage__rehearsal">
@@ -467,8 +627,10 @@ export function Stage(props: Props) {
         ) : null}
       </div>
       {mode === "reader" ? (
-        <ReaderControls slideIndex={slideIndex} total={total} hasPrev={Boolean(prevId)} hasNext={Boolean(nextId)} onPrev={() => perform({ type: "retreat" })} onNext={() => perform({ type: "advance" })} onHelp={() => setHelpOpen(true)} />
+        <ReaderControls slideIndex={slideIndex} total={total} hasPrev={Boolean(prevId)} hasNext={Boolean(nextId)} onPrev={() => perform({ type: "retreat" })} onNext={() => perform({ type: "advance" })} onHelp={() => setHelpOpen(true)} onWake={wake} />
       ) : null}
+      {/* One drawer per window, outside the canvas and the pill, so no capture includes it (PRD r7, 9.4). */}
+      {nav && !passive && mode !== "print" ? <NavDrawer groups={nav.groups} currentId={nav.currentId} onJump={jump} focusStage={focusStage} returnFocusToStage={mode === "audience"} /> : null}
       {mode !== "audience" && !passive ? <KeyboardHelp open={helpOpen} onClose={() => setHelpOpen(false)} /> : null}
       {presenter?.mode === "speaker" && !passive ? <GotoDialog open={gotoOpen} total={total} onGo={(n) => go(slideIds[n - 1])} onClose={() => setGotoOpen(false)} /> : null}
     </StageContext.Provider>

@@ -112,7 +112,7 @@ const KEY_VIA: Record<string, RegExp> = {
   "Alt+ArrowLeft": /navigation\.back|history\.back|dispatch|hook:/,
   "Alt+ArrowRight": /navigation\.forward|history\.forward|dispatch|hook:/,
 };
-const TITLES = { "used-to": "How we used to do it", now: "How we do it now" } as const;
+const TITLES = { "used-to": "What we used to do", now: "What we can do today" } as const;
 
 // --------------------------------------------------------------- text helpers
 

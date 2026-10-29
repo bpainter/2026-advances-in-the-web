@@ -70,8 +70,11 @@ export const BACKGROUNDS = {
     lead: "navy",
     hues: ["navy", "cobalt", "magenta", "orange"],
     textZone: [
-      { name: "eyebrow", x: 64, y: 588, w: 560, h: 36, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.24 } },
-      { name: "title", x: 64, y: 648, w: 1384, h: 368, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.24 } },
+      // The cover group (PRD r7 4.3; docs/design/r7-spec.md 1): centered on y 540, every glyph left of x 1024.
+      { name: "eyebrow", x: 64, y: 174, w: 560, h: 36, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.24 } },
+      { name: "title", x: 64, y: 202, w: 960, h: 552, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.24 } },
+      { name: "name", x: 64, y: 802, w: 900, h: 50, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.24 } },
+      { name: "role", x: 64, y: 856, w: 900, h: 50, on: "field", ink: "white", scrim: { color: "navy", alpha: 0.24 } },
     ],
   },
   "the-mandate": {
@@ -137,7 +140,6 @@ export const BACKGROUNDS = {
   d4: section("d4.jpg", "periwinkle", ["dark-blue", "purple"]),
   d5: section("d5.jpg", "violet", ["magenta", "pink"]),
   d6: section("d6.jpg", "pale-grey", ["cyan", "pink", "yellow"]),
-  f1: section("f1.jpg", "chartreuse", ["cyan", "pale-blue"]),
   m1: section("m1.jpg", "lavender", ["yellow", "cyan", "cream"]),
   m2: section("m2.jpg", "yellow", ["cream", "orange", "lilac"]),
   m3: section("m3.jpg", "pink", ["pale-blue", "peach"]),

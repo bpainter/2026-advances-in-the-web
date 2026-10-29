@@ -1,5 +1,5 @@
 import type { DemoSection } from "@/content/demo-schema";
-import { excerpt, sectionFile } from "@/lib/demo-files";
+import { excerpt, sectionCode } from "@/lib/demo-files";
 
 const TODAY = "demos/15-scroll-driven/today";
 
@@ -11,8 +11,9 @@ const TODAY = "demos/15-scroll-driven/today";
 export const section: DemoSection = {
   id: "m4-return-guide",
   background: "m4",
-  order: 11,
+  order: 10,
   label: "Return guide",
+  group: "still-in-motion",
   feature: "Scroll-driven animations",
   scenario: "A help article shows reading progress, and each step slides in as it arrives.",
   // web-features 3.44.0 predates Firefox 159 (27 Oct 2026); remove the fallback after the bump (3.4).
@@ -42,7 +43,7 @@ export const section: DemoSection = {
       id: "m4-used-to",
       stage: "used-to",
       eyebrow: "Scroll-driven animations",
-      title: "How we used to do it",
+      title: "What we used to do",
       intro: "This help article tracks reading progress. Script listens to every scroll.",
       frame: {
         build: "today",
@@ -133,7 +134,7 @@ export const section: DemoSection = {
       id: "m4-now",
       stage: "now",
       eyebrow: "Scroll-driven animations",
-      title: "How we do it now",
+      title: "What we can do today",
       intro:
         "This is the same article with no scroll script. CSS links each animation to the scroll position.",
       frame: {
@@ -144,8 +145,8 @@ export const section: DemoSection = {
         hooks: ["reset", "scrollArticle", "busyScroll"],
       },
       files: [
-        { file: "index.html", lang: "html", source: sectionFile("m4-return-guide", "index.html") },
-        { file: "article.css", lang: "css", source: sectionFile("m4-return-guide", "article.css") },
+        sectionCode("m4-return-guide", "index.html", "html"),
+        sectionCode("m4-return-guide", "article.css", "css"),
       ],
       steps: [
         {

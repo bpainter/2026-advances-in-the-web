@@ -19,6 +19,8 @@ export interface DemoSection {
   pages: DemoPage[];               // [intro, used-to, now] or [single]
   citations: { text: string; url: string }[];
   cautions: string[];              // 3 at most, 20 words each at most, shown on the now page's last step
+  /** M1 to M5 (PRD r7, 8.3): the intro slide shows a "Still in motion" chip and the drawer groups them. */
+  group?: "still-in-motion";
 }
 
 export type SupportSource =
@@ -75,7 +77,7 @@ export const SPLITS: Record<SplitRatio, { frame: number; code: number; viewport:
 export interface WalkPage extends PageBase {
   stage: "used-to" | "now";
   eyebrow: string;                 // equals the section's feature
-  title: "How we used to do it" | "How we do it now";   // used-to, now respectively
+  title: "What we used to do" | "What we can do today";   // used-to, now respectively
   /** Frame and code widths; defaults to "50/50". "60/40" gives the frame 1056 px and a 768 by 628 viewport. */
   split?: SplitRatio;
   frame: Frame;                    // viewport per split: 640 by 628 (50/50), 768 by 628 (60/40)

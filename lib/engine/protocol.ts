@@ -52,7 +52,9 @@ export type ToRuntime =
   | { v: 2; type: "set-flag"; frameId: string; flag: string; on: boolean }
   | { v: 2; type: "set-mode"; frameId: string; handsOn: boolean }
   | { v: 2; type: "set-live"; frameId: string; on: boolean }
-  | { v: 2; type: "watch"; frameId: string; selectors: string[]; live: boolean };
+  | { v: 2; type: "watch"; frameId: string; selectors: string[]; live: boolean }
+  /** Answers `focus-request`, posted from a task carrying the presenter's press (input-relay.ts). */
+  | { v: 2; type: "focus-grant"; frameId: string };
 
 export type FromRuntime =
   | { v: 2; type: "ready"; frameId: string | null; build: string; url: string; title: string; supports: Record<string, boolean>; hooks: string[]; flags: Flags }
@@ -62,10 +64,12 @@ export type FromRuntime =
   | { v: 2; type: "step-done"; frameId: string; runId: number; stepId: string; asserts: AssertResult[]; digest: string; ms: number; finished: boolean }
   | { v: 2; type: "error"; frameId: string; runId?: number; code: ErrorCode; message: string; action?: number; selector?: string }
   | { v: 2; type: "key"; frameId: string; key: string; shift: boolean; alt: boolean; meta: boolean; ctrl: boolean }
-  | { v: 2; type: "resize-viewport"; frameId: string; inlineSize: string; ms: number };
+  | { v: 2; type: "resize-viewport"; frameId: string; inlineSize: string; ms: number }
+  /** A focus() in the frame did not take during a run (WebKit, no press behind it; review r7 M2). */
+  | { v: 2; type: "focus-request"; frameId: string; runId?: number };
 
 let warnedVersion = false;
-const FROM_TYPES = new Set(["ready", "rects", "cue", "unloading", "step-done", "error", "key", "resize-viewport"]);
+const FROM_TYPES = new Set(["ready", "rects", "cue", "unloading", "step-done", "error", "key", "resize-viewport", "focus-request"]);
 
 /**
  * Strict enough for a trusted-origin message: version 2, a known type, and a string or null frame

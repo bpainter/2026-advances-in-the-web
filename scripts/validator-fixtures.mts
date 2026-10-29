@@ -10,7 +10,7 @@ import { validate, type ValidateContext } from "@/lib/validate/rules";
 import { computeSupport } from "@/lib/support-data";
 import { installedWebFeatures } from "@/lib/web-features";
 import { lintTheme } from "@/lib/validate/theme";
-import { slideCopyIssues, validateV5, type V5Context } from "@/lib/validate/v5";
+import { slideCopyIssues, validateR7, validateV5, type R7Context, type V5Context } from "@/lib/validate/v5";
 import type { Background } from "@/content/backgrounds";
 import { validateWrappers, type WrappedBuild } from "@/lib/validate/wrappers";
 
@@ -42,7 +42,7 @@ function base(): DemoSection {
         id: "x1-used-to",
         stage: "used-to",
         eyebrow: "Dialog element",
-        title: "How we used to do it",
+        title: "What we used to do",
         intro: "This is the old row. The code lights up as it plays.",
         frame: { build: "today", route: "/x/today", viewport: { width: 640, height: 628 } },
         files: [{ file: "app.js", lang: "js", source: "", excerptOf: { path: "fixture.js", ranges: [[1, 10], [20, 30]] } }],
@@ -65,7 +65,7 @@ function base(): DemoSection {
         id: "x1-now",
         stage: "now",
         eyebrow: "Dialog element",
-        title: "How we do it now",
+        title: "What we can do today",
         intro: "This is the same row. The box is a dialog.",
         frame: { build: "native", route: "/x/native", viewport: { width: 640, height: 628 } },
         files: [{ file: "index.html", lang: "html", source: "<button>\n  Open\n</button>\n<dialog></dialog>" }],
@@ -165,7 +165,7 @@ const CASES: [string, Mut][] = [
   ["intro", (s) => (s.support = { kind: "web-features", id: "no-such-feature" })],
   ["intro", (s) => (intro(s).visual.capture.stepId = "s9")],
   ["eyebrow", (s) => (now(s).eyebrow = "Dialogs")],
-  ["title", (s) => (usedTo(s).title = "How we do it now")],
+  ["title", (s) => (usedTo(s).title = "What we can do today")],
   ["callouts", (s) => (usedTo(s).steps[1].callouts = [{ target: "#open", text: "Open", side: "top" }])],
   ["callouts", (s) => (now(s).steps[1].callouts!.push({ target: "#open", text: "Two", side: "left" }))],
   ["callouts", (s) => (now(s).steps[1].callouts![0].text = "Four words are here")],
@@ -362,6 +362,53 @@ const SLIDE_CASES: [string, Parameters<typeof slideCopyIssues>[0], string][] = [
   }
 }
 
+// PRD r7 deck rules (lib/validate/v5.ts validateR7): a clean context passes; each mutation breaks one rule.
+function r7Base(): R7Context {
+  return {
+    deck: { site: { url: "https://example.com" }, speaker: { linkedin: "https://www.linkedin.com/in/x" }, org: { url: "https://www.example.org" } },
+    closingUrl: "https://www.linkedin.com/in/x",
+    sections: [
+      { id: "d1-x", pageIds: ["d1-intro", "d1-now"], stages: ["intro", "now"] },
+      { id: "m1-x", group: "still-in-motion", pageIds: ["m1-intro", "m1-now"], stages: ["intro", "now"] },
+      { id: "m2-x", group: "still-in-motion", pageIds: ["m2-intro", "m2-now"], stages: ["intro", "now"] },
+    ],
+    slideIds: ["title", "d1-intro", "d1-now", "m1-intro", "m1-now", "m2-intro", "m2-now", "closing"],
+    nav: [
+      { slideId: "title", label: "Opening" },
+      { slideId: "d1-intro", label: "Dialog element" },
+      { slideId: "m1-intro", label: "Anchor positioning" },
+      { slideId: "m2-intro", label: "Grid Lanes" },
+      { slideId: "closing", label: "Closing" },
+    ],
+  };
+}
+const R7_CASES: [string, (c: R7Context) => void][] = [
+  ["deck-links", (c) => (c.closingUrl = "https://www.linkedin.com/in/y")],
+  ["deck-links", (c) => (c.deck.org.url = "http://www.example.org")],
+  ["group", (c) => (c.sections = [c.sections[1], c.sections[0], c.sections[2]])],
+  ["group", (c) => (c.sections[1].stages = ["single"])],
+  ["nav", (c) => c.nav!.push({ slideId: "nope", label: "Nope" })],
+  ["nav", (c) => c.nav!.splice(2, 1)],
+  ["nav", (c) => c.nav!.push({ slideId: "d1-now", label: "Dialog element again" })],
+];
+{
+  const clean = validateR7(r7Base());
+  if (clean.length) {
+    failed++;
+    console.log(`✖ r7: the clean fixture fails: ${clean.map((i) => `${i.rule} ${i.message}`).join("; ")}`);
+  } else console.log("✓ r7: the clean fixture passes");
+  for (const [rule, mutate] of R7_CASES) {
+    const c = r7Base();
+    mutate(c);
+    const hit = validateR7(c).filter((i) => i.rule === rule);
+    if (hit.length) console.log(`✓ ${rule}: ${hit[0].message}`);
+    else {
+      failed++;
+      console.log(`✖ ${rule}: not reported`);
+    }
+  }
+}
+
 function computeSupportSafe(s: DemoSection, ctx: ValidateContext) {
   try {
     return computeSupport([s], wf.data, wf.version, {});
@@ -370,5 +417,5 @@ function computeSupportSafe(s: DemoSection, ctx: ValidateContext) {
   }
 }
 
-console.log(`\n${CASES.length + THEME_CASES.length + V5_CASES.length + WRAP_CASES.length + SLIDE_CASES.length + 6 - failed} passed, ${failed} failed`);
+console.log(`\n${CASES.length + THEME_CASES.length + V5_CASES.length + WRAP_CASES.length + SLIDE_CASES.length + R7_CASES.length + 7 - failed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);
