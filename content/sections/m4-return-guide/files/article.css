@@ -1,0 +1,26 @@
+.progress { display: none; }
+.progress__bar { transform-origin: left; }
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion:
+    no-preference) {
+    .progress { display: block; }
+    .progress__bar {
+      animation: grow linear both;
+      animation-timeline: scroll();
+    }
+    .step {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 50%;
+    }
+  }
+}
+
+@keyframes grow {
+  from { scale: 0 1; }
+  to { scale: 1 1; }
+}
+@keyframes rise {
+  from { opacity: 0; translate: 0 2rem; }
+}

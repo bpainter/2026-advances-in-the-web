@@ -73,16 +73,12 @@ export function GlassSlide({ slide }: Props) {
               <span key={l}>{l}</span>
             ))}
           </h1>
-          <div className="sg-card sg-card--dark sg-speaker">
-            <p className="sg-speaker__name">{g.speaker.name}</p>
-            <p className="sg-speaker__role">{g.speaker.role}</p>
-          </div>
           <Wordmark />
         </section>
       );
     case "grid":
       return (
-        <section className={`sg sg--grid sg--${g.variant}`} data-tone={g.tone} data-slide={slide.id} aria-label={slide.title}>
+        <section className={`sg sg--grid sg--${g.variant}${g.align === "center" ? " sg--center" : ""}`} data-tone={g.tone} data-slide={slide.id} aria-label={slide.title}>
           {g.eyebrow ? <p className="sg-eyebrow">{g.eyebrow}</p> : null}
           {g.display ? <h1 className="sg-display">{g.display}</h1> : null}
           {g.title ? <h1 className="sg-title">{g.title}</h1> : null}

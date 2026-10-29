@@ -19,6 +19,24 @@
   #t-status:empty {
     display: none;
   }
+  /* The status line reads as a success chip that hugs its text, so its ring hugs it too
+     (review r6 M2). The shown CSS only hides it while empty. */
+  .orders [role="status"]:not(:empty) {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    justify-self: start;
+    inline-size: fit-content;
+    box-sizing: border-box;
+    padding: 4px 12px;
+  }
+  .orders [role="status"]:not(:empty)::before {
+    content: "";
+    flex: none;
+    inline-size: 8px;
+    block-size: 8px;
+    border-radius: 50%;
+  }
 }
 @layer portal-theme {
   .orders .order {
@@ -36,5 +54,15 @@
     margin: 0;
     color: var(--glass-ink);
     font-weight: 700;
+  }
+  .orders [role="status"]:not(:empty) {
+    border: 1px solid var(--glass-chip-success-edge);
+    border-radius: 8px;
+    background: var(--glass-chip-success-bg);
+    font-size: 15px;
+    line-height: 20px;
+  }
+  .orders [role="status"]:not(:empty)::before {
+    background: var(--glass-chip-success-dot);
   }
 }

@@ -1,0 +1,127 @@
+/* M4 portal content (unshown; still-in-motion-demos.md 7) for both builds: the article is a pane
+   that scrolls inside the shown slot, with the progress track stuck to its top, a lede and five
+   numbered step cards. The motion itself is in the shown CSS. */
+@layer portal-layout {
+  .guide {
+    display: block;
+    box-sizing: border-box;
+    block-size: 100%;
+    overflow-y: auto;
+    /* 36 px at the end: more than the 2rem a hidden step sits lower, so the scroll range never
+       changes while the last step slides in. */
+    padding: 0 20px 36px;
+    border-radius: 12px;
+    overscroll-behavior: contain;
+  }
+  /* 12 px, so the bar reads from the back of the room (review r6 motion H4). */
+  .progress {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    block-size: 12px;
+    margin: 0 -20px 16px;
+  }
+  /* A 12 px strip under the track that fades out: text scrolling up disappears cleanly under the
+     bar instead of showing cut through it (review r6 motion M9). */
+  .progress::after {
+    content: "";
+    position: absolute;
+    inset: 100% 0 auto;
+    block-size: 12px;
+    pointer-events: none;
+  }
+  .progress__bar {
+    block-size: 100%;
+  }
+  .guide > h2 {
+    margin: 0 0 12px;
+  }
+  .guide > p {
+    margin: 0 0 20px;
+  }
+  .before {
+    padding: 14px 16px;
+  }
+  .steps {
+    display: grid;
+    gap: 16px;
+    margin: 40px 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+  .step {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    align-content: start;
+    gap: 2px 12px;
+    min-block-size: 112px;
+    box-sizing: border-box;
+    padding: 16px;
+  }
+  .step::before {
+    content: counter(step);
+    display: grid;
+    place-items: center;
+    grid-row: 1 / span 2;
+    inline-size: 32px;
+    block-size: 32px;
+  }
+  .step > h3,
+  .step > p {
+    grid-column: 2;
+    margin: 0;
+  }
+  /* The hook places the chip just under the bar, at the article's top right (review r6 H4). */
+  .busy-chip {
+    position: fixed;
+    inset: 12px 12px auto auto;
+    z-index: 10;
+    margin: 0;
+    padding: 6px 12px;
+  }
+}
+@layer portal-theme {
+  /* An opaque track, so nothing shows through it. */
+  .progress {
+    background: linear-gradient(var(--glass-rule), var(--glass-rule)), var(--glass-surface-solid);
+  }
+  .progress::after {
+    background: linear-gradient(var(--glass-surface-solid), rgb(255 255 255 / 0));
+  }
+  .progress__bar {
+    background: var(--slalom-blue);
+  }
+  .guide > h2 {
+    font-size: var(--glass-text-xl);
+    line-height: 28px;
+  }
+  .before {
+    border-radius: var(--glass-radius-control);
+    background: var(--glass-surface-selected);
+    color: var(--glass-ink);
+  }
+  .step {
+    border: var(--glass-border);
+    border-radius: var(--glass-radius-card);
+    background: var(--glass-surface-strong);
+    box-shadow: var(--glass-highlight), var(--glass-shadow-card);
+  }
+  .step::before {
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--white);
+    font-weight: 700;
+  }
+  .step > h3 {
+    font-size: var(--glass-text-lg);
+    line-height: 24px;
+  }
+  .busy-chip {
+    border-radius: var(--glass-radius-pill);
+    background: var(--navy);
+    color: var(--white);
+    font-weight: 700;
+  }
+}

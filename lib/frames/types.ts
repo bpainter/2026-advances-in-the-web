@@ -43,6 +43,19 @@ export interface BuildDef {
   extraDir?: string;
   /** Document title. */
   title: string;
+  /**
+   * Documents besides index.html that the build serves as composed pages, each with the theme,
+   * the wrapper, the runtime and the instrumentation, exactly like the entry page
+   * (still-in-motion-demos.md 3.3): `["product.html"]`. A link or navigation between them is a
+   * real document load inside the frame.
+   */
+  pages?: string[];
+  /**
+   * Fills a page's server template before it is composed (M2's photo wall, M5's catalog). The
+   * shown file stays as written; `url` carries the page's query (`?id=trail`). Throws for an
+   * unknown record, which the route answers with a 404.
+   */
+  render?: (file: string, html: string, url: URL) => string;
 }
 
 export interface DemoFolder {

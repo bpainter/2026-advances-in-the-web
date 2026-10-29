@@ -1,0 +1,74 @@
+<!-- prettier-ignore -->
+<link rel="stylesheet" href="styles.css">
+<figure id="t-look" class="look">
+  <img
+    src="hiker-ridge.webp"
+    width="1800"
+    height="1200"
+    alt="A hiker on a ridge."
+  />
+  <button
+    id="t-pin-shell"
+    class="pin"
+    aria-expanded="false"
+    aria-controls="t-card-shell"
+    aria-label="Rain shell"
+  ></button>
+  <button
+    id="t-pin-pack"
+    class="pin"
+    aria-expanded="false"
+    aria-controls="t-card-pack"
+    aria-label="Day pack 22 L"
+  ></button>
+  <button
+    id="t-pin-shoe"
+    class="pin"
+    aria-expanded="false"
+    aria-controls="t-card-shoe"
+    aria-label="Ridgeline Trail"
+  ></button>
+</figure>
+<template id="t-cards">
+  <div
+    id="t-card-shell"
+    class="card"
+    role="dialog"
+    aria-label="Rain shell"
+  >
+    <img src="rain-shell.webp" alt="" />
+    <h3>Rain shell</h3>
+    <p>$149</p>
+    <button>Add to cart</button>
+  </div>
+  <div
+    id="t-card-pack"
+    class="card"
+    role="dialog"
+    aria-label="Day pack 22 L"
+  >
+    <img src="day-pack-22.webp" alt="" />
+    <h3>Day pack 22 L</h3>
+    <p>$89</p>
+    <button>Add to cart</button>
+  </div>
+  <div
+    id="t-card-shoe"
+    class="card"
+    role="dialog"
+    aria-label="Ridgeline Trail"
+  >
+    <img
+      src="ridgeline-trail.webp"
+      alt=""
+    />
+    <h3>Ridgeline Trail</h3>
+    <p>$129</p>
+    <button>Add to cart</button>
+  </div>
+</template>
+<div id="t-float-root"></div>
+<script
+  type="module"
+  src="hotspots.js"
+></script>

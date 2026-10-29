@@ -1,0 +1,42 @@
+/* M5 storefront-catalog (still-in-motion-demos.md 8): a store header strip and a footer strip,
+   identical on the category page and the product page, around the shown page on the focus
+   surface. Nothing here names a view transition. */
+@layer wrapper {
+  .wrap-cat-nav {
+    display: inline-flex;
+    gap: 16px;
+    color: var(--glass-ink);
+    font-weight: 700;
+  }
+  .wrap-cat-cart {
+    gap: 6px;
+  }
+  .wrap-cat-cart__count {
+    display: inline-grid;
+    place-items: center;
+    min-inline-size: 20px;
+    block-size: 20px;
+    padding: 0 6px;
+    box-sizing: border-box;
+    border-radius: 999px;
+    background: var(--wrap-chip-fill);
+    color: var(--glass-ink);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .wrap--catalog .wrap-store-body {
+    display: flex;
+    flex-direction: column;
+    min-block-size: 0;
+    padding: 12px 20px;
+  }
+  .wrap--catalog [data-shown] {
+    flex: 1;
+    min-block-size: 0;
+    padding: 16px 20px;
+  }
+  .wrap--catalog .wrap-site-foot {
+    margin: 0;
+  }
+}

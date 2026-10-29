@@ -10,8 +10,12 @@ import { watchList } from "./watch-list";
 import { advisoryFeed } from "./advisory-feed";
 import { terminalWindow } from "./terminal-window";
 import { ciReport } from "./ci-report";
-import { dependencyReview } from "./dependency-review";
 import { storefrontProduct } from "./storefront-product";
+import { helpCenter } from "./help-center";
+import { lookbook } from "./lookbook";
+import { editorPricing } from "./editor-pricing";
+import { productPhotos } from "./product-photos";
+import { storefrontCatalog } from "./storefront-catalog";
 import type { WrapperDef, WrapperId } from "./types";
 
 export type { WrapperDef, WrapperId, WrapperRender, WrapperContext } from "./types";
@@ -29,7 +33,11 @@ export const WRAPPERS: Partial<Record<WrapperId, WrapperDef>> = {
   "advisory-feed": advisoryFeed,
   "terminal-window": terminalWindow,
   "ci-report": ciReport,
-  "dependency-review": dependencyReview,
+  "help-center": helpCenter,
+  lookbook,
+  "editor-pricing": editorPricing,
+  "product-photos": productPhotos,
+  "storefront-catalog": storefrontCatalog,
   "fixture-bare": fixtureBare,
 };
 

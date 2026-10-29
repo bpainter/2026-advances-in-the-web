@@ -10,6 +10,19 @@
   .variant .combo__button {
     min-inline-size: 18rem;
   }
+  /* A disclosure chevron, so the used-to field reads as a picker like the now select (review r6
+     L8). Paint only; the combobox's behavior is the shown code. */
+  .combo__button::after {
+    content: "";
+    flex: none;
+    margin-inline-start: auto;
+    inline-size: 12px;
+    block-size: 7px;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+  .combo__button[aria-expanded="true"]::after {
+    transform: rotate(180deg);
+  }
   .picker-replica {
     position: absolute;
     min-inline-size: 18rem;
@@ -18,6 +31,12 @@
     display: flex;
     gap: 0.5rem;
     align-items: center;
+  }
+  /* The replica's photos match the shown select img rule. */
+  .picker-replica__option img {
+    inline-size: 3rem;
+    block-size: 2.25rem;
+    border-radius: 4px;
   }
   .firefox-capture {
     margin: var(--glass-space-6) 0 0;
@@ -36,6 +55,9 @@
   }
 }
 @layer portal-theme {
+  .combo__button::after {
+    background: var(--glass-ink);
+  }
   .picker-replica {
     background: rgb(255 255 255 / 0.92);
   }

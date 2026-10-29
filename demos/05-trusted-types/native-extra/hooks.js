@@ -26,12 +26,16 @@ async function call(fn, name) {
   // A direct assignment reports a violation (report-only) or reports and
   // throws (enforce); the event is queued, so wait for it before the asserts.
   const reported = fn === "renderDirect" ? nextViolation() : Promise.resolve();
+  let thrown = null;
   try {
     app[fn](body);
   } catch (error) {
-    log(`${error.name}: ${error.message}`);
+    thrown = error;
   }
   await reported;
+  // The console lists newest first. The violation report is queued after the throw, so the error
+  // is logged once the report is in: the blocked write stays the top row (review r6 L10).
+  if (thrown) log(`${thrown.name}: ${thrown.message}`);
   await settled(document.querySelector("#description img"));
 }
 

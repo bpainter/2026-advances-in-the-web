@@ -234,7 +234,7 @@ export const section: DemoSection = {
           code: { file: "app.js", lines: [[1, 5]] },
           spotlight: [".product-card"],
           // The one state the room cannot see: where the container ends (design review M5).
-          callouts: [{ target: ".product-slot", text: "Container edge", side: "right" }],
+          callouts: [{ target: ".product-slot", text: "Container edge", side: "bottom" }],
           proof:
             "Switch page width while keeping the card container fixed to prove the query belongs to the component.",
           meter: {

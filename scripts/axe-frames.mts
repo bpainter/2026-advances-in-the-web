@@ -17,7 +17,7 @@ const axeSource = readFileSync(require.resolve("axe-core/axe.min.js"), "utf8");
 const only = process.argv.slice(2).find((a) => !a.startsWith("--"));
 
 const seen = new Set<string>();
-const targets: { where: string; url: string }[] = [];
+const targets: { where: string; url: string; viewport: { width: number; height: number } }[] = [];
 for (const s of sections) {
   if (only && s.id !== only) continue;
   for (const p of s.pages) {
@@ -26,7 +26,16 @@ for (const s of sections) {
     const url = `${frameUrl(route).url}?flags=${flagsQuery({ ...(p.frame.flags ?? {}), glass: false })}`;
     if (seen.has(url)) continue;
     seen.add(url);
-    targets.push({ where: p.id, url });
+    targets.push({ where: p.id, url, viewport: p.frame.viewport });
+    // Multi-page builds (still-in-motion-demos.md 3.3): every other document a step ends on.
+    const base = route.replace(/[^/]*$/, "");
+    for (const step of p.steps) {
+      if (!step.route || step.route === "index.html") continue;
+      const routed = `${frameUrl(base + step.route).url}${step.route.includes("?") ? "&" : "?"}flags=${flagsQuery({ ...(p.frame.flags ?? {}), glass: false })}`;
+      if (seen.has(routed)) continue;
+      seen.add(routed);
+      targets.push({ where: `${p.id} ${step.id} (${step.route})`, url: routed, viewport: p.frame.viewport });
+    }
   }
 }
 
@@ -35,6 +44,8 @@ const context = await browser.newContext({ bypassCSP: true, viewport: { width: 6
 const page = await context.newPage();
 let violations = 0;
 for (const t of targets) {
+  // Each frame at its authored viewport (640 or 768 by 628 on walk pages, 1304 on single pages).
+  await page.setViewportSize(t.viewport);
   await page.goto(t.url);
   await page.waitForTimeout(500);
   await page.evaluate(axeSource);

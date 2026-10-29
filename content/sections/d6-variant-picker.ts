@@ -11,7 +11,7 @@ export const section: DemoSection = {
   label: "Variant picker",
   feature: "Customizable select",
   scenario:
-    "The Color field shows a swatch beside each name and still posts the color.",
+    "The Color field shows a photo beside each name and still posts the color.",
   support: {
     kind: "web-features",
     id: "customizable-select",
@@ -22,12 +22,12 @@ export const section: DemoSection = {
       id: "d6-intro",
       stage: "intro",
       intro:
-        "Our last core demo is a product editor. The Color field shows a swatch beside each name. Firefox does not support this yet, and it still gets a working form.",
+        "Our last core demo is a product editor. The Color field shows a photo beside each name. Firefox does not support this yet, and it still gets a working form.",
       description:
         "Customizable select lets you style a real select, with any content inside each option.",
       visual: {
         src: "/intro/d6-variant-picker.png",
-        alt: "The product editor with the color picker open, showing a swatch beside each color.",
+        alt: "The product editor with the color picker open, showing a photo beside each color.",
         capture: { pageId: "d6-now", stepId: "s2" },
       },
       steps: [{ id: "s0", label: "Title and support", actions: [], bullets: [] }],
@@ -39,7 +39,7 @@ export const section: DemoSection = {
       eyebrow: "Customizable select",
       title: "How we used to do it",
       intro:
-        "The Color field shows a swatch beside each name. Teams built their own select for that.",
+        "The Color field shows a photo beside each name. Teams built their own select for that.",
       frame: {
         build: "today",
         route: "/demos/11-customizable-select/today",
@@ -49,7 +49,7 @@ export const section: DemoSection = {
       files: [
         excerpt(`${TODAY}/index.html`, "html", [[11, 34]]),
         excerpt(`${TODAY}/styles.css`, "css", [[10, 35]]),
-        excerpt(`${TODAY}/combobox.js`, "js", [[133, 170]]),
+        excerpt(`${TODAY}/combobox.js`, "js", [[134, 171]]),
       ],
       steps: [
         {
@@ -114,12 +114,12 @@ export const section: DemoSection = {
           ifKeyboard: "Press Arrow Down, then Enter. Then press Next once to sync the frame.",
           meter: {
             label: "JavaScript",
-            value: "127 lines",
+            value: "128 lines",
             source: "non-blank, non-comment lines in /demos/11-customizable-select/today/*.js",
           },
           bullets: [
             "Arrow Down and Enter pick Moss.",
-            "Script handles every key, the outside click and the form value: 127 lines.",
+            "Script handles every key, the outside click and the form value: 128 lines.",
           ],
         },
       ],
@@ -131,7 +131,7 @@ export const section: DemoSection = {
       eyebrow: "Customizable select",
       title: "How we do it now",
       intro:
-        "This is a real select with the same swatches. It starts plain, the way every browser draws it.",
+        "This is a real select with the same photos. It starts plain, the way every browser draws it.",
       frame: {
         build: "native",
         route: "/demos/11-customizable-select/native",
@@ -165,7 +165,7 @@ export const section: DemoSection = {
           bullets: [
             "Four lines of CSS turn the plain select into a custom one.",
             "Appearance base-select lets us style the select and its picker.",
-            "The button now shows the swatch beside the name.",
+            "The button now shows the photo beside the name.",
           ],
         },
         {
@@ -186,7 +186,7 @@ export const section: DemoSection = {
           ifKeyboard:
             "Click the select to open the live picker. Then press Next once to sync the frame.",
           bullets: [
-            "The picker opens, and each option shows a swatch beside its name.",
+            "The picker opens, and each option shows a photo beside its name.",
             "The selectedcontent element copies the chosen option into the button.",
           ],
         },
@@ -208,7 +208,7 @@ export const section: DemoSection = {
           spotlight: ["#color"],
           ifKeyboard: "Tab to Color and press Arrow Down. Then press Next once to sync the frame.",
           bullets: [
-            "Arrow Down picks Moss, and the button shows its swatch.",
+            "Arrow Down picks Moss, and the button shows its photo.",
             "The keyboard works because this is still a select. We wrote no key handling.",
           ],
         },

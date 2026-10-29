@@ -140,11 +140,24 @@
     var r = el.getBoundingClientRect();
     return { x: r.left, y: r.top, w: r.width, h: r.height, radii: radiiOf(el, r.width, r.height) };
   }
+  // Animations on the document timeline: transitions, keyframe animations and view transitions.
+  // Scroll-driven animations (a ScrollTimeline or ViewTimeline) report as running for as long as
+  // they exist and follow the scroll position, so they never count as motion to wait for, and
+  // finishing one would pin it to its end (still-in-motion-demos.md 3.5).
+  function timeAnimations() {
+    try {
+      return document.getAnimations().filter(function (a) {
+        return a.timeline === document.timeline;
+      });
+    } catch (e) {
+      return [];
+    }
+  }
   // A finite animation or transition is running (infinite ones, such as a blinking caret, do not
   // count): the presenter keeps spotlights hidden meanwhile (PRD v5, 3.2).
   function isAnimating() {
     try {
-      var list = document.getAnimations();
+      var list = timeAnimations();
       for (var i = 0; i < list.length; i++) {
         var a = list[i];
         if (a.playState !== "running" || !a.effect) continue;
@@ -199,7 +212,7 @@
   }
   function finishAnimations() {
     try {
-      document.getAnimations().forEach(function (a) {
+      timeAnimations().forEach(function (a) {
         try {
           a.finish();
         } catch (e) {
@@ -274,7 +287,7 @@
     }
     try {
       await Promise.all(
-        document.getAnimations().map(function (a) {
+        timeAnimations().map(function (a) {
           return a.finished.catch(function () {});
         }),
       );
@@ -290,13 +303,17 @@
   function enhancementSheets() {
     return Array.prototype.slice.call(document.querySelectorAll('link[rel="stylesheet"][data-flag="enhance-css"], style[data-flag="enhance-css"]'));
   }
-  var removedSupports = []; // { sheet, rules: [{ index, cssText }] }
+  var removedSupports = []; // { sheet, rules: [{ index, cssText, inserted }] }
   function applyFlag(flag, on) {
     flags[flag] = on;
     if (flag === "enhance-css") {
       var mode = document.documentElement.getAttribute("data-enhance-css-mode") || "all";
       if (mode === "supports-blocks") {
         if (!on) {
+          // Off is what a browser without the feature gets: every positive @supports block goes,
+          // and the body of every `@supports not (...)` block applies unconditionally (M2 s0: the
+          // cropped fallback grid, review r6 motion H1). Pages with positive blocks only (D3)
+          // behave as before.
           removedSupports = [];
           Array.prototype.slice.call(document.styleSheets).forEach(function (sheet) {
             // The portal theme is never part of an enhancement (PRD v4, 6.2).
@@ -304,9 +321,22 @@
             var removed = [];
             try {
               for (var i = sheet.cssRules.length - 1; i >= 0; i--) {
-                if (sheet.cssRules[i] instanceof CSSSupportsRule) {
-                  removed.unshift({ index: i, cssText: sheet.cssRules[i].cssText });
-                  sheet.deleteRule(i);
+                var rule = sheet.cssRules[i];
+                if (!(rule instanceof CSSSupportsRule)) continue;
+                var body = /^\s*not[\s(]/i.test(rule.conditionText || "")
+                  ? Array.prototype.map.call(rule.cssRules, function (r) {
+                      return r.cssText;
+                    })
+                  : [];
+                removed.unshift({ index: i, cssText: rule.cssText, inserted: 0 });
+                sheet.deleteRule(i);
+                for (var j = 0; j < body.length; j++) {
+                  try {
+                    sheet.insertRule(body[j], i + removed[0].inserted);
+                    removed[0].inserted++;
+                  } catch (e) {
+                    /* unsupported rule */
+                  }
                 }
               }
             } catch (e) {
@@ -316,13 +346,16 @@
           });
         } else {
           removedSupports.forEach(function (entry) {
-            entry.rules.forEach(function (r) {
+            // First block first: once every earlier block is back, a block's own index holds again.
+            for (var k = 0; k < entry.rules.length; k++) {
+              var r = entry.rules[k];
               try {
+                for (var n = 0; n < r.inserted; n++) entry.sheet.deleteRule(r.index);
                 entry.sheet.insertRule(r.cssText, Math.min(r.index, entry.sheet.cssRules.length));
               } catch (e) {
                 /* unsupported rule */
               }
-            });
+            }
           });
           removedSupports = [];
         }
@@ -367,7 +400,68 @@
     } catch (e) {
       fv = false;
     }
-    return { rects: rects, focus: focus, focusVisible: fv, animating: isAnimating() };
+    return { rects: rects, focus: focus, focusVisible: fv, animating: isAnimating(), layers: computeLayers(active) };
+  }
+  // Top-layer elements (open popovers, modal dialogs, fullscreen), in the order they opened. They
+  // paint above the page, so the presenter keeps spotlights, callouts and the focus ring from
+  // drawing over them unless the box marks the layer or something inside it (PRD v5, 3.1;
+  // review r6 D1). `owns` lists the watched selectors that match the layer or a descendant;
+  // `focus` says the focused element is inside it.
+  var layerOrder = new Map();
+  var layerSeq = 0;
+  document.addEventListener(
+    "toggle",
+    function (e) {
+      if (!(e.target instanceof Element)) return;
+      if (e.newState === "closed") layerOrder.delete(e.target);
+      else if (e.newState === "open" && !layerOrder.has(e.target)) layerOrder.set(e.target, ++layerSeq);
+      scheduleRects();
+    },
+    true,
+  );
+  function computeLayers(active) {
+    var found = [];
+    [":popover-open", "dialog:modal", ":fullscreen"].forEach(function (q) {
+      try {
+        var els = document.querySelectorAll(q);
+        for (var i = 0; i < els.length; i++) if (found.indexOf(els[i]) === -1) found.push(els[i]);
+      } catch (e) {
+        /* the selector is not supported */
+      }
+    });
+    var seen = new Map();
+    var out = [];
+    for (var i = 0; i < found.length; i++) {
+      var el = found[i];
+      if (!layerOrder.has(el)) layerOrder.set(el, ++layerSeq);
+      seen.set(el, true);
+      var r = rectOf(el);
+      if (!(r.w > 0 && r.h > 0) || getComputedStyle(el).visibility === "hidden") continue;
+      var owns = [];
+      for (var j = 0; j < watched.length; j++) {
+        try {
+          var m = document.querySelectorAll(watched[j]);
+          for (var k = 0; k < m.length; k++) {
+            if (el.contains(m[k])) {
+              owns.push(watched[j]);
+              break;
+            }
+          }
+        } catch (e) {
+          /* bad selector */
+        }
+      }
+      r.z = layerOrder.get(el);
+      r.owns = owns;
+      r.focus = !!active && el.contains(active);
+      out.push(r);
+    }
+    layerOrder.forEach(function (_, el) {
+      if (!seen.has(el)) layerOrder.delete(el);
+    });
+    return out.sort(function (a, b) {
+      return a.z - b.z;
+    });
   }
   function postRects(force) {
     if (!frameId) return;
@@ -375,7 +469,7 @@
     var json = JSON.stringify(data);
     if (!force && json === lastRectsJson) return;
     lastRectsJson = json;
-    post({ type: "rects", seq: ++rectsSeq, viewport: { w: window.innerWidth, h: window.innerHeight }, rects: data.rects, focus: data.focus, focusVisibleNative: data.focusVisible || focusVisibleNative === true, animating: data.animating });
+    post({ type: "rects", seq: ++rectsSeq, viewport: { w: window.innerWidth, h: window.innerHeight }, rects: data.rects, focus: data.focus, focusVisibleNative: data.focusVisible || focusVisibleNative === true, animating: data.animating, layers: data.layers });
   }
   var rafPending = false;
   function scheduleRects() {
@@ -453,7 +547,7 @@
       pass = m[1] === ">" ? w > Number(m[2]) : m[1] === "<" ? w < Number(m[2]) : Math.round(w) === Number(m[2]);
       actual = Math.round(w) + "px";
     } else if ((m = /^(?:text~=|contains:)(.*)$/.exec(ex))) {
-      var text = el ? el.textContent || "" : "";
+      var text = el ? deepText(el) : "";
       pass = text.indexOf(m[1]) !== -1;
       actual = text.trim().slice(0, 80);
     } else if ((m = /^attr:([\w-]+)(?:=(.*))?$/.exec(ex))) {
@@ -473,6 +567,10 @@
       var bs = cs ? parseFloat(cs.blockSize || cs.height) : -1;
       pass = !!cs && Math.abs(bs - Number(m[1]) * lh) <= 2;
       actual = bs + "px (lh " + lh + "px)";
+    } else if ((m = /^style:([\w-]+)=(.+)$/.exec(ex))) {
+      var sv = el ? getComputedStyle(el).getPropertyValue(m[1]).trim() : "";
+      pass = !!el && sv === m[2];
+      actual = el ? m[1] + "=" + sv : "missing";
     } else if ((m = /^columns=(\d+)$/.exec(ex))) {
       var cols = el ? getComputedStyle(el).gridTemplateColumns : "";
       var count = cols && cols !== "none" ? cols.trim().split(/\s+/).length : 0;
@@ -483,6 +581,33 @@
     }
     if (negate) pass = !pass;
     return { pass: pass, actual: actual };
+  }
+
+  // The text a person sees in an element: its own, plus open shadow roots and same-origin iframe
+  // documents inside it (M3's pricing app renders in one or the other; still-in-motion-demos.md 6).
+  function deepText(el) {
+    var out = el.textContent || "";
+    var stack = [el];
+    while (stack.length) {
+      var node = stack.pop();
+      if (node.shadowRoot) {
+        out += " " + (node.shadowRoot.textContent || "");
+        stack.push.apply(stack, node.shadowRoot.querySelectorAll("*"));
+      }
+      if (node.tagName === "IFRAME") {
+        try {
+          var doc = node.contentDocument;
+          if (doc && doc.body) {
+            out += " " + (doc.body.textContent || "");
+            stack.push.apply(stack, doc.body.querySelectorAll("*"));
+          }
+        } catch (e) {
+          /* cross-origin */
+        }
+      }
+      if (node === el) stack.push.apply(stack, el.querySelectorAll("*"));
+    }
+    return out;
   }
 
   function describe(el) {
@@ -706,7 +831,21 @@
         await cue("cursor", { to: rectOf(el), ms: pace.glideMs }, pace.glideMs);
         await cue("ripple", { at: rectOf(el) }, pace.rippleMs);
         if (el.matches('button[type="submit"], input[type="submit"]') || (el.form && el.type === "submit")) markUnloadingSoon();
+        var link = multiPage ? el.closest("a[href]") : null;
+        var prevented = false;
+        if (link) {
+          await loadFinished();
+          markOwnLoad();
+          window.addEventListener(
+            "click",
+            function (e) {
+              prevented = e.defaultPrevented;
+            },
+            { once: true },
+          );
+        }
         focusThenClick(el);
+        if (link && !prevented && !(window.navigation && navigation.transition)) await leaving();
         return;
       case "key": {
         await cue("keycap", { label: keycapLabel(action.key), ms: 900 }, 150);
@@ -807,10 +946,15 @@
         if (action.history) {
           traverse(action.history);
         } else if (action.url) {
+          if (multiPage) {
+            await loadFinished();
+            markOwnLoad();
+          }
           if (window.navigation) swallow(navigation.navigate(action.url));
           else location.assign(action.url);
         }
-        await sleep(instant ? 60 : 200);
+        if (multiPage && !(window.navigation && navigation.transition)) await leaving();
+        else await sleep(instant ? 60 : 200);
         return;
       case "network":
         netProfile = action.profile;
@@ -861,11 +1005,80 @@
   function markUnloadingSoon() {
     unloadSoon = true;
   }
+  // Multi-page builds (still-in-motion-demos.md 3.3; the composer writes data-pages). A click on a
+  // link or a navigate that loads another page ends this document's part of the run: the runtime
+  // waits here for pagehide, whose `unloading` names the next action, and the presenter resumes
+  // the run in the new document. A same-document traversal (popstate) or a load that never comes
+  // ends the wait. The load is counted as one of the frame's own entries (the frame's referrer
+  // policy hides the referrer that recordFrameEntries looks for).
+  var multiPage = document.documentElement.hasAttribute("data-pages");
+  function leaving() {
+    return new Promise(function (resolve) {
+      var t = setTimeout(resolve, 5000);
+      window.addEventListener(
+        "popstate",
+        function () {
+          clearTimeout(t);
+          resolve();
+        },
+        { once: true },
+      );
+    });
+  }
+  function markOwnLoad() {
+    if (!window.name) saveDepth(frameDepth());
+  }
+  // A navigation started before the document's load event has finished is a replace in every
+  // engine (no session history entry). The runtime is ready at DOMContentLoaded, so an instant
+  // replay's navigate would otherwise replace the entry page, leave no entry for a later Back,
+  // and WebKit's history.back() would then move the presenter window. Wait for load to finish.
+  function loadFinished() {
+    return new Promise(function (resolve) {
+      var t = setTimeout(resolve, 3000);
+      function check() {
+        var nt = performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
+        if (nt ? nt.loadEventEnd > 0 : document.readyState === "complete") {
+          clearTimeout(t);
+          resolve();
+          return;
+        }
+        window.addEventListener(
+          "load",
+          function () {
+            setTimeout(check, 0);
+          },
+          { once: true },
+        );
+      }
+      check();
+    });
+  }
+  // Instant replay and Next during playback load the next page with no view transition.
+  // Skipping rejects the transition's promises; they are handled here, or Chrome reports
+  // "Transition was skipped" as an uncaught error in the frame.
+  window.addEventListener("pageswap", function (e) {
+    var vt = e.viewTransition;
+    if (!vt || !run || !(run.instant || run.finishing || reducedMotion)) return;
+    [vt.ready, vt.finished, vt.updateCallbackDone].forEach(function (p) {
+      if (p && typeof p.catch === "function") p.catch(function () {});
+    });
+    vt.skipTransition();
+  });
+  // Only a run still playing continues in the next document; a finished run's step-done is out.
   window.addEventListener("pagehide", function () {
-    if (run && !run.unloadPosted) {
+    if (run && run.playing && !run.unloadPosted) {
       run.unloadPosted = true;
       post({ type: "unloading", runId: run.runId, cursor: { step: run.cursor.step, action: run.cursor.action + 1 } });
     }
+  });
+  // A document restored from the back/forward cache runs no script: the run that left it already
+  // continues elsewhere (cancel it, so its pending wait cannot resume here), and the presenter
+  // needs a fresh `ready` to init this document and resume its own run in it.
+  window.addEventListener("pageshow", function (e) {
+    if (!e.persisted) return;
+    if (run) run.cancelled = true;
+    traversing = false;
+    announce(flags);
   });
 
   function insertText(el, text, inputType) {
@@ -1069,9 +1282,6 @@
   function ready() {
     installFetch();
     startObservers();
-    var hookNames = Object.keys(hooks()).filter(function (k) {
-      return typeof hooks()[k] === "function";
-    });
     var initialFlags = {};
     var fl = document.documentElement.getAttribute("data-flags");
     if (fl) {
@@ -1081,7 +1291,16 @@
       });
     }
     flags = initialFlags;
-    post({ type: "ready", build: document.documentElement.getAttribute("data-build") || "", url: location.pathname + location.search, title: document.title, supports: features(), hooks: hookNames, flags: initialFlags });
+    // A supports-blocks enhancement that starts off (M2): its @supports blocks leave before the
+    // first paint the presenter shows, as a later toggle would remove them.
+    if (initialFlags["enhance-css"] === false && document.documentElement.getAttribute("data-enhance-css-mode") === "supports-blocks") applyFlag("enhance-css", false);
+    announce(initialFlags);
+  }
+  function announce(withFlags) {
+    var hookNames = Object.keys(hooks()).filter(function (k) {
+      return typeof hooks()[k] === "function";
+    });
+    post({ type: "ready", build: document.documentElement.getAttribute("data-build") || "", url: location.pathname + location.search, title: document.title, supports: features(), hooks: hookNames, flags: withFlags });
   }
   function onLoaded() {
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(ready, ready);

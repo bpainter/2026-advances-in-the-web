@@ -9,14 +9,18 @@ import { folder as d05 } from "@/demos/05-trusted-types/build";
 import { folder as d07 } from "@/demos/07-package-workflow/build";
 import { folder as d08 } from "@/demos/08-fast-follows/build";
 import { folder as d09 } from "@/demos/09-vite-8/build";
-import { folder as d10 } from "@/demos/10-delete/build";
 import { folder as d11 } from "@/demos/11-customizable-select/build";
+import { folder as d12 } from "@/demos/12-anchor-hotspots/build";
+import { folder as d13 } from "@/demos/13-grid-lanes/build";
+import { folder as d14 } from "@/demos/14-scoped-registries/build";
+import { folder as d15 } from "@/demos/15-scroll-driven/build";
+import { folder as d16 } from "@/demos/16-cross-document-vt/build";
 import { folder as d00 } from "@/demos/00-fixtures/build";
 
 export { nativeBuild, folderBuild, manifestDefaults, BASE_SANDBOX, FORMS_SANDBOX } from "./build-helpers";
 
 /** Every demo folder the frame routes can serve, keyed by folder name. */
-export const DEMO_FOLDERS: Record<string, DemoFolder> = Object.fromEntries([d01, d02, d03, d04, d05, d07, d08, d09, d10, d11].map((f) => [f.demo, f]));
+export const DEMO_FOLDERS: Record<string, DemoFolder> = Object.fromEntries([d01, d02, d03, d04, d05, d07, d08, d09, d11, d12, d13, d14, d15, d16].map((f) => [f.demo, f]));
 
 /** Engine fixtures (demos/00-fixtures) are served in development only (PRD v5, 3.4). */
 const DEV_FOLDERS: Record<string, DemoFolder> = process.env.NODE_ENV === "production" ? {} : { [d00.demo]: d00 };

@@ -24,10 +24,14 @@
   -webkit-backdrop-filter: var(--glass-filter-pane);
   box-shadow: var(--chrome-card-highlight), var(--chrome-card-shadow);
 }
+/* The still keeps its frame's aspect inside 832 by 816: a 640 by 628 frame fills it, a 60/40
+   frame (768 by 628) shows 832 by 680, so the edge and shadow hug the image, never a letterbox. */
 .intro__image {
   @apply block;
-  width: 832px;
-  height: 816px;
+  width: auto;
+  height: auto;
+  max-width: 832px;
+  max-height: 816px;
   object-fit: contain;
   border: 1px solid rgb(255 255 255 / 0.6);
   border-radius: 16px;

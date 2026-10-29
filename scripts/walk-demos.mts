@@ -11,7 +11,7 @@
 import { chromium, firefox, webkit, type Browser, type Page } from "@playwright/test";
 import { mkdirSync, readFileSync } from "node:fs";
 import path from "node:path";
-import { hasFrame, type DemoPage, type DemoSection } from "@/content/demo-schema";
+import { SPLITS, hasFrame, type DemoPage, type DemoSection } from "@/content/demo-schema";
 import type { SupportFile } from "@/lib/support-data";
 import { sections } from "@/lib/content";
 import type { StepResult } from "@/lib/engine/frame";
@@ -93,10 +93,180 @@ async function checkD6(page: Page, where: string) {
   } else pass(`${browserName}: select appearance ${appearance}`);
 }
 
+/**
+ * The Chromium switch behind chrome://flags/#css-grid-lanes-layout ("CSS Grid Lanes Layout"),
+ * checked in Playwright's Chromium 145 and Chrome 156 on 28 October 2026
+ * (still-in-motion-demos.md 3.5 and S0). On the talk laptop, turn the flag on in chrome://flags,
+ * or start Chrome with this switch.
+ */
+export const GRID_LANES_SWITCH = "--enable-blink-features=CSSGridLanesLayout";
+
+/**
+ * M2 (still-in-motion-demos.md 3.5): the now frame supports Grid Lanes in Chromium (launched with
+ * the switch) and WebKit; Firefox shows the regular grid. With --capture in WebKit, each step's
+ * photo pane is saved for plan B (public/posters/m2-safari/<step>.png, read by `showSafari`).
+ */
+async function checkM2(page: Page, where: string, stepId: string) {
+  const frame = page.frames().find((f) => f.url().includes("/13-grid-lanes/native/"));
+  if (!frame) return fail(where, "M2 frame not found");
+  const supports = (await frame.evaluate(`CSS.supports("display", "grid-lanes")`)) as boolean;
+  if (stepId === "s0") {
+    if (browserName === "firefox") pass(`Firefox: no Grid Lanes (${supports ? "supported" : "a regular grid"}); the fallback is expected`);
+    else if (!supports) fail(where, `${browserName}: CSS.supports("display", "grid-lanes") is false in the M2 now frame${browserName === "chromium" ? `; launch with ${GRID_LANES_SWITCH}` : ""}`);
+    else pass(`${browserName}: CSS.supports("display", "grid-lanes") in the M2 now frame`);
+  }
+  if (args.includes("--capture") && browserName === "webkit" && stepId === "s0") await captureM2(page, frame.url().split("?")[0]);
+}
+
+/**
+ * M3 (review r6 motion M11): where the browser has the CustomElementRegistry constructor, the now
+ * page's app must run in its own scoped shadow root, never the iframe fallback, which looks the
+ * same at s1. Without the constructor (Playwright's Chromium 145, older Firefox) the fallback is
+ * expected; walk with --channel=chrome to see the feature.
+ */
+async function checkM3(page: Page, where: string, stepId: string) {
+  if (stepId !== "s1") return;
+  const frame = page.frames().find((f) => f.url().includes("/14-scoped-registries/native"));
+  if (!frame) return fail(where, "M3 frame not found");
+  const r = (await frame.evaluate(`(() => {
+    let scoped = false;
+    try { new CustomElementRegistry(); scoped = true; } catch {}
+    const app = document.querySelector("#pricing-app");
+    return { scoped, shadow: Boolean(app && app.shadowRoot), iframe: Boolean(app && app.querySelector("iframe")) };
+  })()`)) as { scoped: boolean; shadow: boolean; iframe: boolean };
+  if (!r.scoped) {
+    if (r.iframe) pass(`${browserName}: no CustomElementRegistry constructor; the iframe fallback is expected${browserName === "chromium" ? " (walk with --channel=chrome for the feature)" : ""}`);
+    else fail(where, `${browserName}: no CustomElementRegistry constructor and no iframe fallback`);
+  } else if (!r.shadow || r.iframe) fail(where, `${browserName}: scoped registries are supported, but the app is ${r.iframe ? "the iframe fallback" : "missing its shadow root"}`);
+  else pass(`${browserName}: the pricing app runs in its own scoped shadow root, no iframe`);
+}
+
+/**
+ * Plan B stills for M2 (still-in-motion-demos.md 5): the same four states recorded in WebKit at
+ * 2x from the frame document itself, so no presenter box or cursor is in them: styles off, lanes
+ * on, Show more pressed, the wall narrowed. `showSafari` lays them over the photo pane.
+ */
+async function captureM2(page: Page, url: string) {
+  const ctx = await page.context().browser()!.newContext({ viewport: { width: 768, height: 628 }, deviceScaleFactor: 2 });
+  const p = await ctx.newPage();
+  const dir = path.join(process.cwd(), "public", "posters", "m2-safari");
+  mkdirSync(dir, { recursive: true });
+  // The frame's CSP refuses string evaluation, so the waits poll locators.
+  const settle = async () => {
+    for (let i = 0; i < 80; i++) {
+      const pending = await p.locator("#wall img").evaluateAll((imgs) => imgs.filter((img) => !(img as HTMLImageElement).complete).length);
+      if (!pending) break;
+      await p.waitForTimeout(100);
+    }
+    await p.waitForTimeout(300);
+  };
+  const shoot = async (step: string) => {
+    await p.locator(".photos").screenshot({ path: path.join(dir, `${step}.png`) });
+    pass(`captured public/posters/m2-safari/${step}.png from WebKit for plan B`);
+  };
+  await p.goto(`${url}?flags=enhance-css:0,enhance-js:1&bg=m2`);
+  await settle();
+  await shoot("s0");
+  await p.goto(`${url}?flags=enhance-css:1,enhance-js:1&bg=m2`);
+  await settle();
+  await shoot("s1");
+  await p.click("#more");
+  await p.locator("#wall figure").nth(17).waitFor({ timeout: 8000 });
+  await settle();
+  await shoot("s2");
+  await p.locator("#wall").evaluate((wall) => ((wall as HTMLElement).style.inlineSize = "66%"));
+  await p.waitForTimeout(400);
+  await shoot("s3");
+  await ctx.close();
+}
+
+/**
+ * Frame side, in every document on the demo origin: whether it was revealed with a cross-document
+ * view transition, and whether the engine has them (`PageRevealEvent.viewTransition`; Firefox
+ * falls back to a plain load).
+ */
+const REVEAL_WATCH = `(() => {
+  if (location.hostname !== "127.0.0.1") return;
+  const supported = typeof PageRevealEvent !== "undefined" && "viewTransition" in PageRevealEvent.prototype;
+  window.__walkReveal = { supported, vt: "none" };
+  addEventListener("pagereveal", (e) => {
+    const vt = e.viewTransition;
+    if (!vt) return;
+    window.__walkReveal.vt = "running";
+    vt.ready.catch(() => {});
+    vt.finished.then(() => (window.__walkReveal.vt = "finished"), () => (window.__walkReveal.vt = "skipped"));
+  });
+})();`;
+
+/**
+ * A forward run that loads another document in a multi-page build (a routed step whose route
+ * differs from the one before it) plays its view transition where the engine supports them.
+ */
+async function checkTransition(page: Page, where: string, label: string, demoPage: DemoPage, i: number) {
+  const step = demoPage.steps[i];
+  let prev: string | undefined;
+  for (let k = i - 1; k >= 0 && !prev; k--) prev = demoPage.steps[k].route;
+  if (!step.route || !prev || prev === step.route) return;
+  const f = await visibleFrame(page);
+  const s = f ? ((await f.evaluate(`({ pages: document.documentElement.hasAttribute("data-pages"), reveal: window.__walkReveal || null })`).catch(() => null)) as { pages: boolean; reveal: { supported: boolean; vt: string } | null } | null) : null;
+  if (!s?.pages) return;
+  if (!s.reveal) return fail(where, `${label}: the document's reveal was not observed`);
+  if (!s.reveal.supported) return pass(`${label}: a plain load (no cross-document view transitions here)`);
+  if (s.reveal.vt === "running" || s.reveal.vt === "finished") pass(`${label}: the view transition played (${s.reveal.vt})`);
+  else fail(where, `${label}: no view transition on a forward run (${s.reveal.vt})`);
+}
+
+/**
+ * The clicker's instant replay (Back one step, then Next again): Back to `i` was just pressed and
+ * replayed; Next plays step `i + 1` animated from the replayed document, then Back replays `i`
+ * again. Asserts, route and transition must hold as on the first forward run.
+ */
+async function replayThenNext(page: Page, where: string, demoPage: DemoPage, i: number) {
+  const next = demoPage.steps[i + 1];
+  const here = demoPage.steps[i];
+  let seq = await lastSeq(page);
+  await page.keyboard.press("ArrowRight");
+  let r = await waitForResult(page, `${demoPage.id}:${next.id}`, seq, 10000);
+  if (!r) return fail(where, `replay ${here.id} then next ${next.id}: no step result`);
+  const failed = r.asserts.filter((a) => a.stepId === next.id && !a.pass);
+  if (failed.length) fail(where, `replay ${here.id} then next ${next.id}: ${failed.map((a) => `${a.target} ${a.expect} (got ${a.actual})`).join("; ")}`);
+  else pass(`replay ${here.id} then next ${next.id}: ${r.asserts.filter((a) => a.stepId === next.id).length} assert(s) ok, ${r.ms}ms`);
+  if (next.route) await checkRoute(page, where, `replay ${here.id} then next ${next.id}`, next.route);
+  await checkTransition(page, where, `replay ${here.id} then next ${next.id}`, demoPage, i + 1);
+  seq = await lastSeq(page);
+  await page.keyboard.press("ArrowLeft");
+  r = await waitForResult(page, `${demoPage.id}:${here.id}`, seq, 10000);
+  if (!r) return fail(where, `back ${here.id} again: no step result`);
+  const again = r.asserts.filter((a) => !a.pass);
+  if (again.length) fail(where, `back ${here.id} again: ${again.map((a) => `${a.target} ${a.expect} (got ${a.actual})`).join("; ")}`);
+  if (here.route) await checkRoute(page, where, `back ${here.id} again`, here.route);
+}
+
+/** Multi-page builds (still-in-motion-demos.md 3.3): a routed step ends on its document. */
+async function checkRoute(page: Page, where: string, stepId: string, route: string) {
+  // A replay swaps iframes and drops the old one on the next frame: retry briefly. The document's
+  // own address is read, because a frame object's url can lag a load in WebKit.
+  let href: string | null = null;
+  for (let i = 0; i < 10 && !href; i++) {
+    const f = await visibleFrame(page);
+    href = f ? ((await f.evaluate(() => location.href).catch(() => null)) as string | null) : null;
+    if (!href) await page.waitForTimeout(100);
+  }
+  if (!href) return fail(where, `${stepId}: no frame for the route check`);
+  const url = new URL(href);
+  const want = new URL(route, url);
+  const ok = url.pathname === want.pathname && [...want.searchParams].every(([k, v]) => url.searchParams.get(k) === v);
+  if (ok) pass(`${stepId}: the frame is on ${route}`);
+  else fail(where, `${stepId}: the frame is on ${url.pathname}${url.search}; the step's route is ${route}`);
+}
+
 /** Every frame carries the portal theme (PRD v4, 7.6): computed --glass-surface is set on its root. */
 async function checkTheme(page: Page, where: string, stepId: string) {
   const frames = page.frames().filter((f) => f !== page.mainFrame() && /^http:\/\/(127\.0\.0\.1|localhost):\d+\//.test(f.url()) && !f.url().startsWith(BASE));
-  const values = await Promise.all(frames.map((f) => f.evaluate(`getComputedStyle(document.documentElement).getPropertyValue("--glass-surface").trim()`).catch(() => "") as Promise<string>));
+  // A nested frame that is not rendered yet (M3's hidden app iframe) has no computed style in
+  // Firefox; it is checked once it shows. A direct child of the presenter is cross-origin, so its
+  // frameElement is never read: WebKit reports that read as an uncaught "Blocked a frame" error.
+  const values = await Promise.all(frames.map((f) => f.evaluate(`(() => { try { if (window.parent !== window.top && window.frameElement && !window.frameElement.getClientRects().length) return "not rendered"; } catch (e) {} return getComputedStyle(document.documentElement).getPropertyValue("--glass-surface").trim(); })()`).catch(() => "") as Promise<string>));
   if (!frames.length) return fail(where, `theme ${stepId}: no frame found`);
   if (values.some((v) => !v)) fail(where, `theme ${stepId}: --glass-surface is not set in a frame (${frames.map((f) => f.url()).join(", ")})`);
   else pass(`theme ${stepId}: --glass-surface ${values[0]} in the frame`);
@@ -209,10 +379,17 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
       if (wrapped || V5_WRAPPED.has(section.id)) await checkWrapper(f, `${where} ${step.id}`, demoPage.files ?? [], demoPage.stage === "single", { fail, pass });
     }
     if (demoPage.id === "d6-now" && step.id === "s4") await checkD6(page, where);
+    if (demoPage.id === "m2-now") await checkM2(page, where, step.id);
+    if (demoPage.id === "m3-now") await checkM3(page, where, step.id);
+    if (step.route) await checkRoute(page, where, step.id, step.route);
+    await checkTransition(page, where, step.id, demoPage, i);
     await checkSpeaker(where, demoPage, section, i);
     await checkHandsOn(page, where, demoPage, i);
   }
-  // Back: reset and replay must land on the same digest.
+  // Back: reset and replay must land on the same digest. At two steps the clicker's instant
+  // replay is repeated: Next again from the replayed document, then Back once more.
+  const n = demoPage.steps.length;
+  const replayAt = new Set(n >= 2 ? [n - 2, Math.floor((n - 2) / 2)] : []);
   for (let i = demoPage.steps.length - 2; i >= 0; i--) {
     const step = demoPage.steps[i];
     const seq = await lastSeq(page);
@@ -226,6 +403,8 @@ async function walkPage(page: Page, section: DemoSection, demoPage: DemoPage) {
     if (failed.length) fail(where, `back ${step.id}: ${failed.map((a) => `${a.target} ${a.expect} (got ${a.actual})`).join("; ")}`);
     else if (forward[i] && r.digest !== forward[i]) console.log(`    · back ${step.id}: digest ${r.digest} differs from forward ${forward[i]} (asserts pass)`);
     else pass(`back ${step.id}: asserts pass, digest ${r.digest}`);
+    if (step.route) await checkRoute(page, where, `back ${step.id}`, step.route);
+    if (replayAt.has(i)) await replayThenNext(page, where, demoPage, i);
   }
   await checkProtocol(page, where, { fail, pass });
   // No box was forced in after 2000 ms on this page (PRD v5, 3.2 rule 6; M8's rehearsal criterion).
@@ -257,8 +436,9 @@ async function walkIntro(page: Page, section: DemoSection, where: string) {
 }
 
 /**
- * Geometry (PRD v4, 7.6): on walk pages the frame slot and the code panel are each 880 canvas px
- * wide, and a 44-column, 40-line fixture fits the code panel with no horizontal scroll.
+ * Geometry (PRD v4, 7.6): on walk pages the frame slot and the code panel have the page's split
+ * widths (880 and 880 by default, 1056 and 704 at 60/40), and a 44-column, 40-line fixture fits the
+ * code panel with no horizontal scroll.
  */
 async function checkGeometry(page: Page, demoPage: DemoPage, where: string) {
   if (demoPage.stage !== "used-to" && demoPage.stage !== "now") return;
@@ -282,8 +462,9 @@ async function checkGeometry(page: Page, demoPage: DemoPage, where: string) {
     pre.remove();
     return { frame: width(".page__frame"), code: width(".page__code"), fixture };
   })()`)) as { frame: number; code: number; fixture: { scrollWidth: number; clientWidth: number } };
-  if (g.frame !== 880 || g.code !== 880) fail(where, `slots are ${g.frame} and ${g.code} canvas px; both should be 880`);
-  else pass(`${where}: frame slot and code panel are 880 px`);
+  const want = SPLITS[demoPage.split ?? "50/50"];
+  if (g.frame !== want.frame || g.code !== want.code) fail(where, `slots are ${g.frame} and ${g.code} canvas px; ${demoPage.split ?? "50/50"} wants ${want.frame} and ${want.code}`);
+  else pass(`${where}: frame slot ${g.frame} px and code panel ${g.code} px (${demoPage.split ?? "50/50"})`);
   if (g.fixture.scrollWidth > g.fixture.clientWidth) fail(where, `a 44 by 40 fixture scrolls sideways (${g.fixture.scrollWidth} > ${g.fixture.clientWidth})`);
   else pass(`${where}: 44 by 40 fixture fits without horizontal scroll`);
 }
@@ -296,8 +477,12 @@ async function main() {
   }
   const launcher = { chromium, webkit, firefox }[browserName];
   // Two windows in one context share BroadcastChannel; neither may be throttled as a background tab.
-  const chromiumArgs = ["--disable-background-timer-throttling", "--disable-renderer-backgrounding", "--disable-backgrounding-occluded-windows"];
-  const browser: Browser = await launcher.launch({ headless: !headed, ...(browserName === "chromium" ? { args: chromiumArgs } : {}) });
+  // GRID_LANES_SWITCH turns on Chrome's "CSS Grid Lanes Layout" flag (M2, plan A).
+  const chromiumArgs = ["--disable-background-timer-throttling", "--disable-renderer-backgrounding", "--disable-backgrounding-occluded-windows", GRID_LANES_SWITCH];
+  // --channel=chrome walks the installed Google Chrome instead of Playwright's Chromium, for
+  // features newer than the bundled build (M3's scoped registries need Chrome 146).
+  const channel = args.find((a) => a.startsWith("--channel="))?.slice(10);
+  const browser: Browser = await launcher.launch({ headless: !headed, ...(browserName === "chromium" ? { args: chromiumArgs, ...(channel ? { channel } : {}) } : {}) });
   const context = await browser.newContext({ viewport: { width: 1600, height: 900 } });
   const page = await context.newPage();
   // The speaker checks are layout checks; they run in Chromium, where background tabs can be unthrottled.
@@ -310,6 +495,7 @@ async function main() {
   }
   page.on("pageerror", (err) => fail("page", `uncaught error: ${err.message}`));
   await page.addInitScript(PROTOCOL_WATCH);
+  await page.addInitScript(REVEAL_WATCH);
 
   // The spotlight fixture (PRD v5, 3.4) runs first on a full walk, and alone with `pnpm walk fixtures`.
   if (!only || only === "fixtures") await walkFixture(browser, BASE, { fail, pass });

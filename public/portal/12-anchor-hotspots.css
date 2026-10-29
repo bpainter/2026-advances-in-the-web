@@ -1,0 +1,124 @@
+/* M1 portal content (unshown; still-in-motion-demos.md 4) for both builds: the look is a cropped,
+   mirrored crop of the hiker photo at a fixed 9:7 ratio, so the pins (placed in percent) stay on
+   the shell, the pack and the shoes at any width. The product cards' look. Placement of the cards
+   is the shown code's job. */
+@layer portal-layout {
+  .look {
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+    inline-size: 100%;
+    /* Top, centered: a narrowed photo keeps its top edge and centers in its column, like a page
+       with a narrower window, rather than dropping down into one big hole (review r6 motion M3).
+       Centered, the shoe pin stays near the edge, so the shoe card stays on the left in both
+       builds. */
+    margin: 0 auto auto;
+    aspect-ratio: 9 / 7;
+    border-radius: 14px;
+  }
+  /* The photo is 3:2; at 9:7 it is 116.67 percent of the box wide. Mirrored, the hiker walks left. */
+  .look > img {
+    position: absolute;
+    inset: 0 auto auto 0;
+    block-size: 100%;
+    inline-size: auto;
+    max-inline-size: none;
+    scale: -1 1;
+  }
+  .pin {
+    position: absolute;
+    box-sizing: border-box;
+    inline-size: 30px;
+    block-size: 30px;
+    padding: 0;
+    translate: -50% -50%;
+  }
+  .pin::after {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+  }
+  #pin-shell,
+  #t-pin-shell {
+    left: 52%;
+    top: 37%;
+  }
+  #pin-pack,
+  #t-pin-pack {
+    left: 64%;
+    top: 19%;
+  }
+  /* 84 percent is still on the shoe, and the shoe card clears the returns strip (review r6 L3). */
+  #pin-shoe,
+  #t-pin-shoe {
+    left: 64%;
+    top: 84%;
+  }
+  .card {
+    box-sizing: border-box;
+    inline-size: 216px;
+    overflow: visible;
+  }
+  .card > img {
+    display: block;
+    inline-size: 100%;
+    block-size: 112px;
+    object-fit: cover;
+    margin-block-end: 10px;
+  }
+  .card > h3,
+  .card > p {
+    margin: 0 0 4px;
+  }
+  .card > button {
+    display: block;
+    inline-size: 100%;
+    margin-block-start: 10px;
+  }
+}
+@layer portal-theme {
+  .pin {
+    border: 3px solid var(--white);
+    border-radius: 50%;
+    background: var(--navy);
+    box-shadow: 0 0 0 2px var(--navy), 0 4px 12px rgb(15 28 65 / 0.35);
+  }
+  .pin::after {
+    background: var(--white);
+  }
+  /* The open pin is blue in both builds: aria-expanded (used to), its popover open (now). */
+  .pin[aria-expanded="true"],
+  .look:has(~ #card-shell:popover-open) #pin-shell,
+  .look:has(~ #card-pack:popover-open) #pin-pack,
+  .look:has(~ #card-shoe:popover-open) #pin-shoe {
+    background: var(--slalom-blue);
+  }
+  .card {
+    padding: 12px;
+    border: 1px solid var(--glass-border-float-color);
+    border-radius: var(--glass-radius-card);
+    background: var(--white);
+    box-shadow: var(--glass-shadow-float);
+    color: var(--glass-ink);
+  }
+  .card > img {
+    border-radius: var(--glass-radius-control);
+  }
+  .card > h3 {
+    font-size: var(--glass-text-lg);
+    line-height: 24px;
+  }
+  .card > p {
+    color: var(--glass-ink-soft);
+    font-weight: 700;
+  }
+  /* Centered and bold in both builds, whatever each page's base button style is (review r6 M1). */
+  .card > button {
+    text-align: center;
+    font-weight: 700;
+    color: var(--glass-on-accent);
+    background: var(--slalom-blue);
+    border-color: var(--dark-blue);
+  }
+}

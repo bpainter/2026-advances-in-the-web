@@ -1,0 +1,99 @@
+{
+  "note": "The storefront's Trail gear category for M5 and the M2 wrapper's product header (still-in-motion-demos.md 3.6 and 8). Photos live in public/demo-assets/catalog/, generated with Higgsfield on a plain light field. Names, prices and ratings come from here, never typed into wrappers (PRD v5, 2.1 rule 7). Ridgeline Trail matches store.price in portal-context.json. Sizes fill the product page's size row (review r6 motion M10).",
+  "category": "Trail gear",
+  "nav": [
+    "Trail gear",
+    "Packs",
+    "Jackets",
+    "Footwear"
+  ],
+  "cart": 2,
+  "freeShippingOver": 75,
+  "dir": "/demo-assets/catalog/",
+  "products": [
+    {
+      "id": "trail",
+      "name": "Ridgeline Trail",
+      "price": 129,
+      "rating": "4.5",
+      "photo": "ridgeline-trail.webp",
+      "alt": "The Ridgeline Trail shoe in side view.",
+      "blurb": "A light trail shoe with a sticky outsole for rock and roots.",
+      "sizes": [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13"
+      ]
+    },
+    {
+      "id": "jacket",
+      "name": "Trail jacket",
+      "price": 179,
+      "rating": "4.6",
+      "photo": "trail-jacket.webp",
+      "alt": "The Trail jacket laid flat.",
+      "blurb": "A warm, packable jacket for cold starts and windy ridges.",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "shell",
+      "name": "Rain shell",
+      "price": 149,
+      "rating": "4.4",
+      "photo": "rain-shell.webp",
+      "alt": "The Rain shell with its hood up.",
+      "blurb": "A waterproof shell that packs into its own pocket.",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "daypack",
+      "name": "Day pack 22 L",
+      "price": 89,
+      "rating": "4.7",
+      "photo": "day-pack-22.webp",
+      "alt": "The Day pack 22 L standing upright.",
+      "blurb": "A 22 liter pack with a padded back and a rain cover.",
+      "sizes": [
+        "One size"
+      ]
+    },
+    {
+      "id": "poles",
+      "name": "Trekking poles",
+      "price": 69,
+      "rating": "4.3",
+      "photo": "trekking-poles.webp",
+      "alt": "A pair of folding trekking poles.",
+      "blurb": "Folding poles with cork grips and quick locks.",
+      "sizes": [
+        "100 to 135 cm"
+      ]
+    },
+    {
+      "id": "headlamp",
+      "name": "Headlamp",
+      "price": 39,
+      "rating": "4.5",
+      "photo": "headlamp.webp",
+      "alt": "A compact headlamp on its strap.",
+      "blurb": "A bright, rechargeable headlamp with a red night mode.",
+      "sizes": [
+        "One size"
+      ]
+    }
+  ]
+}

@@ -28,7 +28,7 @@ createInputWidth(
 );
 autosize(details, {
   minRows: 6,
-  maxRows: 18,
+  maxRows: 12,
 });
 
 // Validation messages: shown under the

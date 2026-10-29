@@ -77,6 +77,10 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
       iframe.referrerPolicy = "no-referrer";
       iframe.dataset.visible = String(visible);
       iframe.tabIndex = mode === "audience" ? -1 : 0;
+      // The address is set before the frame is inserted, so its first document is the demo, never
+      // an about:blank that WebKit records in the presenter's session history: a later Back in
+      // this frame (M5) would restore that blank page instead of the frame's entry page.
+      iframe.src = url;
       slotRef.current?.appendChild(iframe);
       const h = new FrameHandle(iframe, { expectedOrigin: origin, mirror: false, handsOn, reducedMotion, flags, sideEffects });
       h.onViewport(({ inlineSize, ms }) => {
@@ -84,7 +88,6 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
         setViewportWidth(Number.parseFloat(inlineSize));
       });
       h.onKey((k) => dispatchKey(k.key, k.shift));
-      iframe.src = url;
       return h;
     },
     [page, sandbox, mode, handsOn, reducedMotion, sideEffects, dispatchKey, background],
@@ -96,7 +99,13 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
       h.iframe.dataset.visible = "true";
       current.current = { handle: h, stepIndex: idx, flags };
       setHandle(h);
-      if (old && old !== h) requestAnimationFrame(() => old.dispose());
+      if (old && old !== h) {
+        // The swap is atomic: the outgoing document is hidden in this task, so when the step
+        // reports done exactly one frame is shown (the walk's route check reads it), and removed
+        // on the next frame, once the incoming one has painted over it.
+        old.iframe.dataset.visible = "false";
+        requestAnimationFrame(() => old.dispose());
+      }
       if (mode === "audience" && !handsOn) h.focus();
     },
     [mode, handsOn],

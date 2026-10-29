@@ -8,7 +8,7 @@ export const esc = (v: string | number) => String(v).replace(/&/g, "&amp;").repl
 
 const ROOT = process.cwd();
 export function readJson<T>(rel: string): T {
-  return JSON.parse(readFileSync(path.join(ROOT, rel), "utf8")) as T;
+  return JSON.parse(readFileSync(path.join(/*turbopackIgnore: true*/ ROOT, rel), "utf8")) as T;
 }
 
 export interface PortalContext {
@@ -21,6 +21,12 @@ export interface PortalContext {
   advisories: { title: string; updated: string; filters: { label: string; value: string }[]; sources: string[] };
   benchmarks: { area: string; runs: string };
   review: { area: string; title: string; state: string };
+  /** M1 lookbook (still-in-motion-demos.md 4). */
+  lookbook: { area: string; season: string; blurb: string; nav: string[]; cart: number; looks: { title: string; photo: string }[] };
+  /** M4 help-center (still-in-motion-demos.md 7). */
+  help: { title: string; search: string; crumbs: string[]; hours: string; channels: string[]; updated: string };
+  /** M3 editor-pricing (still-in-motion-demos.md 6). */
+  pricing: { channels: { name: string; state: string }[]; tabs: string[]; current: string };
 }
 export const context = () => readJson<PortalContext>("fixtures/portal-context.json");
 

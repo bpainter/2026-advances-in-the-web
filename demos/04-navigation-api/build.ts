@@ -33,6 +33,9 @@ const today: BuildDef = folderBuild(
     instrumentation: ["/demo/log.js", "/demo/hooks.js"],
     sideEffects: ["reset"],
   }),
+  // The entry document is the same server-rendered list the router fetches later, so the first
+  // paint and a later "Go back" show the same rows (review r6 H1).
+  { render: (file, html) => (file === "index.html" ? fillTemplate(html, listPage("Open")) : html) },
 );
 
 const native: BuildDef = nativeBuild(

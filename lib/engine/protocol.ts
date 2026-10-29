@@ -7,6 +7,12 @@ export const PROTOCOL_VERSION = 2;
 export type Radii = [tl: number, tr: number, br: number, bl: number];
 /** PRD Part A, 5.3. Rectangles are frame CSS pixels. */
 export type Rect = { x: number; y: number; w: number; h: number; radii: Radii };
+/**
+ * A top-layer element (open popover, modal dialog, fullscreen) in the frame. `z` is its opening
+ * order, `owns` the watched selectors that match it or a descendant, `focus` whether it holds the
+ * focused element. The overlay keeps boxes from drawing over a layer above their own target.
+ */
+export type Layer = Rect & { z: number; owns: string[]; focus: boolean };
 export type Flags = Record<string, boolean>;
 export type RunMode = "animated" | "instant";
 export type Cursor = { step: number; action: number };
@@ -50,7 +56,7 @@ export type ToRuntime =
 
 export type FromRuntime =
   | { v: 2; type: "ready"; frameId: string | null; build: string; url: string; title: string; supports: Record<string, boolean>; hooks: string[]; flags: Flags }
-  | { v: 2; type: "rects"; frameId: string; seq: number; viewport: { w: number; h: number }; rects: Record<string, Rect[]>; focus: Rect | null; focusVisibleNative: boolean; animating: boolean }
+  | { v: 2; type: "rects"; frameId: string; seq: number; viewport: { w: number; h: number }; rects: Record<string, Rect[]>; focus: Rect | null; focusVisibleNative: boolean; animating: boolean; layers?: Layer[] }
   | { v: 2; type: "cue"; frameId: string; runId: number; index: number; cue: Cue }
   | { v: 2; type: "unloading"; frameId: string; runId: number; cursor: Cursor }
   | { v: 2; type: "step-done"; frameId: string; runId: number; stepId: string; asserts: AssertResult[]; digest: string; ms: number; finished: boolean }

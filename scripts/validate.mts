@@ -48,7 +48,18 @@ function build(route: string): BuildInfo | "unknown" | null {
   if (!def) return "unknown";
   const file = path.join(def.dir, "index.html");
   if (!existsSync(file)) return "unknown";
-  return { html: readFileSync(file, "utf8"), runtimeSelectors: def.manifest.runtimeSelectors, flags: def.manifest.flags };
+  // Every composed page of a multi-page build, filled as the frame gets it (still-in-motion-demos.md 3.3).
+  const html = ["index.html", ...(def.pages ?? [])]
+    .map((page) => {
+      const raw = readFileSync(path.join(def.dir, page), "utf8");
+      try {
+        return def.render ? def.render(page, raw, new URL(`http://validate.invalid/${page}`)) : raw;
+      } catch {
+        return raw;
+      }
+    })
+    .join("\n");
+  return { html, runtimeSelectors: def.manifest.runtimeSelectors, flags: def.manifest.flags };
 }
 
 const all = validate(sections, {

@@ -77,7 +77,7 @@ function zoneBases(id: BackgroundId, zone: string): Record<string, RGBA> {
   if (!z) throw new Error(`no stats for ${id} ${zone}; run pnpm backgrounds`);
   return { [`darkest ${id} pixel`]: [...z.darkest, 1], [`brightest ${id} pixel`]: [...z.brightest, 1] };
 }
-const SECTION_IDS = (Object.keys(BACKGROUNDS) as BackgroundId[]).filter((id) => /^[df]\d$/.test(id));
+const SECTION_IDS = (Object.keys(BACKGROUNDS) as BackgroundId[]).filter((id) => /^[dfm]\d$/.test(id));
 /** Frames show the section image under the wash: palette colors plus the frame slot's extremes. */
 const FRAME_BASES: Record<string, RGBA> = { ...PALETTE, ...Object.assign({}, ...SECTION_IDS.map((id) => zoneBases(id, "frame slot"))) };
 

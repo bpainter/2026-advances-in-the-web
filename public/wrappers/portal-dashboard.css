@@ -2,9 +2,12 @@
    is part of the demo): the rail and the top bar stick; the shown evidence panel docks itself
    (public/portal/04-navigation-api.css). */
 @layer wrapper {
+  /* Every page can scroll to the demo's 200 px: a Back that restores the list's scroll position
+     may land while the shorter order page is still in place (an instant replay of two Backs), and
+     the browser clamps the restore to the document height. */
   .wrap--app {
     block-size: auto;
-    min-block-size: 100vh;
+    min-block-size: calc(100vh + 240px);
   }
   .wrap-app {
     display: grid;
@@ -65,7 +68,8 @@
     box-sizing: border-box;
     border-block-end: 1px solid var(--glass-rule);
     border-start-end-radius: 16px;
-    background: var(--glass-surface-float);
+    /* Near solid, like the shown toolbar under it: rows scroll beneath both (r6). */
+    background: color-mix(in srgb, var(--glass-surface-solid) 97%, transparent);
     -webkit-backdrop-filter: var(--glass-filter-float);
     backdrop-filter: var(--glass-filter-float);
   }
@@ -87,8 +91,9 @@
   .wrap-mask--bottom {
     bottom: 0;
   }
+  /* The block end clears the shown evidence dock (120 tall) so the last rows scroll above it. */
   .wrap-main {
-    padding: 12px var(--wrap-pad) 196px;
+    padding: 12px var(--wrap-pad) 140px;
     min-inline-size: 0;
   }
 }

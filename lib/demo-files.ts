@@ -46,7 +46,7 @@ export function excerpt(relPath: string, lang: DemoCodeLang, ranges: [number, nu
   const entry = { file, lang, excerptOf: { path: relPath, ranges } } as DemoCodeFile;
   Object.defineProperty(entry, "source", {
     enumerable: true,
-    get: () => excerptSource(readFileSync(path.join(process.cwd(), relPath), "utf8"), ranges, lang),
+    get: () => excerptSource(readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), relPath), "utf8"), ranges, lang),
   });
   return entry;
 }
@@ -56,7 +56,7 @@ export function repoFile(relPath: string, lang: DemoCodeLang, file = path.basena
   const entry = { file, lang } as DemoCodeFile;
   Object.defineProperty(entry, "source", {
     enumerable: true,
-    get: () => readFileSync(path.join(process.cwd(), relPath), "utf8").replace(/\n$/, ""),
+    get: () => readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), relPath), "utf8").replace(/\n$/, ""),
   });
   return entry;
 }

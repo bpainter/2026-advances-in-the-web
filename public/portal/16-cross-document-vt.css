@@ -1,0 +1,137 @@
+/* M5 portal content (unshown) for both builds: the category grid of six cards and the product
+   page, laid out the same way in the single-page store and the two plain pages. Nothing here
+   moves anything: the motion is the shown CSS (now) or the FLIP script (used to). */
+@layer portal-layout {
+  .shelf h1 {
+    margin: 0 0 12px;
+  }
+  .shelf-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 6px 8px;
+  }
+  .card img {
+    display: block;
+    grid-column: 1 / -1;
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+  .card-name {
+    justify-self: start;
+  }
+  .product {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 24px;
+  }
+  .hero {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+  .product-info {
+    display: grid;
+    justify-items: start;
+    gap: 10px;
+  }
+  .product-info h1,
+  .product-info p {
+    margin: 0;
+  }
+  /* The rest of the product page (render.ts buyBlock, review r6 motion M10): rating, sizes and
+     Add to cart. The used-to page carries one block per product and shows the one whose photo is
+     in the hero; the now page renders only its own. */
+  .buy {
+    display: grid;
+    justify-items: start;
+    gap: 10px;
+    margin-block-start: 4px;
+  }
+  .buy[data-product] {
+    display: none;
+  }
+  #t-product-view:has(#t-hero[src$="/ridgeline-trail.webp"]) .buy[data-product="trail"],
+  #t-product-view:has(#t-hero[src$="/trail-jacket.webp"]) .buy[data-product="jacket"],
+  #t-product-view:has(#t-hero[src$="/rain-shell.webp"]) .buy[data-product="shell"],
+  #t-product-view:has(#t-hero[src$="/day-pack-22.webp"]) .buy[data-product="daypack"],
+  #t-product-view:has(#t-hero[src$="/trekking-poles.webp"]) .buy[data-product="poles"],
+  #t-product-view:has(#t-hero[src$="/headlamp.webp"]) .buy[data-product="headlamp"] {
+    display: grid;
+  }
+  .sizes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+  .sizes-label {
+    margin-inline-end: 4px;
+  }
+  .size {
+    min-inline-size: 28px;
+    padding: 3px 8px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+  .add-to-cart {
+    padding: 8px 16px;
+  }
+}
+@layer portal-theme {
+  .card {
+    color: var(--glass-ink);
+    text-decoration: none;
+  }
+  .card img,
+  .hero {
+    border-radius: 10px;
+    background: var(--glass-surface-solid);
+  }
+  .card-name,
+  .price {
+    font-weight: 700;
+  }
+  .price {
+    font-size: 18px;
+  }
+  /* The router focuses the title (tabindex -1) after a route change. A focused heading needs no
+     visible ring, and the square theme outline read as a second spotlight (review r6 motion H3).
+     Links and buttons keep their focus-visible ring. */
+  #t-title:focus {
+    outline: none;
+  }
+  .rating {
+    color: var(--glass-ink-soft);
+  }
+  .sizes-label {
+    color: var(--glass-ink);
+    font-weight: 700;
+  }
+  .size {
+    border: 1px solid var(--glass-control-border);
+    border-radius: var(--glass-radius-control);
+    background: var(--white);
+    color: var(--glass-ink);
+  }
+  .add-to-cart {
+    border: 1px solid var(--dark-blue);
+    border-radius: var(--glass-radius-control);
+    background: var(--slalom-blue);
+    color: var(--glass-on-accent);
+    font-weight: 700;
+  }
+}

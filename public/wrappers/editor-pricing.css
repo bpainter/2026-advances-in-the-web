@@ -1,0 +1,57 @@
+/* M3 editor-pricing (still-in-motion-demos.md 6): the product editor on its Pricing tab. A static
+   tab strip under the bar, the shown Pricing card and a side column. Nothing moves. */
+@layer wrapper {
+  .wrap-tabs {
+    display: flex;
+    flex: none;
+    gap: 20px;
+    margin: 0;
+    padding: 0 var(--wrap-pad);
+    list-style: none;
+    border-block-end: 1px solid var(--glass-rule);
+  }
+  .wrap-tabs__tab {
+    display: flex;
+    align-items: center;
+    block-size: 40px;
+    color: var(--glass-ink-soft);
+  }
+  .wrap-tabs__tab--current {
+    color: var(--glass-ink);
+    font-weight: 700;
+    box-shadow: inset 0 -2px 0 var(--slalom-blue);
+  }
+  .wrap-pricing {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 184px;
+    gap: 16px;
+  }
+  .wrap-pricing > .wrap-shown {
+    padding: 18px 20px;
+  }
+  .wrap-pricing__side {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .wrap-pricing__card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: var(--wrap-pad);
+  }
+  .wrap-pricing__channels {
+    display: grid;
+    gap: 8px;
+    margin: 4px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .wrap-pricing__channel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    color: var(--glass-ink);
+  }
+}

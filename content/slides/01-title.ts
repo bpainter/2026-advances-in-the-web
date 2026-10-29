@@ -11,11 +11,10 @@ export const slide: Slide = {
     kind: "title",
     eyebrow: "FITC Web Unleashed 2026, Toronto",
     lines: ["2026 advances", "in the web"],
-    speaker: { name: "Bermon Painter", role: "Head of DXP and Commerce, Slalom" },
   },
   citations: [],
   speakerNotes:
-    "Title slide. FITC Web Unleashed 2026, Toronto. Bermon Painter, Head of DXP and Commerce at Slalom. Say the thesis: in 2026 the browser shipped more than the frameworks on it.",
+    "Title slide. FITC Web Unleashed 2026, Toronto. Your name is not on the slide. Say it: Bermon Painter, Head of DXP and Commerce at Slalom. Say the thesis: in 2026 the browser shipped more than the frameworks on it.",
   timing: { minutes: 0.5, cumulative: 0.5 },
   background: "title",
 };

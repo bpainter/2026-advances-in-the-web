@@ -153,3 +153,14 @@
     grid-column: 3;
   }
 }
+
+/* Page rhythm: tight section titles and a
+   short search image keep every slot above
+   the footer at both page widths. */
+.section-title {
+  margin-block-end: 0.75rem;
+}
+
+.search__grid .c-product-card__image {
+  aspect-ratio: 3 / 1;
+}

@@ -230,6 +230,15 @@ export const section: DemoSection = {
             { type: "click", target: '#cancel-418 button[value="confirm"]' },
             { type: "wait", ms: 300 },
             { type: "assert", target: "#status", expect: "contains:Order 418 was canceled" },
+            // The dialog lives in the menu, so the menu is still open; close it so the room reads
+            // the canceled row and the status chip (review r6 M1).
+            {
+              type: "key",
+              key: "Escape",
+              target: "#order-actions-418",
+              via: "hidePopover() on the menu (the same close request Escape sends)",
+            },
+            { type: "assert", target: "#order-actions-418", expect: "!:popover-open" },
           ],
           code: {
             file: "app.js",
@@ -239,6 +248,8 @@ export const section: DemoSection = {
             ],
           },
           spotlight: ["#status"],
+          ifKeyboard:
+            "Open the menu and confirm the cancel. Press Escape. Then press Next once to sync the frame.",
           meter: {
             label: "JavaScript",
             value: "22 lines",
@@ -255,6 +266,8 @@ export const section: DemoSection = {
           label: "Styles off",
           actions: [
             { type: "toggle", flag: "enhance-css", on: false },
+            { type: "pointer", to: "#actions-418" },
+            { type: "click", target: "#actions-418" },
             { type: "assert", target: "#order-actions-418", expect: ":popover-open" },
             { type: "wait", ms: 1200 },
             {
@@ -267,7 +280,7 @@ export const section: DemoSection = {
           ],
           code: { file: "enhance.css", lines: [], off: true },
           spotlight: ["#actions-418"],
-          ifKeyboard: "Press Escape. Press Next once to sync the frame.",
+          ifKeyboard: "Press Enter to open the menu, then Escape. Press Next once to sync the frame.",
           proof: "Remove the enhancement CSS and show that the controls remain semantic and usable.",
           bullets: [
             "The CSS file is off. The menu loses its place under the button.",

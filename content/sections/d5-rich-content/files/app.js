@@ -11,10 +11,11 @@ const cmsPolicy =
     'cms-html', { createHTML: clean }
   ) ?? { createHTML: clean };
 
-export function render(body) {
+export function render(body,
+  slot = description) {
   const trusted =
     cmsPolicy.createHTML(body);
-  description.innerHTML = trusted;
+  slot.innerHTML = trusted;
 }
 
 // This now throws under enforcement:
@@ -22,7 +23,11 @@ export function renderDirect(body) {
   description.innerHTML = body;
 }
 
-const cmsResponse = await fetch(
+const cms = await fetch(
   '/cms/ridgeline.json')
   .then(r => r.json());
-render(cmsResponse.body);
+render(cms.body);
+render(cms.reviews,
+  document.querySelector('#reviews'));
+render(cms.promo,
+  document.querySelector('#promo'));

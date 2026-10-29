@@ -3,7 +3,7 @@ import { excerpt, sectionFile } from "@/lib/demo-files";
 
 const TODAY = "demos/03-content-sized-form/today";
 const LONG_DETAILS =
-  "Customer returned the shoes on 2 October. The carrier shows delivery to the warehouse on 6 October. No refund has been issued.\n\nThe customer has asked twice by email and once by phone.\n\nOrder 418, size 10, black.\n\nWarehouse note: box received with the original tags. Inspection passed on 7 October.\n\nFinance note: the refund batch on 8 October failed for three orders. This one is among them.\n\nNext step: reissue the refund and confirm by email.\n\nEscalation: second contact, so the customer is owed a reply within one business day.\n\nAgent note: customer prefers email.\n\nAttachment list: carrier receipt, warehouse scan, two emails.";
+  "Customer returned the shoes on 2 October. The carrier shows delivery to the warehouse on 6 October. No refund has been issued.\n\nThe customer has asked twice by email and once by phone. Order 418, size 10, black.\n\nNext step: reissue the refund and reply by email within one business day.";
 
 /** D3: a mirror element and a scrollHeight loop, then field-sizing with line-height limits. */
 export const section: DemoSection = {
@@ -165,13 +165,13 @@ export const section: DemoSection = {
           key: true,
           actions: [
             { type: "paste", target: "#details", text: LONG_DETAILS },
-            { type: "assert", target: "#details", expect: "value-length>400" },
+            { type: "assert", target: "#details", expect: "value-length>250" },
           ],
-          code: { file: "form.css", lines: [[12, 13]] },
+          code: { file: "form.css", lines: [7, 12] },
           spotlight: ["#details"],
           bullets: [
-            "The details box grows with the pasted text, then scrolls at twelve lines.",
-            "One lh is one line of text, so the limits follow the font.",
+            "The details box starts at six lines and grows to fit the pasted text.",
+            "One lh is one line of text, so the size follows the font.",
             "The browser does the sizing. We wrote no measuring code.",
           ],
         },
@@ -204,6 +204,13 @@ export const section: DemoSection = {
             { type: "pointer", to: ".case-form button" },
             { type: "click", target: ".case-form button" },
             { type: "assert", target: "#subject", expect: "focused" },
+            // Chromium's message bubble is too small to read from the room and covers the Details
+            // label; moving focus away and back dismisses it (review r6 M7). The outlines and the
+            // callout carry the proof.
+            { type: "wait", ms: 600 },
+            { type: "focus", target: "#details", visible: false },
+            { type: "focus", target: "#subject" },
+            { type: "assert", target: "#subject", expect: "focused" },
           ],
           code: {
             file: "index.html",
@@ -213,9 +220,10 @@ export const section: DemoSection = {
             ],
           },
           spotlight: ["#subject"],
+          callouts: [{ target: "#subject", text: "No script", side: "right" }],
           proof: "Submit an empty form and show that native focus and validation still work.",
           bullets: [
-            "Submitting the empty form moves focus to Subject and shows its message.",
+            "Submitting the empty form moves focus to Subject. Both empty fields get a red outline.",
             "The required attribute does the checking. No request leaves the page.",
           ],
         },

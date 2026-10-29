@@ -135,6 +135,11 @@ The design agent sets layout and visuals in `docs/design/demo-wrappers-spec.md`.
 | D5 Rich content | `product-page`: a storefront product page | Store header, image, price and rating around the shown article. `#console` docks as a browser console drawer on dark glass. | Any HTML sink (`innerHTML`, `outerHTML`, `insertAdjacentHTML`, `document.write`, `setHTML`), `trustedTypes`, any wrapper script |
 | D6 Variant picker | `product-editor`: the admin product editor | Editor header with a Draft chip, static Title, Price and SKU values, an image strip, a Size row of static chips, and the shown Color field in a Variants card | `select`, `appearance`, `::picker()`, `selectedcontent`, any listbox |
 | F1 Still in motion | `watch-list`: a team's platform watch list | Page header with the date, a legend for "Try now" and "Wait for", the five shown tiles, a source line naming the web-features version | Anchor positioning, Grid Lanes, view transitions, scroll-driven animation, scoped registries |
+| M1 Shop the look | `lookbook`: the storefront home page | Store header with static nav words and the cart count, a season column with three "More looks" thumbnails, the shown look | `anchor-name`, `position-anchor`, `position-area`, `position-try`, `anchor()`, `popover`, `command`, `commandfor`, any script |
+| M2 Trail photos | `product-photos`: the top of the Ridgeline Trail product page | Site header, a product bar (photo, name, price, rating and photo count from fixtures, an "Add to cart" look-alike), the "From the trail" heading over the shown wall | `grid-lanes`, masonry, multi-column layout, any script |
+| M3 Pricing app | `editor-pricing`: the D6 product editor on its Pricing tab | Editor header (Trail Runner 2, Draft, SKU), a static tab strip, the shown Pricing card, Sales channels and product cards | `customElements`, `CustomElementRegistry`, `attachShadow`, an `iframe`, any script |
+| M4 Return guide | `help-center`: the customer help center | Header with a search look-alike, a plain breadcrumb, the shown article pane over a Related articles card, a "Still need help?" column with hours and the return window | `animation-timeline`, `scroll-timeline`, `view-timeline`, `animation-range`, scroll listeners, `IntersectionObserver`, any script |
+| M5 Trail gear pages | `storefront-catalog`: the storefront around the category page and the product page | Store header strip (name, static nav words, cart count) and a footer strip with the free shipping note, identical on both pages | `view-transition-name`, `@view-transition`, `startViewTransition`, `pageswap`, `pagereveal`, `href` |
 | F2 Caching | `storefront-product`, rendered by both F2 apps | Storefront header, the product page, and the request log docked as a drawer on dark glass, newest 4 rows | Any fetch, cache directive or `revalidate` in the layout |
 | F3 used-to | `advisory-feed`: a security advisories page | Header, static filter chips, the shown incident timeline, a source footer | Nothing extra; the page is static |
 | F3 now | `terminal-window`: a full-frame terminal app on dark glass | Title bar, session tab, working directory, a status bar with the registry address and the pinned pnpm and npm versions, the "Recorded" chip | Any sign of a live session |
@@ -217,7 +222,7 @@ The parent side owns the decision. `lib/engine/settle.ts` is a pure state machin
 
 ### 4.1 Background data
 
-- `content/backgrounds.ts` (new) is the registry: `BACKGROUNDS: Record<BackgroundId, { file: string; tone: "light" | "dark"; lead: Hue; hues: Hue[]; textZone: string }>`. It has 21 entries, keyed as in table 1.4. `BackgroundId` is its key type.
+- `content/backgrounds.ts` (new) is the registry: `BACKGROUNDS: Record<BackgroundId, { file: string; tone: "light" | "dark"; lead: Hue; hues: Hue[]; textZone: string }>`. It has 26 entries: the 21 of table 1.4 plus `m1` to `m5` for the Still in motion demos (`docs/design/still-in-motion-demos.md` 2). `BackgroundId` is its key type.
 - `content/schema.ts`: `Slide.background: BackgroundId`, required.
 - `content/demo-schema.ts`: `DemoSection.background: BackgroundId`, required. Pages have no background field of their own, so a section cannot split.
 - `content/slides/index.ts`: `pageSlide` copies `section.background` onto each page slide.
@@ -316,7 +321,7 @@ QR card       1200  182   656   716   solid white (--glass-surface-solid), radiu
 Add these rules. Each one fails unless marked as a warning.
 
 - Every slide has a `background` that is in the registry. The file exists, is 1920 by 1080 (read from the JPEG header) and is 1.5 MB or less. Above 900 KB is a warning.
-- Each registry id is used by exactly one non-demo slide or one section. Adjacent sections have different `lead` hues. All 21 file hashes differ.
+- Each registry id is used by exactly one non-demo slide or one section. Adjacent sections have different `lead` hues. All 26 file hashes differ.
 - Nothing is left under `public/backgrounds/` except `v5/` and the README. No source file names a `glass-*.jpg`.
 - `backgrounds.json`, `grain.png` and `linkedin.svg` match fresh output.
 - Every frame build has a `wrapper` with a known id. Wrapper CSS and markup pass the rules in 2.1 and the banned list in 2.2. No shown file contains `wrap-`.

@@ -4,8 +4,10 @@ import type { WrapperDef } from "./types";
 
 /**
  * D6 `product-editor` (spec 4.6): the admin product editor. The shown Color field sits in a
- * Variants card; the right column holds read-only details, three color tiles and the sizes as
- * plain text. Never a select, appearance, ::picker(), selectedcontent or a listbox.
+ * Variants card; the right column holds a photo of the chosen color, read-only details, three
+ * color tiles and the sizes as plain text. `/wrappers/product-editor.js` swaps the photo when the
+ * form's color changes, the same way for both builds. Never a select, appearance, ::picker(),
+ * selectedcontent or a listbox.
  */
 export const productEditor: WrapperDef = {
   id: "product-editor",
@@ -26,14 +28,17 @@ export const productEditor: WrapperDef = {
       '<p class="wrap-caption wrap-editor__caption">Variants</p>',
     ].join("");
     const tiles = e.colors.map((c) => `<li class="wrap-editor__tile"><span class="wrap-editor__swatch wrap-editor__swatch--${c.toLowerCase()}" aria-hidden="true"></span><span class="wrap-editor__name">${esc(c)}</span></li>`).join("");
+    const colors = e.colors.map((c) => c.toLowerCase());
+    const photo = `<figure class="wrap-card wrap-editor__media"><img class="wrap-editor__photo" src="/wrappers/trail-runner-2-${colors[0]}.webp" alt="${esc(e.title)} in ${colors[0]}" width="1200" height="900" data-wrap-colors="${colors.join(" ")}" data-wrap-name="${esc(e.title)}"></figure>`;
     const after = [
       '<div class="wrap-editor__side">',
+      photo,
       `<section class="wrap-card wrap-editor__details" aria-label="Details"><dl class="wrap-dl"><dt class="wrap-dl__key">Title</dt><dd class="wrap-dl__value">${esc(e.title)}</dd><dt class="wrap-dl__key">Price</dt><dd class="wrap-dl__value">${dollars(e.price)}</dd><dt class="wrap-dl__key">SKU</dt><dd class="wrap-dl__value">${esc(e.sku)}</dd></dl></section>`,
       `<section class="wrap-card wrap-editor__colors" aria-label="Colors"><p class="wrap-card__title">Colors</p><ul class="wrap-editor__tiles">${tiles}</ul></section>`,
       `<p class="wrap-meta">Sizes ${e.sizes[0]} to ${e.sizes[1]}</p>`,
       "</div>",
       "</div></div></div>",
     ].join("");
-    return { before, after, styles: [BASE_CSS, "/wrappers/product-editor.css"], scripts: [] };
+    return { before, after, styles: [BASE_CSS, "/wrappers/product-editor.css"], scripts: ["/wrappers/product-editor.js"] };
   },
 };

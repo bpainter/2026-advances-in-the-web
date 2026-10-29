@@ -65,6 +65,8 @@ export function segments(step: Step, startFlags: Record<string, boolean>): { act
  * discarded, as in forward play), minus the toggles themselves (the flags are already applied).
  */
 export function replaySteps(page: FramePage, stepIndex: number): Step[] {
+  const routed = routedReplay(page, stepIndex);
+  if (routed) return routed;
   let fromStep = 0;
   let fromAction = 0;
   for (let i = 0; i <= stepIndex && i < page.steps.length; i++) {
@@ -131,4 +133,37 @@ export function nominalMs(step: Step): number {
 
 export function ceilingMs(step: Step): number {
   return step.actions.some((a) => a.type === "type" || a.type === "paste" || a.type === "terminal") ? 6000 : 2500;
+}
+
+/** The document a step ends on in a multi-page build: its own route or the last one before it. */
+export function routeAt(page: FramePage, stepIndex: number): string | undefined {
+  for (let i = Math.min(stepIndex, page.steps.length - 1); i >= 0; i--) if (page.steps[i].route) return page.steps[i].route;
+  return undefined;
+}
+
+/**
+ * Instant replay on a multi-page build (still-in-motion-demos.md 3.3). The fresh document is the
+ * build's entry page (s0's route). The last routed step at or before `stepIndex` defines the
+ * state: steps before it replay nothing; it opens its route with one navigation when that differs
+ * from the entry page (a real entry, so a later Back has somewhere to go; the runtime skips the
+ * view transition in instant runs), then runs its actions after its last click or navigate, the
+ * waits and asserts that end it. Steps after it, still in that document, replay as usual.
+ * Null when the page has no routes.
+ */
+function routedReplay(page: FramePage, stepIndex: number): Step[] | null {
+  let k = -1;
+  for (let i = 0; i <= stepIndex && i < page.steps.length; i++) if (page.steps[i].route) k = i;
+  if (k < 0) return null;
+  const entry = page.steps[0].route ?? "index.html";
+  return page.steps.slice(0, stepIndex + 1).map((s, i) => {
+    if (i < k) return { ...s, actions: [] };
+    if (i > k) return { ...s, actions: s.actions.filter((a) => !isReloadingToggle(a)) };
+    let last = -1;
+    s.actions.forEach((a, j) => {
+      if (a.type === "click" || a.type === "navigate") last = j;
+    });
+    const rest = s.actions.slice(last + 1).filter((a) => a.type !== "pointer" && !isReloadingToggle(a));
+    const open: Action[] = s.route !== entry ? [{ type: "navigate", url: s.route }] : [];
+    return { ...s, actions: [...open, ...rest] };
+  });
 }

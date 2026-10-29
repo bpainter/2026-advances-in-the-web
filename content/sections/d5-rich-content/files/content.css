@@ -1,6 +1,7 @@
-.product { max-inline-size: 30rem; }
+/* Same page as the used-to build: copy
+   and highlights, reviews, then the rail.
+   Shared layout is in the portal sheet. */
+#description { min-block-size: 3lh; }
 #description img { max-inline-size: 100%; }
-.injected-banner { padding: 0.75rem;
-  background: #FEE4E2; color: #7A271A; }
 body[data-injected] .injected-banner {
   display: block; }

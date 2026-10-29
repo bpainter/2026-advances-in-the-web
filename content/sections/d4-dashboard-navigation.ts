@@ -36,13 +36,14 @@ export const section: DemoSection = {
       stage: "used-to",
       eyebrow: "Navigation API",
       title: "How we used to do it",
+      split: "60/40",
       intro:
         "This dashboard uses a router written by hand. Links, Back and slow networks each need code.",
       frame: {
         build: "today",
         route: "/demos/04-navigation-api/today",
-        viewport: { width: 640, height: 628 },
-        spotlightClip: { bottom: 412 },
+        viewport: { width: 768, height: 628 },
+        spotlightClip: { bottom: 488 },
         keycap: "above-drawer",
         hooks: ["reset", "scrollTo"],
         poster: "/posters/d4-today.png",
@@ -127,13 +128,14 @@ export const section: DemoSection = {
       stage: "now",
       eyebrow: "Navigation API",
       title: "How we do it now",
+      split: "60/40",
       intro:
         "This is the same dashboard. Every page is a normal server page. One listener makes the moves between them smooth.",
       frame: {
         build: "native",
         route: "/orders",
-        viewport: { width: 640, height: 628 },
-        spotlightClip: { bottom: 412 },
+        viewport: { width: 768, height: 628 },
+        spotlightClip: { bottom: 488 },
         keycap: "above-drawer",
         flags: { "enhance-js": true },
         hooks: ["reset", "scrollTo"],

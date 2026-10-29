@@ -134,7 +134,7 @@ export function jpegSize(buf: Buffer): { width: number; height: number } | null 
 export function glassText(g: GlassContent): { field: string; text: string; label?: boolean }[] {
   switch (g.kind) {
     case "title":
-      return [{ field: "eyebrow", text: g.eyebrow, label: true }, ...g.lines.map((t) => ({ field: "title", text: t })), { field: "speaker", text: `${g.speaker.name}, ${g.speaker.role}` }];
+      return [{ field: "eyebrow", text: g.eyebrow, label: true }, ...g.lines.map((t) => ({ field: "title", text: t }))];
     case "grid":
       return [
         ...(g.eyebrow ? [{ field: "eyebrow", text: g.eyebrow, label: true }] : []),

@@ -27,6 +27,12 @@ export type SupportSource =
       id: string;                  // primary feature: "dialog"
       alsoUses?: string[];         // 2 at most: ["popover", "invoker-commands"]
       fallback?: { missing: Browser[]; text: string };   // "a normal select"
+      /**
+       * Compat keys the demo uses (still-in-motion-demos.md 3.2): each tile shows the highest
+       * version across these keys in `status.by_compat_key`, and the since sentence uses their
+       * latest `baseline_low_date`. For features whose whole-feature status lags the parts a demo uses.
+       */
+      compatKeys?: string[];             // ["css.properties.anchor-name", "css.properties.position-area"]
     }
   | {
       kind: "tooling";
@@ -57,11 +63,22 @@ export interface IntroPage extends PageBase {
   };
 }
 
+/** Walk-page split of the 1792 px body: frame share / code share (the 32 px gap is outside both). */
+export type SplitRatio = "50/50" | "60/40";
+
+/** Slot geometry per split on the 1920 by 1080 canvas, and the frame viewport each one implies. */
+export const SPLITS: Record<SplitRatio, { frame: number; code: number; viewport: { width: number; height: number } }> = {
+  "50/50": { frame: 880, code: 880, viewport: { width: 640, height: 628 } },
+  "60/40": { frame: 1056, code: 704, viewport: { width: 768, height: 628 } },
+};
+
 export interface WalkPage extends PageBase {
   stage: "used-to" | "now";
   eyebrow: string;                 // equals the section's feature
   title: "How we used to do it" | "How we do it now";   // used-to, now respectively
-  frame: Frame;                    // viewport 640 by 628
+  /** Frame and code widths; defaults to "50/50". "60/40" gives the frame 1056 px and a 768 by 628 viewport. */
+  split?: SplitRatio;
+  frame: Frame;                    // viewport per split: 640 by 628 (50/50), 768 by 628 (60/40)
   files: DemoCodeFile[];           // used-to: 4 at most; now: 3 at most
 }
 
@@ -129,6 +146,13 @@ export interface Step {
   ifKeyboard?: string;             // kept: what to do by hand in hands-on mode
   proof?: string;                  // kept: the plan's proof item this step satisfies
   poster?: string;                 // kept: speaker-mirror image on framework and terminal pages
+  /**
+   * Multi-page builds (still-in-motion-demos.md 3.3): the document this step ends on, relative to
+   * the build ("index.html", "product.html?id=trail"). The forward run keeps the real navigation,
+   * so a cross-document view transition plays. Instant replay opens the route with no transition,
+   * then runs the step's actions after its last click or navigate.
+   */
+  route?: string;
 }
 
 export type Key = "Escape" | "Tab" | "Shift+Tab" | "Enter" | "Space" | "ArrowDown" | "ArrowUp" | "Alt+ArrowLeft" | "Alt+ArrowRight";

@@ -1,6 +1,6 @@
 import type { Action, Step } from "@/content/demo-schema";
 import { notePress } from "./input-relay";
-import { DEFAULT_PACE, parseFromRuntime, type AssertResult, type Cursor, type Cue, type Flags, type FromRuntime, type Rect, type RunMode, type ToRuntime } from "./protocol";
+import { DEFAULT_PACE, parseFromRuntime, type AssertResult, type Cursor, type Cue, type Flags, type FromRuntime, type Layer, type Rect, type RunMode, type ToRuntime } from "./protocol";
 
 export interface StepResult {
   asserts: AssertResult[];
@@ -24,6 +24,8 @@ export interface RectsMessage {
   viewport: { w: number; h: number };
   /** A finite animation or transition is running in the document (PRD v5, 3.3). */
   animating: boolean;
+  /** Top-layer elements, in opening order; empty from a runtime that does not report them. */
+  layers: Layer[];
 }
 
 type Listener<T> = (value: T) => void;
@@ -130,7 +132,7 @@ export class FrameHandle {
         return;
       }
       case "rects":
-        this.lastRects = { rects: msg.rects, focus: msg.focus, focusVisibleNative: msg.focusVisibleNative, viewport: msg.viewport, animating: msg.animating };
+        this.lastRects = { rects: msg.rects, focus: msg.focus, focusVisibleNative: msg.focusVisibleNative, viewport: msg.viewport, animating: msg.animating, layers: msg.layers ?? [] };
         this.rectListeners.forEach((l) => l(this.lastRects!));
         return;
       case "cue":

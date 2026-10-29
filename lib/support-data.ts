@@ -16,7 +16,48 @@ export const BROWSERS: { id: Browser; name: string; logo: string }[] = [
 
 export interface WebFeaturesData {
   browsers: Record<string, { name: string; releases: { version: string; date: string }[] }>;
-  features: Record<string, { kind?: string; name?: string; status?: { baseline: "high" | "low" | false; baseline_low_date?: string; support: Record<string, string> } }>;
+  features: Record<string, { kind?: string; name?: string; status?: FeatureStatus & { by_compat_key?: Record<string, FeatureStatus> } }>;
+}
+
+export interface FeatureStatus {
+  baseline: "high" | "low" | false;
+  baseline_low_date?: string;
+  support: Record<string, string>;
+}
+
+/** Numeric order of two web-features versions ("≤" ignored): "129" > "125", "26.2" > "26". */
+export function compareVersions(a: string, b: string): number {
+  const pa = a.replace(/^≤/, "").split(".").map(Number);
+  const pb = b.replace(/^≤/, "").split(".").map(Number);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    const d = (pa[i] ?? 0) - (pb[i] ?? 0);
+    if (d) return d;
+  }
+  return 0;
+}
+
+/**
+ * The status the tiles read (still-in-motion-demos.md 3.2): the feature's own, or with
+ * `compatKeys`, one built from those keys. A browser's version is the highest across the keys (it
+ * supports all of them from then on) and is missing when any key lacks it; Baseline is the weakest
+ * of the keys; the low date is their latest.
+ */
+export function effectiveStatus(featureId: string, status: NonNullable<WebFeaturesData["features"][string]["status"]>, compatKeys?: string[]): FeatureStatus {
+  if (!compatKeys?.length) return status;
+  const keys = compatKeys.map((k) => {
+    const s = status.by_compat_key?.[k];
+    if (!s) throw new Error(`web-features ${featureId} has no compat key "${k}"`);
+    return s;
+  });
+  const support: Record<string, string> = {};
+  for (const b of BROWSERS.map((x) => x.id)) {
+    const versions = keys.map((k) => k.support[b]);
+    if (versions.some((v) => !v)) continue;
+    support[b] = versions.reduce((hi, v) => (compareVersions(v!, hi!) > 0 ? v : hi))!;
+  }
+  const baseline = keys.some((k) => !k.baseline) ? false : keys.some((k) => k.baseline === "low") ? "low" : "high";
+  const lows = keys.map((k) => k.baseline_low_date).filter((d): d is string => Boolean(d));
+  return { baseline, support, ...(baseline && lows.length === keys.length ? { baseline_low_date: lows.sort().pop()! } : {}) };
 }
 
 export interface SupportTile {
@@ -81,14 +122,15 @@ export function spokenName(name: string): string {
 export function webFeaturesEntry(data: WebFeaturesData, source: Extract<SupportSource, { kind: "web-features" }>): SupportEntry {
   const feature = data.features[source.id];
   if (!feature?.status) throw new Error(`web-features has no feature "${source.id}"`);
-  const support = feature.status.support;
+  const status = effectiveStatus(source.id, feature.status, source.compatKeys);
+  const support = status.support;
   const tiles: SupportTile[] = BROWSERS.map((b) => {
     const version = support[b.id] ?? null;
     return { id: b.id, name: b.name, logo: b.logo, version, date: version ? releaseDate(data, b.id, version) : null };
   });
   let since: string;
-  if (feature.status.baseline && feature.status.baseline_low_date) {
-    since = `It has been available in all four browsers since ${monthYear(feature.status.baseline_low_date)}.`;
+  if (status.baseline && status.baseline_low_date) {
+    since = `It has been available in all four browsers since ${monthYear(status.baseline_low_date)}.`;
   } else {
     const listed = tiles.filter((t) => t.version);
     const latest = listed.map((t) => t.date ?? "").sort().pop() ?? "";
@@ -97,7 +139,7 @@ export function webFeaturesEntry(data: WebFeaturesData, source: Extract<SupportS
     if (missing.length) {
       const fallback = source.fallback?.text;
       if (!fallback) throw new Error(`${source.id}: not Baseline and missing in ${missing.map((m) => m.name).join(", ")}, but support.fallback is not set`);
-      since += ` ${joinAnd(missing.map((m) => m.name))} shows ${fallback}.`;
+      since += ` ${joinAnd(missing.map((m) => m.name))} ${missing.length > 1 ? "show" : "shows"} ${fallback}.`;
     }
   }
   let alsoUses: string | null = null;
@@ -110,7 +152,7 @@ export function webFeaturesEntry(data: WebFeaturesData, source: Extract<SupportS
     });
     alsoUses = `This demo also uses ${joinAnd(parts)}.`;
   }
-  return { kind: "web-features", id: source.id, name: feature.name, baseline: feature.status.baseline, baselineLowDate: feature.status.baseline_low_date ?? null, tiles, since, alsoUses };
+  return { kind: "web-features", id: source.id, name: feature.name, baseline: status.baseline, baselineLowDate: status.baseline_low_date ?? null, tiles, since, alsoUses };
 }
 
 /** npm version for a tile's version: "16" -> "16.0.0", "12.11" -> "12.11.0". */

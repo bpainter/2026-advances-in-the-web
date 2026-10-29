@@ -1,0 +1,20 @@
+/* One view shows at a time. */
+.view[hidden] {
+  display: none;
+}
+
+/* FLIP plays a transform from the old
+   box to the new one. */
+.hero,
+.card img {
+  transform-origin: top left;
+}
+.is-flipping {
+  transition: transform 300ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-flipping {
+    transition: none;
+  }
+}

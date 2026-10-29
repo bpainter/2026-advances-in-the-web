@@ -8,7 +8,7 @@ const REQUEST = { type: "hook", name: "requestPage" } as const;
 export const section: DemoSection = {
   id: "f2-caching",
   background: "f2",
-  order: 8,
+  order: 13,
   label: "Caching",
   feature: "Cache Components",
   scenario: "A product page with shared copy, a scheduled price and stock read for each user.",

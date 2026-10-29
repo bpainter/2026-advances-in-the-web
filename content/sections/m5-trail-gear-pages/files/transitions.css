@@ -1,0 +1,19 @@
+/* Both pages opt in to a transition
+   when you move between them */
+@view-transition {
+  navigation: auto;
+}
+
+/* Paired photos and names move together */
+::view-transition-group(*) {
+  animation-duration: 300ms;
+}
+
+/* No motion for people who ask for less */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none;
+  }
+}

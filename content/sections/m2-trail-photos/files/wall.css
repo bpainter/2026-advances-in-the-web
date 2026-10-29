@@ -1,0 +1,28 @@
+/* Every browser: a regular grid */
+.wall {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fill, minmax(6.5rem, 1fr));
+  gap: 0.5rem;
+}
+
+/* Lanes where the browser has them */
+@supports (display: grid-lanes) {
+  .wall {
+    display: grid-lanes;
+  }
+}
+
+/* No lanes: crop to one height */
+@supports not (display: grid-lanes) {
+  .wall img {
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+  .wall figcaption {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+  }
+}

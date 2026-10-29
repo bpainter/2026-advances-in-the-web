@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { deck } from "@/content/deck";
+import { SiteAnalytics } from "@/components/presenter/SiteAnalytics";
 import "@/styles/app.css";
 
 export const metadata: Metadata = {
@@ -11,7 +12,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en-CA">
-      <body>{children}</body>
+      <body>
+        {children}
+        {/* Vercel sets VERCEL=1 for its builds and functions; dev, walks and captures never load the script. */}
+        {process.env.VERCEL ? <SiteAnalytics /> : null}
+      </body>
     </html>
   );
 }

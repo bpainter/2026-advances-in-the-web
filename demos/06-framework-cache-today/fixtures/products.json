@@ -4,7 +4,9 @@
       "id": "ridgeline-trail",
       "name": "Ridgeline Trail",
       "copy": "A light trail runner with a lugged outsole for loose, rocky paths.",
-      "price": 129
+      "price": 129,
+      "image": "/images/ridgeline-trail.webp",
+      "imageAlt": "Ridgeline Trail in black with orange laces"
     }
   ],
   "inventory": {

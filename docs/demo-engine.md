@@ -35,6 +35,10 @@ per page), `proof`, `ifKeyboard` and `poster`.
 On the 1920 by 1080 canvas: eyebrow at y 48 (with the step indicator at the right), title at y 88
 (with the meter at the right), body at y 176. Walk pages split the body into two 880 by 864 cards
 32 px apart. Frames are authored at 640 by 628 and scaled by 1.375; single pages use 1304 by 628.
+A walk page may set `split: "60/40"` (`SPLITS` in `content/demo-schema.ts`, default `"50/50"`):
+the frame card is 1056 wide, the code card 704, and the frame is authored at 768 by 628 at the
+same scale. 44-column code still fits the 704 card without wrapping. D4 and D5 use it; the
+validator checks the viewport against the split, and the walk checks both card widths.
 The code card shows 24 px code in a scroller exactly 21 lines tall that scrolls in whole lines
 (no line is cut at either edge), file-name tabs, a highlight that leads playback by 400 ms, elision
 lines in the comment color and italic (gaps under three lines are shown in full), and an 18 px
@@ -92,6 +96,40 @@ fresh document there; a forward run, which has the real key press, restores it. 
 the next page's frame is loaded once in a hidden iframe to warm it (never for F2, whose apps log
 every request).
 
+## Multi-page builds (M5)
+
+A build may serve more than one composed document (`docs/design/still-in-motion-demos.md` 3.3).
+`nativeBuild` and `folderBuild` take an optional fifth argument: `pages` (`["product.html"]`, each
+composed like `index.html`, with the same wrapper, runtime and instrumentation), `render` (fills a
+page's server template from fixtures; the shown file stays as written) and `extraDir` (unshown
+hooks outside a today build's meter folder). The composer writes `data-pages` on `<html>` and moves
+the shown markup's leading stylesheet links into the head, so the CSS that opts a page in to a
+cross-document view transition blocks its first paint. A page request without `?flags=` takes the
+flags and background of the build's last mount.
+
+`Step.route` names the document a step ends on (`"product.html?id=trail"`). Forward runs keep the
+real navigation: in a `data-pages` document, a click on a link or a `navigate` waits for
+`pagehide`, whose `unloading` message names the next action, and the presenter resumes the run in
+the new document (the same protocol D3 and D4 use for loads), so the view transition plays.
+Instant replay loads the entry page, opens the last routed step's route with one navigation (a
+real entry, so a later Back works; the runtime skips the view transition in `pageswap` for instant
+runs) and runs that step's actions after its last click or navigate. The walk checks the frame's
+address against `route` forward and back, and `pnpm axe` scans every routed document.
+
+These rules keep it deterministic. A click on a link or a `navigate` to a URL waits until the
+document's load event has finished: a navigation started before then is a replace in every engine,
+which would leave no entry for Back (and WebKit's `history.back()` then restores a stale entry).
+A fresh frame gets its address before it is inserted, so WebKit never records an `about:blank`
+first document in the presenter's session history. The swap to a replayed frame hides the old frame
+in the same task, so when a step reports done exactly one frame is shown. A document restored from
+the back/forward cache posts `ready` again (`pageshow` with `persisted`), and `pagehide` posts
+`unloading` only for a run still playing.
+
+Asserts gained `style:<property>=<value>` (computed style). A `supports-blocks` enhancement may
+start off (M2): the runtime removes its `@supports` blocks before the first paint the presenter
+shows. The Chromium walk and `pnpm visuals` launch with `--enable-blink-features=CSSGridLanesLayout`
+(Chrome's "CSS Grid Lanes Layout" flag, `chrome://flags/#css-grid-lanes-layout`) for M2.
+
 ## Spotlights (v5)
 
 Protocol v2 (`lib/engine/protocol.ts`): every rect carries `radii: [tl, tr, br, bl]` in frame px,
@@ -111,6 +149,15 @@ for its playback to finish. After 2000 ms without a settle they show anyway and 
 (`window.__spotlightForced`; rehearsal mode logs "Spotlight forced after 2000 ms"). Reduced motion
 makes the fades instant. Targets at the frame edge get an inset ring.
 
+Top-layer occlusion: every rects message also carries `layers`, the frame's open popovers, modal
+dialogs and fullscreen elements in opening order, each with its rect and radii, `z`, `owns` (the
+watched selectors that match it or a descendant) and `focus` (it holds the focused element). A
+box belongs to the highest layer that owns one of its selectors (or holds focus, for the focus
+ring); every layer opened above that one is cut out of the box with a mask on its
+`.overlay__layer` wrapper, so an open menu paints over a spotlight the way it paints over the
+spotlighted page (D1 now s4: Cancel order over the status ring). Layer rects pass through the
+settle gate with the boxes, so a hole never moves while a box is shown.
+
 `/fixtures/spotlight` (development only) renders a page frame over `demos/00-fixtures/spotlight/`:
 radius 0, 8, 16, 999, `12px 12px 0 0` and 50 percent targets, a button whose width transitions
 and a panel that scales in. `pnpm walk fixtures` checks the radii, the fade timeline and reduced
@@ -119,7 +166,7 @@ target.
 
 ## Backgrounds and grain (v5)
 
-`content/backgrounds.ts` registers 21 files under `public/backgrounds/v5/` (1920 by 1080): one per
+`content/backgrounds.ts` registers 25 files under `public/backgrounds/v5/` (1920 by 1080): one per
 opening and closing slide and one per demo section (`Slide.background`, `DemoSection.background`;
 demo pages take their section's). The stage draws `.stage__bg` from the slide's file and, in the
 audience window only, `.stage__grain` (`public/theme/grain.png`, one tile pixel per device pixel,

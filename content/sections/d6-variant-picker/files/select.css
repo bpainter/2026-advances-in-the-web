@@ -6,17 +6,15 @@ select { min-inline-size: 18rem; }
 ::picker(select) {
   margin-block-start: 4px;
 }
-option {
+option,
+selectedcontent {
   display: flex;
   gap: 0.5rem;
   align-items: center;
 }
 option:checked { font-weight: 700; }
-.swatch { display: inline-block;
-  inline-size: 1rem;
-  block-size: 1rem;
-  border-radius: 50%;
+select img {
+  inline-size: 3rem;
+  block-size: 2.25rem;
+  border-radius: 4px;
 }
-.black { background: #000a25; }
-.moss { background: #5b6b2e; }
-.sand { background: #d8c7a0; }

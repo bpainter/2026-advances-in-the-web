@@ -1,0 +1,106 @@
+/* M2 portal content (unshown) for both builds: the photo pane scrolls inside the shown block, each
+   photo carries its quote over its lower edge, and Show more sits under the wall. Nothing here
+   lays out the wall itself: that is the shown CSS (now) or the script (used to). */
+@layer portal-layout {
+  .photos {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+    min-block-size: 0;
+    overflow: auto;
+    position: relative;
+  }
+  .wall,
+  .t-wall {
+    align-self: stretch;
+    flex: none;
+  }
+  .wall figure {
+    position: relative;
+    margin: 0;
+  }
+  .wall figure,
+  .t-wall figure {
+    overflow: hidden;
+  }
+  /* A wide photo is never shorter than its quote. */
+  .wall img,
+  .t-wall img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    min-block-size: 76px;
+    object-fit: cover;
+  }
+  .wall figcaption,
+  .t-wall figcaption {
+    position: absolute;
+    inset: auto 0 0;
+    padding: 20px 8px 6px;
+  }
+  /* Before the first layout (used to, s0), the items sit in source order at their width, the way
+     a Masonry.js page looks before its script runs (review r6 motion M5). The shown CSS makes them
+     absolute; this holds them in flow until the script has placed them. A held photo (render.ts)
+     is a placeholder of its own shape, never its alt text. */
+  .t-wall:not([data-laid-out]) {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .t-wall:not([data-laid-out]) > figure {
+    position: relative !important;
+  }
+  .t-wall img[data-held-src] {
+    visibility: hidden;
+  }
+  /* The stills show Show more where the live one is; clicks go through to it. */
+  .safari-capture {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    pointer-events: none;
+  }
+  .safari-capture img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+  .safari-capture figcaption {
+    position: absolute;
+    inset: 8px 8px auto auto;
+    padding: 2px 10px;
+  }
+}
+@layer portal-theme {
+  .wall figure,
+  .t-wall figure {
+    border-radius: 8px;
+    background: var(--glass-surface-solid);
+  }
+  .wall figcaption,
+  .t-wall figcaption {
+    background: linear-gradient(rgb(15 28 65 / 0), rgb(15 28 65 / 0.78));
+    color: var(--white);
+    font-size: 13px;
+    line-height: 16px;
+  }
+  .t-wall figure:has(img[data-held-src]) {
+    background: rgb(15 28 65 / 0.08);
+  }
+  .wall figcaption span,
+  .t-wall figcaption span {
+    font-weight: 700;
+  }
+  .safari-capture {
+    background: var(--glass-surface-solid);
+  }
+  .safari-capture figcaption {
+    border-radius: 999px;
+    background: var(--navy);
+    color: var(--white);
+    font-size: 13px;
+    font-weight: 700;
+  }
+}

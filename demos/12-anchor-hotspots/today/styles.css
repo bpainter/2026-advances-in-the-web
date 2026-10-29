@@ -1,0 +1,24 @@
+/* The floating card sits in a box at the
+   end of the page. Script writes its top
+   and left; the classes draw the arrow. */
+.card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  top: calc(50% - 8px);
+  inline-size: 16px;
+  block-size: 16px;
+  background: inherit;
+  rotate: 45deg;
+}
+.card--right::before {
+  left: -8px;
+}
+.card--left::before {
+  right: -8px;
+}

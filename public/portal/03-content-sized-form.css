@@ -8,3 +8,10 @@
     line-height: var(--glass-leading-sm);
   }
 }
+/* Room between the details box and Open case, so a spotlight ring on the box clears the button
+   (review r6 L4). */
+@layer portal-layout {
+  .case-form > button {
+    margin-block-start: 8px;
+  }
+}

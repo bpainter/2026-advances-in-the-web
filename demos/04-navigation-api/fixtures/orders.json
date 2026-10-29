@@ -1463,5 +1463,87 @@
       ],
       "total": 196
     }
-  ]
+  ],
+  "customers": {
+    "Maya Chen": [
+      "2214 NE Alberta St",
+      "Portland, OR 97211"
+    ],
+    "Daniel Okafor": [
+      "88 Grove Ave",
+      "Columbus, OH 43215"
+    ],
+    "Sofia Ramirez": [
+      "410 W Mesa Dr",
+      "Tucson, AZ 85705"
+    ],
+    "Liam Tremblay": [
+      "1290 Rue Rachel E",
+      "Montréal, QC H2J 2J7"
+    ],
+    "Priya Nair": [
+      "37 Linden Ct",
+      "Ann Arbor, MI 48104"
+    ],
+    "Owen Gallagher": [
+      "5 Harbor View Rd",
+      "Bar Harbor, ME 04609"
+    ],
+    "Hannah Kowalski": [
+      "716 S 3rd St",
+      "Milwaukee, WI 53204"
+    ],
+    "Marcus Bell": [
+      "2402 Pecan St",
+      "Austin, TX 78702"
+    ],
+    "Aiko Tanaka": [
+      "1530 Pine St",
+      "Seattle, WA 98101"
+    ],
+    "Noah Fischer": [
+      "61 Aspen Ln",
+      "Boulder, CO 80302"
+    ],
+    "Elena Petrova": [
+      "903 Commonwealth Ave",
+      "Boston, MA 02215"
+    ],
+    "Samuel Osei": [
+      "48 Carroll St",
+      "Brooklyn, NY 11231"
+    ],
+    "Clara Dubois": [
+      "2210 Royal St",
+      "New Orleans, LA 70117"
+    ],
+    "Ethan Morales": [
+      "175 Cedar Ridge Dr",
+      "Asheville, NC 28803"
+    ],
+    "Ingrid Larsen": [
+      "3318 Bryant Ave S",
+      "Minneapolis, MN 55408"
+    ],
+    "Jamal Carter": [
+      "620 Peachtree Pl",
+      "Atlanta, GA 30308"
+    ],
+    "Rosa Delgado": [
+      "1407 Guerrero St",
+      "San Francisco, CA 94110"
+    ],
+    "Tom Whitfield": [
+      "29 Summit Ave",
+      "Burlington, VT 05401"
+    ],
+    "Nadia Haddad": [
+      "845 Lake Shore Dr",
+      "Chicago, IL 60611"
+    ],
+    "Ben Archer": [
+      "312 Ridge Rd",
+      "Bozeman, MT 59715"
+    ]
+  }
 }

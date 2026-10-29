@@ -6,7 +6,7 @@
   "scripts": {
     "predev": "pnpm -s theme:sync && pnpm -s qr",
     "dev": "next dev",
-    "prebuild": "pnpm -s theme:sync && pnpm -s qr",
+    "prebuild": "pnpm -s theme:sync && pnpm -s qr && pnpm -s meters",
     "build": "next build",
     "start": "next start -p 3000",
     "lint": "eslint .",
@@ -39,6 +39,7 @@
     "start:framework-today": "pnpm -s theme:sync && pnpm --dir demos/06-framework-cache-today start"
   },
   "dependencies": {
+    "@vercel/analytics": "2.0.1",
     "clsx": "2.1.1",
     "hast-util-from-html": "2.0.3",
     "hast-util-to-jsx-runtime": "2.3.6",

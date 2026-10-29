@@ -1,5 +1,5 @@
 /* D6 product-editor (spec 4.6): the Variants card holding the shown Color field, and a right
-   column of read-only details, color tiles and sizes. */
+   column of the chosen color's photo, read-only details, color tiles and sizes. */
 @layer wrapper {
   .wrap-editor {
     display: grid;
@@ -22,6 +22,17 @@
     gap: 12px;
     grid-column: 2;
     grid-row: 1 / span 2;
+  }
+  /* The photo fills its card edge to edge: 216 by 144, the shoe centred in a 3:2 crop. */
+  .wrap-editor__media {
+    overflow: hidden;
+  }
+  .wrap-editor__photo {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
   }
   .wrap-editor__details,
   .wrap-editor__colors {

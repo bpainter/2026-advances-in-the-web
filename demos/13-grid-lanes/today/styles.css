@@ -1,0 +1,21 @@
+/* The wall is relative. Script sets its
+   height after every layout. */
+.t-wall {
+  position: relative;
+}
+
+/* Every item is absolute at a fixed
+   width, so CSS cannot place it. */
+.t-wall > figure {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 104px;
+  margin: 0;
+}
+
+.t-wall img {
+  display: block;
+  width: 100%;
+  height: auto;
+}

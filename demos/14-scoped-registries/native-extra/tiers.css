@@ -1,0 +1,51 @@
+/* The pricing app's own styles (unshown). It renders in a shadow root or an iframe, so the page
+   theme does not reach it; theme tokens still inherit as custom properties. */
+:host {
+  display: block;
+}
+.tiers {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--glass-border-color, rgb(15 28 65 / 0.12));
+  border-radius: 12px;
+  background: var(--glass-surface-strong, rgb(255 255 255 / 0.72));
+  color: var(--glass-ink, #0f1c41);
+  font: 400 15px/20px var(--glass-font, sans-serif);
+}
+.tiers__head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.tiers__title {
+  margin: 0;
+  font-size: 17px;
+  line-height: 22px;
+}
+.tiers__by,
+.tiers__base {
+  margin: 0;
+  color: var(--glass-ink-soft, #3e4a6b);
+}
+.tiers__list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.add-tier {
+  justify-self: start;
+  padding: 6px 12px;
+  border: 1px solid var(--glass-control-border, rgb(15 28 65 / 0.16));
+  border-radius: 8px;
+  background: var(--white, #fff);
+  color: var(--glass-ink, #0f1c41);
+  font: 700 15px/20px var(--glass-font, sans-serif);
+  cursor: pointer;
+}
+.add-tier:focus-visible {
+  outline: 2px solid var(--slalom-blue, #0c62fb);
+  outline-offset: 2px;
+}

@@ -41,19 +41,10 @@
 .combo__option.is-active {
   background: var(--glass-surface-selected);
 }
-.swatch {
-  inline-size: 1rem;
-  block-size: 1rem;
-  border-radius: 50%;
-}
-.black {
-  background: #000a25;
-}
-.moss {
-  background: #5b6b2e;
-}
-.sand {
-  background: #d8c7a0;
+.combo img {
+  inline-size: 3rem;
+  block-size: 2.25rem;
+  border-radius: 4px;
 }
 #t-status:empty {
   display: none;

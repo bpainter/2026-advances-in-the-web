@@ -172,6 +172,8 @@ const CASES: [string, Mut][] = [
   ["meter", (s) => (usedTo(s).steps[1].meter = usedTo(s).steps[2].meter) && delete usedTo(s).steps[2].meter],
   ["meter", (s) => (usedTo(s).steps[2].meter = { label: "JavaScript", value: "12 lines", source: "fixture" })],
   ["viewport", (s) => (now(s).frame.viewport = { width: 1280, height: 720 })],
+  // A 60/40 page keeps the 50/50 viewport: it must be 768 by 628.
+  ["viewport", (s) => (now(s).split = "60/40")],
   ["timing", (s) => (now(s).timing.minutes = 2)],
   ["timing", (s) => (now(s).timing.minutes = 20) && (s.id = "x1-fixture")],
   ["frame-change", (s) => (now(s).steps[2].actions = [{ type: "wait", ms: 100 }])],

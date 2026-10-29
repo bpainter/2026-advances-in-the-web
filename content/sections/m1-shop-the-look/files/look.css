@@ -1,0 +1,33 @@
+@supports (anchor-name: --a) {
+  #pin-shell { anchor-name: --shell; }
+  #pin-pack { anchor-name: --pack; }
+  #pin-shoe { anchor-name: --shoe; }
+  #card-shell { position-anchor: --shell; }
+  #card-pack { position-anchor: --pack; }
+  #card-shoe { position-anchor: --shoe; }
+
+  .card {
+    inset: auto;
+    margin: 0 14px;
+    position-area: inline-end;
+    align-self: anchor-center;
+    position-try-fallbacks:
+      flip-inline, flip-block;
+  }
+}
+
+/* The arrow turns to face its pin. */
+@supports (container-type: anchored) {
+  .card { container-type: anchored; }
+  .card::before {
+    content: "";
+    position: absolute;
+    top: calc(50% - 8px); left: -8px;
+    inline-size: 16px; block-size: 16px;
+    background: inherit;
+    rotate: 45deg;
+  }
+}
+@container anchored(fallback: flip-inline) {
+  .card::before { left: calc(100% - 8px); }
+}

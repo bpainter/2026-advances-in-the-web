@@ -53,10 +53,10 @@ const KINDS: Record<string, LogKind> = {
 };
 
 const CACHED: Record<LogKind, string> = {
-  catalog: "?",
-  inventory: "?",
-  price: "?",
-  invalidate: "?",
+  catalog: "unknown",
+  inventory: "unknown",
+  price: "unknown",
+  invalidate: "unknown",
 };
 
 /** How long a held catalog line waits for its request's inventory line. */

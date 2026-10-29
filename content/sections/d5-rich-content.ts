@@ -33,12 +33,13 @@ export const section: DemoSection = {
       stage: "used-to",
       eyebrow: "Trusted Types",
       title: "How we used to do it",
+      split: "60/40",
       intro:
         "This product page shows CMS content in three places. Each place writes HTML its own way.",
       frame: {
         build: "today",
         route: "/demos/05-trusted-types/today",
-        viewport: { width: 640, height: 628 },
+        viewport: { width: 768, height: 628 },
         hooks: ["reset", "renderReview"],
         poster: "/posters/d5-today.png",
       },
@@ -119,12 +120,13 @@ export const section: DemoSection = {
       stage: "now",
       eyebrow: "Trusted Types",
       title: "How we do it now",
+      split: "60/40",
       intro:
-        "This is the same page with one rule in the header. HTML can only come through a policy we review.",
+        "This is the same page with one rule in the header. All three places write HTML through one policy we review.",
       frame: {
         build: "native",
         route: "/demos/05-trusted-types/native",
-        viewport: { width: 640, height: 628 },
+        viewport: { width: 768, height: 628 },
         flags: { "csp-enforce": false },
         hooks: ["reset", "renderFixture", "renderDirect"],
         poster: "/posters/d5-now.png",
@@ -150,7 +152,7 @@ export const section: DemoSection = {
           id: "s1",
           label: "Report a direct write",
           actions: [
-            { type: "hook", name: "renderDirect", args: ["handler"] },
+            { type: "hook", name: "renderDirect", args: ["update"] },
             { type: "wait", ms: 400 },
             { type: "assert", target: "#console", expect: "contains:require-trusted-types-for" },
             { type: "assert", target: ".injected-banner", expect: "visible" },
@@ -174,7 +176,7 @@ export const section: DemoSection = {
           code: { file: "csp-header.http", lines: [[9, 12]] },
           spotlight: ["#description"],
           bullets: [
-            "The same rule now enforces. The approved description still renders.",
+            "The same rule now enforces. The description, reviews and promo still render.",
             "Only the two policies named in the header may create HTML.",
           ],
         },
@@ -183,14 +185,21 @@ export const section: DemoSection = {
           label: "Render through the policy",
           key: true,
           actions: [
-            { type: "hook", name: "renderFixture", args: ["handler"] },
+            { type: "hook", name: "renderFixture", args: ["update"] },
             { type: "assert", target: "#description img", expect: "no-attr:onerror" },
           ],
-          code: { file: "app.js", lines: [[6, 17]] },
+          code: {
+            file: "app.js",
+            lines: [
+              [6, 7],
+              [9, 12],
+              [14, 19],
+            ],
+          },
           spotlight: ["#description", "#description img"],
           meter: {
             label: "JavaScript",
-            value: "15 lines",
+            value: "17 lines",
             source: "non-blank, non-comment lines in content/sections/d5-rich-content/files/*.js",
           },
           bullets: [
@@ -203,11 +212,11 @@ export const section: DemoSection = {
           id: "s4",
           label: "Write a plain string",
           actions: [
-            { type: "hook", name: "renderDirect", args: ["handler"] },
+            { type: "hook", name: "renderDirect", args: ["update"] },
             { type: "assert", target: "#console", expect: "contains:TypeError" },
             { type: "assert", target: ".injected-banner", expect: "hidden" },
           ],
-          code: { file: "app.js", lines: [[20, 23]] },
+          code: { file: "app.js", lines: [[21, 24]] },
           spotlight: ["#console"],
           proof: "Try a direct string assignment and show the browser exception.",
           bullets: [

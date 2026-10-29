@@ -71,5 +71,69 @@
     "area": "Pull requests",
     "title": "Remove UI libraries the browser now covers",
     "state": "Draft"
+  },
+  "lookbook": {
+    "area": "Shop the look",
+    "season": "Fall 2026: built for the ridge",
+    "nav": [
+      "Packs",
+      "Jackets",
+      "Footwear"
+    ],
+    "cart": 2,
+    "looks": [
+      {
+        "title": "Camp at dusk",
+        "photo": "/demo-assets/trail/photo-03.webp"
+      },
+      {
+        "title": "Summit morning",
+        "photo": "/demo-assets/trail/photo-06.webp"
+      },
+      {
+        "title": "Wet trail day",
+        "photo": "/demo-assets/trail/photo-07.webp"
+      }
+    ],
+    "blurb": "Three pieces for a cold, wet ridge. Press a pin to see each one."
+  },
+  "help": {
+    "title": "Ridgeline Help",
+    "search": "Search help articles",
+    "crumbs": [
+      "Help",
+      "Orders",
+      "Returns"
+    ],
+    "hours": "9\u00a0am to 6\u00a0pm ET, weekdays",
+    "channels": [
+      "Chat",
+      "Email",
+      "Phone"
+    ],
+    "updated": "2026-10-20"
+  },
+  "pricing": {
+    "channels": [
+      {
+        "name": "Online store",
+        "state": "Active"
+      },
+      {
+        "name": "Retail",
+        "state": "Active"
+      },
+      {
+        "name": "Wholesale",
+        "state": "Draft"
+      }
+    ],
+    "tabs": [
+      "Details",
+      "Pricing",
+      "Variants",
+      "Media"
+    ],
+    "current": "Pricing"
   }
 }

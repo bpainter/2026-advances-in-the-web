@@ -1,0 +1,67 @@
+/* M3 portal content (unshown; still-in-motion-demos.md 6) for both builds: the Pricing card, the
+   Ridge UI v2 field's look in light DOM, and the fallback iframe's size on the now page. The app
+   itself styles its own shadow root or document (native-extra/tiers.css). */
+@layer portal-layout {
+  .pricing {
+    display: grid;
+    align-content: start;
+    gap: 14px;
+  }
+  .pricing > h2 {
+    margin: 0;
+  }
+  /* Room between the base price and the app, so their spotlights never touch (review r6 M7). */
+  .pricing > pricing-app,
+  .pricing > .app-frame {
+    margin-block-start: 12px;
+  }
+  ridge-price-field,
+  pricing-app {
+    display: block;
+  }
+  ridge-price-field[hidden],
+  pricing-app[hidden] {
+    display: none;
+  }
+  .ridge2-field {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+  }
+  .ridge2-field__control {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ridge2-field__input {
+    inline-size: 7ch;
+    text-align: end;
+  }
+  pricing-app .app-frame {
+    display: block;
+    inline-size: 100%;
+    block-size: 232px;
+    border: 0;
+  }
+}
+@layer portal-theme {
+  /* The iframe's fixed box, drawn as a dashed edge, so its size reads on screen (review r6 M6).
+     An outline, because the shown CSS resets the border. */
+  .app-frame {
+    outline: 1px dashed var(--glass-control-border);
+    outline-offset: 0;
+  }
+  .pricing > h2 {
+    font-size: var(--glass-text-xl);
+    line-height: 28px;
+  }
+  .ridge2-field__label {
+    color: var(--glass-ink);
+    font-weight: 700;
+  }
+  .ridge2-field__prefix {
+    color: var(--glass-ink-soft);
+    font-weight: 700;
+  }
+}

@@ -1,111 +1,311 @@
-/* D4 shown block (unshown, PRD v5 2; spec 4.4) for both builds: the document scrolls, because
-   scroll restore is part of the demo. The toolbar sticks under the wrapper's top bar; the evidence
-   panel docks as a dark drawer at the bottom of the frame (the real subject, full contrast); the
-   order list reads as a portal card. */
+/* D4 shown block (unshown, PRD v5 2; spec 4.4) for both builds, at the 768 by 628 viewport of the
+   60/40 walk pages. The document scrolls, because scroll restore is part of the demo. The toolbar
+   is a second header row flush under the wrapper's top bar, and both stick, so rows never show in
+   a gap between them. The evidence panel docks at the foot of the app, from the rail to the sheet
+   edge, so no row scrolls out below it (r6). The list and the order detail are portal cards.
+   Geometry the steps rely on: the dock's top edge is frame y 496; spotlights clip at 488 and
+   keycaps sit above it (content/sections/d4-dashboard-navigation.ts). */
 @layer portal-layout {
-  /* Room for the inset spotlight ring inside the content edge (review v5 H7). */
-  #content {
-    padding-inline: 8px;
-  }
   .toolbar {
     position: sticky;
-    top: 72px;
+    top: 60px;
     z-index: 1;
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: var(--glass-space-4) var(--glass-space-6);
-    padding: var(--glass-space-4) var(--glass-space-5);
+    gap: var(--glass-space-6);
+    box-sizing: border-box;
+    block-size: 56px;
+    /* Flush with the main column: cancel .wrap-main's padding (12 top, --wrap-pad at the sides). */
+    margin: -12px calc(-1 * var(--wrap-pad)) 0;
+    padding: 0 24px;
   }
   .toolbar nav {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--glass-space-4) var(--glass-space-6);
+    gap: var(--glass-space-7);
   }
   .toolbar nav a {
-    padding-block: var(--glass-space-2);
+    padding-block: var(--glass-space-3);
   }
   .toolbar form {
     display: flex;
     align-items: center;
     gap: var(--glass-space-4);
+    margin-inline-start: auto;
   }
+  /* Room for the inset spotlight ring inside the content edge (review v5 H7). Focusing #content
+     after a move scrolls it below the sticky header band (frame pad 12, top bar 48, toolbar 56),
+     never under it. */
+  #content {
+    padding: 20px 8px 0;
+    scroll-margin-top: 116px;
+  }
+
+  /* The list: one card, a row per order on a four-column grid. */
   .order-list {
     display: grid;
-    margin: var(--glass-space-4) 0 0;
+    margin: var(--glass-space-5) 0 0;
     padding: 0;
     list-style: none;
   }
   .order-list li {
-    padding: var(--glass-space-4) var(--glass-space-6);
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr) 128px 64px;
+    align-items: center;
+    gap: var(--glass-space-5);
+    min-block-size: 44px;
+    box-sizing: border-box;
+    padding: 0 var(--glass-space-7);
+  }
+  .order-list__total {
+    text-align: end;
+  }
+
+  /* The order detail: header, then the items card beside the customer card. */
+  .order-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--glass-space-2) var(--glass-space-5);
+  }
+  .order-head__meta {
+    flex-basis: 100%;
+    margin: 0;
   }
   .order-detail {
     display: grid;
-    grid-template-columns: auto 1fr;
-    gap: var(--glass-space-2) var(--glass-space-6);
+    grid-template-columns: minmax(0, 1fr) 216px;
+    align-items: start;
+    gap: var(--glass-space-5);
+    margin-block-start: var(--glass-space-6);
   }
-  .order-detail dd {
+  .order-card {
+    padding: var(--glass-space-6) var(--glass-space-7);
+  }
+  .order-card h2 {
+    margin-block-end: var(--glass-space-3);
+  }
+  .order-items table {
+    inline-size: 100%;
+  }
+  .order-items :is(th, td) {
+    padding: 7px var(--glass-space-4);
+  }
+  .order-items :is(th, td):first-child {
+    padding-inline-start: 0;
+  }
+  .order-items :is(th, td):last-child {
+    padding-inline-end: 0;
+  }
+  .order-items .num,
+  .order-items tfoot th {
+    text-align: end;
+  }
+  .order-items tfoot tr:first-child > * {
+    padding-block-start: var(--glass-space-5);
+  }
+  .order-items tfoot :is(th, td) {
+    padding-block: 3px;
+  }
+  .order-items__total > * {
+    padding-block-start: var(--glass-space-4) !important;
+  }
+  .order-side {
+    display: grid;
+    gap: var(--glass-space-6);
+  }
+  .order-side p,
+  .order-side address {
     margin: 0;
   }
+  .order-timeline {
+    display: grid;
+    gap: var(--glass-space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .order-timeline li {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    gap: var(--glass-space-4);
+    padding-inline-start: 18px;
+  }
+  .order-timeline li::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 5px;
+    inline-size: 8px;
+    block-size: 8px;
+    box-sizing: border-box;
+    border-radius: 50%;
+  }
+  .order-timeline li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    inset-inline-start: 3.5px;
+    inset-block: 15px -9px;
+    inline-size: 1px;
+  }
+
+  /* The evidence dock: Address, Title, Focus and Scroll on the left, the request log on the right. */
   .demo-panel {
     position: fixed;
-    inset: auto 28px 24px 84px;
+    inset: auto 12px 12px 69px;
     z-index: 3;
-    block-size: 180px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--glass-space-8);
+    block-size: 120px;
     box-sizing: border-box;
-    padding: 12px 16px;
+    padding: 10px 20px;
     overflow: hidden;
   }
   .demo-panel dl {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr);
-    gap: 4px var(--glass-space-5);
+    grid-template-columns: auto minmax(0, 1fr);
+    align-content: start;
+    /* 6 px between rows keeps a spotlight ring on one value off its neighbours' text. */
+    gap: 6px var(--glass-space-6);
     margin: 0;
   }
   .demo-panel dd {
+    justify-self: start;
+    max-inline-size: 100%;
+    min-inline-size: 14ch;
     margin: 0;
-    min-inline-size: 0;
-    overflow-wrap: anywhere;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
+  /* Four whole rows of 22 px, newest first: no half row at the dock's foot (review r6 M4). */
   #request-log {
-    max-block-size: 66px;
-    margin: 10px 0 0;
-    padding: 0;
+    max-block-size: 88px;
+    margin: 0;
+    padding: 0 0 0 var(--glass-space-8);
     list-style: none;
     overflow: hidden;
   }
   #request-log li {
     padding: 0;
+    white-space: nowrap;
   }
 }
 @layer portal-theme {
-  /* The toolbar floats over the list as it scrolls: float fill and frost. */
+  /* The two header rows read as one band. Near solid, because rows scroll beneath it. */
   .toolbar {
-    background: var(--glass-surface-float);
+    border-block-end: 1px solid var(--glass-rule);
+    background: color-mix(in srgb, var(--glass-surface-solid) 97%, transparent);
     -webkit-backdrop-filter: var(--glass-filter-float);
     backdrop-filter: var(--glass-filter-float);
   }
-  .toolbar,
-  .order-list {
+  /* Focus moves to #content after each navigation; the dock's Focus row proves it. A box round the
+     whole pane read as a third spotlight, so the pane draws none (review r6 H2). Important, so it
+     outranks the shown, unlayered main:focus-visible rule; links and controls keep their ring. */
+  #content:focus {
+    outline: none !important;
+  }
+  /* The wrapper sets ink-soft; the page title and detail sit on the pane, which carries ink only. */
+  #content {
+    color: var(--glass-ink);
+  }
+  #content > h1,
+  .order-head h1 {
+    font-size: var(--glass-text-xl);
+    line-height: var(--glass-leading-xl);
+  }
+  .order-list,
+  .order-card {
     border: var(--glass-border);
     border-radius: var(--glass-radius-card);
-    box-shadow: var(--glass-highlight), var(--glass-shadow-card);
-  }
-  .order-list {
     background: var(--wrap-surface-focus);
+    box-shadow: var(--glass-highlight), var(--glass-shadow-card);
   }
   .order-list li + li {
     border-top: 1px solid var(--glass-rule);
   }
-  /* The evidence drawer: navy 0.82, white values, soft labels; above 12:1 for the values. */
+  .order-list a {
+    font-weight: 700;
+  }
+  .order-list__customer {
+    color: var(--glass-ink);
+  }
+  .order-list__meta {
+    color: var(--glass-ink-soft);
+  }
+  .order-list__total {
+    color: var(--glass-ink);
+    font-weight: 700;
+  }
+  .order-head__meta {
+    color: var(--glass-ink);
+  }
+  .order-card h2 {
+    color: var(--glass-ink-soft);
+  }
+  /* The detail's small text holds the 14 px floor (review r6 L5): column heads, card heads, the
+     order count, timeline times and the status chip. */
+  .order-items thead th,
+  .order-card h2,
+  .order-side__soft,
+  .order-timeline__when,
+  .order-head .glass-chip {
+    font-size: var(--wrap-text-sm);
+    line-height: var(--wrap-leading-sm);
+  }
+  .order-items td {
+    color: var(--glass-ink);
+  }
+  .order-items tbody tr:last-child > td {
+    border-block-end: 1px solid var(--glass-rule);
+  }
+  .order-items tfoot :is(th, td) {
+    border: 0;
+    color: var(--glass-ink-soft);
+    font-size: var(--glass-text-md);
+    font-weight: 400;
+  }
+  .order-items__total > * {
+    color: var(--glass-ink) !important;
+    font-weight: 700 !important;
+  }
+  .order-side p:first-of-type,
+  .order-side address {
+    color: var(--glass-ink);
+    font-style: normal;
+  }
+  .order-side__soft {
+    color: var(--glass-ink-soft);
+  }
+  .order-timeline li {
+    color: var(--glass-ink);
+    font-size: 14px;
+    line-height: 18px;
+  }
+  .order-timeline__when {
+    color: var(--glass-ink-soft);
+  }
+  .order-timeline li::before {
+    background: var(--glass-chip-success-dot);
+  }
+  .order-timeline li[aria-current="step"] {
+    font-weight: 700;
+  }
+  .order-timeline li[aria-current="step"]::before {
+    border: 2px solid var(--glass-chip-info-dot);
+    background: var(--glass-surface-solid);
+  }
+  .order-timeline li::after {
+    background: var(--glass-control-border);
+  }
+  /* The dock: near-solid navy, white values, soft labels; above 12:1 for the values. */
   .demo-panel {
-    border: 1px solid var(--wrap-dark-edge);
-    border-radius: 12px;
-    /* Near solid: the drawer is the subject, so list rows never read through it (review v5 M10). */
-    background: var(--wrap-surface-dark-strong);
-    -webkit-backdrop-filter: var(--glass-filter-float);
-    backdrop-filter: var(--glass-filter-float);
-    box-shadow: var(--glass-dark-highlight), var(--glass-shadow-float);
+    border-block-start: 1px solid var(--wrap-dark-edge);
+    border-end-end-radius: 16px;
+    /* Solid: rows scroll beneath the dock and must never read through it. */
+    background: var(--glass-dark-solid);
+    box-shadow: var(--glass-dark-highlight);
     color: var(--wrap-dark-ink);
     font: 15px/20px var(--glass-font-mono);
   }
@@ -114,6 +314,7 @@
     font: 700 14px/20px var(--glass-font);
   }
   #request-log {
+    border-inline-start: 1px solid var(--wrap-dark-rule);
     color: var(--wrap-dark-ink-body);
     font: 14px/22px var(--glass-font-mono);
   }

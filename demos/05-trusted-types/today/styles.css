@@ -1,131 +1,22 @@
 /* D5 today: a product page with CMS content
-   in three places. */
+   in three places. The page layout and look
+   are shared with the now build in
+   public/portal/05-trusted-types.css. */
 
-.shop {
-  display: grid;
-  grid-template-columns:
-    minmax(0, 1fr)
-    12rem;
-  gap: 1rem 1.25rem;
-  align-items: start;
-}
-
-.product {
-  max-inline-size: 40rem;
-}
-
-/* The wrapper's product bar names the product line, so the eyebrow is not drawn here (review v5
-   M13: the card ends above the collapsed console drawer). */
+/* The wrapper's product bar names the product
+   line, so the eyebrow is not drawn here
+   (review v5 M13: the card ends above the
+   collapsed console drawer). */
 .product__eyebrow {
   display: none;
-  margin: 0;
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #5b6475;
-}
-
-h1 {
-  margin: 0 0 0.5rem;
-  font-size: 1.75rem;
-  line-height: 1.2;
 }
 
 .product__body {
   min-block-size: 3lh;
 }
 
-.product__body > :first-child,
-.review__body > :first-child {
-  margin-block-start: 0;
-}
-
-.product__body > :last-child,
-.review__body > :last-child {
-  margin-block-end: 0;
-}
-
-.product__body p,
-.product__body ul {
-  margin-block: 0.5rem;
-}
-
-.product__body img,
-.review__body img {
+.product__body img {
   max-inline-size: 100%;
-}
-
-.reviews {
-  margin-block-start: 0.5rem;
-  padding-block-start: 0.5rem;
-  border-block-start: 1px solid #dfe3ea;
-}
-
-.reviews h2 {
-  margin: 0 0 0.25rem;
-  font-size: 1.1rem;
-}
-
-.reviews .count {
-  font-weight: 400;
-  color: #5b6475;
-}
-
-.review-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.review {
-  padding-block: 0.25rem;
-}
-
-.review + .review {
-  border-block-start: 1px solid #eef0f4;
-}
-
-.review__meta {
-  margin: 0;
-  font-size: 0.9rem;
-}
-
-.review__stars {
-  margin-inline-start: 0.5rem;
-  color: #b8860b;
-  letter-spacing: 0.1em;
-}
-
-.review--empty {
-  color: #5b6475;
-}
-
-.rail {
-  display: grid;
-  gap: 1rem;
-  margin-block-start: 2rem;
-}
-
-.promo {
-  padding: 1rem 1.25rem;
-  border: 1px solid #dfe3ea;
-  border-radius: 0.5rem;
-  background: #f6f8fb;
-}
-
-.promo p {
-  margin: 0;
-}
-
-.promo__title {
-  font-weight: 600;
-}
-
-.injected-banner {
-  margin: 0;
-  padding: 0.75rem;
-  background: #fee4e2;
-  color: #7a271a;
 }
 
 body[data-injected] .injected-banner {

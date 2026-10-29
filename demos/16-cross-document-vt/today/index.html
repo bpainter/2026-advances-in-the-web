@@ -1,0 +1,26 @@
+<link rel="stylesheet" href="styles.css" />
+<div id="t-app">
+  <main id="t-grid-view" class="shelf view">
+    <h1>Trail gear</h1>
+    <ul class="shelf-grid">
+      <!-- product cards from the server -->
+    </ul>
+  </main>
+  <main
+    id="t-product-view"
+    class="product view"
+    hidden
+  >
+    <img id="t-hero" class="hero" alt="" />
+    <div class="product-info">
+      <a href="./" data-route>Trail gear</a>
+      <h1 id="t-title" tabindex="-1"></h1>
+      <p id="t-price" class="price"></p>
+      <p id="t-blurb"></p>
+    </div>
+  </main>
+</div>
+<script
+  type="module"
+  src="router.js"
+></script>

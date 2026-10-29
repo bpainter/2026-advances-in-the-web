@@ -42,6 +42,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           controls={
             <>
               <div className="admin" data-presenter-chrome="">
+                {/* The same strip as the now app (review r6 M8). Reset clears the user and region
+                    cookies, and this page never switches them, so it always previews agent-1 in US. */}
+                <label className="admin__field">
+                  <span>User</span>
+                  <select name="user" defaultValue="agent-1" disabled>
+                    <option value="agent-1">agent-1</option>
+                  </select>
+                </label>
+                <label className="admin__field">
+                  <span>Region</span>
+                  <select name="region" defaultValue="us" disabled>
+                    <option value="us">US</option>
+                  </select>
+                </label>
                 <button type="button" data-demo-reload="">
                   Reload
                 </button>

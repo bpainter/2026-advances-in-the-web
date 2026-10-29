@@ -8,7 +8,7 @@ const T = (a: number, b: number): Action => ({ type: "terminal", lines: [a, b] }
 export const section: DemoSection = {
   id: "f3-package-trust",
   background: "f3",
-  order: 9,
+  order: 14,
   label: "Package trust",
   feature: "Package trust",
   scenario:

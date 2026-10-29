@@ -1,0 +1,82 @@
+/* M4 help-center (still-in-motion-demos.md 7): breadcrumb, the shown article pane over a related
+   articles card, and a "Still need help?" column. The pane scrolls inside the shown markup; the
+   document never does. Nothing here moves. */
+@layer wrapper {
+  .wrap-help__search {
+    inline-size: 220px;
+    flex: none;
+  }
+  .wrap-help__crumbs {
+    display: flex;
+    gap: 6px;
+    flex: none;
+  }
+  .wrap-help__sep {
+    color: var(--glass-ink-soft);
+  }
+  .wrap-help__crumb:last-child {
+    color: var(--glass-ink);
+    font-weight: 700;
+  }
+  .wrap-help__cols {
+    display: grid;
+    flex: 1;
+    grid-template-columns: minmax(0, 1fr) 176px;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 12px 16px;
+    min-block-size: 0;
+  }
+  .wrap-help__cols > .wrap-shown {
+    grid-column: 1;
+    grid-row: 1;
+    min-block-size: 0;
+  }
+  .wrap-help__related {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 14px var(--wrap-pad);
+  }
+  .wrap-help__links {
+    display: grid;
+    gap: 8px;
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .wrap-help__link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--glass-ink);
+  }
+  .wrap-help__side {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .wrap-help__card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: var(--wrap-pad);
+  }
+  .wrap-help__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+  }
+  .wrap-help__big {
+    margin: 0;
+    color: var(--glass-ink);
+    font-size: 22px;
+    line-height: 28px;
+    font-weight: 700;
+  }
+  /* Under the return window card, not alone at the foot of the column (review r6 motion L8). */
+  .wrap-help__updated {
+    margin: 0;
+  }
+}

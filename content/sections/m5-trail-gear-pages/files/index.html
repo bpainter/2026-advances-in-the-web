@@ -1,0 +1,21 @@
+<link rel="stylesheet"
+  href="transitions.css">
+<main class="shelf">
+  <h1>Trail gear</h1>
+  <ul class="shelf-grid">
+    {{#products}}
+    <li>
+      <a id="card-{{id}}" class="card"
+        href="product.html?id={{id}}">
+        <img src="{{photo}}" alt=""
+          style="view-transition-name:
+            {{id}}-photo">
+        <span class="card-name"
+          style="view-transition-name:
+            {{id}}-name">{{name}}</span>
+        <span>{{price}}</span>
+      </a>
+    </li>
+    {{/products}}
+  </ul>
+</main>

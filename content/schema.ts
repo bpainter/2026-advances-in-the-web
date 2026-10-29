@@ -152,11 +152,13 @@ export interface GlassCard {
 
 /** The text of a native glass slide (PRD v5, 4.5; docs/design/demo-wrappers-spec.md 6). */
 export type GlassContent =
-  | { kind: "title"; eyebrow: string; lines: string[]; speaker: { name: string; role: string } }
+  | { kind: "title"; eyebrow: string; lines: string[] }
   | {
       kind: "grid";
       variant: "icons" | "portraits" | "numbered";
       tone: "light" | "dark";
+      /** "center": the text and cards stack as one group, centered vertically; default: each block at its own fixed position. */
+      align?: "center";
       eyebrow?: string;
       title?: string;
       display?: string;

@@ -11,7 +11,11 @@ export type WrapperId =
   | "advisory-feed"
   | "terminal-window"
   | "ci-report"
-  | "dependency-review"
+  | "lookbook"
+  | "editor-pricing"
+  | "help-center"
+  | "product-photos"
+  | "storefront-catalog"
   | "fixture-bare";
 
 export interface WrapperRender {

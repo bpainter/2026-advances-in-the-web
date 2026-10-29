@@ -5,8 +5,9 @@ import type { WrapperDef } from "./types";
 
 /**
  * D5 `product-page` (spec 4.5): a storefront product page around the shown article. A product
- * bar (thumbnail, price, rating, returns) and a developer tools drawer on dark glass, open on the
- * now page (the shown #console docks over it) and collapsed to its tabs on the used-to page. No
+ * bar (thumbnail, price, rating, returns) and a developer tools drawer on dark glass, collapsed to
+ * its tabs on the used-to page and on the now page until the shown #console logs a line, when it
+ * opens and the console docks over it (review r6 M5). No
  * script, no inline style, no HTML sink and no alarm styling: D5's CSP and its banner stay honest.
  */
 export const productPage: WrapperDef = {

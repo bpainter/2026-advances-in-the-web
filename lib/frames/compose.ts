@@ -20,9 +20,13 @@ export const BACKGROUND_BY_DEMO: Record<string, BackgroundId> = {
   "05-trusted-types": "d5",
   "11-customizable-select": "d6",
   "08-fast-follows": "f1",
+  "12-anchor-hotspots": "m1",
+  "13-grid-lanes": "m2",
+  "14-scoped-registries": "m3",
+  "15-scroll-driven": "m4",
+  "16-cross-document-vt": "m5",
   "07-package-workflow": "f3",
   "09-vite-8": "f4",
-  "10-delete": "f5",
 };
 
 /** Base CSP for frame documents (PRD Part A, 14.1); `ORIGIN` and `PRESENTER` are substituted. */
@@ -73,6 +77,17 @@ export function composeFrame(def: BuildDef, opts: ComposeOptions): string {
       return manifest.enhancement.js.includes(base) ? "" : m;
     });
   }
+  // Multi-page builds (still-in-motion-demos.md 3.3): the shown markup's leading stylesheet links
+  // go in the head, where a real page has them. A body stylesheet does not block the first paint,
+  // so a page could render before the CSS that opts it in to a cross-document view transition
+  // arrives, and the transition would be skipped.
+  const headLinks: string[] = [];
+  if (def.pages?.length) {
+    body = body.replace(/^(\s*<link\b[^>]*rel="stylesheet"[^>]*>)+/, (m) => {
+      headLinks.push(...(m.match(/<link\b[^>]*>/g) ?? []));
+      return "";
+    });
+  }
   // The wrapper goes around the shown markup; it is never shown code (PRD v5, 4.4).
   let wrapStyles: string[] = [];
   let wrapScripts: string[] = [];
@@ -94,7 +109,7 @@ export function composeFrame(def: BuildDef, opts: ComposeOptions): string {
   const bg = opts.bg && isBackgroundId(opts.bg) ? opts.bg : (BACKGROUND_BY_DEMO[manifest.demo] ?? null);
   return [
     "<!doctype html>",
-    `<html lang="en" data-demo="${escapeAttr(manifest.demo)}" data-build="${manifest.build}" data-flags="${escapeAttr(flagsAttr)}" data-enhance-css-mode="${mode}"${bg ? ` data-section-bg="${bg}"` : ""}${wrapAttrs(manifest)}>`,
+    `<html lang="en" data-demo="${escapeAttr(manifest.demo)}" data-build="${manifest.build}" data-flags="${escapeAttr(flagsAttr)}" data-enhance-css-mode="${mode}"${bg ? ` data-section-bg="${bg}"` : ""}${def.pages?.length ? " data-pages" : ""}${wrapAttrs(manifest)}>`,
     "<head>",
     // The theme comes first, so every build's own CSS (shown CSS is unlayered) wins over it. The
     // enhance-css flag never touches it: it is not tagged.
@@ -102,6 +117,7 @@ export function composeFrame(def: BuildDef, opts: ComposeOptions): string {
     `<link rel="stylesheet" href="${BACKGROUNDS_HREF}">`,
     ...(manifest.styles ?? []).map((href) => `<link rel="stylesheet" href="${escapeAttr(href)}">`),
     ...wrapStyles.map((href) => `<link rel="stylesheet" href="${escapeAttr(href)}">`),
+    ...headLinks,
     '<meta charset="utf-8">',
     '<meta name="viewport" content="width=device-width, initial-scale=1">',
     '<meta name="color-scheme" content="light">',
@@ -203,7 +219,7 @@ export function buildFile(def: BuildDef, file: string): Response | null {
   if (!abs) return null;
   if (def.files && !def.files.includes(file)) return null;
   const ext = abs.split(".").pop() ?? "";
-  return new Response(readFileSync(abs), {
+  return new Response(readFileSync(/*turbopackIgnore: true*/ abs), {
     status: 200,
     headers: { "Content-Type": TYPES[ext] ?? "application/octet-stream", "X-Content-Type-Options": "nosniff", "Cache-Control": "no-store" },
   });

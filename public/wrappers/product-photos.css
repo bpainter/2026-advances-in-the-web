@@ -1,0 +1,67 @@
+/* M2 product-photos (still-in-motion-demos.md 5): site header, a product bar for Ridgeline Trail,
+   the "From the trail" heading, then the shown wall on the focus surface. The wall scrolls inside
+   the shown block; the document never scrolls. */
+@layer wrapper {
+  .wrap--photos .wrap-store-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-block-size: 0;
+    padding: 12px 20px 16px;
+  }
+  .wrap-pp-bar {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 12px;
+    block-size: 48px;
+    padding: 0 8px 0 4px;
+    border-radius: 12px;
+    background: var(--wrap-surface-quiet);
+    box-shadow: var(--glass-highlight);
+    white-space: nowrap;
+  }
+  .wrap-pp-thumb {
+    flex: none;
+    inline-size: 40px;
+    block-size: 40px;
+    border-radius: 8px;
+    background: var(--glass-surface-solid) url("/demo-assets/catalog/ridgeline-trail.webp") center / cover no-repeat;
+    box-shadow: inset 0 0 0 1px var(--glass-rule);
+  }
+  .wrap-pp-name,
+  .wrap-pp-price {
+    color: var(--glass-ink);
+    font-size: 15px;
+    line-height: 20px;
+    font-weight: 700;
+  }
+  /* A look-alike, not a control: an outline pill with no fill, no caret and no focus. */
+  .wrap-pp-cart {
+    display: inline-flex;
+    align-items: center;
+    block-size: 32px;
+    margin-inline-start: auto;
+    padding: 0 14px;
+    box-sizing: border-box;
+    border: 1px solid var(--glass-control-border);
+    border-radius: 999px;
+    color: var(--glass-ink);
+    font-weight: 700;
+  }
+  .wrap-pp-heading {
+    flex: none;
+    margin: 4px 0 0;
+    color: var(--glass-ink);
+    font-size: 15px;
+    line-height: 20px;
+    font-weight: 700;
+  }
+  .wrap--photos [data-shown] {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-block-size: 0;
+    padding: 12px;
+  }
+}

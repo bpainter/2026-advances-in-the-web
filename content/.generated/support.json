@@ -241,6 +241,201 @@
       "since": "It has been available in Chrome, Edge and Safari since September 2026. Firefox shows a normal select.",
       "alsoUses": null
     },
+    "m1-shop-the-look": {
+      "kind": "web-features",
+      "id": "anchor-positioning",
+      "name": "Anchor positioning",
+      "baseline": "low",
+      "baselineLowDate": "2026-01-13",
+      "tiles": [
+        {
+          "id": "chrome",
+          "name": "Chrome",
+          "logo": "/logos/chrome.svg",
+          "version": "129",
+          "date": "2024-09-17"
+        },
+        {
+          "id": "edge",
+          "name": "Edge",
+          "logo": "/logos/edge.svg",
+          "version": "129",
+          "date": "2024-09-19"
+        },
+        {
+          "id": "firefox",
+          "name": "Firefox",
+          "logo": "/logos/firefox.svg",
+          "version": "147",
+          "date": "2026-01-13"
+        },
+        {
+          "id": "safari",
+          "name": "Safari",
+          "logo": "/logos/safari.svg",
+          "version": "26",
+          "date": "2025-09-15"
+        }
+      ],
+      "since": "It has been available in all four browsers since January 2026.",
+      "alsoUses": "This demo also uses Popover (January 2025) and Invoker commands (December 2025)."
+    },
+    "m2-trail-photos": {
+      "kind": "web-features",
+      "id": "grid-lanes",
+      "name": "Grid lanes",
+      "baseline": false,
+      "baselineLowDate": null,
+      "tiles": [
+        {
+          "id": "chrome",
+          "name": "Chrome",
+          "logo": "/logos/chrome.svg",
+          "version": null,
+          "date": null
+        },
+        {
+          "id": "edge",
+          "name": "Edge",
+          "logo": "/logos/edge.svg",
+          "version": null,
+          "date": null
+        },
+        {
+          "id": "firefox",
+          "name": "Firefox",
+          "logo": "/logos/firefox.svg",
+          "version": null,
+          "date": null
+        },
+        {
+          "id": "safari",
+          "name": "Safari",
+          "logo": "/logos/safari.svg",
+          "version": "26.4",
+          "date": "2026-03-24"
+        }
+      ],
+      "since": "It has been available in Safari since March 2026. Chrome, Edge and Firefox show a regular grid.",
+      "alsoUses": null
+    },
+    "m3-pricing-app": {
+      "kind": "web-features",
+      "id": "scoped-custom-element-registries",
+      "name": "Scoped custom element registries",
+      "baseline": false,
+      "baselineLowDate": null,
+      "tiles": [
+        {
+          "id": "chrome",
+          "name": "Chrome",
+          "logo": "/logos/chrome.svg",
+          "version": "146",
+          "date": "2026-03-10"
+        },
+        {
+          "id": "edge",
+          "name": "Edge",
+          "logo": "/logos/edge.svg",
+          "version": "146",
+          "date": "2026-03-13"
+        },
+        {
+          "id": "firefox",
+          "name": "Firefox",
+          "logo": "/logos/firefox.svg",
+          "version": null,
+          "date": null
+        },
+        {
+          "id": "safari",
+          "name": "Safari",
+          "logo": "/logos/safari.svg",
+          "version": "26",
+          "date": "2025-09-15"
+        }
+      ],
+      "since": "It has been available in Chrome, Edge and Safari since March 2026. Firefox shows the iframe version.",
+      "alsoUses": null
+    },
+    "m4-return-guide": {
+      "kind": "web-features",
+      "id": "scroll-driven-animations",
+      "name": "Scroll-driven animations",
+      "baseline": false,
+      "baselineLowDate": null,
+      "tiles": [
+        {
+          "id": "chrome",
+          "name": "Chrome",
+          "logo": "/logos/chrome.svg",
+          "version": "115",
+          "date": "2023-07-18"
+        },
+        {
+          "id": "edge",
+          "name": "Edge",
+          "logo": "/logos/edge.svg",
+          "version": "115",
+          "date": "2023-07-21"
+        },
+        {
+          "id": "firefox",
+          "name": "Firefox",
+          "logo": "/logos/firefox.svg",
+          "version": null,
+          "date": null
+        },
+        {
+          "id": "safari",
+          "name": "Safari",
+          "logo": "/logos/safari.svg",
+          "version": "26",
+          "date": "2025-09-15"
+        }
+      ],
+      "since": "It has been available in Chrome, Edge and Safari since September 2025. Firefox shows the article with no animation.",
+      "alsoUses": null
+    },
+    "m5-trail-gear-pages": {
+      "kind": "web-features",
+      "id": "cross-document-view-transitions",
+      "name": "Cross-document view transitions",
+      "baseline": false,
+      "baselineLowDate": null,
+      "tiles": [
+        {
+          "id": "chrome",
+          "name": "Chrome",
+          "logo": "/logos/chrome.svg",
+          "version": "126",
+          "date": "2024-06-11"
+        },
+        {
+          "id": "edge",
+          "name": "Edge",
+          "logo": "/logos/edge.svg",
+          "version": "126",
+          "date": "2024-06-13"
+        },
+        {
+          "id": "firefox",
+          "name": "Firefox",
+          "logo": "/logos/firefox.svg",
+          "version": null,
+          "date": null
+        },
+        {
+          "id": "safari",
+          "name": "Safari",
+          "logo": "/logos/safari.svg",
+          "version": "18.2",
+          "date": "2024-12-11"
+        }
+      ],
+      "since": "It has been available in Chrome, Edge and Safari since December 2024. Firefox shows a normal page load.",
+      "alsoUses": null
+    },
     "f2-caching": {
       "kind": "tooling",
       "tiles": [

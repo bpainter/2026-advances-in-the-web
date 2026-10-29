@@ -14,7 +14,7 @@
  */
 import { mkdirSync, readFileSync } from "node:fs";
 import path from "node:path";
-import { chromium } from "@playwright/test";
+import { chromium, type Browser, type Page } from "@playwright/test";
 import { sections } from "@/lib/content";
 
 const BASE = process.env.DECK_URL ?? "http://localhost:3000";
@@ -33,9 +33,40 @@ async function blurFrameFocus(p: import("@playwright/test").Page) {
 }
 const only = process.argv.slice(2).filter((a) => !a.startsWith("--"));
 
-const browser = await chromium.launch();
+/** The Grid Lanes switch, GRID_LANES_SWITCH in walk-demos.mts: M2's still and posters show lanes (plan A). */
+const GRID_LANES_SWITCH = "--enable-blink-features=CSSGridLanesLayout";
+/**
+ * Sections captured in the installed Google Chrome (review r6 motion M11). Playwright's Chromium 145
+ * has no CustomElementRegistry constructor, so M3's now page would load its iframe fallback, which
+ * looks the same at s1. `VISUALS_CHANNEL` picks another channel ("chrome-beta"). Every other
+ * section stays in Playwright's Chromium, with the switch.
+ */
+const CHROME_SECTIONS = new Set(["m3-pricing-app"]);
+const CHROME_CHANNEL = process.env.VISUALS_CHANNEL ?? "chrome";
+const browser = await chromium.launch({ args: [GRID_LANES_SWITCH] });
 const context = await browser.newContext({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 2, reducedMotion: "reduce" });
 const page = await context.newPage();
+let chrome: Browser | null = null;
+const chromePages = new Map<number, Page>();
+/** The page to capture a section in: Chrome for CHROME_SECTIONS (launched once), else the default. */
+async function pageFor(sectionId: string, scale: number, fallback: Page): Promise<Page> {
+  if (!CHROME_SECTIONS.has(sectionId)) return fallback;
+  chrome ??= await chromium.launch({ channel: CHROME_CHANNEL, args: [GRID_LANES_SWITCH] });
+  let p = chromePages.get(scale);
+  if (!p) {
+    const ctx = await chrome.newContext({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: scale, reducedMotion: "reduce" });
+    p = await ctx.newPage();
+    chromePages.set(scale, p);
+  }
+  return p;
+}
+/** M3 now: the capture must show the scoped registry, never the iframe fallback (review r6 M11). */
+async function featureMissing(p: Page, pageId: string): Promise<string | null> {
+  if (pageId !== "m3-now") return null;
+  const f = await (await p.$('.page-frame__iframe[data-visible="true"]'))?.contentFrame();
+  const ok = await f?.evaluate(`(() => { const app = document.querySelector("#pricing-app"); return Boolean(app && app.shadowRoot && !app.querySelector("iframe")); })()`).catch(() => false);
+  return ok ? null : "the pricing app is not in a scoped shadow root (the iframe fallback loaded)";
+}
 let failed = 0;
 for (const section of sections) {
   if (only.length && !only.includes(section.id)) continue;
@@ -55,9 +86,10 @@ for (const section of sections) {
     else failed++;
     continue;
   }
-  await page.goto(`${BASE}/present?s=${pageId}&step=${stepIndex}&capture=1`);
+  const cap = await pageFor(section.id, 2, page);
+  await cap.goto(`${BASE}/present?s=${pageId}&step=${stepIndex}&capture=1`);
   const key = `${pageId}:${stepId}`;
-  const ok = await page
+  const ok = await cap
     .waitForFunction((k) => Boolean((window as unknown as { __stepResults?: Record<string, unknown> }).__stepResults?.[k]), key, { timeout: 20000 })
     .then(() => true)
     .catch(() => false);
@@ -66,14 +98,20 @@ for (const section of sections) {
     failed++;
     continue;
   }
-  await page.waitForTimeout(600);
+  await cap.waitForTimeout(600);
+  const missing = await featureMissing(cap, pageId);
+  if (missing) {
+    console.log(`✖ ${section.id}: ${key}: ${missing}`);
+    failed++;
+    continue;
+  }
   // Only the frame: no overlay (cursor, spotlights) and no dev-server badge.
-  await page.addStyleTag({ content: CAPTURE_CSS });
-  await blurFrameFocus(page);
-  await page.waitForTimeout(100);
+  await cap.addStyleTag({ content: CAPTURE_CSS });
+  await blurFrameFocus(cap);
+  await cap.waitForTimeout(100);
   const out = path.join(process.cwd(), "public", intro.visual.src);
   mkdirSync(path.dirname(out), { recursive: true });
-  await page.locator('.page-frame__iframe[data-visible="true"]').screenshot({ path: out, animations: "disabled" });
+  await cap.locator('.page-frame__iframe[data-visible="true"]').screenshot({ path: out, animations: "disabled" });
   console.log(`✓ ${section.id}: ${key} -> public${intro.visual.src}`);
 }
 /** One shelf crop of the D2 now card at a step: the slot and 16 frame px around it, at 2x. */
@@ -136,10 +174,11 @@ if (process.argv.includes("--posters")) {
     if (only.length && !only.includes(section.id)) continue;
     for (const p of section.pages) {
       if (p.stage === "intro") continue;
+      const cap = await pageFor(section.id, 1, shot);
       for (const [i, step] of p.steps.entries()) {
-        await shot.goto(`${BASE}/present?s=${p.id}&step=${i}&capture=1`);
+        await cap.goto(`${BASE}/present?s=${p.id}&step=${i}&capture=1`);
         const key = `${p.id}:${step.id}`;
-        const ok = await shot
+        const ok = await cap
           .waitForFunction((k) => Boolean((window as unknown as { __stepResults?: Record<string, unknown> }).__stepResults?.[k]), key, { timeout: 25000 })
           .then(() => true)
           .catch(() => false);
@@ -148,11 +187,17 @@ if (process.argv.includes("--posters")) {
           failed++;
           continue;
         }
-        await shot.waitForTimeout(500);
-        await shot.addStyleTag({ content: CAPTURE_CSS });
+        await cap.waitForTimeout(500);
+        const missing = i > 0 ? await featureMissing(cap, p.id) : null;
+        if (missing) {
+          console.log(`✖ poster ${key}: ${missing}`);
+          failed++;
+          continue;
+        }
+        await cap.addStyleTag({ content: CAPTURE_CSS });
         const out = path.join(process.cwd(), "public", "posters", p.id, `${step.id}.jpg`);
         mkdirSync(path.dirname(out), { recursive: true });
-        await shot.locator('.page-frame__iframe[data-visible="true"]').screenshot({ path: out, type: "jpeg", quality: 72 });
+        await cap.locator('.page-frame__iframe[data-visible="true"]').screenshot({ path: out, type: "jpeg", quality: 72 });
       }
       console.log(`✓ posters ${p.id}: ${p.steps.length}`);
     }
@@ -160,4 +205,5 @@ if (process.argv.includes("--posters")) {
   await shotCtx.close();
 }
 await browser.close();
+await chrome?.close();
 process.exit(failed ? 1 : 0);

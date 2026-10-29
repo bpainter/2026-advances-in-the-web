@@ -1,0 +1,8 @@
+/* The page cannot size an iframe to what
+   is inside it, so the app gets a fixed
+   height and scrolls past it. */
+.app-frame {
+  inline-size: 100%;
+  block-size: 232px;
+  border: 0;
+}

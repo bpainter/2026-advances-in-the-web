@@ -46,6 +46,40 @@ function fixtures(): Record<string, unknown> {
   return JSON.parse(readFileSync(FIXTURE, "utf8")) as Record<string, unknown>;
 }
 
+interface Review {
+  author: string;
+  rating: number;
+  body: string;
+}
+interface Fixtures {
+  approved: string;
+  promo: string;
+  reviews: Review[];
+}
+
+function esc(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+/**
+ * The reviews block as CMS rich text, the same markup the today build's reviews.js writes (heading
+ * with the count, one item per review), so both pages show the same reviews. The native page
+ * renders it through its one policy, which sanitizes it like any CMS field.
+ */
+function reviewsHtml(reviews: Review[]): string {
+  const items = reviews
+    .map((r) => {
+      const stars = "\u2605".repeat(r.rating) + "\u2606".repeat(5 - r.rating);
+      return (
+        `<li class="review"><p class="review__meta"><strong>${esc(r.author)}</strong>` +
+        `<span class="review__stars" aria-label="${r.rating} of 5">${stars}</span></p>` +
+        `<div class="review__body">${r.body}</div></li>`
+      );
+    })
+    .join("");
+  return `<h2>Reviews <span class="count">(${reviews.length})</span></h2><ul class="review-list">${items}</ul>`;
+}
+
 function json(body: unknown): Response {
   return new Response(JSON.stringify(body), {
     status: 200,
@@ -58,11 +92,15 @@ const routes: ServerRoute[] = [
   { method: "GET", path: "/vendor/purify.es.mjs", handler: () => extraFile("purify.es.mjs") },
   // The violation log both builds load (instrumentation, never shown).
   { method: "GET", path: "/demo/console.js", handler: () => extraFile("console.js") },
-  // The CMS response the shown app.js fetches on load: the approved fixture.
+  // The CMS response the shown app.js fetches on load: the approved description, the reviews and
+  // the promotion, the same three fields the today build renders (review r6 M5).
   {
     method: "GET",
     path: "/cms/ridgeline.json",
-    handler: () => json({ body: fixtures().approved }),
+    handler: () => {
+      const data = fixtures() as unknown as Fixtures;
+      return json({ body: data.approved, reviews: reviewsHtml(data.reviews), promo: data.promo });
+    },
   },
   // The fixtures, fetched relative to either build's document.
   {

@@ -11,6 +11,7 @@ export const slide: Slide = {
     kind: "grid",
     variant: "numbered",
     tone: "dark",
+    align: "center",
     eyebrow: "2026 advances in the web",
     title: "What we’ll cover",
     cards: [

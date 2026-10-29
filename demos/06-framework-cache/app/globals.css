@@ -5,11 +5,14 @@
 html[data-unloading] body {
   opacity: 0.92;
 }
-/* The demo controls, compact on the dark preview strip. */
+/* The demo controls, compact on the dark preview strip. The copy field takes the rest of the
+   strip and ends in an ellipsis, never mid-word (review r6 M8). */
 .admin {
   display: flex;
+  flex: 1;
   align-items: center;
   gap: 8px;
+  min-inline-size: 0;
 }
 .admin__field {
   display: flex;
@@ -25,8 +28,14 @@ html[data-unloading] body {
 }
 .admin__form {
   display: flex;
+  flex: 1;
   align-items: center;
   gap: 4px;
+  min-inline-size: 0;
+}
+.admin__field--grow {
+  flex: 1;
+  min-inline-size: 0;
 }
 .admin select,
 .admin input,
@@ -37,13 +46,30 @@ html[data-unloading] body {
   font-size: 14px;
 }
 .admin input {
-  inline-size: 96px;
+  flex: 1;
+  inline-size: 100%;
+  min-inline-size: 8rem;
+  text-overflow: ellipsis;
 }
 .admin button {
   padding: 0 6px;
 }
+/* The product: photo on the left; name, price and copy on the right; the stock line across the
+   foot of the card. The shown page's article lays out its children on the card's grid
+   (display: contents), so the Cache Components off page (price inside the article) and the on
+   page (price after it, from the layout) place the same parts in the same cells. */
 .product-card {
-  padding: var(--glass-space-5) var(--glass-space-6);
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  grid-template-rows: auto auto 1fr auto;
+  grid-template-areas:
+    "photo name"
+    "photo price"
+    "photo copy"
+    "stock stock";
+  column-gap: var(--glass-space-7);
+  row-gap: var(--glass-space-4);
+  padding: var(--glass-space-6);
   border: var(--glass-border);
   border-radius: var(--glass-radius-card);
   background: var(--glass-surface);
@@ -52,28 +78,69 @@ html[data-unloading] body {
 .product {
   min-inline-size: 0;
 }
+.product-card > article {
+  display: contents;
+}
+.product-photo {
+  grid-area: photo;
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--glass-radius-control);
+}
 article h1 {
-  margin: 0 0 var(--glass-space-2);
-  font-size: var(--glass-text-xl);
-  line-height: var(--glass-leading-xl);
+  grid-area: name;
+  margin: var(--glass-space-2) 0 0;
+  font-size: var(--glass-text-2xl);
+  line-height: var(--glass-leading-2xl);
 }
 article p {
   margin: 0;
 }
-article .stock {
-  margin-top: var(--glass-space-3);
-  padding: var(--glass-space-3) var(--glass-space-5);
+/* Every other paragraph of the article is the stock line or its Suspense fallback. */
+.product-card > article > p {
+  grid-area: stock;
+  margin-block-start: var(--glass-space-4);
+  padding: var(--glass-space-4) var(--glass-space-6);
   border-radius: var(--glass-radius-control);
-  background: var(--glass-surface-selected);
+  background: var(--glass-surface-hover);
+  color: var(--glass-ink-soft);
+  font-size: var(--glass-text-md);
+  line-height: var(--glass-leading-md);
 }
-.price {
-  margin-top: var(--glass-space-3);
+.product-card > article > p.stock {
+  background: var(--glass-surface-selected);
+  color: var(--glass-ink);
+}
+.product-card > article > h1 + p {
+  grid-area: copy;
+  align-self: start;
+  margin: 0;
+  padding: 0;
+  background: none;
+  color: var(--glass-ink-soft);
+  font-size: var(--glass-text-md);
+  line-height: var(--glass-leading-prose);
+}
+.product-card .price {
+  grid-area: price;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  column-gap: var(--glass-space-4);
+  margin: 0;
+  padding: 0;
+  background: none;
+  color: var(--glass-ink);
   font-size: var(--glass-text-xl);
+  line-height: var(--glass-leading-xl);
   font-weight: 700;
 }
 .price__note {
-  margin-left: var(--glass-space-4);
   font-size: var(--glass-text-sm);
+  line-height: var(--glass-leading-sm);
   font-weight: 400;
   color: var(--glass-ink-soft);
 }

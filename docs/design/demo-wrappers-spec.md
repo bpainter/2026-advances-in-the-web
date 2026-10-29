@@ -637,9 +637,8 @@ Mocks for every slide are in `scratchpad/v5-design/slide-*.png`.
 
 | Element | x | y | w | h | Spec |
 |---|---|---|---|---|---|
-| Eyebrow | 64 | 64 | auto | 36 | "FITC Web Unleashed 2026, Toronto", 28/36 Bold cyan |
-| Title | 64 | 424 | 1200 | 288 | "2026 advances / in the web", display, white. Measured 1048 wide. |
-| Speaker card | 64 | 840 | 720 | 176 | Dark glass, padding 40 48: "Bermon Painter" 36/50 Bold white, 4 gap, "Head of DXP and Commerce, Slalom" 24/32 `#D6DCEC`. The card keeps the name off the magenta glow lower left. |
+| Eyebrow | 64 | 588 | auto | 36 | "FITC Web Unleashed 2026, Toronto", 28/36 Bold cyan, 24 above the title |
+| Title | 64 | 648 | 1384 | 368 | "2026 advances / in the web", 192/184 Bold white. Bottom left on the 64 margin, level with the wordmark: the bloom above y 560 is too bright for white at this size. Navy wash 0.24 to x 1480. |
 | Wordmark | 1640 | 960 | 216 | 56 | Slalom, white, on the dark lower right |
 | QR slot | 1680 | 840 | 176 | 176 | Reserved and empty unless PRD question 2 says yes |
 
@@ -647,12 +646,12 @@ Mocks for every slide are in `scratchpad/v5-design/slide-*.png`.
 
 | Element | x | y | w | h | Spec |
 |---|---|---|---|---|---|
-| Eyebrow | 64 | 64 | | 36 | "The mandate" |
-| Display | 64 | 116 | | 144 | "Use AI", navy on the chartreuse bloom |
-| Eyebrow | 64 | 644 | | 36 | "The reaction" |
-| Cards | 64, 672, 1280 | 696, 856 | 576 | 128 | Light glass; Lucide 48 (wrench, key-round, graduation-cap, user-check, clipboard-check, activity), 24 gap, label 32/40 Bold navy, padding 0 40 |
+| Eyebrow | 64 | 224 | | 36 | "The mandate" |
+| Display | 64 | 276 | | 144 | "Use AI", navy on the chartreuse bloom |
+| Eyebrow | 64 | 484 | | 36 | "The reaction", 64 under the display |
+| Cards | 64, 672, 1280 | 536, 696 | 576 | 128 | Light glass; Lucide 48 (wrench, key-round, graduation-cap, user-check, clipboard-check, activity), 24 gap, label 32/40 Bold navy, padding 0 40. Labels are short questions: "Which tools?" to "What’s the impact?" |
 
-The band between y 260 and 644 is left open on purpose: the bloom is the image.
+The slide uses `align: "center"`: the group stacks in flow and centers in the band above the footer (padding 64, 96 at the bottom).
 
 **three-reactions** (`glass-grid`, variant `portraits`, o3.jpg, light)
 
@@ -697,9 +696,9 @@ Lora goes: the PRD fixes Slalom Sans Regular and Bold.
 
 | Element | x | y | w | h | Spec |
 |---|---|---|---|---|---|
-| Eyebrow | 64 | 64 | | 36 | "2026 advances in the web", cyan |
-| Title | 64 | 116 | | 72 | "What we’ll cover", white |
-| Cards | 64, 672, 1280 | 584 | 576 | 400 | Dark glass, padding 40. Number "01" to "03" 64/72 Bold cyan at top left; Lucide 56 white at top right (code-xml, layers, package); label 36/50 Bold white pinned to the bottom, 2 lines at most. The cards sit over o7's purple and cyan bands. |
+| Eyebrow | 64 | 230 | | 36 | "2026 advances in the web", cyan |
+| Title | 64 | 282 | | 72 | "What we’ll cover", white |
+| Cards | 64, 672, 1280 | 418 | 576 | 400 | Dark glass, padding 40. Number "01" to "03" 64/72 Bold cyan at top left; Lucide 56 white at top right (code-xml, layers, package); label 36/50 Bold white pinned to the bottom, 2 lines at most. The cards sit over o7's purple and cyan bands. `align: "center"` stacks the group, 64 between title and cards, centered above the footer. |
 
 Numbers change from chartreuse to cyan: chartreuse stays the keycap's one use on navy.
 

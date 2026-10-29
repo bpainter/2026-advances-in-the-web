@@ -1,5 +1,6 @@
 /* Demo page (PRD v4, 1.4): eyebrow at y 48, title row at y 88, body at y 176. Walk pages split the
-   body 50/50 (880 + 32 + 880); single pages use one 1792 px slot. */
+   body 50/50 (880 + 32 + 880) or, with `split: "60/40"`, 1056 + 32 + 704; single pages use one
+   1792 px slot. */
 .page {
   @apply grid relative;
   grid-template-rows: 36px 72px minmax(0, 1fr);
@@ -66,6 +67,12 @@
 }
 .page[data-split="true"] .page__body {
   grid-template-columns: 880px 880px;
+}
+/* 60/40 (content/demo-schema.ts SPLITS): the frame gets 1056 px (a 768 by 628 viewport at the same
+   1.372 scale), the code 704 px. 704 minus the card edge, 2 x 24 px padding and 2 x 8 px line
+   padding leaves 638 px: 44 columns of 24 px code at 0.6 em are 634 px, so nothing wraps. */
+.page[data-split="true"][data-ratio="60/40"] .page__body {
+  grid-template-columns: 1056px 704px;
 }
 .page__frame {
   @apply relative;
@@ -216,6 +223,16 @@
   font-weight: var(--weight-bold);
   color: var(--color-navy);
 }
+/* A frame whose origin is not deployed shows its poster on stage too, with a note (docs/deploy.md). */
+.page__poster-note {
+  @apply relative;
+  margin: var(--space-4);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  font-size: 18px;
+  color: var(--glass-ink-soft);
+  background: var(--glass-surface-solid);
+}
 
 /* Code card (PRD v4 1.4; spec 6): tabs 56 px, code 24/36 px with 24 px top and bottom and 32 px
    at the sides, 21 lines visible. Code colors meet 7:1 on --chrome-code-surface. */
@@ -308,6 +325,13 @@
    has no paint; three concentric bands are borders on its pseudo-elements, so the arcs stay
    concentric in every engine. Only opacity animates, keyed on data-state from the settle gate:
    out over 100 ms, in over 160 ms. Position and size are never transitioned. */
+/* Each gated box sits in a layer the size of the overlay, so its coordinates are unchanged. The
+   layer carries the box's top-layer hole mask (Overlay holeMask): an open popover or modal dialog
+   above the box's target paints over the box too. */
+.overlay__layer {
+  @apply absolute;
+  inset: 0;
+}
 .overlay__spotlight,
 .overlay__focus,
 .overlay__callout {
@@ -491,9 +515,23 @@
   /* Fades in and stays until the next keycap or step (design review L3). */
   animation: overlay-cap 160ms ease-out both;
 }
-/* D4: the keycap sits above the evidence drawer, never on the request log (review v5 H6). */
+/* D4: the keycap sits above the evidence dock, never on the request log (review v5 H6), and in the
+   gap under the order detail's items card, left-aligned with it (review r6 M3). The card ends at
+   frame y 431 and the dock starts at 496; the 48 px keycap spans y 440 to 488. */
 .overlay[data-keycap="above-drawer"] .overlay__keycap {
-  bottom: 218px;
+  left: 93px;
+  bottom: 140px;
+  transform: none;
+  padding: 4px 18px;
+  font-size: 24px;
+  line-height: 36px;
+  animation-name: overlay-cap-start;
+}
+@keyframes overlay-cap-start {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }
 @keyframes overlay-cap {
   from {

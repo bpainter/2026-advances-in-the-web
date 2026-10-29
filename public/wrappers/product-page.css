@@ -7,18 +7,21 @@
     align-items: center;
     gap: 12px;
     block-size: 48px;
-    padding: 0 20px 0 0;
+    padding: 0 20px 0 4px;
     border-radius: 12px;
     background: var(--wrap-surface-quiet);
     box-shadow: var(--glass-highlight);
     white-space: nowrap;
   }
+  /* The thumbnail sits inside the bar with a 4 px inset, the whole shoe in frame (r6). The photo
+     is the F2 product shot (review r6 L9); its backdrop fills the tile above and below. */
   .wrap-pdp-thumb {
     flex: none;
-    inline-size: 48px;
-    block-size: 48px;
+    inline-size: 40px;
+    block-size: 40px;
     border-radius: 8px;
-    background: var(--glass-surface-solid) url("/wrappers/shoe.avif") center / cover no-repeat;
+    background: var(--glass-surface-solid) url("/wrappers/shoe.avif") center / 104% auto no-repeat;
+    box-shadow: inset 0 0 0 1px var(--glass-rule);
   }
   .wrap-pdp-price {
     color: var(--glass-ink);
@@ -37,7 +40,7 @@
     padding: 12px 20px 0;
   }
   .wrap--pdp [data-shown] {
-    padding: 8px 20px;
+    padding: 14px 20px;
   }
   .wrap-console {
     position: fixed;
@@ -46,16 +49,16 @@
     block-size: 44px;
     overflow: hidden;
   }
-  /* Now page: the drawer is open at 280; the shown card hugs its content (review v5 L5), never
-     shorter than 120 so no gap above the drawer passes 96. */
-  .wrap--pdp-open .wrap-console {
-    block-size: 280px;
+  /* Now page: the drawer opens to 232 once the console logs a line, sized to two entries of two
+     lines at the 768 px viewport (r6). Until then it is collapsed like the used-to page's, so both
+     pages open on the same product page (review r6 M5). */
+  /* Open, it covers the reviews, so it is solid: no text reads through it (as D4's dock). */
+  .wrap--pdp-open:has(#console li) .wrap-console {
+    block-size: 232px;
+    background: var(--glass-dark-solid);
   }
-  .wrap--pdp-open [data-shown] {
-    min-block-size: 120px;
-  }
-  /* Used-to page: the card stays above the collapsed drawer (review v5 M13). */
-  .wrap--pdp:not(.wrap--pdp-open) .wrap-store-body {
+  /* Both pages: the card stays above the collapsed drawer (review v5 M13). */
+  .wrap--pdp .wrap-store-body {
     padding-block-end: 56px;
   }
 }

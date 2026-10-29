@@ -38,7 +38,16 @@ the direction each was generated from is table 1.4 of `docs/PRD-demos-v5.md`, re
 | `v5/f2.jpg` | F2 caching | Warm grey field, cobalt blue orb left, orange and yellow glow right | light to mid |
 | `v5/f3.jpg` | F3 package trust | Icy white top, cyan and navy along the bottom with a coral edge lower right | light |
 | `v5/f4.jpg` | F4 Vite 8 locally | Lilac, periwinkle and pink soft blooms on white | light |
-| `v5/f5.jpg` | F5 what you can delete | Blush white top, orange upper right, magenta and purple along the bottom | light |
+| `v5/m1.jpg` | M1 shop the look | Lavender upper left, pale yellow center, soft cyan lower right, cream base | light |
+| `v5/m2.jpg` | M2 trail photos | Pale yellow and cream field, orange glow lower left, lilac haze on the right | light |
+| `v5/m3.jpg` | M3 pricing app | Blush pink upper right, pale blue on the left, peach along the bottom | light |
+| `v5/m4.jpg` | M4 return guide | Pale cyan top, mint center, cobalt haze along the bottom | light |
+| `v5/m5.jpg` | M5 trail gear pages | White top band, coral glow upper left, peach center, purple along the bottom | light |
 | `v5/c1.jpg` | what-changed | Ice white top, cobalt, purple and cyan haze rising from the bottom | light |
 | `v5/c2.jpg` | people-to-follow | Cream center, yellow and coral glow upper right, orange and purple at the edges | light |
 | `v5/closing.jpg` | closing | Near-black navy left, cobalt blue center, purple into a coral and pink band on the right | dark |
+
+The five Still in motion files, `m1.jpg` to `m5.jpg` (still-in-motion-demos.md 2), were generated
+with Higgsfield (Soul v2) on 28 October 2026 from the directions above. They were then blurred
+(sigma 5 to 48), resized to 1920 by 1080 and given the same monochrome grain (sd 4.4, quality 90,
+4:4:4) as the reworked v5 files. The registry has 25 entries (F5 was removed on 28 October 2026).

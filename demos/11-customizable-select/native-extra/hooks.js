@@ -26,8 +26,8 @@ for (const option of select.options) {
   const row = document.createElement("div");
   row.className = "glass-menu__item picker-replica__option";
   row.dataset.value = option.value;
-  const swatch = option.querySelector(".swatch");
-  if (swatch) row.append(swatch.cloneNode(true));
+  const photo = option.querySelector("img");
+  if (photo) row.append(photo.cloneNode(true));
   row.append(option.textContent.trim());
   replica.append(row);
 }

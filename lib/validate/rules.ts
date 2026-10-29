@@ -1,5 +1,5 @@
 import type { Action, DemoCodeFile, DemoPage, DemoSection, Step } from "@/content/demo-schema";
-import { VIA_VOCABULARY, hasFrame } from "@/content/demo-schema";
+import { SPLITS, VIA_VOCABULARY, hasFrame } from "@/content/demo-schema";
 import { elisionLines, excerptLayout, lineSet } from "@/lib/excerpt";
 import { computeSupport, type SupportFile, type WebFeaturesData } from "@/lib/support-data";
 import { ceilingMs, nominalMs } from "@/lib/engine/steps";
@@ -295,9 +295,11 @@ export function validate(sections: DemoSection[], ctx: ValidateContext): Issue[]
       if (page.stage === "single") copy(where, "badge", page.badge?.text, { label: true, sentenceCheck: false });
     }
 
-    const vp = walk ? LIMITS.viewport.walk : LIMITS.viewport.single;
+    // Walk pages: the viewport follows the page's split (SPLITS); 50/50 is LIMITS.viewport.walk.
+    const split = walk && "split" in page ? page.split : undefined;
+    const vp = walk ? (split ? SPLITS[split].viewport : LIMITS.viewport.walk) : LIMITS.viewport.single;
     const ratio = page.frame.viewport.width / page.frame.viewport.height / (vp.width / vp.height);
-    if (Math.abs(ratio - 1) > 0.02 || page.frame.viewport.width !== vp.width) add("viewport", where, `viewport ${page.frame.viewport.width}x${page.frame.viewport.height}; ${stage} pages use ${vp.width}x${vp.height}`);
+    if (Math.abs(ratio - 1) > 0.02 || page.frame.viewport.width !== vp.width) add("viewport", where, `viewport ${page.frame.viewport.width}x${page.frame.viewport.height}; ${stage} pages${split ? ` at ${split}` : ""} use ${vp.width}x${vp.height}`);
 
     for (const f of page.files ?? []) checkFile(where, f);
     const built = ctx.build(page.frame.route);

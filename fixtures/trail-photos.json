@@ -1,0 +1,152 @@
+{
+  "note": "Customer trail photos for M2 (still-in-motion-demos.md 3.6 and 5). Files live in public/demo-assets/trail/, generated with Higgsfield: no faces in focus, no text, no logos. Width and height give each photo's shape; the first 12 load with the page and the last 6 arrive with Show more.",
+  "product": "Ridgeline Trail",
+  "dir": "/demo-assets/trail/",
+  "first": 12,
+  "photos": [
+    {
+      "file": "photo-01.webp",
+      "width": 750,
+      "height": 1000,
+      "alt": "A dirt trail winding through tall pines.",
+      "caption": "Grippy on pine needles.",
+      "name": "Maya"
+    },
+    {
+      "file": "photo-02.webp",
+      "width": 1000,
+      "height": 1000,
+      "alt": "Looking down at trail shoes on gray granite.",
+      "caption": "Sticky on dry granite.",
+      "name": "Theo"
+    },
+    {
+      "file": "photo-03.webp",
+      "width": 1000,
+      "height": 750,
+      "alt": "A tent beside a calm lake at dusk.",
+      "caption": "Comfy from car to camp.",
+      "name": "Priya"
+    },
+    {
+      "file": "photo-04.webp",
+      "width": 667,
+      "height": 1000,
+      "alt": "A hiker walking a narrow rocky ridge.",
+      "caption": "Sure footed up high.",
+      "name": "Sam"
+    },
+    {
+      "file": "photo-05.webp",
+      "width": 1000,
+      "height": 563,
+      "alt": "A wide mountain valley under a clear sky.",
+      "caption": "Comfy at mile twelve.",
+      "name": "Lena"
+    },
+    {
+      "file": "photo-06.webp",
+      "width": 1000,
+      "height": 1000,
+      "alt": "A backpack resting on a summit cairn.",
+      "caption": "No hot spots.",
+      "name": "Jonah"
+    },
+    {
+      "file": "photo-07.webp",
+      "width": 750,
+      "height": 1000,
+      "alt": "A waterfall beside a forest trail.",
+      "caption": "No slips by the falls.",
+      "name": "Aiko"
+    },
+    {
+      "file": "photo-08.webp",
+      "width": 1000,
+      "height": 750,
+      "alt": "A camp stove and a blue enamel mug by a lake.",
+      "caption": "Light enough for camp.",
+      "name": "Marcus"
+    },
+    {
+      "file": "photo-09.webp",
+      "width": 1000,
+      "height": 1000,
+      "alt": "Muddy trail shoes resting on a log.",
+      "caption": "Shed the mud fast.",
+      "name": "Elena"
+    },
+    {
+      "file": "photo-10.webp",
+      "width": 667,
+      "height": 1000,
+      "alt": "A wooden boardwalk through a green forest.",
+      "caption": "Solid on roots.",
+      "name": "Ravi"
+    },
+    {
+      "file": "photo-11.webp",
+      "width": 1000,
+      "height": 750,
+      "alt": "An alpine meadow full of wildflowers.",
+      "caption": "Great for wide feet.",
+      "name": "Nora"
+    },
+    {
+      "file": "photo-12.webp",
+      "width": 750,
+      "height": 1000,
+      "alt": "A headlamp beam on a trail at night.",
+      "caption": "Steady on a night hike.",
+      "name": "Diego"
+    },
+    {
+      "file": "photo-13.webp",
+      "width": 1000,
+      "height": 1000,
+      "alt": "Trekking poles leaning against a boulder.",
+      "caption": "Good with poles.",
+      "name": "Hana"
+    },
+    {
+      "file": "photo-14.webp",
+      "width": 1000,
+      "height": 563,
+      "alt": "A trail along a coastal cliff above the sea.",
+      "caption": "No slips in sand.",
+      "name": "Owen"
+    },
+    {
+      "file": "photo-15.webp",
+      "width": 750,
+      "height": 1000,
+      "alt": "Switchbacks climbing a steep scree slope.",
+      "caption": "Outlasted the scree.",
+      "name": "Zara"
+    },
+    {
+      "file": "photo-16.webp",
+      "width": 1000,
+      "height": 750,
+      "alt": "Stepping stones across a shallow river.",
+      "caption": "Dry by lunch.",
+      "name": "Felix"
+    },
+    {
+      "file": "photo-17.webp",
+      "width": 667,
+      "height": 1000,
+      "alt": "Golden larch trees on an autumn hillside.",
+      "caption": "Forty miles on these.",
+      "name": "Ines"
+    },
+    {
+      "file": "photo-18.webp",
+      "width": 1000,
+      "height": 1000,
+      "alt": "An orange paint blaze on a tree trunk.",
+      "caption": "My third pair.",
+      "name": "Kofi"
+    }
+  ]
+}

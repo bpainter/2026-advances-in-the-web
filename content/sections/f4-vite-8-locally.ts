@@ -4,7 +4,7 @@ import type { DemoSection } from "@/content/demo-schema";
 export const section: DemoSection = {
   id: "f4-vite-8-locally",
   background: "f4",
-  order: 10,
+  order: 15,
   label: "Vite 8 locally",
   scenario:
     "One fixture app built with Vite 7 and with Vite 8 on this laptop.",

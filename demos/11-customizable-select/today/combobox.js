@@ -20,10 +20,11 @@ export function createCombobox(
     li.className =
       "combo__option glass-menu__item";
     li.setAttribute("role", "option");
-    const swatch =
-      document.createElement("span");
-    swatch.className = "swatch " + o.value;
-    li.append(swatch, o.label);
+    const photo =
+      document.createElement("img");
+    photo.src = `${o.value}.webp`;
+    photo.alt = "";
+    li.append(photo, o.label);
     li.addEventListener("click", () => {
       choose(i);
       close();
