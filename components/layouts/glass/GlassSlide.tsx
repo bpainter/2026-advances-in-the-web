@@ -153,7 +153,8 @@ export function GlassSlide({ slide, mode }: Props) {
               {g.people.map((p) => (
                 <li key={p.name} className="sg-person">
                   <span className="sg-person__avatar" aria-hidden="true">
-                    {p.initials}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    {p.photo ? <img className="sg-person__photo" src={p.photo} alt="" width={96} height={96} decoding="async" /> : p.initials}
                   </span>
                   <span className="sg-person__text">
                     <span className="sg-person__name">{p.name}</span>

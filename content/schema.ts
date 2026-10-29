@@ -168,7 +168,7 @@ export type GlassContent =
     }
   | { kind: "quotes"; title: string; quotes: { text: string; cite: string }[] }
   | { kind: "statement"; lines: string[] }
-  | { kind: "people"; title: string; people: { initials: string; name: string; role: string }[] }
+  | { kind: "people"; title: string; people: { initials: string; name: string; role: string; /** A 256 px square WebP under public/people/, cropped to the face. */ photo?: string }[] }
   | { kind: "closing"; eyebrow: string; name: string; role: string; link: string; url: string; caption: string };
 
 /** The event the talk is part of (PRD r7, 10.3): the Event JSON-LD and the eyebrow read it. */
