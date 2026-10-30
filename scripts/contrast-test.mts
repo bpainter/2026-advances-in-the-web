@@ -166,5 +166,53 @@ for (const id of SECTION_IDS) {
   }
 }
 
+// ----- Speaker view (docs/PRD-speaker-view.md, 6.2 and 12.1) -----
+// Reads the first `.speaker {` block of styles/components/speaker.css; tokens that alias a glass
+// token (`var(--glass-dark-ink)`, `var(--cyan)`) resolve through styles/glass-tokens.css. Text sits
+// on the panel (white 0.05), its hover (0.08) or the footer pill (navy 0.85), each over the window
+// background, over each glow's peak and over both peaks stacked; and on the solid fallback.
+{
+  const speakerCss = readFileSync(path.join(process.cwd(), "styles", "components", "speaker.css"), "utf8");
+  const start = speakerCss.indexOf(".speaker {");
+  const speakerBlock = speakerCss.slice(start, speakerCss.indexOf("}", start));
+  const sp = (name: string): RGBA => {
+    const m = new RegExp(`${name}:\\s*([^;]+);`).exec(speakerBlock);
+    if (!m) throw new Error(`speaker token ${name} not found`);
+    const v = m[1].trim();
+    const ref = /^var\((--[\w-]+)\)$/.exec(v);
+    if (!ref) return parse(v);
+    return ref[1].startsWith("--speaker-") ? sp(ref[1]) : token(ref[1]);
+  };
+  const bg = sp("--speaker-bg");
+  const glows = [...(/--speaker-bg-glow:\s*([^;]+);/.exec(speakerBlock)?.[1] ?? "").matchAll(/rgb\(\s*\d+\s+\d+\s+\d+\s*\/\s*[\d.]+\s*\)/g)].map((m) => parse(m[0]));
+  if (glows.length < 1) throw new Error("--speaker-bg-glow has no color stops");
+  const bases: Record<string, RGBA> = { "the speaker background": bg };
+  glows.forEach((g, i) => (bases[`glow ${i + 1} peak`] = over(g, bg)));
+  bases["both glow peaks"] = stack(...glows, bg);
+  const solid = sp("--speaker-solid");
+  const surfaces: [string, RGBA[], Record<string, RGBA>][] = [
+    ["the panel", [sp("--speaker-panel")], bases],
+    ["the panel hover", [sp("--speaker-panel-strong")], bases],
+    ["a References card", [sp("--speaker-card"), sp("--speaker-panel")], bases],
+    ["the footer pill", [sp("--speaker-pill")], bases],
+    ["the solid fallback", [], { "--speaker-solid": solid }],
+  ];
+  const texts = ["--speaker-ink", "--speaker-ink-body", "--speaker-ink-soft", "--speaker-link", "--speaker-over"];
+  for (const [where, layers, b] of surfaces) for (const t of texts) expect(`speaker: ${t} on ${where}`, sp(t), layers, 4.5, b);
+  // Pace text sits on the pill; the button hover (white 0.10) over the pill keeps white legible.
+  expect("speaker: --speaker-ink on a footer button hover", sp("--speaker-ink"), [sp("--speaker-hover"), sp("--speaker-pill")], 4.5, bases);
+  // Status pill, pressed toggles and the current step button: white on each tint over the panel.
+  for (const tint of ["--speaker-tint-cyan", "--speaker-tint-chartreuse", "--speaker-tint-coral", "--speaker-tint-neutral"]) {
+    expect(`speaker: white on ${tint} over the panel`, sp("--speaker-ink"), [sp(tint), sp("--speaker-panel")], 4.5, bases);
+    expect(`speaker: white on ${tint} over the footer pill`, sp("--speaker-ink"), [sp(tint), sp("--speaker-pill")], 4.5, bases);
+  }
+  expect("speaker: white on a primary button", sp("--speaker-ink"), [sp("--speaker-primary")], 4.5);
+  expect("speaker: white on a primary button hover", sp("--speaker-ink"), [sp("--speaker-primary-hover")], 4.5);
+  // Non-text (WCAG 1.4.11): the cyan ring against the panel and pill it lands on.
+  expect("speaker: focus ring on the panel", sp("--speaker-focus"), [sp("--speaker-panel")], 3, bases);
+  expect("speaker: focus ring on the footer pill", sp("--speaker-focus"), [sp("--speaker-pill")], 3, bases);
+  expect("speaker: focus ring on the solid fallback", sp("--speaker-focus"), [], 3, { "--speaker-solid": solid });
+}
+
 console.log(`\n${checks - failed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);

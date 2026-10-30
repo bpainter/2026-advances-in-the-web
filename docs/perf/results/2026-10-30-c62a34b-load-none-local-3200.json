@@ -1,0 +1,872 @@
+{
+  "task": "load",
+  "origin": "http://localhost:3200",
+  "demo": "http://127.0.0.1:3200",
+  "profile": "none",
+  "runs": 1,
+  "rows": [
+    {
+      "run": 0,
+      "url": "/present?s=d1-now",
+      "phase": "cold",
+      "ttfb": 8.300000011920929,
+      "dcl": 47.60000002384186,
+      "load": 76.20000004768372,
+      "fcp": 76,
+      "lcp": 144,
+      "lcpEl": "page-frame",
+      "lcpUrl": "http://localhost:3200/backgrounds/v5/d1.jpg",
+      "cls": 0,
+      "tbt": 0,
+      "longTasks": 0,
+      "hydrated": 106.10000002384186,
+      "firstStep": 205.30000001192093,
+      "htmlBytes": 10248,
+      "requests": [
+        {
+          "url": "http://localhost:3200/present?s=d1-now",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 10822,
+          "disk": false,
+          "cc": "s-maxage=31536000",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/064a8ydjar-u_.css",
+          "kind": "css",
+          "status": 200,
+          "bytes": 21981,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/07piujfq5ymoj.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 2452,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/08tat7toc5y2b.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 9214,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/0byza4cdkvmz0.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 72499,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/0seugnf_wx82r.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 45666,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 4870,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/24i9osjzscjff.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 5982,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/0ze5-cndecqhg.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 3784,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/212ijld8rnctw.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 1139,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/3xtvr34gkqmz-.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 9194,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/3jamy22bo7m3i.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 12287,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/backgrounds/v5/d1.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 690759,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/theme/grain.png",
+          "kind": "img",
+          "status": 200,
+          "bytes": 62873,
+          "disk": false,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/fonts/SlalomSans-Bold.otf",
+          "kind": "font",
+          "status": 200,
+          "bytes": 38740,
+          "disk": false,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://localhost:3200/fonts/SlalomSans-Regular.otf",
+          "kind": "font",
+          "status": 200,
+          "bytes": 37129,
+          "disk": false,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/01-layered-ui/native/index.html?flags=enhance-css:1&bg=d1",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 4848,
+          "disk": false,
+          "cc": "no-store",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://localhost:3200/backgrounds/v5/d2.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 540730,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/present?s=d2-intro&_rsc=hd6g4Y5MS4Al705_",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 838,
+          "disk": false,
+          "cc": "s-maxage=31536000",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/present?s=d1-used-to&_rsc=hd6g4Y5MS4Al705_",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 782,
+          "disk": false,
+          "cc": "s-maxage=31536000",
+          "prio": "Low"
+        },
+        {
+          "url": "http://127.0.0.1:3200/theme/portal-glass.css?v=6b0627e9",
+          "kind": "css",
+          "status": 200,
+          "bytes": 9393,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://127.0.0.1:3200/theme/backgrounds.css?v=c82a3795",
+          "kind": "css",
+          "status": 200,
+          "bytes": 872,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://127.0.0.1:3200/portal/01-layered-ui.css?v=84790ae3",
+          "kind": "css",
+          "status": 200,
+          "bytes": 1190,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://127.0.0.1:3200/wrappers/base.css?v=a1009214",
+          "kind": "css",
+          "status": 200,
+          "bytes": 2234,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://127.0.0.1:3200/wrappers/order-queue.css?v=e6a0298a",
+          "kind": "css",
+          "status": 200,
+          "bytes": 989,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://127.0.0.1:3200/runtime/demo-runtime.js?v=608709f6",
+          "kind": "js",
+          "status": 200,
+          "bytes": 17122,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "High"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/01-layered-ui/native/enhance.css",
+          "kind": "css",
+          "status": 200,
+          "bytes": 1028,
+          "disk": false,
+          "cc": "public, max-age=300, stale-while-revalidate=86400",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/01-layered-ui/native/app.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 1264,
+          "disk": false,
+          "cc": "public, max-age=300, stale-while-revalidate=86400",
+          "prio": "High"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/01-layered-ui/native/hooks.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 753,
+          "disk": false,
+          "cc": "public, max-age=300, stale-while-revalidate=86400",
+          "prio": "High"
+        },
+        {
+          "url": "http://localhost:3200/intro/d2-product-card.png",
+          "kind": "img",
+          "status": 200,
+          "bytes": 1012662,
+          "disk": false,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/logos/chrome.svg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 1072,
+          "disk": false,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/logos/edge.svg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 1493,
+          "disk": false,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/logos/firefox.svg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 3128,
+          "disk": false,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/logos/safari.svg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 2501,
+          "disk": false,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/present?s=d2-intro&_rsc=n_0LCqnvnEUEMBLY",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 3865,
+          "disk": false,
+          "cc": "s-maxage=31536000",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/present?s=d1-used-to&_rsc=hzb_RN8EK9rz1-VA",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 7959,
+          "disk": false,
+          "cc": "s-maxage=31536000",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/present?_rsc=hd6g4Y5MS4Al705_",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 771,
+          "disk": false,
+          "cc": "s-maxage=31536000",
+          "prio": "Low"
+        },
+        {
+          "url": "http://127.0.0.1:3200/backgrounds/v5/d1.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 690792,
+          "disk": false,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://127.0.0.1:3200/fonts/SlalomSans-Bold.otf",
+          "kind": "font",
+          "status": 200,
+          "bytes": 38773,
+          "disk": false,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://127.0.0.1:3200/fonts/SlalomSans-Regular.otf",
+          "kind": "font",
+          "status": 200,
+          "bytes": 37162,
+          "disk": false,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "VeryHigh"
+        }
+      ],
+      "kb": 3332,
+      "notModified": 0,
+      "fromCache": 0,
+      "net": {
+        "requests": 40,
+        "bytes": 3411612,
+        "by": {
+          "doc": {
+            "n": 2,
+            "bytes": 15670
+          },
+          "css": {
+            "n": 7,
+            "bytes": 37687
+          },
+          "js": {
+            "n": 13,
+            "bytes": 186226
+          },
+          "img": {
+            "n": 9,
+            "bytes": 3006010
+          },
+          "font": {
+            "n": 4,
+            "bytes": 151804
+          },
+          "rsc": {
+            "n": 5,
+            "bytes": 14215
+          }
+        },
+        "notModified": 0,
+        "fromCache": 0,
+        "presenter": 27,
+        "demo": 13
+      }
+    },
+    {
+      "run": 0,
+      "url": "/present?s=d1-now",
+      "phase": "warm",
+      "ttfb": 4.700000047683716,
+      "dcl": 10.300000011920929,
+      "load": 24,
+      "fcp": 64,
+      "lcp": 64,
+      "lcpEl": "page-frame",
+      "lcpUrl": "http://localhost:3200/backgrounds/v5/d1.jpg",
+      "cls": 0,
+      "tbt": 0,
+      "longTasks": 0,
+      "hydrated": 34.90000003576279,
+      "firstStep": 85.10000002384186,
+      "htmlBytes": 10248,
+      "requests": [
+        {
+          "url": "http://localhost:3200/present?s=d1-now",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 457,
+          "disk": false,
+          "cc": "s-maxage=31536000",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/064a8ydjar-u_.css",
+          "kind": "css",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/07piujfq5ymoj.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/08tat7toc5y2b.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/0byza4cdkvmz0.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/0seugnf_wx82r.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/24i9osjzscjff.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/0ze5-cndecqhg.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/212ijld8rnctw.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/3xtvr34gkqmz-.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/_next/static/chunks/3jamy22bo7m3i.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/fonts/SlalomSans-Regular.otf",
+          "kind": "font",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://localhost:3200/fonts/SlalomSans-Bold.otf",
+          "kind": "font",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://localhost:3200/backgrounds/v5/d1.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/theme/grain.png",
+          "kind": "img",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "Low"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/01-layered-ui/native/index.html?flags=enhance-css:1&bg=d1",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 4848,
+          "disk": false,
+          "cc": "no-store",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://localhost:3200/backgrounds/v5/d2.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/present?s=d2-intro&_rsc=hd6g4Y5MS4Al705_",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 838,
+          "disk": false,
+          "cc": "s-maxage=31536000",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/present?s=d1-used-to&_rsc=hd6g4Y5MS4Al705_",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 782,
+          "disk": false,
+          "cc": "s-maxage=31536000",
+          "prio": "Low"
+        },
+        {
+          "url": "http://127.0.0.1:3200/theme/portal-glass.css?v=6b0627e9",
+          "kind": "css",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://127.0.0.1:3200/theme/backgrounds.css?v=c82a3795",
+          "kind": "css",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://127.0.0.1:3200/portal/01-layered-ui.css?v=84790ae3",
+          "kind": "css",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://127.0.0.1:3200/wrappers/base.css?v=a1009214",
+          "kind": "css",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://127.0.0.1:3200/wrappers/order-queue.css?v=e6a0298a",
+          "kind": "css",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://127.0.0.1:3200/runtime/demo-runtime.js?v=608709f6",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "High"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/01-layered-ui/native/enhance.css",
+          "kind": "css",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=300, stale-while-revalidate=86400",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/01-layered-ui/native/app.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=300, stale-while-revalidate=86400",
+          "prio": "High"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/01-layered-ui/native/hooks.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=300, stale-while-revalidate=86400",
+          "prio": "High"
+        },
+        {
+          "url": "http://localhost:3200/intro/d2-product-card.png",
+          "kind": "img",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/logos/chrome.svg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 0,
+          "disk": true,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/logos/edge.svg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 0,
+          "disk": true,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/logos/firefox.svg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 0,
+          "disk": true,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/logos/safari.svg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 0,
+          "disk": true,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/present?s=d2-intro&_rsc=n_0LCqnvnEUEMBLY",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 3865,
+          "disk": false,
+          "cc": "s-maxage=31536000",
+          "prio": "Low"
+        },
+        {
+          "url": "http://127.0.0.1:3200/fonts/SlalomSans-Regular.otf",
+          "kind": "font",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://127.0.0.1:3200/fonts/SlalomSans-Bold.otf",
+          "kind": "font",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400",
+          "prio": "VeryHigh"
+        },
+        {
+          "url": "http://127.0.0.1:3200/backgrounds/v5/d1.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 0,
+          "disk": false,
+          "mem": true,
+          "cc": "public, max-age=31536000, immutable",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/present?s=d1-used-to&_rsc=hzb_RN8EK9rz1-VA",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 7959,
+          "disk": false,
+          "cc": "s-maxage=31536000",
+          "prio": "Low"
+        },
+        {
+          "url": "http://localhost:3200/present?_rsc=hd6g4Y5MS4Al705_",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 771,
+          "disk": false,
+          "cc": "s-maxage=31536000",
+          "prio": "Low"
+        }
+      ],
+      "kb": 19,
+      "notModified": 0,
+      "fromCache": 33,
+      "net": {
+        "requests": 40,
+        "bytes": 19520,
+        "by": {
+          "doc": {
+            "n": 2,
+            "bytes": 5305
+          },
+          "css": {
+            "n": 7,
+            "bytes": 0
+          },
+          "js": {
+            "n": 13,
+            "bytes": 0
+          },
+          "font": {
+            "n": 4,
+            "bytes": 0
+          },
+          "img": {
+            "n": 9,
+            "bytes": 0
+          },
+          "rsc": {
+            "n": 5,
+            "bytes": 14215
+          }
+        },
+        "notModified": 0,
+        "fromCache": 33,
+        "presenter": 27,
+        "demo": 13
+      }
+    }
+  ]
+}

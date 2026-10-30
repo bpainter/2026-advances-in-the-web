@@ -1,0 +1,1814 @@
+{
+  "task": "walk",
+  "origin": "http://localhost:3201",
+  "demo": "http://127.0.0.1:3200",
+  "mode": "reader",
+  "profile": "none",
+  "slidesWalked": 22,
+  "passes": {
+    "cold": {
+      "summary": {
+        "requests": 97,
+        "bytes": 14353309,
+        "by": {
+          "doc": {
+            "n": 11,
+            "bytes": 11109
+          },
+          "css": {
+            "n": 7,
+            "bytes": 37429
+          },
+          "js": {
+            "n": 14,
+            "bytes": 274053
+          },
+          "img": {
+            "n": 27,
+            "bytes": 13661463
+          },
+          "font": {
+            "n": 4,
+            "bytes": 151738
+          },
+          "rsc": {
+            "n": 32,
+            "bytes": 214358
+          },
+          "fetch": {
+            "n": 2,
+            "bytes": 3159
+          }
+        },
+        "notModified": 0,
+        "fromCache": 0,
+        "presenter": 70,
+        "demo": 27
+      },
+      "byOriginKind": {
+        "presenter:doc": {
+          "n": 1,
+          "bytes": 7057,
+          "notModified": 0
+        },
+        "presenter:css": {
+          "n": 1,
+          "bytes": 20424,
+          "notModified": 0
+        },
+        "presenter:js": {
+          "n": 9,
+          "bytes": 164863,
+          "notModified": 0
+        },
+        "presenter:img": {
+          "n": 25,
+          "bytes": 13341148,
+          "notModified": 0
+        },
+        "presenter:font": {
+          "n": 2,
+          "bytes": 75803,
+          "notModified": 0
+        },
+        "presenter:rsc": {
+          "n": 32,
+          "bytes": 214358,
+          "notModified": 0
+        },
+        "demo:doc": {
+          "n": 10,
+          "bytes": 4052,
+          "notModified": 0
+        },
+        "demo:css": {
+          "n": 6,
+          "bytes": 17005,
+          "notModified": 0
+        },
+        "demo:js": {
+          "n": 5,
+          "bytes": 109190,
+          "notModified": 0
+        },
+        "demo:fetch": {
+          "n": 2,
+          "bytes": 3159,
+          "notModified": 0
+        },
+        "demo:img": {
+          "n": 2,
+          "bytes": 320315,
+          "notModified": 0
+        },
+        "demo:font": {
+          "n": 2,
+          "bytes": 75935,
+          "notModified": 0
+        }
+      },
+      "largestImage": {
+        "url": "http://localhost:3201/intro/d5-rich-content.png",
+        "bytes": 1459195
+      },
+      "revalidated": [],
+      "list": [
+        {
+          "url": "http://localhost:3201/s/title",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 7057,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/2363gkbmqu8e4.css",
+          "kind": "css",
+          "status": 200,
+          "bytes": 20424,
+          "cache": false,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/07piujfq5ymoj.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 2452,
+          "cache": false,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/08tat7toc5y2b.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 9214,
+          "cache": false,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/0byza4cdkvmz0.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 72499,
+          "cache": false,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/0seugnf_wx82r.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 45666,
+          "cache": false,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 4870,
+          "cache": false,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/23dof6q5gvlwd.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 5474,
+          "cache": false,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/0ze5-cndecqhg.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 3784,
+          "cache": false,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/15i1qu32rtmv2.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 8846,
+          "cache": false,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/0czvlnsqht_uh.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 12058,
+          "cache": false,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/title.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 449331,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/fonts/SlalomSans-Bold.otf",
+          "kind": "font",
+          "status": 200,
+          "bytes": 38707,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/fonts/SlalomSans-Regular.otf",
+          "kind": "font",
+          "status": 200,
+          "bytes": 37096,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/the-mandate?_rsc=kgERX3bo8s3pXTwY",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 705,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/the-mandate?_rsc=k2lu05y6Ia4hjh2m",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4962,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/o2.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 238468,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/three-reactions?_rsc=qH_fo_WdUTEImW92",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4608,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/images/design/c18ba5ceb5f4a9a2dc228deb4d240a17.png",
+          "kind": "img",
+          "status": 200,
+          "bytes": 916825,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/images/design/41c92a3370c2ea5a19e31664dfb3f880.png",
+          "kind": "img",
+          "status": 200,
+          "bytes": 999184,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/images/design/7a3f47c0216f32a9a3c35bc46ca6e398.png",
+          "kind": "img",
+          "status": 200,
+          "bytes": 1100198,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/o3.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 278726,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/two-perspectives?_rsc=vVtolyb58ry3n4Sy",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4237,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/o4.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 484141,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/keep-humanity?_rsc=Vq2TUfMnw45Zer86",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4018,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/o5.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 305347,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/open-web?_rsc=rbD5kkoFnxOYchmC",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 5214,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/o6.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 593639,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/what-we-cover?_rsc=A3lVK3bQDlYtJg11",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4564,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/o7.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 329040,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/d1-intro?_rsc=W9bVbhwVHPmZClcj",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 5005,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/intro/d1-order-actions.png",
+          "kind": "img",
+          "status": 200,
+          "bytes": 813097,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/logos/chrome.svg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 1039,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/logos/edge.svg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 1460,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/logos/firefox.svg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 3095,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/logos/safari.svg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 2468,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/d1.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 690741,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/d1-used-to?_rsc=YDdNv4anWHZQatvE",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 9178,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/01-layered-ui/today/index.html?bg=d1",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 0,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d1-now?_rsc=45R6yDx1DDlEYDV6",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 9161,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/01-layered-ui/native/index.html?flags=enhance-css:1&bg=d1",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 0,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d2-intro?_rsc=G7-dh0c9sfV7NIN-",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4819,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/d1-used-to?step=last&_rsc=oMV7asfdYZ7zqS_-",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 9178,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/intro/d2-product-card.png",
+          "kind": "img",
+          "status": 200,
+          "bytes": 1012629,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/d2.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 540712,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/d2-used-to?_rsc=w2uvXvhtRC1SzRYB",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 8567,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/d1-now?step=last&_rsc=0VmnDyy5zMxtzia6",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 9161,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/02-container-card/today/index.html?bg=d2",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 0,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d2-now?_rsc=nFPRFbQpXGn_2Zp0",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 8015,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/02-container-card/native/index.html?flags=enhance-js:1&bg=d2",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 0,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d3-intro?_rsc=FXANQICB8stsmrNK",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4808,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/d2-used-to?step=last&_rsc=L7M-rqortVcAmjxr",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 8567,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/intro/d3-support-form.png",
+          "kind": "img",
+          "status": 200,
+          "bytes": 650690,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/d3.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 310750,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/d3-used-to?_rsc=jpZ5YG0SYs8EJEwM",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 8469,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/d2-now?step=last&_rsc=Q0ktcY0IzeLoLeoy",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 8015,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/03-content-sized-form/today/index.html?bg=d3",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 0,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d3-now?_rsc=32POTX8KSfEB5jwf",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 8068,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/03-content-sized-form/native/index.html?flags=enhance-css:1,enhance-js:1&bg=d3",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 0,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d4-intro?_rsc=M8ke7rxutvjRWmzd",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4681,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/d3-used-to?step=last&_rsc=Wt0-rwO10yh71wqI",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 8469,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/intro/d4-dashboard-navigation.png",
+          "kind": "img",
+          "status": 200,
+          "bytes": 727881,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/d4.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 478277,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/d4-used-to?_rsc=Hw7SSkO0sxTRDJJQ",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 7384,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/d3-now?step=last&_rsc=8o58SL0nDYyoAyHY",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 8068,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/04-navigation-api/today/index.html?bg=d4",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 0,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d4-now?_rsc=lEs_yvYPMOkTviFU",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 9424,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/orders?flags=enhance-js%3A1&bg=d4",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 0,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d5-intro?_rsc=rh_tMOhuGN3E05Q4",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4630,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/d4-used-to?step=last&_rsc=9jK8lhEbHx2cbNev",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 7384,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/intro/d5-rich-content.png",
+          "kind": "img",
+          "status": 200,
+          "bytes": 1459195,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/d5.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 312324,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/d5-used-to?_rsc=Z86yCagAC-7tzLpc",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 6541,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/d4-now?step=last&_rsc=7B8F_rN9-7TSOGS7",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 9424,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/05-trusted-types/today/index.html?bg=d5",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 0,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d5-now?_rsc=Rw4Pzjm-uI5v7s5o",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 7806,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/05-trusted-types/native/index.html?flags=csp-enforce:0&bg=d5",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 4052,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d6-intro?_rsc=X4CAsxgfIYLxl8aN",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4687,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/d5-used-to?step=last&_rsc=bf4YTGR4JjuqhmmS",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 6541,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/theme/portal-glass.css?v=6b0627e9",
+          "kind": "css",
+          "status": 200,
+          "bytes": 9393,
+          "cache": false,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://127.0.0.1:3200/theme/backgrounds.css?v=c82a3795",
+          "kind": "css",
+          "status": 200,
+          "bytes": 872,
+          "cache": false,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://127.0.0.1:3200/portal/05-trusted-types.css?v=13635221",
+          "kind": "css",
+          "status": 200,
+          "bytes": 2308,
+          "cache": false,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://127.0.0.1:3200/wrappers/base.css?v=a1009214",
+          "kind": "css",
+          "status": 200,
+          "bytes": 2234,
+          "cache": false,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://127.0.0.1:3200/wrappers/product-page.css?v=611cd8c2",
+          "kind": "css",
+          "status": 200,
+          "bytes": 1427,
+          "cache": false,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://127.0.0.1:3200/runtime/demo-runtime.js?v=608709f6",
+          "kind": "js",
+          "status": 200,
+          "bytes": 17122,
+          "cache": false,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/05-trusted-types/native/content.css",
+          "kind": "css",
+          "status": 200,
+          "bytes": 771,
+          "cache": false,
+          "cc": "public, max-age=300, stale-while-revalidate=86400"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demo/console.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 1628,
+          "cache": false,
+          "cc": "public, max-age=300, stale-while-revalidate=86400"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/05-trusted-types/native/app.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 1249,
+          "cache": false,
+          "cc": "public, max-age=300, stale-while-revalidate=86400"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/05-trusted-types/native/hooks.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 2859,
+          "cache": false,
+          "cc": "public, max-age=300, stale-while-revalidate=86400"
+        },
+        {
+          "url": "http://localhost:3201/intro/d6-variant-picker.png",
+          "kind": "img",
+          "status": 200,
+          "bytes": 641891,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://127.0.0.1:3200/vendor/purify.es.mjs",
+          "kind": "js",
+          "status": 200,
+          "bytes": 86332,
+          "cache": false,
+          "cc": "public, max-age=300, stale-while-revalidate=86400"
+        },
+        {
+          "url": "http://127.0.0.1:3200/cms/ridgeline.json",
+          "kind": "fetch",
+          "status": 200,
+          "bytes": 1491,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/05-trusted-types/native/fixtures/cms-content.json",
+          "kind": "fetch",
+          "status": 200,
+          "bytes": 1668,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://127.0.0.1:3200/backgrounds/v5/d5.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 312375,
+          "cache": false,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://127.0.0.1:3200/wrappers/shoe.avif",
+          "kind": "img",
+          "status": 200,
+          "bytes": 7940,
+          "cache": false,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400"
+        },
+        {
+          "url": "http://127.0.0.1:3200/fonts/SlalomSans-Bold.otf",
+          "kind": "font",
+          "status": 200,
+          "bytes": 38773,
+          "cache": false,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400"
+        },
+        {
+          "url": "http://127.0.0.1:3200/fonts/SlalomSans-Regular.otf",
+          "kind": "font",
+          "status": 200,
+          "bytes": 37162,
+          "cache": false,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    "warm": {
+      "summary": {
+        "requests": 97,
+        "bytes": 230196,
+        "by": {
+          "doc": {
+            "n": 11,
+            "bytes": 4508
+          },
+          "css": {
+            "n": 7,
+            "bytes": 0
+          },
+          "js": {
+            "n": 14,
+            "bytes": 0
+          },
+          "font": {
+            "n": 4,
+            "bytes": 0
+          },
+          "img": {
+            "n": 27,
+            "bytes": 8171
+          },
+          "rsc": {
+            "n": 32,
+            "bytes": 214358
+          },
+          "fetch": {
+            "n": 2,
+            "bytes": 3159
+          }
+        },
+        "notModified": 17,
+        "fromCache": 27,
+        "presenter": 70,
+        "demo": 27
+      },
+      "byOriginKind": {
+        "presenter:doc": {
+          "n": 1,
+          "bytes": 456,
+          "notModified": 0
+        },
+        "presenter:css": {
+          "n": 1,
+          "bytes": 0,
+          "notModified": 0
+        },
+        "presenter:js": {
+          "n": 9,
+          "bytes": 0,
+          "notModified": 0
+        },
+        "presenter:font": {
+          "n": 2,
+          "bytes": 0,
+          "notModified": 0
+        },
+        "presenter:img": {
+          "n": 25,
+          "bytes": 8171,
+          "notModified": 17
+        },
+        "presenter:rsc": {
+          "n": 32,
+          "bytes": 214358,
+          "notModified": 0
+        },
+        "demo:doc": {
+          "n": 10,
+          "bytes": 4052,
+          "notModified": 0
+        },
+        "demo:css": {
+          "n": 6,
+          "bytes": 0,
+          "notModified": 0
+        },
+        "demo:js": {
+          "n": 5,
+          "bytes": 0,
+          "notModified": 0
+        },
+        "demo:fetch": {
+          "n": 2,
+          "bytes": 3159,
+          "notModified": 0
+        },
+        "demo:font": {
+          "n": 2,
+          "bytes": 0,
+          "notModified": 0
+        },
+        "demo:img": {
+          "n": 2,
+          "bytes": 0,
+          "notModified": 0
+        }
+      },
+      "largestImage": {
+        "url": "http://localhost:3201/images/design/7a3f47c0216f32a9a3c35bc46ca6e398.png",
+        "bytes": 328
+      },
+      "revalidated": [
+        "/backgrounds/v5/o2.jpg",
+        "/images/design/c18ba5ceb5f4a9a2dc228deb4d240a17.png",
+        "/images/design/41c92a3370c2ea5a19e31664dfb3f880.png",
+        "/images/design/7a3f47c0216f32a9a3c35bc46ca6e398.png",
+        "/backgrounds/v5/o3.jpg",
+        "/backgrounds/v5/o4.jpg",
+        "/backgrounds/v5/o5.jpg",
+        "/backgrounds/v5/o6.jpg",
+        "/backgrounds/v5/o7.jpg",
+        "/intro/d1-order-actions.png",
+        "/logos/chrome.svg",
+        "/logos/edge.svg",
+        "/logos/firefox.svg",
+        "/logos/safari.svg",
+        "/backgrounds/v5/d1.jpg",
+        "/intro/d2-product-card.png",
+        "/backgrounds/v5/d2.jpg"
+      ],
+      "list": [
+        {
+          "url": "http://localhost:3201/s/title",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 456,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/2363gkbmqu8e4.css",
+          "kind": "css",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/07piujfq5ymoj.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/08tat7toc5y2b.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/0byza4cdkvmz0.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/0seugnf_wx82r.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/23dof6q5gvlwd.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/0ze5-cndecqhg.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/15i1qu32rtmv2.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/_next/static/chunks/0czvlnsqht_uh.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://localhost:3201/fonts/SlalomSans-Regular.otf",
+          "kind": "font",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/fonts/SlalomSans-Bold.otf",
+          "kind": "font",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/title.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 327,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/the-mandate?_rsc=kgERX3bo8s3pXTwY",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 705,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/the-mandate?_rsc=k2lu05y6Ia4hjh2m",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4962,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/o2.jpg",
+          "kind": "img",
+          "status": 304,
+          "bytes": 327,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/three-reactions?_rsc=qH_fo_WdUTEImW92",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4608,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/images/design/c18ba5ceb5f4a9a2dc228deb4d240a17.png",
+          "kind": "img",
+          "status": 304,
+          "bytes": 327,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/images/design/41c92a3370c2ea5a19e31664dfb3f880.png",
+          "kind": "img",
+          "status": 304,
+          "bytes": 327,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/images/design/7a3f47c0216f32a9a3c35bc46ca6e398.png",
+          "kind": "img",
+          "status": 304,
+          "bytes": 328,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/o3.jpg",
+          "kind": "img",
+          "status": 304,
+          "bytes": 327,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/two-perspectives?_rsc=vVtolyb58ry3n4Sy",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4237,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/o4.jpg",
+          "kind": "img",
+          "status": 304,
+          "bytes": 327,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/keep-humanity?_rsc=Vq2TUfMnw45Zer86",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4018,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/o5.jpg",
+          "kind": "img",
+          "status": 304,
+          "bytes": 327,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/open-web?_rsc=rbD5kkoFnxOYchmC",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 5214,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/o6.jpg",
+          "kind": "img",
+          "status": 304,
+          "bytes": 327,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/what-we-cover?_rsc=A3lVK3bQDlYtJg11",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4564,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/o7.jpg",
+          "kind": "img",
+          "status": 304,
+          "bytes": 327,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/d1-intro?_rsc=W9bVbhwVHPmZClcj",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 5005,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/intro/d1-order-actions.png",
+          "kind": "img",
+          "status": 304,
+          "bytes": 327,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/logos/chrome.svg",
+          "kind": "img",
+          "status": 304,
+          "bytes": 325,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/logos/edge.svg",
+          "kind": "img",
+          "status": 304,
+          "bytes": 325,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/logos/firefox.svg",
+          "kind": "img",
+          "status": 304,
+          "bytes": 326,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/logos/safari.svg",
+          "kind": "img",
+          "status": 304,
+          "bytes": 326,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/d1.jpg",
+          "kind": "img",
+          "status": 304,
+          "bytes": 327,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/d1-used-to?_rsc=YDdNv4anWHZQatvE",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 9178,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/01-layered-ui/today/index.html?bg=d1",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 0,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d1-now?_rsc=45R6yDx1DDlEYDV6",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 9161,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/01-layered-ui/native/index.html?flags=enhance-css:1&bg=d1",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 0,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d2-intro?_rsc=G7-dh0c9sfV7NIN-",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4819,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/d1-used-to?step=last&_rsc=oMV7asfdYZ7zqS_-",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 9178,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/intro/d2-product-card.png",
+          "kind": "img",
+          "status": 304,
+          "bytes": 327,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/d2.jpg",
+          "kind": "img",
+          "status": 304,
+          "bytes": 327,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/d2-used-to?_rsc=w2uvXvhtRC1SzRYB",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 8567,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/d1-now?step=last&_rsc=0VmnDyy5zMxtzia6",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 9161,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/02-container-card/today/index.html?bg=d2",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 0,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d2-now?_rsc=nFPRFbQpXGn_2Zp0",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 8015,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/02-container-card/native/index.html?flags=enhance-js:1&bg=d2",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 0,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d3-intro?_rsc=FXANQICB8stsmrNK",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4808,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/d2-used-to?step=last&_rsc=L7M-rqortVcAmjxr",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 8567,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/intro/d3-support-form.png",
+          "kind": "img",
+          "status": 200,
+          "bytes": 327,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/d3.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 327,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/d3-used-to?_rsc=jpZ5YG0SYs8EJEwM",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 8469,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/d2-now?step=last&_rsc=Q0ktcY0IzeLoLeoy",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 8015,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/03-content-sized-form/today/index.html?bg=d3",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 0,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d3-now?_rsc=32POTX8KSfEB5jwf",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 8068,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/03-content-sized-form/native/index.html?flags=enhance-css:1,enhance-js:1&bg=d3",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 0,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d4-intro?_rsc=M8ke7rxutvjRWmzd",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4681,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/d3-used-to?step=last&_rsc=Wt0-rwO10yh71wqI",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 8469,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/intro/d4-dashboard-navigation.png",
+          "kind": "img",
+          "status": 200,
+          "bytes": 327,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/d4.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 327,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/d4-used-to?_rsc=Hw7SSkO0sxTRDJJQ",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 7384,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/d3-now?step=last&_rsc=8o58SL0nDYyoAyHY",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 8068,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/04-navigation-api/today/index.html?bg=d4",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 0,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d4-now?_rsc=lEs_yvYPMOkTviFU",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 9424,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/orders?flags=enhance-js%3A1&bg=d4",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 0,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d5-intro?_rsc=rh_tMOhuGN3E05Q4",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4630,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/d4-used-to?step=last&_rsc=9jK8lhEbHx2cbNev",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 7384,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/intro/d5-rich-content.png",
+          "kind": "img",
+          "status": 200,
+          "bytes": 328,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/backgrounds/v5/d5.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 327,
+          "cache": false,
+          "cc": "public, max-age=0"
+        },
+        {
+          "url": "http://localhost:3201/s/d5-used-to?_rsc=Z86yCagAC-7tzLpc",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 6541,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/d4-now?step=last&_rsc=7B8F_rN9-7TSOGS7",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 9424,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/05-trusted-types/today/index.html?bg=d5",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 0,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d5-now?_rsc=Rw4Pzjm-uI5v7s5o",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 7806,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/05-trusted-types/native/index.html?flags=csp-enforce:0&bg=d5",
+          "kind": "doc",
+          "status": 200,
+          "bytes": 4052,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://localhost:3201/s/d6-intro?_rsc=X4CAsxgfIYLxl8aN",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 4687,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://localhost:3201/s/d5-used-to?step=last&_rsc=bf4YTGR4JjuqhmmS",
+          "kind": "rsc",
+          "status": 200,
+          "bytes": 6541,
+          "cache": false,
+          "cc": "s-maxage=31536000"
+        },
+        {
+          "url": "http://127.0.0.1:3200/theme/portal-glass.css?v=6b0627e9",
+          "kind": "css",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://127.0.0.1:3200/theme/backgrounds.css?v=c82a3795",
+          "kind": "css",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://127.0.0.1:3200/portal/05-trusted-types.css?v=13635221",
+          "kind": "css",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://127.0.0.1:3200/wrappers/base.css?v=a1009214",
+          "kind": "css",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://127.0.0.1:3200/wrappers/product-page.css?v=611cd8c2",
+          "kind": "css",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://127.0.0.1:3200/runtime/demo-runtime.js?v=608709f6",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/05-trusted-types/native/content.css",
+          "kind": "css",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=300, stale-while-revalidate=86400"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demo/console.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=300, stale-while-revalidate=86400"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/05-trusted-types/native/app.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=300, stale-while-revalidate=86400"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/05-trusted-types/native/hooks.js",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=300, stale-while-revalidate=86400"
+        },
+        {
+          "url": "http://127.0.0.1:3200/vendor/purify.es.mjs",
+          "kind": "js",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=300, stale-while-revalidate=86400"
+        },
+        {
+          "url": "http://127.0.0.1:3200/cms/ridgeline.json",
+          "kind": "fetch",
+          "status": 200,
+          "bytes": 1491,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://127.0.0.1:3200/demos/05-trusted-types/native/fixtures/cms-content.json",
+          "kind": "fetch",
+          "status": 200,
+          "bytes": 1668,
+          "cache": false,
+          "cc": "no-store"
+        },
+        {
+          "url": "http://127.0.0.1:3200/fonts/SlalomSans-Regular.otf",
+          "kind": "font",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400"
+        },
+        {
+          "url": "http://127.0.0.1:3200/fonts/SlalomSans-Bold.otf",
+          "kind": "font",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400"
+        },
+        {
+          "url": "http://127.0.0.1:3200/backgrounds/v5/d5.jpg",
+          "kind": "img",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=31536000, immutable"
+        },
+        {
+          "url": "http://127.0.0.1:3200/wrappers/shoe.avif",
+          "kind": "img",
+          "status": 200,
+          "bytes": 0,
+          "cache": true,
+          "cc": "public, max-age=3600, stale-while-revalidate=86400"
+        },
+        {
+          "url": "http://localhost:3201/intro/d6-variant-picker.png",
+          "kind": "img",
+          "status": 200,
+          "bytes": 327,
+          "cache": false,
+          "cc": "public, max-age=0"
+        }
+      ]
+    }
+  },
+  "offline": {
+    "files": 10,
+    "served": 0,
+    "failed": [
+      "http://localhost:3201/fonts/SlalomSans-Regular.otf",
+      "http://localhost:3201/fonts/SlalomSans-Bold.otf",
+      "http://localhost:3201/backgrounds/v5/title.jpg",
+      "http://localhost:3201/intro/d3-support-form.png",
+      "http://localhost:3201/backgrounds/v5/d3.jpg",
+      "http://localhost:3201/intro/d4-dashboard-navigation.png",
+      "http://localhost:3201/backgrounds/v5/d4.jpg",
+      "http://localhost:3201/intro/d5-rich-content.png",
+      "http://localhost:3201/backgrounds/v5/d5.jpg",
+      "http://localhost:3201/intro/d6-variant-picker.png"
+    ]
+  }
+}

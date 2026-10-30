@@ -159,6 +159,7 @@ export class FrameHandle {
         return;
       case "key":
         // The frame forwards a real press; keep it for a fresh document's replay (input-relay.ts).
+        // Tab and Escape come up too in scripted mode (PRD-perf P0-3); the stage decides what they do.
         notePress();
         this.keyListeners.forEach((l) => l(msg));
         return;
@@ -263,6 +264,10 @@ export class FrameHandle {
     this.watched = selectors;
     this.live = live;
     if (this.isReady) this.post({ v: 2, type: "watch", frameId: this.id, selectors, live });
+  }
+  /** In or out of the window's tab order (reader mode: in only while hands-on is on, PRD-perf P0-3). */
+  setTabbable(on: boolean) {
+    this.iframe.tabIndex = on ? 0 : -1;
   }
   focus() {
     this.iframe.focus();

@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import type { KeyAction } from "@/lib/keys";
 import { createSync, type Sync, type Transport } from "./transport";
 import { slideHref, slideHrefWithStep } from "./url";
@@ -14,8 +14,13 @@ export interface Presenter {
   state: PresenterState;
   writer: string;
   transport: Transport;
-  /** Windows that answered or sent `hello` in the last few seconds, including this one. */
+  /** Windows heard from (any message, presence every 2 s) in the last 5 s, including this one. */
   peers: number;
+  /**
+   * Whether an audience window is connected (speaker view PRD, 8.6): null until 5 s after mount
+   * or under the storage transport, then true if one was heard within 5 s, else false.
+   */
+  audienceConnected: boolean | null;
   demoHealth: Record<string, DemoHealth>;
   update: (patch: Partial<Omit<PresenterState, "seq" | "writer">>) => void;
   /** The latest state, synchronously (ahead of the render that `state` reflects). */
@@ -55,17 +60,24 @@ function stateFromUrl(writer: string, fallbackSlideId: string): PresenterState {
 
 interface Props {
   mode: PresenterMode;
-  /** Slide the server rendered for this page; the store starts from the URL around it. */
-  initialSlideId: string;
+  /** Every slide id, in order. An `[id]` the deck does not have renders the first slide. */
+  slideIds: string[];
   children: ReactNode;
 }
 
 /**
  * Two windows, one state (PRD Part A, section 5.1). Owns the sync transport, the hello handshake
  * and URL mirroring; the stage and speaker view read and write through `update`.
+ *
+ * Rendered by the window's layout (`app/present/layout.tsx`, `app/speaker/layout.tsx`), above the
+ * prerendered `[id]` pages: a slide move swaps the page and keeps this provider, its state and its
+ * transport (docs/PRD-perf.md, P1-PRERENDER). Inside a page it would remount on every move, as a
+ * new window that has lost the shared step. The first slide comes from the route's `[id]`.
  */
-export function PresenterProvider({ mode, initialSlideId, children }: Props) {
+export function PresenterProvider({ mode, slideIds, children }: Props) {
   const router = useRouter();
+  const params = useParams<{ id?: string }>();
+  const [initialSlideId] = useState(() => (params?.id && slideIds.includes(params.id) ? params.id : slideIds[0]));
   const writer = useMemo(() => newWriterId(), []);
   const [state, setState] = useState<PresenterState>(() => ({
     seq: 0,
@@ -82,17 +94,29 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
   const [transport, setTransport] = useState<Transport>("broadcast");
   const [demoHealth, setDemoHealth] = useState<Record<string, DemoHealth>>({});
   const [playback, setPlayback] = useState<Playback | null>(null);
-  const [peerSeen, setPeerSeen] = useState<Record<string, number>>({});
+  const [audienceConnected, setAudienceConnected] = useState<boolean | null>(null);
+  // Last time each window was heard from, and the last time an audience window was (presence, 8.6).
+  const peerSeen = useRef<Record<string, number>>({});
+  const audienceSeen = useRef(0);
+  const healthRef = useRef<Record<string, DemoHealth>>({});
+  const playbackRef = useRef<Playback | null>(null);
+  const modeRef = useRef(mode);
   const [rendered, setRendered] = useState(initialSlideId);
   const syncRef = useRef<Sync | null>(null);
   const performRef = useRef<((action: KeyAction) => void) | null>(null);
-  // The provider survives slide navigations (same page component); the transport must start once.
+  // The provider survives slide navigations (it sits in the layout); the transport must start once.
   const firstSlideRef = useRef(initialSlideId);
   const urlAtMount = useRef<{ state: PresenterState; urlSlide: string | null; urlWins: boolean } | null>(null);
 
   useEffect(() => {
     stateRef.current = state;
   }, [state]);
+  useEffect(() => {
+    healthRef.current = demoHealth;
+  }, [demoHealth]);
+  useEffect(() => {
+    playbackRef.current = playback;
+  }, [playback]);
 
   // Transport, hello handshake, and the first state (sync > storage > URL). Runs once per window.
   useEffect(() => {
@@ -130,24 +154,47 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
       stateRef.current = incoming;
       setState(incoming);
     };
+    const seen = (id: string, audience = false) => {
+      if (id === writer) return;
+      const now = Date.now();
+      peerSeen.current[id] = now;
+      if (audience) {
+        audienceSeen.current = now;
+        setAudienceConnected(true);
+      }
+    };
     const sync = createSync((msg: SyncMessage) => {
       if (msg.type === "state") {
         accept(msg.state);
-        setPeerSeen((p) => ({ ...p, [msg.state.writer]: Date.now() }));
+        seen(msg.state.writer);
       } else if (msg.type === "hello") {
-        setPeerSeen((p) => ({ ...p, [msg.writer]: Date.now() }));
+        seen(msg.writer);
         // The current holder answers with its state.
         sync.send({ type: "state", state: stateRef.current });
+        // The audience window also replays its frame health and playback, so a speaker window
+        // opened or reloaded later does not wait for the next change to hear them (8.6).
+        if (modeRef.current === "audience") {
+          for (const [demoId, status] of Object.entries(healthRef.current)) sync.send({ type: "demo-health", demoId, status, writer });
+          if (playbackRef.current) sync.send({ type: "playback", ...playbackRef.current, writer });
+        }
+      } else if (msg.type === "presence") {
+        seen(msg.writer, msg.mode === "audience");
       } else if (msg.type === "playback") {
+        seen(msg.writer, true);
         setPlayback({ slideId: msg.slideId, stepIndex: msg.stepIndex, playing: msg.playing });
       } else if (msg.type === "demo-health") {
-        setPeerSeen((p) => ({ ...p, [msg.writer]: Date.now() }));
+        seen(msg.writer, true);
         setDemoHealth((h) => (h[msg.demoId] === msg.status ? h : { ...h, [msg.demoId]: msg.status }));
       }
     });
     syncRef.current = sync;
     setTransport(sync.transport);
     sync.send({ type: "hello", writer });
+    // Still here (8.6): a window only sends state on a change, so presence is what keeps an idle
+    // audience window counted.
+    const presence = () => sync.send({ type: "presence", writer, mode: modeRef.current });
+    presence();
+    const beat = window.setInterval(presence, 2000);
     const t = window.setTimeout(() => {
       // The URL's claim is spent once the fallback fires: a window opened later must not have its
       // first press reverted by this window snapping back to the URL's slide.
@@ -163,6 +210,7 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
     }, 300);
     return () => {
       window.clearTimeout(t);
+      window.clearInterval(beat);
       sync.close();
       syncRef.current = null;
     };
@@ -231,20 +279,27 @@ export function PresenterProvider({ mode, initialSlideId, children }: Props) {
   }, []);
   const perform = useCallback<Presenter["perform"]>((action) => performRef.current?.(action), []);
 
-  // Windows heard from in the last 5 seconds, re-counted on a timer so stale peers age out.
+  // Windows heard from in the last 5 seconds, re-counted on a timer so stale peers age out. The
+  // audience is "not connected" once none has been heard for 5 s, and not before this window has
+  // been up for 5 s. Presence rides the BroadcastChannel only, so the storage fallback says nothing.
   const [peers, setPeers] = useState(1);
   useEffect(() => {
+    const mounted = Date.now();
     const count = () => {
-      const cutoff = Date.now() - 5000;
-      setPeers(1 + Object.entries(peerSeen).filter(([id, t]) => id !== writer && t > cutoff).length);
+      const now = Date.now();
+      const cutoff = now - 5000;
+      setPeers(1 + Object.values(peerSeen.current).filter((t) => t > cutoff).length);
+      if (transport !== "broadcast") setAudienceConnected(null);
+      else if (audienceSeen.current > cutoff) setAudienceConnected(true);
+      else setAudienceConnected(now - mounted >= 5000 ? false : null);
     };
     const id = window.setInterval(count, 1000);
     return () => window.clearInterval(id);
-  }, [peerSeen, writer]);
+  }, [transport]);
 
   const value = useMemo<Presenter>(
-    () => ({ mode, state, writer, transport, peers, demoHealth, update, getState, reportHealth, playback, reportPlayback, registerPerform, perform, setRenderedSlide: setRendered }),
-    [mode, state, writer, transport, peers, demoHealth, update, getState, reportHealth, playback, reportPlayback, registerPerform, perform],
+    () => ({ mode, state, writer, transport, peers, audienceConnected, demoHealth, update, getState, reportHealth, playback, reportPlayback, registerPerform, perform, setRenderedSlide: setRendered }),
+    [mode, state, writer, transport, peers, audienceConnected, demoHealth, update, getState, reportHealth, playback, reportPlayback, registerPerform, perform],
   );
 
   return <PresenterContext.Provider value={value}>{children}</PresenterContext.Provider>;

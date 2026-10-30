@@ -7,6 +7,7 @@ import { renderCodeFiles } from "@/lib/highlight";
 import { manifestFor } from "@/lib/frames/registry";
 import { meterValue } from "@/lib/meters";
 import { elisionLines } from "@/lib/excerpt";
+import { firstPoster } from "@/lib/assets";
 import { PageBody } from "./PageBody";
 import { IntroSlide } from "./IntroSlide";
 import { FrameWarm } from "./FrameWarm";
@@ -59,12 +60,10 @@ export async function DemoPageSlide({ slide, mode }: Props) {
   const ratio = page.stage === "single" ? null : (page.split ?? "50/50");
   const slot = split && ratio ? { width: SPLITS[ratio].frame, height: SLOT.split.height } : split ? SLOT.split : SLOT.full;
   const meters = Object.fromEntries(page.steps.filter((s) => s.meter).map((s) => [s.id, meterValue(s.meter!.source)]));
-  // Posters are optional files under public/; the preview only shows the ones that exist.
-  const posterExists = (p?: string) => Boolean(p && existsSync(path.join(process.cwd(), "public", p)));
   // One captured poster per step (pnpm capture, public/posters/<page>/<step>.jpg) keeps the speaker's
-  // previews from going blank (design review H7); an authored poster still wins.
-  const stepPoster = (id: string) => `/posters/${page.id}/${id}.jpg`;
-  const posters = Object.fromEntries(page.steps.map((s) => [s.id, posterExists(s.poster) ? s.poster! : posterExists(stepPoster(s.id)) ? stepPoster(s.id) : posterExists(page.frame.poster) ? page.frame.poster! : null]));
+  // previews from going blank (design review H7); an authored poster still wins. Posters are
+  // optional: only the ones that exist, served as their AVIF (pnpm images, lib/assets.ts).
+  const posters = Object.fromEntries(page.steps.map((s) => [s.id, firstPoster(s.poster, `/posters/${page.id}/${s.id}.jpg`, page.frame.poster)]));
   const eyebrow = page.stage === "single" ? null : page.eyebrow;
   return (
     <article className="page" data-stage={page.stage} data-split={split} data-ratio={split && ratio ? ratio : undefined} aria-label={eyebrow ? `${eyebrow}: ${page.title}` : page.title}>

@@ -5,6 +5,9 @@ out/
 content/.generated/*
 !content/.generated/support.json
 !content/.generated/backgrounds.json
+# Committed with public/opt (docs/PRD-perf.md, P1-IMG): pnpm images and pnpm capture write them.
+!content/.generated/images.json
+!content/.generated/posters.json
 *.tsbuildinfo
 next-env.d.ts
 .env*.local

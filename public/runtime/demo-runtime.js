@@ -17,6 +17,24 @@
   var metaEl = document.querySelector('meta[name="presenter-origin"]');
   var PRESENTER = metaEl ? metaEl.getAttribute("content") : null;
   var embedded = window.parent && window.parent !== window;
+  // A warm-up document (FrameWarm, `warm=1`) only loads, so its files and the theme are cached: it
+  // posts nothing, probes nothing and calls no focus(). In Chromium a focus() in a frame moves the
+  // presenter window's focus into it, and the clicker's keys followed (PRD-perf P0-1).
+  var warm = /[?&]warm=1(&|$)/.test(location.search);
+  // The engine's own focus(), kept before watchFocus() wraps it: the probe must not count as a
+  // refused focus during a run.
+  var nativeFocus = window.HTMLElement && HTMLElement.prototype.focus;
+  if (warm && embedded) {
+    // Nothing in a warm-up document may take focus, the page's own scripts included.
+    [window.HTMLElement, window.SVGElement].forEach(function (C) {
+      if (C && C.prototype && typeof C.prototype.focus === "function") C.prototype.focus = function () {};
+    });
+    try {
+      window.focus = function () {};
+    } catch (e) {
+      /* none */
+    }
+  }
 
   var frameId = null;
   var mirror = false;
@@ -42,7 +60,7 @@
   };
 
   function post(msg) {
-    if (!embedded || !PRESENTER) return;
+    if (warm || !embedded || !PRESENTER) return;
     msg.v = 2;
     msg.frameId = frameId;
     window.parent.postMessage(msg, PRESENTER);
@@ -71,29 +89,39 @@
       "trusted-types": "trustedTypes" in window,
       "customizable-select": supports("appearance: base-select"),
       "anchor-positioning": supports("anchor-name: --a"),
-      "focus-visible-option": probeFocusVisibleOption(),
+      // Not probed at `ready` (PRD-perf P0-1): see probeFocusVisibleOption.
+      "focus-visible-option": focusVisibleNative,
     };
   }
 
+  // Whether `focus({ focusVisible: true })` shows the native ring. Null until probed, which the
+  // rects message reads as false. The probe focuses a button, and in Chromium a focus() in a frame
+  // moves the presenter window's focus into the frame: probing at `ready` took the audience
+  // window's keyboard on every warmed intro slide (PRD-perf P0-1). So it runs at most once, lazily,
+  // the first time a run starts or this window gets a focus event, and only while this document
+  // already has focus and nothing in it is focused.
   var focusVisibleNative = null;
+  var focusProbed = false;
   function probeFocusVisibleOption() {
-    if (focusVisibleNative !== null) return focusVisibleNative;
-    if (document.activeElement && document.activeElement !== document.body) return (focusVisibleNative = false);
+    if (focusProbed || warm || !nativeFocus) return;
+    if (!document.hasFocus() || !document.body) return;
+    if (document.activeElement && document.activeElement !== document.body) return;
+    focusProbed = true;
     try {
       var b = document.createElement("button");
       b.style.position = "fixed";
       b.style.opacity = "0";
       b.style.pointerEvents = "none";
       document.body.appendChild(b);
-      b.focus({ focusVisible: true, preventScroll: true });
+      nativeFocus.call(b, { focusVisible: true, preventScroll: true });
       focusVisibleNative = b.matches(":focus-visible");
       b.blur();
       b.remove();
     } catch (e) {
       focusVisibleNative = false;
     }
-    return focusVisibleNative;
   }
+  window.addEventListener("focus", probeFocusVisibleOption);
 
   // ---------------------------------------------------------------- helpers
 
@@ -1191,6 +1219,7 @@
   // ---------------------------------------------------------------- runs
 
   async function runStep(msg) {
+    probeFocusVisibleOption();
     if (run && run.playing) run.cancelled = true;
     var instant = msg.mode === "instant";
     var r = { runId: msg.runId, stepId: msg.stepId, instant: instant, cancelled: false, finishing: false, playing: true, cursor: { step: 0, action: msg.startAt || 0 } };
@@ -1235,6 +1264,7 @@
   }
 
   async function replayTo(msg) {
+    probeFocusVisibleOption();
     if (run && run.playing) run.cancelled = true;
     var r = { runId: msg.runId, stepId: "", instant: true, cancelled: false, finishing: false, playing: true, cursor: { step: msg.from ? msg.from.step : 0, action: 0 } };
     run = r;
@@ -1273,8 +1303,10 @@
   // A step can move focus into this frame (D1's Escape returns it to the Actions button), and from
   // then on the presenter's window hears only what is forwarded. In scripted mode the deck's other
   // keys go up too, so no clicker or keyboard key dies here; hands-on mode keeps them in the demo
-  // (PRD r7, 6.2 H2).
-  var FORWARD_SCRIPTED_ONLY = ["Home", "End", "Backspace", "Enter", "g", "s", "o", "?"];
+  // (PRD r7, 6.2 H2). Tab and Escape go up as well, so reader mode can move focus past the frame
+  // (PRD-perf P0-3, a11y H1); in hands-on mode Tab moves through the demo and Escape is the demo's
+  // (D1's dialog).
+  var FORWARD_SCRIPTED_ONLY = ["Home", "End", "Backspace", "Enter", "g", "s", "o", "?", "Tab", "Escape"];
   function onKeydown(e) {
     // The runtime's own dispatch(keydown) and hook-driven events are untrusted; let builds see them.
     if (!e.isTrusted) return;
@@ -1372,7 +1404,7 @@
   }
 
   window.addEventListener("message", function (e) {
-    if (!embedded || e.source !== window.parent || e.origin !== PRESENTER) return;
+    if (warm || !embedded || e.source !== window.parent || e.origin !== PRESENTER) return;
     if (!valid(e.data)) return;
     handle(e.data);
   });
@@ -1383,6 +1415,7 @@
   });
 
   function ready() {
+    if (warm) return;
     installFetch();
     watchFocus();
     startObservers();

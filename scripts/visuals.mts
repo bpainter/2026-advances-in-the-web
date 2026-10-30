@@ -11,11 +11,18 @@
  * pnpm capture runs this against production builds, so no dev chrome is in any image.
  *
  * Needs `pnpm dev`. The overlay (cursor, spotlights) is not part of the capture: only the iframe.
+ *
+ * At the end it runs `pnpm images` for what it captured (docs/PRD-perf.md, P1-IMG item 9), so the
+ * slides serve the new stills and posters, and with --posters it records each page's frame inputs
+ * in content/.generated/posters.json, which `pnpm check` compares (the poster freshness rule).
  */
-import { mkdirSync, readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { chromium, type Browser, type Page } from "@playwright/test";
 import { sections } from "@/lib/content";
+import { hasFrame } from "@/content/demo-schema";
+import { POSTERS_FILE, posterInputHash, type PosterRecord } from "@/lib/validate/assets";
 
 const BASE = process.env.DECK_URL ?? "http://localhost:3000";
 /**
@@ -167,14 +174,17 @@ async function composeD2(pageId: string, src: string): Promise<boolean> {
   return true;
 }
 
+const postersPath = path.join(process.cwd(), POSTERS_FILE);
+const posterRecords: Record<string, PosterRecord> = existsSync(postersPath) ? (JSON.parse(readFileSync(postersPath, "utf8")) as Record<string, PosterRecord>) : {};
 if (process.argv.includes("--posters")) {
   const shotCtx = await browser.newContext({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1, reducedMotion: "reduce" });
-  const shot = await shotCtx.newPage();
+  const shotPage = await shotCtx.newPage();
   for (const section of sections) {
     if (only.length && !only.includes(section.id)) continue;
     for (const p of section.pages) {
       if (p.stage === "intro") continue;
-      const cap = await pageFor(section.id, 1, shot);
+      const cap = await pageFor(section.id, 1, shotPage);
+      let shot = 0;
       for (const [i, step] of p.steps.entries()) {
         await cap.goto(`${BASE}/present?s=${p.id}&step=${i}&capture=1`);
         const key = `${p.id}:${step.id}`;
@@ -198,12 +208,27 @@ if (process.argv.includes("--posters")) {
         const out = path.join(process.cwd(), "public", "posters", p.id, `${step.id}.jpg`);
         mkdirSync(path.dirname(out), { recursive: true });
         await cap.locator('.page-frame__iframe[data-visible="true"]').screenshot({ path: out, type: "jpeg", quality: 72 });
+        shot++;
       }
+      // Every step captured: these posters match the frame inputs on disk now.
+      if (shot === p.steps.length && hasFrame(p)) posterRecords[p.id] = { inputs: posterInputHash(process.cwd(), section, p), captured: new Date().toISOString() };
       console.log(`✓ posters ${p.id}: ${p.steps.length}`);
     }
   }
   await shotCtx.close();
+  const sorted = Object.fromEntries(Object.keys(posterRecords).sort().map((k) => [k, posterRecords[k]]));
+  writeFileSync(postersPath, `${JSON.stringify(sorted, null, 2)}\n`);
 }
 await browser.close();
 await chrome?.close();
+
+// Encode what this run captured (pnpm images): the intro stills, and the posters with --posters.
+const touched = sections.filter((s) => !only.length || only.includes(s.id));
+const globs = only.length
+  ? touched.flatMap((s) => [
+      ...s.pages.flatMap((p) => (p.stage === "intro" ? [p.visual.src] : [])),
+      ...(process.argv.includes("--posters") ? s.pages.filter((p) => p.stage !== "intro").map((p) => `/posters/${p.id}/**`) : []),
+    ])
+  : [];
+execFileSync(process.execPath, ["--conditions=react-server", "--import", "tsx", "scripts/images.mts", ...(globs.length ? [`--only=${globs.join(",")}`] : [])], { stdio: "inherit" });
 process.exit(failed ? 1 : 0);

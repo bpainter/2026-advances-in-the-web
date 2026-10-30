@@ -35,7 +35,9 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     ".next-capture/types/**/*.ts",
-    ".next-capture/dev/types/**/*.ts"
+    ".next-capture/dev/types/**/*.ts",
+    ".next-ws1/types/**/*.ts",
+    ".next-ws1/dev/types/**/*.ts"
   ],
   "exclude": [
     "content/.generated/**",

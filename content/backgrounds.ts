@@ -1,6 +1,8 @@
 // The background registry (PRD v5, 1.4 and 4.1): one file per non-demo slide and one per demo
 // section, under public/backgrounds/v5/. Files are 1920 by 1080 JPEG with grain baked in; the
-// shared overlay (public/theme/grain.png) is the grain of record.
+// shared overlay (public/theme/grain.png) is the grain of record. `pnpm images` encodes each one
+// as a 1920 by 1080 AVIF under public/opt/bg/ (docs/PRD-perf.md, P1-IMG).
+import imageManifest from "@/content/.generated/images.json";
 
 export type Hue =
   | "navy"
@@ -185,9 +187,16 @@ export type BackgroundId = keyof typeof BACKGROUNDS;
 
 export const BACKGROUND_IDS = Object.keys(BACKGROUNDS) as BackgroundId[];
 
-/** Root-relative URL of a background file. */
+/**
+ * Root-relative URL of the file the stage paints and decodes for a background: its AVIF from
+ * content/.generated/images.json, the same 1920 by 1080 file the frames' image-set() picks, else
+ * the JPEG master. The walk compares the stage's data-background with this. lib/assets.ts
+ * `backgroundImage()` has the JPEG and the image-set() too.
+ */
 export function backgroundUrl(id: BackgroundId): string {
-  return `/backgrounds/v5/${BACKGROUNDS[id].file}`;
+  const master = `/backgrounds/v5/${BACKGROUNDS[id].file}`;
+  const entry = (imageManifest as Record<string, { avif?: { src: string }[] } | undefined>)[master];
+  return entry?.avif?.[0]?.src ?? master;
 }
 
 export function isBackgroundId(id: string): id is BackgroundId {

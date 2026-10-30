@@ -1,11 +1,10 @@
-import { existsSync } from "node:fs";
-import path from "node:path";
 import { hasFrame } from "@/content/demo-schema";
 import type { Slide } from "@/content/schema";
 import type { Mode } from "@/lib/mode";
 import { slides, neighbours } from "@/lib/content";
 import { backgroundUrl } from "@/content/backgrounds";
 import { navCurrent, navGroups } from "@/lib/nav";
+import { backgroundImage, firstPoster, introImage } from "@/lib/assets";
 import { Stage } from "./Stage";
 import { SlideRouter } from "./SlideRouter";
 
@@ -20,21 +19,23 @@ interface Props {
   passive?: boolean;
 }
 
-const publicFile = (p?: string | null): p is string => Boolean(p && existsSync(path.join(/*turbopackIgnore: true*/ process.cwd(), "public", p)));
-
 /**
  * The images a slide shows at a step (PRD r7, 9.2): an intro slide's captured still, or a frame
  * page's poster for that step (the speaker previews; the audience window when a frame is offline).
- * Only files that exist under public/, resolved as DemoPageSlide resolves them.
+ * Only files that exist under public/, at the URLs IntroSlide and DemoPageSlide render
+ * (lib/assets.ts), so the decode ahead is the file the slide shows.
  */
 function slideImages(slide: Slide | undefined, stepIds?: string[]): string[] {
   const page = slide?.page;
   if (!page) return [];
-  if (!hasFrame(page)) return publicFile(page.visual.src) ? [page.visual.src] : [];
+  if (!hasFrame(page)) {
+    const still = introImage(page.visual.src);
+    return still ? [still.decodeUrl] : [];
+  }
   const ids = stepIds ?? [page.steps[0]?.id].filter(Boolean);
   return ids.flatMap((id) => {
     const step = page.steps.find((s) => s.id === id);
-    const poster = [step?.poster, `/posters/${page.id}/${id}.jpg`, page.frame.poster].find(publicFile);
+    const poster = firstPoster(step?.poster, `/posters/${page.id}/${id}.jpg`, page.frame.poster);
     return poster ? [poster] : [];
   });
 }
@@ -64,6 +65,7 @@ export function SlidePage({ slide, mode, canonicalPath, embedded, passive }: Pro
       slideIds={slides.map((s) => s.id)}
       slideSteps={slides.map((s) => s.page?.steps.length ?? 0)}
       background={backgroundUrl(slide.background)}
+      backgroundCss={backgroundImage(slide.background).css}
       neighbourBackgrounds={[prev, next].flatMap((n) => (n ? [backgroundUrl(n.background)] : []))}
       neighbourAssets={mode === "audience" ? audienceAssets : mode === "speaker-preview" && !passive ? speakerAssets : []}
       nav={passive ? null : { groups, currentId: navCurrent(slide.id) }}

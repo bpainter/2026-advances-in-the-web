@@ -1,0 +1,301 @@
+{
+  "task": "functions",
+  "dist": "../../../../private/tmp/claude-501/-Users-bermonpainter-Sites-web-unleashed-talk-2026/6b2d6583-dfb5-4ace-8751-a1f9a529508e/scratchpad/ws2/exp/.next",
+  "runtimeBytes": 32673668,
+  "rows": [
+    {
+      "route": "/s/[id]",
+      "files": 865,
+      "bytes": 17818130,
+      "withRuntime": 49129988,
+      "largest": [
+        "node_modules/@shikijs/langs 8.2",
+        "public/demo-assets 3.0",
+        ".next/server 1.4",
+        "node_modules/@shikijs/themes 1.4",
+        "node_modules/next 1.3",
+        "node_modules/@shikijs/engine-oniguruma 0.6"
+      ]
+    },
+    {
+      "route": "/speaker",
+      "files": 869,
+      "bytes": 17813392,
+      "withRuntime": 49125250,
+      "largest": [
+        "node_modules/@shikijs/langs 8.2",
+        "public/demo-assets 3.0",
+        ".next/server 1.4",
+        "node_modules/@shikijs/themes 1.4",
+        "node_modules/next 1.3",
+        "node_modules/@shikijs/engine-oniguruma 0.6"
+      ]
+    },
+    {
+      "route": "/present/[id]",
+      "files": 868,
+      "bytes": 17797088,
+      "withRuntime": 49108946,
+      "largest": [
+        "node_modules/@shikijs/langs 8.2",
+        "public/demo-assets 3.0",
+        ".next/server 1.4",
+        "node_modules/@shikijs/themes 1.4",
+        "node_modules/next 1.3",
+        "node_modules/@shikijs/engine-oniguruma 0.6"
+      ]
+    },
+    {
+      "route": "/",
+      "files": 864,
+      "bytes": 17787598,
+      "withRuntime": 49099456,
+      "largest": [
+        "node_modules/@shikijs/langs 8.2",
+        "public/demo-assets 3.0",
+        "node_modules/@shikijs/themes 1.4",
+        ".next/server 1.4",
+        "node_modules/next 1.3",
+        "node_modules/@shikijs/engine-oniguruma 0.6"
+      ]
+    },
+    {
+      "route": "/fixtures/spotlight",
+      "files": 383,
+      "bytes": 5890447,
+      "withRuntime": 37202305,
+      "largest": [
+        "public/demo-assets 3.0",
+        "node_modules/next 1.3",
+        ".next/server 0.7",
+        "content/sections 0.2",
+        "demos/05-trusted-types 0.1",
+        "lib/frames 0.1"
+      ]
+    },
+    {
+      "route": "/_not-found",
+      "files": 351,
+      "bytes": 5708626,
+      "withRuntime": 37020484,
+      "largest": [
+        "public/demo-assets 3.0",
+        "node_modules/next 1.3",
+        ".next/server 0.6",
+        "content/sections 0.2",
+        "demos/05-trusted-types 0.1",
+        "demos/04-navigation-api 0.1"
+      ]
+    },
+    {
+      "route": "/sitemap.xml",
+      "files": 338,
+      "bytes": 5570788,
+      "withRuntime": 36882646,
+      "largest": [
+        "public/demo-assets 3.0",
+        "node_modules/next 1.5",
+        ".next/server 0.3",
+        "content/sections 0.2",
+        "demos/05-trusted-types 0.1",
+        "demos/04-navigation-api 0.1"
+      ]
+    },
+    {
+      "route": "/demos/[demo]/[build]/[[...path]]",
+      "files": 365,
+      "bytes": 5517314,
+      "withRuntime": 36829172,
+      "largest": [
+        "public/demo-assets 3.0",
+        "node_modules/next 1.5",
+        ".next/server 0.2",
+        "content/sections 0.2",
+        "demos/05-trusted-types 0.1",
+        "lib/frames 0.1"
+      ]
+    },
+    {
+      "route": "/demos/07-package-workflow/timeline/[[...path]]",
+      "files": 365,
+      "bytes": 5516079,
+      "withRuntime": 36827937,
+      "largest": [
+        "public/demo-assets 3.0",
+        "node_modules/next 1.5",
+        ".next/server 0.2",
+        "content/sections 0.2",
+        "demos/05-trusted-types 0.1",
+        "lib/frames 0.1"
+      ]
+    },
+    {
+      "route": "/api/orders/[id]/cancel",
+      "files": 365,
+      "bytes": 5515919,
+      "withRuntime": 36827777,
+      "largest": [
+        "public/demo-assets 3.0",
+        "node_modules/next 1.5",
+        ".next/server 0.2",
+        "content/sections 0.2",
+        "demos/05-trusted-types 0.1",
+        "lib/frames 0.1"
+      ]
+    },
+    {
+      "route": "/vendor/[...path]",
+      "files": 365,
+      "bytes": 5515891,
+      "withRuntime": 36827749,
+      "largest": [
+        "public/demo-assets 3.0",
+        "node_modules/next 1.5",
+        ".next/server 0.2",
+        "content/sections 0.2",
+        "demos/05-trusted-types 0.1",
+        "lib/frames 0.1"
+      ]
+    },
+    {
+      "route": "/demo/[...path]",
+      "files": 365,
+      "bytes": 5515875,
+      "withRuntime": 36827733,
+      "largest": [
+        "public/demo-assets 3.0",
+        "node_modules/next 1.5",
+        ".next/server 0.2",
+        "content/sections 0.2",
+        "demos/05-trusted-types 0.1",
+        "lib/frames 0.1"
+      ]
+    },
+    {
+      "route": "/cms/[...path]",
+      "files": 365,
+      "bytes": 5515836,
+      "withRuntime": 36827694,
+      "largest": [
+        "public/demo-assets 3.0",
+        "node_modules/next 1.5",
+        ".next/server 0.2",
+        "content/sections 0.2",
+        "demos/05-trusted-types 0.1",
+        "lib/frames 0.1"
+      ]
+    },
+    {
+      "route": "/orders/[id]",
+      "files": 365,
+      "bytes": 5515823,
+      "withRuntime": 36827681,
+      "largest": [
+        "public/demo-assets 3.0",
+        "node_modules/next 1.5",
+        ".next/server 0.2",
+        "content/sections 0.2",
+        "demos/05-trusted-types 0.1",
+        "lib/frames 0.1"
+      ]
+    },
+    {
+      "route": "/app.css",
+      "files": 365,
+      "bytes": 5515784,
+      "withRuntime": 36827642,
+      "largest": [
+        "public/demo-assets 3.0",
+        "node_modules/next 1.5",
+        ".next/server 0.2",
+        "content/sections 0.2",
+        "demos/05-trusted-types 0.1",
+        "lib/frames 0.1"
+      ]
+    },
+    {
+      "route": "/app.js",
+      "files": 365,
+      "bytes": 5515776,
+      "withRuntime": 36827634,
+      "largest": [
+        "public/demo-assets 3.0",
+        "node_modules/next 1.5",
+        ".next/server 0.2",
+        "content/sections 0.2",
+        "demos/05-trusted-types 0.1",
+        "lib/frames 0.1"
+      ]
+    },
+    {
+      "route": "/orders",
+      "files": 365,
+      "bytes": 5515776,
+      "withRuntime": 36827634,
+      "largest": [
+        "public/demo-assets 3.0",
+        "node_modules/next 1.5",
+        ".next/server 0.2",
+        "content/sections 0.2",
+        "demos/05-trusted-types 0.1",
+        "lib/frames 0.1"
+      ]
+    },
+    {
+      "route": "/cases",
+      "files": 365,
+      "bytes": 5515770,
+      "withRuntime": 36827628,
+      "largest": [
+        "public/demo-assets 3.0",
+        "node_modules/next 1.5",
+        ".next/server 0.2",
+        "content/sections 0.2",
+        "demos/05-trusted-types 0.1",
+        "lib/frames 0.1"
+      ]
+    },
+    {
+      "route": "/_health",
+      "files": 338,
+      "bytes": 5492232,
+      "withRuntime": 36804090,
+      "largest": [
+        "public/demo-assets 3.0",
+        "node_modules/next 1.5",
+        ".next/server 0.2",
+        "content/sections 0.2",
+        "demos/05-trusted-types 0.1",
+        "demos/04-navigation-api 0.1"
+      ]
+    },
+    {
+      "route": "/_global-error",
+      "files": 343,
+      "bytes": 5429970,
+      "withRuntime": 36741828,
+      "largest": [
+        "public/demo-assets 3.0",
+        "node_modules/next 1.3",
+        ".next/server 0.3",
+        "content/sections 0.2",
+        "demos/05-trusted-types 0.1",
+        "demos/04-navigation-api 0.1"
+      ]
+    },
+    {
+      "route": "/robots.txt",
+      "files": 337,
+      "bytes": 5390096,
+      "withRuntime": 36701954,
+      "largest": [
+        "public/demo-assets 3.0",
+        "node_modules/next 1.5",
+        "content/sections 0.2",
+        ".next/server 0.1",
+        "demos/05-trusted-types 0.1",
+        "demos/04-navigation-api 0.1"
+      ]
+    }
+  ]
+}

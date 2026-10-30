@@ -1,3 +1,5 @@
+import type { Mode } from "@/lib/mode";
+
 /** Keyboard map (PRD Part A, 6.1) plus the deck's own navigation keys. */
 export type KeyAction =
   | { type: "advance" }
@@ -20,7 +22,23 @@ export type KeyAction =
   | { type: "help" }
   | { type: "noop" };
 
-export function actionForKey(e: Pick<KeyboardEvent, "key" | "shiftKey" | "metaKey" | "ctrlKey" | "altKey">): KeyAction | null {
+/**
+ * Actions only the presenter windows have (PRD-perf P0-4, a11y H2): reader mode maps no key to
+ * them, and `perform` ignores them there even when called.
+ */
+export const PRESENTER_ONLY: ReadonlySet<KeyAction["type"]> = new Set(["open-speaker", "toggle-timer", "toggle-blank", "toggle-rehearsal", "goto"]);
+
+/**
+ * The key map. Reader mode (`/s/<id>` and `/`) gets the deck map without the presenter-only keys
+ * (`s`, `t`, `b`, `.`, `d`, `g`); the audience and speaker windows keep the full map.
+ */
+export function actionForKey(e: Pick<KeyboardEvent, "key" | "shiftKey" | "metaKey" | "ctrlKey" | "altKey">, mode?: Mode): KeyAction | null {
+  const action = presenterMap(e);
+  if (action && mode === "reader" && PRESENTER_ONLY.has(action.type)) return null;
+  return action;
+}
+
+function presenterMap(e: Pick<KeyboardEvent, "key" | "shiftKey" | "metaKey" | "ctrlKey" | "altKey">): KeyAction | null {
   if (e.metaKey || e.ctrlKey || e.altKey) return null;
   switch (e.key) {
     case "ArrowRight":
@@ -70,6 +88,14 @@ export function actionForKey(e: Pick<KeyboardEvent, "key" | "shiftKey" | "metaKe
   }
 }
 
+/**
+ * A character key shortcut (WCAG 2.1.4): one printable character, not Space. In reader mode these
+ * act only from the stage or the page itself (PRD-perf P0-4).
+ */
+export function isCharacterKey(key: string): boolean {
+  return key.length === 1 && key !== " ";
+}
+
 /** True when the key event originated in a form control the stage should leave alone. */
 export function isEditableTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
@@ -77,21 +103,43 @@ export function isEditableTarget(target: EventTarget | null): boolean {
   return ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
 }
 
-export const KEY_HELP: { keys: string[]; action: string }[] = [
-  { keys: ["→", "PageDown", "Space"], action: "Next: plays the next step, then the next page" },
-  { keys: ["←", "PageUp", "Backspace"], action: "Previous: back one step (reset and replay), then the previous page" },
-  { keys: ["Shift", "→"], action: "Next page, step 0" },
-  { keys: ["Shift", "←"], action: "Previous page, step 0" },
-  { keys: ["h"], action: "Hands-on mode: steps stop playing; your keyboard and pointer reach the demo" },
-  { keys: ["r"], action: "Reset and replay the current step" },
-  { keys: ["l"], action: "Terminal page: hide the recording for a live terminal" },
-  { keys: ["d"], action: "Rehearsal overlay" },
-  { keys: ["Home", "End"], action: "First or last slide" },
-  { keys: ["o"], action: "Open the frame standalone in a new tab" },
-  { keys: ["b", "."], action: "Blank the audience window" },
-  { keys: ["t"], action: "Start or pause the talk timer" },
-  { keys: ["s"], action: "Open or focus the speaker window" },
-  { keys: ["g"], action: "Speaker view: go to a slide number" },
-  { keys: ["f"], action: "Toggle fullscreen" },
-  { keys: ["?"], action: "This help" },
+/**
+ * True when Space or Enter on the target should press it rather than move the deck (PRD-perf
+ * P0-4, a11y M1): buttons, links, tabs, summaries, focusable code, and anything inside an open
+ * dialog. The reader and speaker windows return early on these; the audience window does not, so
+ * the clicker's Space always advances there. Key handlers in the speaker window call this instead
+ * of handling Space themselves (PRD-perf 7.2).
+ */
+export function isInteractiveTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof Element)) return false;
+  if (target.closest("dialog[open]")) return true;
+  return target.matches('button, a[href], [role="tab"], summary, pre[tabindex]');
+}
+
+/** Where a help row applies: the presenter windows (audience and speaker), reader mode, or both. */
+export type KeyHelpMode = "presenter" | "reader";
+
+export const KEY_HELP: { keys: string[]; action: string; modes: KeyHelpMode[] }[] = [
+  { keys: ["→", "PageDown", "Space"], action: "Next: plays the next step, then the next page", modes: ["presenter", "reader"] },
+  { keys: ["←", "PageUp", "Backspace"], action: "Previous: back one step (reset and replay), then the previous page", modes: ["presenter", "reader"] },
+  { keys: ["Shift", "→"], action: "Next page, step 0", modes: ["presenter", "reader"] },
+  { keys: ["Shift", "←"], action: "Previous page, step 0", modes: ["presenter", "reader"] },
+  { keys: ["h"], action: "Hands-on mode: steps stop playing; your keyboard and pointer reach the demo", modes: ["presenter", "reader"] },
+  { keys: ["r"], action: "Reset and replay the current step", modes: ["presenter", "reader"] },
+  { keys: ["l"], action: "Terminal page: hide the recording for a live terminal", modes: ["presenter", "reader"] },
+  { keys: ["d"], action: "Rehearsal overlay", modes: ["presenter"] },
+  { keys: ["Home", "End"], action: "First or last slide", modes: ["presenter", "reader"] },
+  { keys: ["o"], action: "Open the frame standalone in a new tab", modes: ["presenter", "reader"] },
+  { keys: ["b", "."], action: "Blank the audience window", modes: ["presenter"] },
+  { keys: ["t"], action: "Start or pause the talk timer", modes: ["presenter"] },
+  { keys: ["s"], action: "Open or focus the speaker window", modes: ["presenter"] },
+  { keys: ["g"], action: "Speaker view: go to a slide number", modes: ["presenter"] },
+  { keys: ["f"], action: "Toggle fullscreen", modes: ["presenter", "reader"] },
+  { keys: ["Tab"], action: "Move past the demo", modes: ["reader"] },
+  { keys: ["?"], action: "This help", modes: ["presenter", "reader"] },
 ];
+
+/** The help rows for a window (PRD-perf P0-4 and a11y L7; KeyboardHelp renders these). */
+export function keyHelpFor(mode: KeyHelpMode) {
+  return KEY_HELP.filter((row) => row.modes.includes(mode));
+}

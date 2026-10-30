@@ -9,6 +9,7 @@
  *   pnpm walk transitions --fade=1                the slide crossfade (r7 9.3)
  *   pnpm walk m2 --no-lanes                       Chromium without the Grid Lanes switch (r7 7.1)
  *   pnpm walk drawer | links                      the drawer's keyboard contract (9.8), link focus (5.3)
+ *   pnpm walk focus | underlay | keys             PRD-perf P0-1 to P0-4 (walk-perf.mts; also --origin=<url>)
  *
  * Needs `pnpm dev` at DECK_URL (default http://localhost:3000) with the demo origin reachable.
  */
@@ -24,6 +25,7 @@ import { checkWrapper } from "./walk-wrapper.mts";
 import { slides as deckSlides } from "@/lib/content";
 import { PROTOCOL_WATCH, checkProtocol, finishDeckSampler, startDeckSampler, walkFixture } from "./walk-spotlight.mts";
 import { VT_WATCH, checkM2Fallback, checkPageTitle, checkSelect, checkSlideR7, finishDeckR7, walkAdvance, walkDrawer, walkLinkFocus, walkTransitions } from "./walk-r7.mts";
+import { walkPerf } from "./walk-perf.mts";
 
 const BASE = process.env.DECK_URL ?? "http://localhost:3000";
 const args = process.argv.slice(2);
@@ -285,10 +287,12 @@ async function checkTheme(page: Page, where: string, stepId: string) {
 }
 
 /**
- * Speaker window at 1440 by 900 (PRD v4, 5.1 and 7.6): on every step the header, the current
- * bullets and the Next line are visible without scrolling, no selector shows outside Reference,
- * and the cautions show on the now page's last step.
+ * Speaker window at 1440 by 900 (PRD v4, 5.1 and 7.6; speaker view PRD, 12.1): on every step the
+ * title and steps block sits fully in the viewport, the current bullets sit inside the notes body,
+ * "Next step" shows when the page has another step and not on its last, no selector shows outside
+ * References, and the cautions show on the now page's last step.
  */
+let speakerLayoutChecked = false;
 async function checkSpeaker(where: string, demoPage: DemoPage, section: DemoSection, i: number) {
   if (!speaker) return;
   const step = demoPage.steps[i];
@@ -308,21 +312,57 @@ async function checkSpeaker(where: string, demoPage: DemoPage, section: DemoSect
     const body = document.querySelector(".speaker__notes-body");
     const br = body.getBoundingClientRect();
     const inView = (el) => { if (!el) return true; const r = el.getBoundingClientRect(); return r.top >= br.top - 1 && r.bottom <= br.bottom + 1 && r.bottom <= innerHeight; };
-    const next = document.querySelector(".notes__next");
-    const nr = next.getBoundingClientRect();
+    const header = document.querySelector(".notes__header");
+    const hr = header.getBoundingClientRect();
+    const then = document.querySelector(".notes__then");
     const clone = body.cloneNode(true);
     clone.querySelectorAll("details").forEach((d) => d.remove());
-    const text = clone.textContent + " " + next.textContent;
+    const text = clone.textContent + " " + header.textContent;
     const sel = /#[a-z][\\w-]*|\\[[a-z-]+(=|\\])/i.exec(text);
-    return { header: inView(document.querySelector(".notes__header")), bullets: inView(document.querySelector(".notes__bullets")), next: nr.top >= 0 && nr.bottom <= innerHeight, selector: sel ? sel[0] : null, cautions: Boolean(document.querySelector(".notes__cautions")) };
-  })()`)) as { header: boolean; bullets: boolean; next: boolean; selector: string | null; cautions: boolean };
-  const problems = [!v.header && "header", !v.bullets && "bullets", !v.next && "Next line"].filter(Boolean);
+    return { header: hr.top >= 0 && hr.left >= 0 && hr.bottom <= innerHeight && hr.right <= innerWidth, bullets: inView(document.querySelector(".notes__bullets")), then: then ? then.getBoundingClientRect().height > 0 : false, selector: sel ? sel[0] : null, cautions: Boolean(document.querySelector(".notes__cautions")) };
+  })()`)) as { header: boolean; bullets: boolean; then: boolean; selector: string | null; cautions: boolean };
+  const problems = [!v.header && "title and steps block", !v.bullets && "bullets"].filter(Boolean);
   if (problems.length) fail(where, `speaker ${step.id}: ${problems.join(", ")} not visible at 1440 by 900`);
-  else pass(`speaker ${step.id}: header, bullets and Next visible`);
-  if (v.selector) fail(where, `speaker ${step.id}: selector text "${v.selector}" outside Reference`);
+  else pass(`speaker ${step.id}: title and steps block, bullets visible`);
+  const wantThen = i < demoPage.steps.length - 1;
+  if (wantThen !== v.then) fail(where, `speaker ${step.id}: "Next step" ${v.then ? "shown on the last step" : "missing"}`);
+  if (v.selector) fail(where, `speaker ${step.id}: selector text "${v.selector}" outside References`);
   const wantCautions = demoPage.stage === "now" && i === demoPage.steps.length - 1 && section.cautions.length > 0;
   if (wantCautions !== v.cautions) fail(where, `speaker ${step.id}: cautions ${v.cautions ? "shown" : "missing"}`);
   else if (wantCautions) pass(`speaker ${step.id}: cautions shown`);
+  // Once per run (speaker view PRD, 11 criteria 1, 7 and 17): the preview keeps its size, the
+  // transport label is gone, one main, and the next preview is out of the tree.
+  if (speakerLayoutChecked) return;
+  speakerLayoutChecked = true;
+  const l = (await speaker.evaluate(`(() => {
+    const c = document.querySelector(".speaker__current").getBoundingClientRect();
+    const np = document.querySelector(".speaker__next-preview");
+    // Criterion 6: nothing but the previews is bright. Fills are composited on the window's navy;
+    // the flags, the Key point chip and the 6 px progress segments are the PRD's own exceptions.
+    const lin = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
+    const bright = [];
+    for (const el of document.querySelectorAll(".speaker *")) {
+      if (el.closest(".speaker__current .stage, .speaker__next-preview, .speaker__flag, .notes__chip--key, .speaker__progress")) continue;
+      const r = el.getBoundingClientRect();
+      if (!r.width || !r.height) continue;
+      const m = /rgba?\\(([\\d.]+)[ ,]+([\\d.]+)[ ,]+([\\d.]+)(?:[ ,/]+([\\d.]+))?/.exec(getComputedStyle(el).backgroundColor);
+      if (!m) continue;
+      const a = m[4] === undefined ? 1 : Number(m[4]);
+      if (a === 0) continue;
+      const [rr, gg, bb] = [[m[1], 5], [m[2], 9], [m[3], 26]].map(([v, bg]) => lin(Number(v) * a + bg * (1 - a)));
+      const lum = 0.2126 * rr + 0.7152 * gg + 0.0722 * bb;
+      if (lum > 0.2) bright.push(\`\${el.tagName.toLowerCase()}.\${String(el.className).split(" ")[0]} \${lum.toFixed(2)}\`);
+    }
+    return { w: c.width, h: c.height, transport: Boolean(document.querySelector(".speaker__transport")), mains: document.querySelectorAll("main, [role=main]").length, inert: np ? np.hasAttribute("inert") : true, bright };
+  })()`)) as { w: number; h: number; transport: boolean; mains: number; inert: boolean; bright: string[] };
+  if (Math.abs(l.w - 633) > 1 || Math.abs(l.h - 356) > 1) fail("speaker", `current preview is ${l.w.toFixed(1)} by ${l.h.toFixed(1)}, wanted 633 by 356`);
+  else pass("speaker: current preview 633 by 356");
+  if (l.transport) fail("speaker", "the transport label still renders");
+  if (l.mains !== 1) fail("speaker", `${l.mains} main landmarks, wanted 1`);
+  if (!l.inert) fail("speaker", "the next preview is not inert");
+  if (!l.transport && l.mains === 1 && l.inert) pass("speaker: no transport label, one main, next preview inert");
+  if (l.bright.length) fail("speaker", `bright fills outside the previews: ${l.bright.slice(0, 4).join(", ")}`);
+  else pass("speaker: no bright fill outside the previews");
 }
 
 /** Hands-on mode shows the step's ifKeyboard in the speaker window; turning it off replays the step. */
@@ -490,6 +530,8 @@ async function checkGeometry(page: Page, demoPage: DemoPage, where: string) {
 }
 
 async function main() {
+  // PRD-perf stage checks (walk-perf.mts) run on their own, also against a deployment (--origin).
+  if (only === "focus" || only === "underlay" || only === "keys") process.exit(await walkPerf(only, args));
   const health = await fetch(`${BASE}/_health`).catch(() => null);
   if (!health?.ok) {
     console.error(`No deck at ${BASE}. Start it with \`pnpm dev\` and run the walk again.`);

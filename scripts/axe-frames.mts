@@ -37,6 +37,8 @@ if (process.argv.includes("--presenter")) {
     { where: "/s/d1-intro", path: "/s/d1-intro" },
     { where: "/s/d1-intro, drawer open", path: "/s/d1-intro", drawer: true },
     { where: "/speaker, drawer open", path: "/speaker?s=d1-intro", viewport: { width: 1440, height: 900 }, drawer: true },
+    // Speaker view PRD, 12.1: the speaker window with the drawer closed.
+    { where: "/speaker", path: "/speaker?s=d1-used-to", viewport: { width: 1440, height: 900 } },
   ];
   let violations = 0;
   for (const t of targets) {

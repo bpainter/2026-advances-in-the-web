@@ -1,5 +1,5 @@
 import { demoFolder } from "@/lib/frames/registry";
-import { composeFrame, frameResponse, buildFile } from "@/lib/frames/compose";
+import { composeFrame, frameResponse, buildFile, asBuildFile } from "@/lib/frames/compose";
 import { parseFlags } from "@/lib/frames/origins";
 import { matchRoute } from "@/lib/frames/routes";
 import { readFileSync } from "node:fs";
@@ -67,7 +67,12 @@ async function handle(req: Request, ctx: Ctx): Promise<Response> {
     if (file) return file;
   }
   const extra = folder.routes ? matchRoute(folder.routes, req.method, url.pathname) : null;
-  if (extra) return extra.route.handler(req, { params: extra.params, url });
+  if (extra) {
+    const res = await extra.route.handler(req, { params: extra.params, url });
+    // Images a folder serves beside its document (M1's photos) are files, fixed per deployment
+    // (docs/PRD-perf.md, P1-FRAMEFILES). Every other extra route keeps its own headers.
+    return req.method === "GET" && res.headers.get("content-type")?.startsWith("image/") ? asBuildFile(res) : res;
+  }
   return notFound("Demo file");
 }
 

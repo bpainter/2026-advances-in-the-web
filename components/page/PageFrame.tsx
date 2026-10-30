@@ -22,6 +22,8 @@ interface Props {
   onStepResult?: (stepId: string, result: StepResult) => void;
   /** The section's background id (PRD v5, 4.2), passed to the frame as `bg`. */
   background?: string;
+  /** The current step's captured poster, shown under the slot until the first document is (PRD-perf P0-2). */
+  poster?: string | null;
 }
 
 /** How long the code highlight shows before a step's playback starts (docs/design/demo-flow-cx.md, 4). */
@@ -38,11 +40,14 @@ function documentUrl(page: FramePage, flags: Record<string, boolean>, background
  * previous step plays the step animated in the active document; any other move mounts a fresh
  * document beneath, replays `s0..sN` instantly and swaps. Reloading toggles split a step.
  */
-export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, onStepResult, background }: Props) {
+export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, onStepResult, background, poster }: Props) {
   const { stepIndex, handsOn, live, reloadToken, rehearsal, registerPlayback, dispatchKey, reportPlaying } = useStage();
   const slotRef = useRef<HTMLDivElement>(null);
   const [handle, setHandle] = useState<FrameHandle | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+  /** A document has been shown; until then the step's poster fills the slot (PRD-perf P0-2). */
+  const [shown, setShown] = useState(false);
+  const posterRef = useRef<HTMLImageElement>(null);
   const [viewportWidth, setViewportWidth] = useState<number | null>(null);
   const [viewportMs, setViewportMs] = useState(0);
   /** The step whose playback (animated or replayed) has finished; spotlights wait for it. */
@@ -82,7 +87,10 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
       iframe.setAttribute("allow", "");
       iframe.referrerPolicy = "no-referrer";
       iframe.dataset.visible = String(visible);
-      iframe.tabIndex = mode === "audience" ? -1 : 0;
+      // The audience frame never joins the tab order (the clicker's keys). In reader mode the frame
+      // is out of it too unless hands-on is on, so Tab passes the demo (PRD-perf P0-3); `h` from
+      // the stage gives it the keyboard.
+      iframe.tabIndex = mode === "audience" || (mode === "reader" && !handsOn) ? -1 : 0;
       // The address is set before the frame is inserted, so its first document is the demo, never
       // an about:blank that WebKit records in the presenter's session history: a later Back in
       // this frame (M5) would restore that blank page instead of the frame's entry page.
@@ -103,6 +111,10 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
     (h: FrameHandle, idx: number, flags: Record<string, boolean>) => {
       const old = current.current?.handle;
       h.iframe.dataset.visible = "true";
+      // The poster leaves in the task that reveals the first document, so no frame shows both
+      // and none shows neither (a narrowed frame would show the poster beside it).
+      if (posterRef.current) posterRef.current.style.display = "none";
+      setShown(true);
       current.current = { handle: h, stepIndex: idx, flags };
       setHandle(h);
       if (old && old !== h) {
@@ -209,14 +221,16 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
       return;
     }
 
-    // Reset and replay: a fresh document with the flags accumulated up to this step.
+    // Reset and replay: a fresh document with the flags accumulated up to this step. Every
+    // document mounts hidden and shows once replayed; the first one has the poster above it, and
+    // later ones the document they replace (PRD-perf P0-2).
     run.current?.cancel();
     run.current = null;
     const flags = flagsAt(page, stepIndex);
     // A fresh document starts at its authored viewport; replayed resizes set it again.
     setViewportWidth(null);
     setViewportMs(0);
-    const fresh = mount(flags, cur === null);
+    const fresh = mount(flags, false);
     fresh.watch(watchList, false);
     reportPlaying(true);
     report(cur === null ? "loading" : status);
@@ -264,8 +278,9 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
     const h = current.current?.handle;
     if (!h) return;
     h.setMode(handsOn);
+    if (mode === "reader") h.setTabbable(handsOn);
     if (handsOn) h.focus();
-  }, [handsOn]);
+  }, [handsOn, mode]);
 
   // Next while playing finishes the step instead of advancing. A run counts as playing only while
   // it belongs to the current entry and plays in the shown document: a run left behind by a
@@ -333,11 +348,14 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
   return (
     <div className="page-frame" data-status={status} data-build={frame.build} style={frameStyle}>
       <div className="page-frame__scaled">
+        {/* Decoration under the slot: the iframe's title names the demo. A static file from public/. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        {poster && !shown ? <img ref={posterRef} className="page-frame__poster" src={poster} alt="" decoding="sync" fetchPriority="high" /> : null}
         <div className="page-frame__slot" ref={slotRef} />
         <Overlay handle={handle} step={step} ready={doneStep !== null && doneStep.index === stepIndex} handsOn={handsOn} reducedMotion={reducedMotion} rehearsal={rehearsal} clipBottom={frame.spotlightClip?.bottom} keycap={frame.keycap} />
       </div>
       {narrowed ? <div className="page-frame__edge" style={{ left: `calc(${viewportWidth}px * ${scale})` }} aria-hidden="true" /> : null}
-      {status === "loading" ? <p className="page-frame__status">Loading demo…</p> : null}
+      {status === "loading" && !(poster && !shown) ? <p className="page-frame__status">Loading demo…</p> : null}
       {status === "error" ? <p className="page-frame__status">The demo frame did not answer. Press r to reload it.</p> : null}
     </div>
   );

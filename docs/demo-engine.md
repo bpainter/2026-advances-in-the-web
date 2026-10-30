@@ -229,13 +229,25 @@ the walk checks the module size and the three lines.
 
 ## Speaker window
 
-Previews on the left; the notes column on the right, top to bottom: header (eyebrow, title, "Step
-n of m: label", Proof and Key point chips), the hands-on box (`ifKeyboard`), the page intro on step
-0, the bullets (40 px, 28 to 56; the key step's last bullet in bold), cautions on the now page's
-last step, a collapsed Reference (support, citations, step list, action summaries). Next is pinned
-under the column; `d` adds the next step's actions under it. The step header shows "Playing" while
-the audience frame runs the step and "Ready" once it is done (a `playback` sync message). Bullets
-have markers. The previews use one captured poster per step. The timer stays hidden by default.
+Dark glass (`docs/PRD-speaker-view.md`). The left column holds the current slide and a small "Next
+slide" panel (preview, number and title, the next section's scenario on demo pages; the next
+preview is `inert` and `aria-hidden`). The right column is one panel, the page's `main`: the title
+and steps block on top (counter and section, notes text size, page title, "Step n of m: label"
+with the Key point and Proof chips, one status pill on framed pages, step progress, and a quiet
+"Next step: label" while the page has another step; `d` adds that step's actions under it), then
+the notes, the only thing that scrolls: the hands-on box (`ifKeyboard`), the page intro on step 0,
+the bullets (40 px, 28 to 56; the key step's last bullet in bold), cautions on the now page's last
+step, and References, collapsed on every slide change (support, sources, jump to step, action
+summaries). The status pill reads, first match wins: "No audience" (no audience window heard for
+5 s, from a `presence` message every window sends every 2 s), "Frame error", "Poster shown",
+"Loading", "Playing" while the audience frame runs the step, else "Ready". The footer holds two
+pills: the controls (Slides, Previous, Next, Blank, Hands-on, Reset step, Audience, Open frame,
+Export log with `?rehearse=1`) and the timer (elapsed, over or under the slide's target, start or
+pause, reset while paused). The Audience button shows a coral dot while no audience window is
+connected. The previews use one captured poster per step. The window title is the route's
+metadata: `Speaker · Dialog element: What we used to do (9/50) · <deck>`. The page is prerendered
+per slide (`app/speaker/[id]`); the footer, the notes size, `d`, the toast and `?rehearse=1` live
+in `SpeakerShell`, which the layout renders, so they survive a slide move.
 
 ## Support data
 

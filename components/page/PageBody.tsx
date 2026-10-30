@@ -27,6 +27,14 @@ interface Props {
   background?: string;
 }
 
+/**
+ * Posters kept out of the underlay (PRD-perf P0-2): they differ from the live document by more than
+ * 2% at the swap, so the room would see a jump. M4's s0 poster is captured with reduced motion
+ * (scripts/visuals.mts), which drops the scroll-driven progress bar and shifts the card's scroll;
+ * a recapture with the same settings matches no better (`pnpm walk underlay m4`, 3.65%).
+ */
+const UNDERLAY_EXCLUDED = new Set(["m4-now:s0"]);
+
 /** The body of a demo page: frame (live or poster on the speaker's preview), meter, and the code panel. */
 export function PageBody({ page, files, sandbox, sideEffects, mode, slot, meters, posters, background }: Props) {
   const { stepIndex, setDemoStatus, setStepResult } = useStage();
@@ -58,7 +66,8 @@ export function PageBody({ page, files, sandbox, sideEffects, mode, slot, meters
             {offline ? <p className="page__poster-note">Captured still. This live demo runs as its own Next.js app, which this site does not include.</p> : <p className="page__poster-label">{step ? step.label : page.title}</p>}
           </div>
         ) : (
-          <PageFrame page={page} sandbox={sandbox} sideEffects={sideEffects} mode={mode} slot={slot} onStatus={onStatus} onStepResult={onStepResult} background={background} />
+          // The step's poster sits under the frame until its document has replayed (PRD-perf P0-2).
+          <PageFrame page={page} sandbox={sandbox} sideEffects={sideEffects} mode={mode} slot={slot} onStatus={onStatus} onStepResult={onStepResult} background={background} poster={step && UNDERLAY_EXCLUDED.has(`${page.id}:${step.id}`) ? null : poster} />
         )}
       </div>
       {page.steps.length > 1 ? (

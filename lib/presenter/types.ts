@@ -11,6 +11,7 @@ export interface PresenterState {
   live: boolean; // terminal pages: recording hidden for a real terminal
   startedAt: number | null; // epoch ms when the timer was started
   pausedAt: number | null; // epoch ms when paused, else null
+  resetSeq?: number; // bumped by `r` and Reset step in either window: every stage on the slide replays its frame (WS-1)
 }
 
 export type SyncMessage =
@@ -18,7 +19,9 @@ export type SyncMessage =
   | { type: "hello"; writer: string }
   | { type: "demo-health"; demoId: string; status: DemoHealth; writer: string }
   /** The audience window reports whether a step is playing, so the speaker waits for Ready (CX risk 2). */
-  | { type: "playback"; slideId: string; stepIndex: number; playing: boolean; writer: string };
+  | { type: "playback"; slideId: string; stepIndex: number; playing: boolean; writer: string }
+  /** Every window says it is still here every 2 s, so the speaker sees a lost audience window (speaker view PRD, 8.6). */
+  | { type: "presence"; writer: string; mode: "audience" | "speaker" };
 
 export interface Playback {
   slideId: string;

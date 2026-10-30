@@ -1,18 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Pause, Play, TimerReset } from "lucide-react";
 import type { PresenterState } from "@/lib/presenter/types";
 
 interface Props {
   state: PresenterState;
   /** Target elapsed time at the end of the current slide, in minutes. */
   targetMinutes: number;
-  /** The last slide's cumulative target, in minutes. */
-  totalMinutes: number;
+  /** Start, pause or resume: the same as `t`. */
   onToggle: () => void;
+  /** Back to "0:00", not started. Offered only while paused. */
   onReset: () => void;
-  /** Collapses the bar back to the status-bar clock. */
-  onHide?: () => void;
 }
 
 function useNow(): number {
@@ -22,22 +21,6 @@ function useNow(): number {
     return () => window.clearInterval(id);
   }, []);
   return now;
-}
-
-/** The clock that stands in for the bar while it is hidden: elapsed, and over or under the slide's target. */
-export function TimerBadge({ state, targetMinutes }: { state: PresenterState; targetMinutes: number }) {
-  const now = useNow();
-  const elapsed = elapsedMs(state, now);
-  const delta = elapsed - targetMinutes * 60_000;
-  const started = state.startedAt !== null;
-  return (
-    <span className="timer-badge" data-over={started && delta > 0} data-running={started && state.pausedAt === null}>
-      <time className="timer-badge__elapsed" dateTime={`PT${Math.round(elapsed / 1000)}S`}>
-        {formatClock(elapsed)}
-      </time>
-      <span className="timer-badge__delta">{!started ? "not started" : delta >= 0 ? `${formatClock(delta)} over` : `${formatClock(-delta)} under`}</span>
-    </span>
-  );
 }
 
 export function formatClock(ms: number): string {
@@ -53,47 +36,36 @@ export function elapsedMs(state: PresenterState, now: number): number {
   return (state.pausedAt ?? now) - state.startedAt;
 }
 
-/** Elapsed, target for this slide, delta as text first, and total remaining (PRD 5.2). */
-export function Timer({ state, targetMinutes, totalMinutes, onToggle, onReset, onHide }: Props) {
+const ICON = { size: 18, strokeWidth: 1.75, "aria-hidden": true } as const;
+
+/**
+ * The speaker footer's timer pill (PRD speaker view, 5.5 and 8.5): elapsed, the pace against the
+ * current slide's target, start or pause, and reset while paused. Not a live region: it ticks
+ * every 500 ms and would talk over the speaker's screen reader.
+ */
+export function SpeakerTimer({ state, targetMinutes, onToggle, onReset }: Props) {
   const now = useNow();
   const elapsed = elapsedMs(state, now);
-  const target = targetMinutes * 60_000;
-  const delta = elapsed - target;
-  const remaining = totalMinutes * 60_000 - elapsed;
-  const running = state.startedAt !== null && state.pausedAt === null;
-  const deltaText = state.startedAt === null ? "not started" : delta >= 0 ? `${formatClock(delta)} over` : `${formatClock(-delta)} under`;
+  const delta = elapsed - targetMinutes * 60_000;
+  const started = state.startedAt !== null;
+  const paused = started && state.pausedAt !== null;
+  const running = started && !paused;
+  const pace = !started ? "none" : delta > 0 ? "over" : "under";
+  const paceText = !started ? "Not started" : `${paused ? "Paused, " : ""}${delta > 0 ? `${formatClock(delta)} over` : `${formatClock(-delta)} under`}`;
   return (
-    <section className="timer" aria-label="Timing">
-      <p className="timer__elapsed">
-        <span className="timer__label">Elapsed</span>
-        <time className="timer__value" dateTime={`PT${Math.round(elapsed / 1000)}S`}>
-          {formatClock(elapsed)}
-        </time>
-      </p>
-      <p className="timer__target">
-        <span className="timer__label">Target by end of slide</span>
-        <span className="timer__value">{formatClock(target)}</span>
-      </p>
-      <p className="timer__delta" data-over={delta > 0 && state.startedAt !== null}>
-        {deltaText}
-      </p>
-      <p className="timer__remaining">
-        <span className="timer__label">Remaining</span>
-        <span className="timer__value">{formatClock(remaining)}</span>
-      </p>
-      <div className="timer__controls">
-        <button type="button" className="speaker__button" onClick={onToggle}>
-          {running ? "Pause" : state.startedAt === null ? "Start timer" : "Resume"}
+    <div className="speaker__timer" role="group" aria-label="Timer" data-running={running} data-paused={paused} data-pace={pace}>
+      <time className="speaker__elapsed" dateTime={`PT${Math.round(elapsed / 1000)}S`}>
+        {formatClock(elapsed)}
+      </time>
+      <span className="speaker__pace">{paceText}</span>
+      <button type="button" className={started ? "speaker__icon-button" : "speaker__icon-button speaker__icon-button--primary"} onClick={onToggle} aria-label={running ? "Pause timer" : started ? "Resume timer" : "Start timer"}>
+        {running ? <Pause {...ICON} /> : <Play {...ICON} />}
+      </button>
+      {paused ? (
+        <button type="button" className="speaker__icon-button" onClick={onReset} aria-label="Reset timer">
+          <TimerReset {...ICON} />
         </button>
-        <button type="button" className="speaker__button speaker__button--quiet" onClick={onReset}>
-          Reset
-        </button>
-        {onHide ? (
-          <button type="button" className="speaker__button speaker__button--quiet" onClick={onHide}>
-            Hide
-          </button>
-        ) : null}
-      </div>
-    </section>
+      ) : null}
+    </div>
   );
 }

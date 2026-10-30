@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, ViewTransition, type CSSProperties, type MouseEvent, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import type { PrefetchOptions } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { actionForKey, isEditableTarget, type KeyAction } from "@/lib/keys";
+import { PRESENTER_ONLY, actionForKey, isCharacterKey, isEditableTarget, isInteractiveTarget, type KeyAction } from "@/lib/keys";
 import type { Mode } from "@/lib/mode";
 import type { NavGroup } from "@/lib/nav";
 import { usePresenter } from "@/lib/presenter/context";
@@ -59,6 +59,29 @@ const lastScale = new Map<string, number>();
 /** Set by a drawer jump: the stage that mounts next takes focus (PRD r7, 9.5). */
 let focusOnArrival = false;
 
+/** Elements sequential focus navigation can reach, in document order (frames excluded by the caller). */
+function tabbables(): HTMLElement[] {
+  const sel = 'a[href], area[href], button, input, select, textarea, iframe, summary, [tabindex], [contenteditable="true"]';
+  return [...document.querySelectorAll<HTMLElement>(sel)].filter((el) => {
+    if (el.tabIndex < 0 || (el as HTMLButtonElement).disabled || el.closest("[inert], dialog:not([open])")) return false;
+    return typeof el.checkVisibility === "function" ? el.checkVisibility({ visibilityProperty: true }) : el.getClientRects().length > 0;
+  });
+}
+
+/**
+ * Reader mode, a Tab the frame forwarded (PRD-perf P0-3): focus moves to the next tabbable element
+ * after the frame in document order, or with Shift to the previous one before it, so the frame is
+ * one tab stop. With nothing on that side, the stage takes focus.
+ */
+function focusPastFrame(frame: Element | null, back: boolean, fallback: () => void) {
+  if (!frame) return fallback();
+  const list = tabbables().filter((el) => el !== frame && !el.classList.contains("frame-warm"));
+  const target = back ? list.filter((el) => frame.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_PRECEDING).at(-1) : list.find((el) => frame.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING);
+  if (!target) return fallback();
+  // A keyboard move: the ring shows where the browser supports the option.
+  target.focus({ preventScroll: true, focusVisible: true } as FocusOptions);
+}
+
 const decoded = new Map<string, Promise<void>>();
 /** Fetches and decodes an image once per window (PRD v5, 1.6; r7, 9.2): backgrounds, stills, posters. */
 function decodeBackground(src: string): Promise<void> {
@@ -89,6 +112,8 @@ interface Props {
   slideSteps?: number[];
   /** The slide's background file (PRD v5, 1.3), drawn by the stage under the slide. */
   background: string;
+  /** The background as a CSS image (`image-set()` from lib/assets.ts); `background` is the file the walk and the decode read. */
+  backgroundCss?: string;
   /** The previous and next slides' backgrounds, decoded ahead so no slide arrives without one. */
   neighbourBackgrounds: string[];
   /** Intro stills and posters the window shows after the next press (PRD r7, 9.2). */
@@ -129,7 +154,7 @@ function stepFromUrl(stepCount: number): number {
  * here. Remounted per slide (keyed on slide id).
  */
 export function Stage(props: Props) {
-  const { slideId, slideTitle, slideIndex, total, prevId, nextId, prevHasSteps, firstId, lastId, slideIds, slideSteps = [], background, neighbourBackgrounds, neighbourAssets = [], nav, steps, frameRoute, mode, canonicalPath, embedded, passive, children } = props;
+  const { slideId, slideTitle, slideIndex, total, prevId, nextId, prevHasSteps, firstId, lastId, slideIds, slideSteps = [], background, backgroundCss, neighbourBackgrounds, neighbourAssets = [], nav, steps, frameRoute, mode, canonicalPath, embedded, passive, children } = props;
   const router = useRouter();
   const presenter = usePresenter();
   const shared = Boolean(presenter) && !passive;
@@ -199,7 +224,9 @@ export function Stage(props: Props) {
     w.__stepResults = { ...(w.__stepResults ?? {}), [`${pageId}:${stepId}`]: { ...result, seq: w.__stepSeq } };
   }, []);
   const playState = useRef({ slideId, stepIndex });
-  useEffect(() => {
+  // A layout effect: it runs before the page frame's entry effect reports the step playing, so
+  // the speaker hears the new step's index, not the previous one's.
+  useLayoutEffect(() => {
     playState.current = { slideId, stepIndex };
   }, [slideId, stepIndex]);
   /** When Next first asked the playing step to finish, for the stuck-playback watchdog. */
@@ -223,6 +250,18 @@ export function Stage(props: Props) {
   useEffect(() => {
     if (shared && sharedStep === -1 && sharedSlideId === slideId) presenterRef.current!.update({ stepIndex: Math.max(stepCount - 1, 0) });
   }, [shared, sharedStep, sharedSlideId, slideId, stepCount]);
+
+  // A reset written to the shared state (`r` or Reset step in either window) replays this stage's
+  // frame once, when it shows the slide the reset was made on. A stage mounting later ignores the
+  // value it starts with.
+  const sharedReset = shared ? (presenter!.state.resetSeq ?? 0) : 0;
+  const seenReset = useRef(sharedReset);
+  useEffect(() => {
+    if (!shared || sharedReset === seenReset.current) return;
+    seenReset.current = sharedReset;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (sharedSlideId === slideId) setReloadToken((n) => n + 1);
+  }, [shared, sharedReset, sharedSlideId, slideId]);
 
   // ----- rehearsal: 95th percentile frame time (PRD v4, 6.6: under 20 ms during playback) -----
   const [p95, setP95] = useState<number | null>(null);
@@ -362,6 +401,8 @@ export function Stage(props: Props) {
 
   const perform = useCallback(
     (action: KeyAction) => {
+      // The presenter's tools do nothing for a reader, even when called (PRD-perf P0-4, a11y H2).
+      if (mode === "reader" && PRESENTER_ONLY.has(action.type)) return;
       // A press while the previous press's slide is still on its way counts from that slide, not
       // from the one this stage shows, so two quick presses land two slides on (PRD r7, 9.3).
       const pending = shared ? presenter!.getState() : null;
@@ -432,7 +473,10 @@ export function Stage(props: Props) {
           patch({ live: !live });
           break;
         case "reset-step":
-          setReloadToken((n) => n + 1);
+          // In the presenter windows the reset goes through the shared state, so a reset from the
+          // speaker window replays the audience frame too (each stage bumps its own token below).
+          if (shared) presenter!.update({ resetSeq: (presenter!.getState().resetSeq ?? 0) + 1 });
+          else setReloadToken((n) => n + 1);
           break;
         case "toggle-rehearsal":
           setRehearsal((r) => !r);
@@ -477,31 +521,53 @@ export function Stage(props: Props) {
   // ----- keyboard -----
   useEffect(() => {
     if (passive) return;
+    const speakerWindow = presenter?.mode === "speaker";
     const onKey = (e: KeyboardEvent) => {
       // The drawer owns every key while it is open (PRD r7, 9.5): Escape is its own, PageUp and
       // PageDown close it (NavDrawer), and nothing moves the deck.
       if (isNavOpen()) return;
       if (isEditableTarget(e.target) || (gotoOpen && e.key !== "Escape")) return;
-      const action = actionForKey(e);
+      // The keyboard help owns every key but Escape while it is open, as the drawer does (a11y M1).
+      if (e.key !== "Escape" && document.querySelector("dialog.keyboard-help[open]")) return;
+      // Reader and speaker windows: Space and Enter press the focused control (PRD-perf P0-4, a11y
+      // M1). The audience window keeps Space for the clicker wherever focus is.
+      if ((mode === "reader" || speakerWindow) && (e.key === " " || e.key === "Enter") && isInteractiveTarget(e.target)) return;
+      // Reader mode: character shortcuts act only from the stage or the page itself (WCAG 2.1.4,
+      // a11y H2). Arrows, PageUp, PageDown, Space, Backspace, Home and End work from anywhere.
+      if (mode === "reader" && isCharacterKey(e.key) && e.target !== document.body && e.target !== canvasRef.current) return;
+      const action = actionForKey(e, mode);
       if (!action) return;
       e.preventDefault();
       perform(action);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [passive, perform, gotoOpen]);
+  }, [passive, perform, gotoOpen, mode, presenter?.mode]);
+
+  const focusStage = useCallback(() => canvasRef.current?.focus({ preventScroll: true }), []);
 
   const dispatchKey = useCallback(
     (key: string, shiftKey: boolean) => {
+      // Every key a frame forwards wakes the pill (PRD r7, 6.4).
       wake();
       if (isNavOpen()) return;
-      const action = actionForKey({ key: key === "Space" ? " " : key, shiftKey, metaKey: false, ctrlKey: false, altKey: false });
+      // Tab and Escape come up from scripted frames (PRD-perf P0-3). In reader mode the frame is
+      // one tab stop and Escape hands the keyboard to the stage. The audience and speaker windows
+      // ignore them: focus stays in the frame, so the clicker keeps working through forwarding.
+      if (key === "Tab" || key === "Escape") {
+        if (mode !== "reader") return;
+        if (key === "Escape") focusStage();
+        else focusPastFrame(document.activeElement instanceof HTMLIFrameElement ? document.activeElement : document.querySelector('#stage .page-frame__iframe[data-visible="true"]'), shiftKey, focusStage);
+        return;
+      }
+      const k = key === "Space" ? " " : key;
+      // Reader mode: letters from inside a frame never act (WCAG 2.1.4); navigation keys do.
+      if (mode === "reader" && isCharacterKey(k)) return;
+      const action = actionForKey({ key: k, shiftKey, metaKey: false, ctrlKey: false, altKey: false }, mode);
       if (action) performRef.current(action);
     },
-    [wake],
+    [wake, mode, focusStage],
   );
-
-  const focusStage = useCallback(() => canvasRef.current?.focus({ preventScroll: true }), []);
 
   // A drawer jump hands the keyboard to the stage that shows the target slide.
   useEffect(() => {
@@ -536,7 +602,10 @@ export function Stage(props: Props) {
   // The audience keyboard belongs to the stage on arrival. When the focused frame of the previous
   // slide is removed, the browser can hand focus to another iframe (the hidden warming frame of an
   // intro slide), where the clicker's keys would be lost. A page frame takes focus again when its
-  // document is shown, so claiming it here is safe on every slide.
+  // document is shown, so claiming it here is safe on every slide. After arrival, any move of focus
+  // to nowhere or into a frame that is not the demo (a warming document, a page that focuses on
+  // load) is taken back in the next task, for the life of the stage (PRD-perf P0-1): the window
+  // blurs when a frame takes focus, and a focusin covers the rest.
   useEffect(() => {
     if (mode !== "audience" || passive) return;
     const claim = () => {
@@ -547,9 +616,22 @@ export function Stage(props: Props) {
     claim();
     const t = window.setTimeout(claim, 450);
     const t2 = window.setTimeout(claim, 1200);
+    let pending = 0;
+    const schedule = () => {
+      if (!pending)
+        pending = window.setTimeout(() => {
+          pending = 0;
+          claim();
+        }, 0);
+    };
+    window.addEventListener("blur", schedule);
+    document.addEventListener("focusin", schedule);
     return () => {
       window.clearTimeout(t);
       window.clearTimeout(t2);
+      window.clearTimeout(pending);
+      window.removeEventListener("blur", schedule);
+      document.removeEventListener("focusin", schedule);
     };
   }, [mode, passive]);
 
@@ -591,7 +673,7 @@ export function Stage(props: Props) {
   }, [assetKey, passive]);
 
   const style = { "--stage-scale": scale, "--dpr": dpr } as CSSProperties;
-  const canvasStyle = { "--slide-bg-image": `url("${background}")` } as CSSProperties;
+  const canvasStyle = { "--slide-bg-image": backgroundCss ?? `url("${background}")` } as CSSProperties;
   // The grain is the audience window's alone: previews and other modes draw none (PRD v5, 1.2).
   const grain = mode === "audience" && !embedded && !passive;
   const showBlank = blank && mode === "audience";

@@ -3,6 +3,7 @@ import { Accessibility, Activity, ClipboardCheck, CodeXml, DoorOpen, GraduationC
 import type { GlassContent, Slide } from "@/content/schema";
 import type { Mode } from "@/lib/mode";
 import { deck, siteHref } from "@/content/deck";
+import { pictureSources } from "@/lib/assets";
 import { GlassClosing } from "./GlassClosing";
 import { NewTabLink } from "./NewTabLink";
 import { Wordmark } from "./Wordmark";
@@ -34,6 +35,23 @@ const ICONS: Record<string, ComponentType<{ size?: number; strokeWidth?: number;
 function Icon({ name, size }: { name?: string; size: number }) {
   const I = name ? ICONS[name] : undefined;
   return I ? <I size={size} strokeWidth={1.75} className="sg-icon" aria-hidden /> : null;
+}
+
+/**
+ * Slide 3's portraits: masters under public/images/design/, served as AVIF with a WebP fallback at
+ * 512 and 1024 w (pnpm images). Shown at 512 by 472 canvas px (object-fit: cover).
+ */
+function Portrait({ src, alt }: { src: string; alt: string }) {
+  const p = pictureSources(src, 512);
+  return (
+    // display: contents keeps the card's layout on the <img>, as before the <picture>.
+    <picture style={{ display: "contents" }}>
+      {p.sources.map((s) => (
+        <source key={s.type} type={s.type} srcSet={s.srcSet} sizes={p.sizes} />
+      ))}
+      <img className="sg-portrait" src={p.src} srcSet={p.srcSet} sizes={p.sizes} alt={alt} width={512} height={512} />
+    </picture>
+  );
 }
 
 /**
@@ -96,11 +114,7 @@ export function GlassSlide({ slide, mode }: Props) {
           <ul className="sg-cards">
             {g.cards.map((c) => (
               <li key={c.title} className={`sg-card ${g.tone === "dark" ? "sg-card--dark" : ""}`}>
-                {c.image ? (
-                  // Portraits are static files under public/images/design/.
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img className="sg-portrait" src={c.image.src} alt={c.image.alt} width={512} height={512} />
-                ) : null}
+                {c.image ? <Portrait src={c.image.src} alt={c.image.alt} /> : null}
                 {c.num ? <p className="sg-num">{c.num}</p> : null}
                 <Icon name={c.icon} size={g.variant === "numbered" || c.body ? 56 : 48} />
                 <div className="sg-card__text">

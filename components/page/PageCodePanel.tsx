@@ -29,7 +29,7 @@ export function PageCodePanel({ files, code, mode }: Props) {
   const highlighted = code && !code.off && file?.file === code.file ? new Set([...lineSet(code.lines)].filter((n) => !elided.has(n))) : new Set<number>();
   const off = Boolean(code?.off && file?.file === code.file);
   const preRef = useRef<HTMLPreElement>(null);
-  const interactive = mode !== "audience";
+  const interactive = mode !== "audience" && mode !== "speaker-preview";
 
   useEffect(() => {
     const pre = preRef.current;

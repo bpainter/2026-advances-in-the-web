@@ -1,6 +1,5 @@
-import { existsSync } from "node:fs";
-import path from "node:path";
 import type { DemoSection, IntroPage } from "@/content/demo-schema";
+import { introImage } from "@/lib/assets";
 import { supportEntry } from "@/lib/support";
 import { SupportRow } from "./SupportRow";
 
@@ -13,13 +12,20 @@ import { SupportRow } from "./SupportRow";
  */
 export function IntroSlide({ section, page }: { section: DemoSection; page: IntroPage }) {
   const support = supportEntry(section.id);
-  const visual = existsSync(path.join(process.cwd(), "public", page.visual.src)) ? page.visual.src : null;
+  const visual = introImage(page.visual.src);
   return (
     <article className="intro" aria-label={section.feature}>
       <figure className="intro__visual">
-        {/* A captured PNG under public/intro (pnpm visuals). */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        {visual ? <img className="intro__image" src={visual} alt={page.visual.alt} /> : <figcaption className="intro__missing">Run pnpm visuals to capture this still</figcaption>}
+        {/* A captured PNG under public/intro (pnpm visuals), served as AVIF with a WebP fallback at
+            its display size (pnpm images). width and height reserve the box before it loads. */}
+        {visual ? (
+          <picture>
+            {visual.avifSrcSet ? <source type="image/avif" srcSet={visual.avifSrcSet} sizes={visual.sizes} /> : null}
+            <img className="intro__image" src={visual.src} srcSet={visual.webpSrcSet || undefined} sizes={visual.sizes || undefined} width={visual.width} height={visual.height} alt={page.visual.alt} />
+          </picture>
+        ) : (
+          <figcaption className="intro__missing">Run pnpm visuals to capture this still</figcaption>
+        )}
       </figure>
       <div className="intro__text glass-dark">
         {/* M1 to M5 (PRD r7, 8.3): the chip tells the room these five are not ship-ready yet. */}

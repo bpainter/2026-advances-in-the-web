@@ -1,30 +1,51 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useParams } from "next/navigation";
 import type { Slide } from "@/content/schema";
 import { hasFrame, type Action, type DemoPage, type DemoSection, type Step } from "@/content/demo-schema";
-import { Menu } from "lucide-react";
+import { AArrowDown, AArrowUp, ChevronLeft, ChevronRight, Download, ExternalLink, EyeOff, Hand, Menu, MonitorUp, RotateCcw } from "lucide-react";
 import { usePresenter } from "@/lib/presenter/context";
+import { speakerSlideName } from "@/lib/presenter/titles";
 import { frameUrl } from "@/lib/frames/origins";
-import { Timer, TimerBadge } from "./Timer";
+import { SpeakerTimer } from "./Timer";
 import { NavTrigger, isNavOpen } from "@/components/chrome/NavDrawer";
 
 const NOTES_KEY = "deck:notes-size";
-const TIMER_KEY = "deck:timer-shown";
+const NOTES_MIN = 28;
+const NOTES_MAX = 56;
 const LOG_KEY = "deck:rehearsal-log";
 
 interface Props {
   slide: Slide;
   next?: Slide;
   total: number;
-  targetMinutes: number;
-  lastCumulative: number;
-  rehearse: boolean;
   current: ReactNode;
   nextPreview: ReactNode | null;
   /** Position of this page's section in the demo section (1-based) and the count. */
   sectionPosition?: { n: number; of: number };
 }
+
+/** What the shell's footer needs about each slide; the layout passes the whole deck once. */
+export interface SpeakerSlideInfo {
+  id: string;
+  /** Target elapsed time at the end of the slide, in minutes. */
+  cumulative: number;
+  hasPage: boolean;
+  /** The page frame's route, for Open frame. */
+  frameRoute: string | null;
+}
+
+/** The speaker window's state that outlasts a slide move (the shell owns it; the page reads it). */
+interface SpeakerShellState {
+  rehearse: boolean;
+  notesSize: number;
+  changeNotes: (delta: number) => void;
+  showActions: boolean;
+  toast: { text: string; shown: boolean } | null;
+}
+
+const SpeakerShellContext = createContext<SpeakerShellState | null>(null);
 
 /** "Click Actions; Esc via hidePopover()" (PRD Part A, 6.4). */
 function summarize(actions: Action[]): string {
@@ -71,62 +92,182 @@ function summarize(actions: Action[]): string {
   return parts.join("; ");
 }
 
-function stageName(page: DemoPage): string {
-  return page.stage === "single" ? "single page" : page.stage;
+const ICON = { size: 18, strokeWidth: 1.75, "aria-hidden": true } as const;
+
+type Status = { key: "offline" | "error" | "fallback" | "loading" | "playing" | "ready"; text: string };
+
+/** One status pill for a framed page (speaker view PRD, 8.2): first match wins. */
+function frameStatus(audienceConnected: boolean | null, health: string | undefined, playing: boolean): Status {
+  if (audienceConnected === false) return { key: "offline", text: "No audience" };
+  if (health === "error") return { key: "error", text: "Frame error" };
+  if (health === "fallback") return { key: "fallback", text: "Poster shown" };
+  if (health === "loading") return { key: "loading", text: "Loading" };
+  // Playing while the audience frame runs this step; Ready once it has finished (CX risk 2).
+  if (playing) return { key: "playing", text: "Playing" };
+  return { key: "ready", text: "Ready" };
 }
 
+
 /**
- * Speaker window (PRD Part A, 6.4): previews on the left, notes for the exact step on the right,
- * next press, counters, timer, status and controls below.
+ * The speaker window's shell (docs/PRD-speaker-view.md, section 7), rendered by
+ * `app/speaker/layout.tsx` above the prerendered `[id]` pages, so a slide move swaps only the page
+ * (docs/PRD-perf.md, P1-PRERENDER). It holds what must outlast the move: the `.speaker` grid, the
+ * footer (the controls keep focus after Next or Previous), the notes text size, the `d` action
+ * summaries, the "Timer started" toast, and `?rehearse=1`, read here in the browser because the
+ * pages are prerendered. The page fills the grid's left column and `main` (`SpeakerView`).
  */
-export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative, rehearse, current, nextPreview, sectionPosition }: Props) {
+export function SpeakerShell({ slides, children }: { slides: SpeakerSlideInfo[]; children: ReactNode }) {
   const presenter = usePresenter();
+  const params = useParams<{ id?: string }>();
+  const info = slides.find((s) => s.id === params?.id) ?? slides[0];
+  const [rehearse, setRehearse] = useState(false);
   const [notesSize, setNotesSize] = useState(40);
   const [showActions, setShowActions] = useState(false);
-  const notesBodyRef = useRef<HTMLDivElement>(null);
-  const [timerShown, setTimerShown] = useState(false);
-  const [toast, setToast] = useState<string | null>(null);
+  // Kept mounted with data-shown="false" for 400 ms after it hides, so the 160 ms fade-out can
+  // run, then removed. Fade-in comes from @starting-style when it mounts.
+  const [toast, setToast] = useState<{ text: string; shown: boolean } | null>(null);
   const timerSeen = useRef<number | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setRehearse(new URLSearchParams(window.location.search).get("rehearse") === "1");
     try {
       const saved = Number.parseInt(localStorage.getItem(NOTES_KEY) ?? "", 10);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      if (saved >= 28 && saved <= 56) setNotesSize(saved);
-      if (localStorage.getItem(TIMER_KEY) === "1") setTimerShown(true);
+      if (saved >= NOTES_MIN && saved <= NOTES_MAX) setNotesSize(saved);
     } catch {
       /* no storage */
     }
   }, []);
-  const changeNotes = (delta: number) => {
-    const n = Math.min(56, Math.max(28, notesSize + delta));
-    setNotesSize(n);
-    try {
-      localStorage.setItem(NOTES_KEY, String(n));
-    } catch {
-      /* no storage */
-    }
-  };
-  const toggleTimerBar = () => {
-    const n = !timerShown;
-    setTimerShown(n);
-    try {
-      localStorage.setItem(TIMER_KEY, n ? "1" : "0");
-    } catch {
-      /* no storage */
-    }
-  };
+  const changeNotes = useCallback((delta: number) => {
+    setNotesSize((size) => {
+      const n = Math.min(NOTES_MAX, Math.max(NOTES_MIN, size + delta));
+      try {
+        localStorage.setItem(NOTES_KEY, String(n));
+      } catch {
+        /* no storage */
+      }
+      return n;
+    });
+  }, []);
 
   const startedAt = presenter?.state.startedAt ?? null;
   useEffect(() => {
     if (startedAt !== null && timerSeen.current === null) {
-      setToast("Timer started");
-      const t = window.setTimeout(() => setToast(null), 2500);
-      timerSeen.current = startedAt;
-      return () => window.clearTimeout(t);
+      setToast({ text: "Timer started", shown: true });
     }
     timerSeen.current = startedAt;
   }, [startedAt]);
+  const toastShown = toast?.shown ?? false;
+  const toastMounted = toast !== null;
+  useEffect(() => {
+    if (!toastMounted) return;
+    const t = toastShown ? window.setTimeout(() => setToast((x) => (x ? { ...x, shown: false } : x)), 2500) : window.setTimeout(() => setToast((x) => (x && !x.shown ? null : x)), 400);
+    return () => window.clearTimeout(t);
+  }, [toastShown, toastMounted]);
+
+  // Rehearsal (`d`): the next step's scripted actions also show under the next-step hint (PRD v4, 5.1 item 7).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "d" && !isNavOpen() && !e.metaKey && !e.ctrlKey && !e.altKey && !(e.target instanceof HTMLInputElement)) setShowActions((v) => !v);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  const shell = useMemo<SpeakerShellState>(() => ({ rehearse, notesSize, changeNotes, showActions, toast }), [rehearse, notesSize, changeNotes, showActions, toast]);
+
+  if (!presenter) return null;
+  const { state, audienceConnected, update, perform } = presenter;
+  const framed = info.frameRoute !== null;
+  const offline = audienceConnected === false;
+  const openAudience = () => window.open("/present", "deck-audience");
+  const openFrame = () => {
+    if (info.frameRoute) window.open(frameUrl(info.frameRoute).url, "_blank", "noopener");
+  };
+  const exportLog = () => {
+    const blob = new Blob([localStorage.getItem(LOG_KEY) ?? "[]"], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "rehearsal-log.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+
+  return (
+    <SpeakerShellContext.Provider value={shell}>
+      <div className="speaker" data-rehearse={rehearse} data-blank={state.blank} data-hands-on={state.handsOn}>
+        {children}
+        <footer className="speaker__bottom">
+          <nav className="speaker__controls" aria-label="Presenter controls">
+            {/* The drawer (PRD r7, 9.4); the current preview's stage renders the dialog it opens. */}
+            <NavTrigger className="speaker__button">
+              <Menu {...ICON} />
+              Slides
+            </NavTrigger>
+            <span className="speaker__divider" aria-hidden="true" />
+            <button type="button" className="speaker__button speaker__button--primary" onClick={() => perform({ type: "retreat" })}>
+              <ChevronLeft {...ICON} />
+              Previous
+            </button>
+            <button type="button" className="speaker__button speaker__button--primary" onClick={() => perform({ type: "advance" })}>
+              Next
+              <ChevronRight {...ICON} />
+            </button>
+            <span className="speaker__divider" aria-hidden="true" />
+            <button type="button" className="speaker__button" onClick={() => perform({ type: "toggle-blank" })} aria-pressed={state.blank}>
+              <EyeOff {...ICON} />
+              Blank
+            </button>
+            <button type="button" className="speaker__button" onClick={() => perform({ type: "toggle-hands-on" })} aria-pressed={state.handsOn}>
+              <Hand {...ICON} />
+              Hands-on
+            </button>
+            <button type="button" className="speaker__button" onClick={() => perform({ type: "reset-step" })} disabled={!info.hasPage}>
+              <RotateCcw {...ICON} />
+              Reset step
+            </button>
+            <span className="speaker__divider" aria-hidden="true" />
+            {/* The name starts with the visible label (2.5.3). An aria-label, not hidden text: an
+                out-of-flow span would put a space before the comma. */}
+            <button type="button" className="speaker__button" onClick={openAudience} title="Open or focus the audience window" data-connected={offline ? "false" : undefined} aria-label={offline ? "Audience, not connected" : undefined}>
+              <MonitorUp {...ICON} />
+              Audience
+            </button>
+            <button type="button" className="speaker__button" onClick={openFrame} disabled={!framed}>
+              <ExternalLink {...ICON} />
+              Open frame
+            </button>
+            {rehearse ? (
+              <>
+                <span className="speaker__divider" aria-hidden="true" />
+                <button type="button" className="speaker__button" onClick={exportLog}>
+                  <Download {...ICON} />
+                  Export log
+                </button>
+              </>
+            ) : null}
+          </nav>
+          <SpeakerTimer state={state} targetMinutes={info.cumulative} onToggle={() => perform({ type: "toggle-timer" })} onReset={() => update({ startedAt: null, pausedAt: null })} />
+        </footer>
+      </div>
+    </SpeakerShellContext.Provider>
+  );
+}
+
+/**
+ * Speaker window in dark glass (docs/PRD-speaker-view.md, section 7), the per-slide part: the
+ * current and next slides on the left; the title and steps block over the notes on the right. The
+ * footer, with the controls and the timer, is the shell's (`SpeakerShell`). The window title is
+ * the route's metadata (`speakerWindowTitle`).
+ */
+export function SpeakerView({ slide, next, total, current, nextPreview, sectionPosition }: Props) {
+  const presenter = usePresenter();
+  const shell = useContext(SpeakerShellContext);
+  const rehearse = shell?.rehearse ?? false;
+  const notesSize = shell?.notesSize ?? 40;
+  const showActions = shell?.showActions ?? false;
+  const toast = shell?.toast ?? null;
+  const notesBodyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!rehearse) return;
@@ -142,240 +283,229 @@ export function SpeakerView({ slide, next, total, targetMinutes, lastCumulative,
     };
   }, [rehearse, slide.id]);
 
-  // Rehearsal (`d`): the next step's scripted actions also show under Next (PRD v4, 5.1 item 7).
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "d" && !isNavOpen() && !e.metaKey && !e.ctrlKey && !e.altKey && !(e.target instanceof HTMLInputElement)) setShowActions((v) => !v);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
   // Every step change brings the current step's notes into view (PRD v4, 5.1).
   const currentStep = presenter?.state.stepIndex;
   useEffect(() => {
     notesBodyRef.current?.scrollTo({ top: 0 });
   }, [slide.id, currentStep]);
 
-  if (!presenter) return null;
-  const { state, demoHealth, transport, peers, update, perform } = presenter;
   const page: DemoPage | undefined = slide.page;
   const section: DemoSection | undefined = slide.demoSection;
+  const heading = page && section ? (hasFrame(page) && page.stage !== "single" ? { eyebrow: page.eyebrow, title: page.title } : { eyebrow: page.stage === "intro" ? "Intro slide" : null, title: page.stage === "intro" ? (section.feature ?? section.label) : page.title }) : null;
+
+  if (!presenter) return null;
+  const { state, demoHealth, audienceConnected, update } = presenter;
   const steps: Step[] = page?.steps ?? [];
   const stepIndex = state.stepIndex < 0 ? Math.max(steps.length - 1, 0) : Math.min(state.stepIndex, Math.max(steps.length - 1, 0));
   const step = steps[stepIndex];
   const last = steps.length > 0 && stepIndex === steps.length - 1;
   const nextStep = steps[stepIndex + 1];
   const showCautions = last && page?.stage === "now";
-  const nextPageName = next ? (next.page && hasFrame(next.page) && next.page.stage !== "single" ? `${next.page.eyebrow}: ${next.page.title}` : next.title) : null;
-  const nextLine = nextStep ? `Next: ${nextStep.label}` : nextPageName ? `Next page: ${nextPageName}` : "End of deck";
-  const heading = page && section ? (hasFrame(page) && page.stage !== "single" ? { eyebrow: page.eyebrow, title: page.title } : { eyebrow: page.stage === "intro" ? "Intro slide" : null, title: page.stage === "intro" ? (section.feature ?? section.label) : page.title }) : null;
-  const health = page ? demoHealth[page.id] : undefined;
-  // Playing while the audience frame runs this step; Ready once it has finished (CX risk 2).
+  const nextPageName = next ? speakerSlideName(next) : null;
+  const nextDesc = next?.page ? next.demoSection?.scenario : undefined;
+  const framed = Boolean(page && hasFrame(page));
   const pb = presenter.playback;
-  const playing = Boolean(pb && pb.playing && pb.slideId === slide.id && pb.stepIndex === stepIndex);
+  // Matched on the slide, not the step: the audience stage reports a step's start with the step it
+  // was on before the press (its playState ref updates after the frame's effect), so a step match
+  // would never show Playing. The finish message carries the right step and clears it.
+  const playing = Boolean(pb && pb.playing && pb.slideId === slide.id);
+  const status = framed && page ? frameStatus(audienceConnected, demoHealth[page.id], playing) : null;
   const supportLine = section?.support ? (section.support.kind === "tooling" ? `Tools: ${section.support.packages.map((p) => `${p.name} ${p.version}`).join(", ")}.` : `web-features: ${section.support.id}${section.support.alsoUses?.length ? `; also uses ${section.support.alsoUses.join(", ")}` : ""}.`) : null;
-  const openAudience = () => window.open("/present", "deck-audience");
-  const openFrame = () => {
-    if (page && hasFrame(page)) window.open(frameUrl(page.frame.route).url, "_blank", "noopener");
-  };
-  const exportLog = () => {
-    const blob = new Blob([localStorage.getItem(LOG_KEY) ?? "[]"], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "rehearsal-log.json";
-    a.click();
-    URL.revokeObjectURL(a.href);
-  };
+  const hasSupport = Boolean(supportLine || step?.proof);
+  const hasCitations = Boolean(section?.citations.length);
+  const hasReferences = Boolean(step) || hasSupport || hasCitations;
 
   return (
-    <div className="speaker" data-rehearse={rehearse} data-blank={state.blank} data-timer={timerShown} data-hands-on={state.handsOn}>
-      {timerShown ? (
-        <Timer state={state} targetMinutes={slide.timing.cumulative} totalMinutes={Math.max(targetMinutes, lastCumulative)} onToggle={() => perform({ type: "toggle-timer" })} onReset={() => update({ startedAt: null, pausedAt: null })} onHide={toggleTimerBar} />
-      ) : null}
-
-      <section className="speaker__left" aria-label="Slides">
+    <>
+      <section className="speaker__slides" aria-label="Slide previews">
         <div className="speaker__current" data-blank={state.blank}>
-          {state.blank ? <p className="speaker__blank-eyebrow">BLANK</p> : null}
-          {state.handsOn ? <p className="speaker__blank-eyebrow speaker__blank-eyebrow--hands">HANDS-ON</p> : null}
+          {state.blank ? (
+            <p className="speaker__flag" data-flag="blank">
+              Blank
+            </p>
+          ) : null}
+          {state.handsOn ? (
+            <p className="speaker__flag" data-flag="hands-on">
+              Hands-on
+            </p>
+          ) : null}
           {current}
         </div>
-        <div className="speaker__status" role="status">
-          <span className="speaker__counter">
-            {slide.index} / {total}
-          </span>
-          {page && sectionPosition ? (
-            <span className="speaker__section">
-              section {sectionPosition.n} of {sectionPosition.of} · {stageName(page)}
-              {steps.length ? ` · step ${stepIndex + 1} of ${steps.length}` : ""}
-            </span>
-          ) : (
-            <span className="speaker__section">{slide.section}</span>
-          )}
-          {page ? (
-            <span className="speaker__engines" data-health={health ?? "none"}>
-              frame {health ?? "not reported"}
-            </span>
-          ) : null}
-          <span className="speaker__status-timer">
-            <TimerBadge state={state} targetMinutes={slide.timing.cumulative} />
-            <button type="button" className="speaker__button speaker__button--quiet" onClick={toggleTimerBar} aria-pressed={timerShown}>
-              {timerShown ? "Hide timer" : "Timer"}
-            </button>
-          </span>
-        </div>
-        <aside className="speaker__next" aria-label="Next">
-          <p className="speaker__region-label">Next</p>
+        <section className="speaker__next" aria-labelledby="speaker-next-label">
+          <h2 className="speaker__label" id="speaker-next-label">
+            Next slide
+          </h2>
           {next ? (
             <div className="speaker__next-row">
-              <div className="speaker__next-preview">{nextPreview}</div>
+              {/* Out of the tree and the tab order: its h1 and regions would repeat the current slide's. */}
+              <div className="speaker__next-preview" inert aria-hidden="true">
+                {nextPreview}
+              </div>
               <div className="speaker__next-meta">
                 <p className="speaker__next-title">
-                  {next.index}. {next.title}
+                  {next.index} · {nextPageName}
                 </p>
-                {next.page ? <p className="speaker__next-wow">{next.demoSection?.scenario}</p> : null}
+                {nextDesc ? <p className="speaker__next-desc">{nextDesc}</p> : null}
               </div>
             </div>
           ) : (
             <p className="speaker__next-title">End of deck</p>
           )}
-        </aside>
+        </section>
       </section>
 
-      <section className="speaker__notes" aria-label="Notes" style={{ "--notes-size": `${notesSize}px` } as React.CSSProperties}>
-        <div className="speaker__notes-head">
-          <p className="speaker__region-label">Notes</p>
-          <div className="speaker__notes-size">
-            <button type="button" className="speaker__button speaker__button--quiet" onClick={() => changeNotes(-4)} aria-label="Smaller notes">
-              −
-            </button>
-            <button type="button" className="speaker__button speaker__button--quiet" onClick={() => changeNotes(4)} aria-label="Larger notes">
-              +
-            </button>
+      <main className="speaker__main" aria-labelledby="speaker-title">
+        <header className="speaker__heading notes__header">
+          <div className="speaker__meta">
+            <p className="speaker__position">
+              <b>{slide.index}</b>
+              <span className="visually-hidden"> of </span>
+              <span className="speaker__total">{total}</span>
+              {page && sectionPosition ? ` · Section ${sectionPosition.n} of ${sectionPosition.of}` : null}
+            </p>
+            <div className="speaker__size" role="group" aria-label="Notes text size">
+              <button type="button" className="speaker__icon-button" onClick={() => shell?.changeNotes(-4)} disabled={notesSize <= NOTES_MIN} aria-label="Smaller notes text">
+                <AArrowDown {...ICON} />
+              </button>
+              <button type="button" className="speaker__icon-button" onClick={() => shell?.changeNotes(4)} disabled={notesSize >= NOTES_MAX} aria-label="Larger notes text">
+                <AArrowUp {...ICON} />
+              </button>
+            </div>
           </div>
-        </div>
-        <div className="speaker__notes-body" ref={notesBodyRef}>
-          {page && step && heading ? (
+          <h2 className="speaker__title" id="speaker-title">
+            {heading ? (
+              <>
+                {heading.eyebrow ? <b className="notes__eyebrow">{heading.eyebrow}:</b> : null}
+                {heading.eyebrow ? " " : null}
+                {heading.title}
+              </>
+            ) : (
+              <b className="notes__eyebrow">{slide.title}</b>
+            )}
+          </h2>
+          {page && step ? (
             <>
-              <header className="notes__header">
-                <p className="notes__page">
-                  {heading.eyebrow ? <span className="notes__eyebrow">{heading.eyebrow}: </span> : null}
-                  {heading.title}
-                </p>
+              <div className="speaker__step-row">
                 <p className="notes__step">
                   Step {stepIndex + 1} of {steps.length}: {step.label}
                   {step.key ? <span className="notes__chip notes__chip--key">Key point</span> : null}
                   {step.proof ? <span className="notes__chip">Proof</span> : null}
-                  {hasFrame(page) ? (
-                    <span className="notes__play" data-playing={playing} role="status">
-                      {playing ? "Playing" : "Ready"}
-                    </span>
-                  ) : null}
                 </p>
-              </header>
-              {state.handsOn && step.ifKeyboard ? <p className="notes__hands-on">{step.ifKeyboard}</p> : null}
-              {stepIndex === 0 && page.intro ? <p className="notes__intro">{page.intro}</p> : null}
-              {step.bullets.length ? (
-                <ul className="notes__bullets" data-key={step.key || undefined}>
-                  {step.bullets.map((b, i) => (
-                    <li key={b} className="notes__bullet" data-key={(step.key && i === step.bullets.length - 1) || undefined}>
-                      {b}
-                    </li>
+                {status ? (
+                  <p className="notes__play" role="status" data-status={status.key}>
+                    {status.text}
+                  </p>
+                ) : null}
+              </div>
+              {steps.length >= 2 ? (
+                <ol className="speaker__progress" aria-hidden="true">
+                  {steps.map((s, i) => (
+                    <li key={s.id} data-state={i < stepIndex ? "done" : i === stepIndex ? "current" : "upcoming"} />
                   ))}
-                </ul>
+                </ol>
               ) : null}
-              {showCautions && section && section.cautions.length ? (
-                <section className="notes__cautions" aria-label="Cautions">
-                  <p className="notes__cautions-label">Cautions</p>
-                  <ul>
-                    {section.cautions.map((c) => (
-                      <li key={c}>{c}</li>
-                    ))}
-                  </ul>
-                </section>
+              {nextStep ? (
+                <p className="notes__then">
+                  <b>Next step:</b> {nextStep.label}
+                  {showActions ? <span className="notes__then-actions">{summarize(nextStep.actions) || "no actions"}</span> : null}
+                </p>
               ) : null}
-              <details className="notes__reference">
-                <summary>Reference</summary>
-                {supportLine ? <p className="notes__support">{supportLine}</p> : null}
-                {step.proof ? <p className="notes__support">Proof item: {step.proof}</p> : null}
-                {section?.citations.length ? (
-                  <ul className="notes__citations">
-                    {section.citations.map((c) => (
-                      <li key={c.url + c.text}>
-                        <a href={c.url} target="_blank" rel="noopener">
-                          {c.text}
-                        </a>
+            </>
+          ) : null}
+        </header>
+
+        <section className="speaker__notes" aria-label="Notes" style={{ "--notes-size": `${notesSize}px` } as React.CSSProperties}>
+          <div className="speaker__notes-body" ref={notesBodyRef}>
+            {page && step ? (
+              <>
+                {state.handsOn && step.ifKeyboard ? <p className="notes__hands-on">{step.ifKeyboard}</p> : null}
+                {stepIndex === 0 && page.intro ? <p className="notes__intro">{page.intro}</p> : null}
+                {step.bullets.length ? (
+                  <ul className="notes__bullets" data-key={step.key || undefined}>
+                    {step.bullets.map((b, i) => (
+                      <li key={b} className="notes__bullet" data-key={(step.key && i === step.bullets.length - 1) || undefined}>
+                        {b}
                       </li>
                     ))}
                   </ul>
                 ) : null}
-                <ol className="speaker__steps" aria-label="Steps">
-                  {steps.map((s, i) => (
-                    <li key={s.id}>
-                      <button type="button" className="speaker__button speaker__button--quiet" aria-current={i === stepIndex} onClick={() => update({ stepIndex: i })}>
-                        {s.id} {s.label}
-                      </button>
-                    </li>
-                  ))}
-                </ol>
-                <p className="notes__actions">This step: {summarize(step.actions) || "no actions"}</p>
-                {nextStep ? <p className="notes__actions">Next step: {summarize(nextStep.actions) || "no actions"}</p> : null}
+                {showCautions && section && section.cautions.length ? (
+                  <section className="notes__cautions" aria-label="Cautions">
+                    <p className="notes__cautions-label">Cautions</p>
+                    <ul>
+                      {section.cautions.map((c) => (
+                        <li key={c}>{c}</li>
+                      ))}
+                    </ul>
+                  </section>
+                ) : null}
+              </>
+            ) : (
+              <p className="notes__intro">{slide.speakerNotes}</p>
+            )}
+            {hasReferences ? (
+              // Keyed by slide, so it is closed again on every slide change (8.4).
+              <details className="notes__reference" key={slide.id}>
+                <summary>
+                  <ChevronRight {...ICON} />
+                  References
+                </summary>
+                <div className="notes__reference-body">
+                  {hasSupport ? (
+                    <div className="notes__group">
+                      <p className="notes__group-label">Support</p>
+                      {supportLine ? <p className="notes__support">{supportLine}</p> : null}
+                      {step?.proof ? <p className="notes__support">Proof item: {step.proof}</p> : null}
+                    </div>
+                  ) : null}
+                  {section && hasCitations ? (
+                    <div className="notes__group">
+                      <p className="notes__group-label">Sources</p>
+                      <ul className="notes__citations">
+                        {section.citations.map((c) => (
+                          <li key={c.url + c.text}>
+                            <a href={c.url} target="_blank" rel="noopener">
+                              {c.text}
+                              <span className="visually-hidden">, opens in a new tab</span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                  {step ? (
+                    <>
+                      <div className="notes__group">
+                        <p className="notes__group-label">Jump to step</p>
+                        <ol className="speaker__steps">
+                          {steps.map((s, i) => (
+                            <li key={s.id}>
+                              <button type="button" className="speaker__step-button" aria-current={i === stepIndex ? "step" : undefined} onClick={() => update({ stepIndex: i })}>
+                                {i + 1}. {s.label}
+                              </button>
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                      <div className="notes__group">
+                        <p className="notes__group-label">Actions</p>
+                        <p className="notes__actions">This step: {summarize(step.actions) || "no actions"}</p>
+                        {nextStep ? <p className="notes__actions">Next step: {summarize(nextStep.actions) || "no actions"}</p> : null}
+                      </div>
+                    </>
+                  ) : null}
+                </div>
               </details>
-            </>
-          ) : (
-            <p className="notes__intro">{slide.speakerNotes}</p>
-          )}
-        </div>
-        <p className="notes__next">
-          {nextLine}
-          {showActions && nextStep ? <span className="notes__next-actions">{summarize(nextStep.actions)}</span> : null}
-        </p>
-      </section>
+            ) : null}
+          </div>
+        </section>
 
-      <footer className="speaker__bottom">
-        <nav className="speaker__controls" aria-label="Presenter controls">
-          {/* The drawer (PRD r7, 9.4); the current preview's stage renders the dialog it opens. */}
-          <NavTrigger className="speaker__button">
-            <Menu aria-hidden="true" />
-            Slides
-          </NavTrigger>
-          <button type="button" className="speaker__button" onClick={() => perform({ type: "retreat" })}>
-            Previous
-          </button>
-          <button type="button" className="speaker__button" onClick={() => perform({ type: "advance" })}>
-            Next
-          </button>
-          <button type="button" className="speaker__button" onClick={() => perform({ type: "toggle-blank" })} aria-pressed={state.blank}>
-            Blank
-          </button>
-          <button type="button" className="speaker__button" onClick={() => perform({ type: "toggle-hands-on" })} aria-pressed={state.handsOn}>
-            Hands-on
-          </button>
-          <button type="button" className="speaker__button speaker__button--quiet" onClick={() => perform({ type: "reset-step" })} disabled={!page}>
-            Reset step
-          </button>
-          <button type="button" className="speaker__button speaker__button--quiet" onClick={openAudience}>
-            Audience window
-          </button>
-          <button type="button" className="speaker__button speaker__button--quiet" onClick={openFrame} disabled={!page || !hasFrame(page)}>
-            Open frame
-          </button>
-          {rehearse ? (
-            <button type="button" className="speaker__button speaker__button--quiet" onClick={exportLog}>
-              Export rehearsal log
-            </button>
-          ) : null}
-        </nav>
-        <p className="speaker__transport">
-          {transport === "broadcast" ? "BroadcastChannel" : "localStorage"} · {peers} window{peers === 1 ? "" : "s"}
-        </p>
-      </footer>
-
-      {toast ? (
-        <p className="speaker__toast" role="status">
-          {toast}
-        </p>
-      ) : null}
-    </div>
+        {toast ? (
+          <p className="speaker__toast" role="status" data-shown={toast.shown}>
+            {toast.text}
+          </p>
+        ) : null}
+      </main>
+    </>
   );
 }

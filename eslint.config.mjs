@@ -12,7 +12,7 @@ const config = [
     },
   },
   {
-    ignores: [".next/**", "**/.next/**", "**/.next-capture/**", "fixtures/vite-measure/**", "node_modules/**", "content/.generated/**", "demos/**/*.js", "public/runtime/**", "content/.generated/**"],
+    ignores: [".next/**", "**/.next/**", "**/.next-capture/**", "fixtures/vite-measure/**", "node_modules/**", "content/.generated/**", "demos/**/*.js", "public/runtime/**", "content/.generated/**", "docs/perf/baseline/**"],
   },
 ];
 

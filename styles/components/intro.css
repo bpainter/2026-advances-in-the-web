@@ -24,14 +24,21 @@
   -webkit-backdrop-filter: var(--glass-filter-pane);
   box-shadow: var(--chrome-card-highlight), var(--chrome-card-shadow);
 }
-/* The still keeps its frame's aspect inside 832 by 816: a 640 by 628 frame fills it, a 60/40
-   frame (768 by 628) shows 832 by 680, so the edge and shadow hug the image, never a letterbox. */
+/* The still keeps its frame's aspect inside 832 by 816 with its border: a 640 by 628 frame fills
+   it, a 60/40 frame (768 by 628) shows 832 by 681, so the edge and shadow hug the image, never a
+   letterbox. The size is the image's own (content-box): its width and height attributes give the
+   pixels pnpm images encoded at 1x (830 by 814 at most), so the box is there before the file loads
+   (no layout shift) and the projector draws the file one to one. The <picture> leaves the layout
+   to the image. */
+.intro__visual > picture {
+  display: contents;
+}
 .intro__image {
   @apply block;
-  width: auto;
+  box-sizing: content-box;
   height: auto;
-  max-width: 832px;
-  max-height: 816px;
+  max-width: 830px;
+  max-height: 814px;
   object-fit: contain;
   border: 1px solid rgb(255 255 255 / 0.6);
   border-radius: 16px;

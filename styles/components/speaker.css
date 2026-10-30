@@ -1,366 +1,195 @@
-/* Speaker view (PRD 5.2): previews on the left, notes in their own scrolling column on the right,
-   health and controls in one row below. The timing bar only takes a row while it is shown. */
+/* Speaker view in dark glass (docs/PRD-speaker-view.md, sections 5 and 6). Markup contract: PRD 7.
+
+   Intent:    the speaker, on a 1440 by 900 laptop at arm's length on a dark stage, glances down
+              between clicker presses. In under a second they must find the step they are on and
+              what to say. Calm, dim and steady, like a cockpit at night: nothing lit but the slides.
+   Domain:    stage, monitor wedge, clicker, cue, run of show, house lights down.
+   Color:     near-black navy house, navy glass, white cue text, cyan for "you are here", Slalom
+              Blue for the two moves, chartreuse and coral only as small state marks.
+   Signature: the slide previews are the only bright surfaces; everything else is clear navy glass
+              that frosts a faint static glow.
+   Rejecting: bright status chips and solid chartreuse toggles -> 0.16 tints with a text label;
+              uppercase tracked region labels -> sentence case bold; Slalom Blue focus ring
+              (2.5:1 on navy) -> 3 px cyan.
+   Dials:     variance 2 / motion 2 / density 6.
+
+   Never put backdrop-filter, filter, transform, perspective or contain: paint on .speaker,
+   .speaker__slides, .speaker__current or .speaker__main: each would become the containing block
+   for a position: fixed child (the rehearsal overlay in the preview's stage, the toast in main).
+   Panels draw their glass on ::before, as .portal::before does. */
+
+/* ----- Tokens (PRD 6.1). scripts/contrast-test.mts reads this first .speaker block. ----- */
 .speaker {
-  @apply grid;
+  --speaker-bg: #05091a;
+  --speaker-bg-glow: radial-gradient(1200px 800px at 15% 0%, rgb(12 98 251 / 0.14), transparent 70%), radial-gradient(900px 700px at 90% 100%, rgb(199 185 255 / 0.06), transparent 70%);
+  --speaker-panel: rgb(255 255 255 / 0.05);
+  --speaker-panel-strong: rgb(255 255 255 / 0.08);
+  --speaker-panel-filter: blur(24px) saturate(140%);
+  --speaker-edge: var(--glass-dark-border-color);
+  --speaker-highlight: var(--glass-dark-highlight);
+  --speaker-shadow: var(--glass-dark-shadow);
+  --speaker-pill: rgb(15 28 65 / 0.85);
+  --speaker-rule: rgb(255 255 255 / 0.12);
+  --speaker-card: rgb(255 255 255 / 0.04);
+  --speaker-hover: rgb(255 255 255 / 0.1);
+  --speaker-ink: var(--glass-dark-ink);
+  --speaker-ink-body: var(--glass-dark-ink-body);
+  --speaker-ink-soft: var(--glass-dark-ink-soft);
+  --speaker-link: var(--cyan);
+  --speaker-over: #ff7a87;
+  --speaker-primary: var(--slalom-blue);
+  --speaker-primary-hover: var(--slalom-blue-hover);
+  --speaker-focus: var(--glass-dark-focus);
+  --speaker-solid: var(--glass-dark-solid);
+  --speaker-tint-cyan: rgb(27 225 242 / 0.16);
+  --speaker-tint-chartreuse: rgb(222 255 77 / 0.16);
+  --speaker-tint-coral: rgb(255 77 95 / 0.18);
+  --speaker-tint-neutral: rgb(255 255 255 / 0.08);
+  --speaker-clear-tint: rgb(15 28 65 / 0.3);
+  --speaker-clear-filter: blur(16px) saturate(170%) brightness(0.58);
+  --speaker-ease: var(--glass-ease);
+}
+
+/* ----- Grid (PRD 5.1): columns, gap and padding unchanged, so the current preview keeps its size. ----- */
+.speaker {
+  @apply grid overflow-hidden;
   grid-template-columns: minmax(0, 5fr) minmax(380px, 6fr);
   grid-template-rows: minmax(0, 1fr) auto;
   grid-template-areas:
-    "left notes"
-    "bottom bottom";
-  gap: var(--space-4);
-  height: 100vh;
-  padding: var(--space-4);
+    "slides main"
+    "footer footer";
+  gap: 16px;
+  block-size: 100dvh;
+  padding: 16px;
   box-sizing: border-box;
-  overflow: hidden;
-  background: var(--color-black);
-  color: var(--color-white);
+  background: var(--speaker-bg-glow), var(--speaker-bg);
+  background-attachment: fixed;
+  color: var(--speaker-ink);
+  color-scheme: dark;
   font-family: var(--font-sans);
-}
-.speaker[data-timer="true"] {
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  grid-template-areas:
-    "timer timer"
-    "left notes"
-    "bottom bottom";
 }
 .speaker[data-rehearse="true"] {
   grid-template-columns: minmax(0, 6fr) minmax(380px, 5fr);
 }
-@media (max-width: 1279px) {
-  .speaker,
-  .speaker[data-timer="true"] {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto;
-    grid-template-areas:
-      "timer"
-      "left"
-      "notes"
-      "bottom";
-    height: auto;
-    min-height: 100vh;
-    overflow: visible;
-  }
-}
-.speaker__region-label {
-  margin: 0 0 var(--space-2);
-  font-size: 12px;
-  font-weight: var(--weight-bold);
-  letter-spacing: var(--tracking-eyebrow);
-  text-transform: uppercase;
-  color: rgb(255 255 255 / 0.55);
-}
-.speaker__button {
-  @apply inline-flex items-center justify-center;
-  min-height: 36px;
-  padding: 0 var(--space-4);
-  border: 0;
-  border-radius: var(--radius-sm);
-  background: var(--color-slalom-blue);
-  color: var(--color-white);
-  font: inherit;
-  font-size: 14px;
-  font-weight: var(--weight-bold);
-  text-decoration: none;
-  cursor: pointer;
-}
-.speaker__button:disabled {
-  opacity: 0.4;
-  cursor: default;
-}
-.speaker__button[aria-pressed="true"] {
-  background: var(--color-chartreuse);
-  color: var(--color-navy);
-}
-.speaker__button--quiet {
-  background: rgb(255 255 255 / 0.12);
+
+/* One cyan ring for every focusable element (PRD 6.3). On footer buttons it sits 2 px outside the
+   button, so it lands on the navy pill (9.9:1), never only on Slalom Blue. */
+/* Preview content is excluded: the previews should hold no tab stops, and the slides keep their own
+   rings. The drawer, go-to and help dialogs sit beside the embedded stage, so they still match. */
+.speaker :focus-visible:not(.stage--embedded, .stage--embedded *) {
+  outline: 3px solid var(--speaker-focus);
+  outline-offset: 2px;
 }
 
-/* Timing bar */
-.timer {
-  grid-area: timer;
-  @apply flex items-center flex-wrap;
-  gap: var(--space-6);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
-  background: var(--color-navy);
-}
-.timer p {
-  @apply flex flex-col;
-  margin: 0;
-  gap: 2px;
-}
-.timer__label {
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgb(255 255 255 / 0.55);
-}
-.timer__value {
-  font-size: 28px;
-  font-weight: var(--weight-bold);
-  font-variant-numeric: tabular-nums;
-}
-.timer__delta {
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-pill);
-  background: rgb(255 255 255 / 0.12);
-  font-size: 16px;
-  font-weight: var(--weight-bold);
-}
-.timer__delta[data-over="true"] {
-  background: var(--color-coral);
-  color: var(--color-black);
-}
-.timer__controls {
-  @apply flex;
-  gap: var(--space-2);
-  margin-left: auto;
-}
-
-/* Left column: current preview, status bar, next preview */
-.speaker__left {
-  grid-area: left;
-  @apply flex flex-col overflow-y-auto;
-  gap: var(--space-3);
-  min-width: 0;
-  min-height: 0;
-  scrollbar-width: thin;
+/* ----- Left column (PRD 5.3) ----- */
+.speaker__slides {
+  grid-area: slides;
+  @apply flex flex-col items-stretch;
+  justify-content: flex-start;
+  gap: 16px;
+  min-inline-size: 0;
+  min-block-size: 0;
 }
 .speaker__current {
   @apply relative;
   flex: none;
-  border-radius: var(--radius-sm);
+  border-radius: 12px;
   overflow: hidden;
+  /* The edge is a spread shadow, not a border, so the preview keeps today's size. */
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.12),
+    0 24px 64px rgb(0 0 0 / 0.5);
 }
-.speaker__blank-eyebrow {
+/* Blank reads from across the laptop: a coral outline beside the flag. */
+.speaker__current[data-blank="true"] {
+  outline: 2px solid var(--coral);
+  outline-offset: 2px;
+}
+.speaker__flag {
   @apply absolute;
-  z-index: 1;
-  top: var(--space-3);
-  left: var(--space-3);
+  z-index: 3;
+  top: 12px;
   margin: 0;
-  padding: 2px var(--space-3);
+  padding: 4px 10px;
   border-radius: var(--radius-pill);
-  background: var(--color-coral);
-  color: var(--color-black);
   font-size: 12px;
+  line-height: 16px;
   font-weight: var(--weight-bold);
-  letter-spacing: var(--tracking-eyebrow);
+  color: var(--navy);
 }
-.speaker__status {
-  @apply flex items-center flex-wrap;
-  flex: none;
-  gap: var(--space-4);
-  min-height: 44px;
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-sm);
-  background: rgb(255 255 255 / 0.08);
-  font-size: 15px;
+.speaker__flag[data-flag="blank"] {
+  left: 12px;
+  background: var(--coral);
 }
-.speaker__counter {
-  font-weight: var(--weight-bold);
-  font-variant-numeric: tabular-nums;
-}
-.speaker__section {
-  color: rgb(255 255 255 / 0.6);
-}
-.speaker__engines {
-  color: var(--color-chartreuse);
-}
-.speaker__status-timer {
-  @apply inline-flex items-center;
-  gap: var(--space-2);
-  margin-left: auto;
-}
-.speaker__status .speaker__button {
-  min-height: 30px;
-  padding: 0 var(--space-3);
-  font-size: 13px;
-}
-.timer-badge {
-  @apply inline-flex items-baseline;
-  gap: var(--space-2);
-  font-variant-numeric: tabular-nums;
-}
-.timer-badge__elapsed {
-  font-weight: var(--weight-bold);
-}
-.timer-badge__delta {
-  font-size: 13px;
-  color: rgb(255 255 255 / 0.6);
-}
-.timer-badge[data-over="true"] .timer-badge__delta {
-  color: var(--color-coral);
+.speaker__flag[data-flag="hands-on"] {
+  right: 12px;
+  background: var(--chartreuse);
 }
 
-/* Next, under the status bar: a small preview beside its title */
+/* Next slide: a glass panel; the frost lives on ::before so the passive stage is never inside a
+   filtered box. */
 .speaker__next {
+  @apply relative;
+  isolation: isolate;
   flex: none;
-  min-width: 0;
+  min-inline-size: 0;
+  padding: 16px;
+  border-radius: 16px;
+}
+.speaker__next::before,
+.speaker__main::before {
+  content: "";
+  @apply absolute;
+  inset: 0;
+  z-index: -1;
+  border: 1px solid var(--speaker-edge);
+  border-radius: inherit;
+  background: var(--speaker-panel);
+  -webkit-backdrop-filter: var(--speaker-panel-filter);
+  backdrop-filter: var(--speaker-panel-filter);
+  box-shadow: var(--speaker-highlight), var(--speaker-shadow);
+  pointer-events: none;
+}
+.speaker__label {
+  margin: 0 0 8px;
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: var(--weight-bold);
+  color: var(--speaker-ink-soft);
 }
 .speaker__next-row {
   @apply flex items-start;
-  gap: var(--space-3);
+  gap: 16px;
 }
 .speaker__next-preview {
   flex: none;
-  width: 45%;
-  border-radius: var(--radius-sm);
+  inline-size: 45%;
+  border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.12);
 }
 .speaker__next-meta {
-  min-width: 0;
+  @apply flex flex-col;
+  gap: 4px;
+  min-inline-size: 0;
 }
 .speaker__next-title {
   margin: 0;
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: var(--weight-bold);
+  color: var(--speaker-ink);
+}
+.speaker__next-desc {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
   font-size: 15px;
-  font-weight: var(--weight-bold);
-}
-.speaker__next-layout {
-  margin-left: var(--space-2);
-  font-weight: var(--weight-regular);
-  color: rgb(255 255 255 / 0.55);
-}
-.speaker__next-wow {
-  margin: var(--space-1) 0 0;
-  font-size: 14px;
-  color: rgb(255 255 255 / 0.75);
-}
-
-/* Notes: the right column; the body scrolls on its own, the head stays put */
-.speaker__notes {
-  grid-area: notes;
-  @apply flex flex-col;
-  min-width: 0;
-  min-height: 0;
-  line-height: 1.4;
-}
-.speaker__notes-body {
-  @apply overflow-y-auto;
-  flex: 1;
-  min-height: 0;
-  padding-right: var(--space-3);
-  scrollbar-width: thin;
-}
-.speaker__notes-step {
-  font-weight: var(--weight-regular);
-  text-transform: none;
-  letter-spacing: 0;
-  color: var(--color-chartreuse);
-}
-.speaker__step {
-  margin: 0 0 var(--space-2);
-  font-weight: var(--weight-bold);
-}
-.speaker__notes-head {
-  @apply flex items-center justify-between;
-}
-.speaker__notes-size {
-  @apply flex;
-  gap: var(--space-1);
-}
-.speaker__action {
-  margin: 0 0 var(--space-3);
-  font-weight: var(--weight-bold);
-  color: var(--color-chartreuse);
-}
-.speaker__next-press {
-  margin: 0 0 var(--space-3);
-  font-size: 0.85em;
-  color: rgb(255 255 255 / 0.8);
-}
-.speaker__next-press-label {
-  @apply inline-block;
-  margin-right: var(--space-2);
-  padding: 0 var(--space-2);
-  border-radius: var(--radius-pill);
-  background: rgb(255 255 255 / 0.15);
-  font-size: 0.8em;
-  font-weight: var(--weight-bold);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-eyebrow);
-}
-.speaker__notes .support {
-  margin-bottom: var(--space-3);
-  font-size: 14px;
-  color: rgb(255 255 255 / 0.75);
-}
-.speaker__support-note {
-  margin: 0 0 var(--space-3);
-  font-size: 0.8em;
-  color: rgb(255 255 255 / 0.75);
-}
-.speaker__notes-text {
-  margin: 0;
-  max-width: 60ch;
-}
-.speaker__gotcha {
-  margin: var(--space-3) 0 0;
-  max-width: 60ch;
-  font-size: 0.85em;
-  color: var(--color-light-gray);
-}
-
-/* Bottom row: controls, then demo health */
-.speaker__bottom {
-  grid-area: bottom;
-  @apply flex flex-col;
-  gap: var(--space-2);
-}
-.speaker__health {
-  @apply flex items-center flex-wrap;
-  gap: var(--space-3);
-  min-height: 32px;
-  font-size: 13px;
-}
-.speaker__chips {
-  @apply flex flex-wrap list-none;
-  gap: var(--space-2);
-  margin: 0;
-  padding: 0;
-}
-.speaker__chip {
-  @apply inline-flex items-center;
-  gap: var(--space-2);
-  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-3);
-  border-radius: var(--radius-pill);
-  background: rgb(255 255 255 / 0.1);
-}
-.speaker__chip[data-status="ready"] .speaker__chip-status {
-  color: var(--color-chartreuse);
-}
-.speaker__chip[data-status="error"] .speaker__chip-status,
-.speaker__chip[data-status="fallback"] .speaker__chip-status {
-  color: var(--color-coral);
-}
-.speaker__chip-id {
-  font-family: var(--font-mono);
-}
-.speaker__chip .speaker__button {
-  min-height: 28px;
-  padding: 0 var(--space-2);
-  font-size: 12px;
-}
-.speaker__transport {
-  margin: 0 0 0 auto;
-  color: rgb(255 255 255 / 0.55);
-}
-
-/* Controls */
-.speaker__controls {
-  @apply flex items-center flex-wrap;
-  gap: var(--space-2);
-}
-.speaker__toast {
-  @apply fixed;
-  left: 50%;
-  bottom: var(--space-6);
-  transform: translateX(-50%);
-  margin: 0;
-  padding: var(--space-2) var(--space-5);
-  border-radius: var(--radius-pill);
-  background: var(--color-chartreuse);
-  color: var(--color-navy);
-  font-weight: var(--weight-bold);
+  line-height: 22px;
+  color: var(--speaker-ink-body);
 }
 
 /* Embedded stages (previews) scale inside their box instead of the viewport. */
@@ -371,93 +200,627 @@
   aspect-ratio: 16 / 9;
 }
 
-/* Go-to dialog */
-.goto {
-  padding: var(--space-5);
-  border: 0;
-  border-radius: var(--radius-md);
-  background: var(--color-white);
-  color: var(--color-black);
-  font-family: var(--font-sans);
-}
-.goto::backdrop {
-  background: rgb(0 0 0 / 0.6);
-}
-.goto__form {
-  @apply flex items-center;
-  gap: var(--space-3);
-}
-.goto__label {
-  font-weight: var(--weight-bold);
-}
-.goto__input {
-  width: 80px;
-  padding: var(--space-2);
-  border: 1px solid var(--color-light-gray);
-  border-radius: var(--radius-sm);
-  font: inherit;
-  font-size: 18px;
-}
-.goto__button {
-  padding: var(--space-2) var(--space-4);
-  border: 0;
-  border-radius: var(--radius-sm);
-  background: var(--color-slalom-blue);
-  color: var(--color-white);
-  font: inherit;
-  font-weight: var(--weight-bold);
-  cursor: pointer;
+/* ----- Right column (PRD 5.4): one glass panel, the heading fixed, the notes scrolling. ----- */
+.speaker__main {
+  grid-area: main;
+  @apply relative flex flex-col;
+  isolation: isolate;
+  min-inline-size: 0;
+  min-block-size: 0;
+  padding: 20px 20px 0;
+  border-radius: 20px;
 }
 
-/* Page notes */
-.speaker__eyebrow {
-  margin: 0 0 var(--space-1);
-  font-size: 0.6em;
+/* Title and steps block */
+.speaker__heading {
+  flex: none;
+  margin: 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--speaker-rule);
+}
+.speaker__meta {
+  @apply flex items-center justify-between;
+  gap: 16px;
+  min-block-size: 32px;
+}
+.speaker__position {
+  margin: 0;
+  font-size: 15px;
+  line-height: 20px;
+  color: var(--speaker-ink-soft);
+  white-space: nowrap;
+}
+.speaker__position b,
+.speaker__total {
+  color: var(--speaker-ink);
+}
+.speaker__position b {
   font-weight: var(--weight-bold);
-  letter-spacing: var(--tracking-eyebrow);
-  text-transform: uppercase;
-  color: var(--color-chartreuse);
 }
-.speaker__proof {
-  margin: var(--space-2) 0 var(--space-3);
-  font-size: 0.75em;
-  color: rgb(255 255 255 / 0.75);
+/* The slash is drawn, as the reader pill draws it; screen readers hear "9 of 50". */
+.speaker__total::before {
+  content: "\00a0/\00a0" / "";
 }
-.speaker__cautions {
-  margin: var(--space-3) 0;
-  padding-left: 1.2em;
-  font-size: 0.8em;
+.speaker__size {
+  @apply inline-flex items-center;
+  flex: none;
+  border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 0.06);
+  box-shadow: inset 0 0 0 1px var(--speaker-rule);
 }
-.speaker__citations {
-  margin: var(--space-3) 0;
-  font-size: 0.6em;
-  color: rgb(255 255 255 / 0.7);
+.speaker__title {
+  margin: 8px 0 0;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: var(--weight-regular);
+  color: var(--speaker-ink-body);
 }
-.speaker__citations a {
-  color: inherit;
+.speaker__title b,
+.speaker__title .notes__eyebrow {
+  font-weight: var(--weight-bold);
+  color: var(--speaker-ink);
+}
+.speaker__step-row {
+  @apply flex items-center;
+  gap: 12px;
+  margin-top: 4px;
+}
+.notes__step {
+  min-inline-size: 0;
+  margin: 0;
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: var(--weight-bold);
+  color: var(--speaker-ink);
+}
+.notes__chip {
+  @apply inline-block;
+  margin-inline-start: 10px;
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 0.12);
+  color: var(--speaker-ink);
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: var(--weight-bold);
+  vertical-align: 4px;
+  white-space: nowrap;
+}
+.notes__chip--key {
+  background: var(--chartreuse);
+  color: var(--navy);
+}
+
+/* One status pill (PRD 8.2). The word carries the state; the dot and tint are the second signal. */
+.notes__play {
+  @apply inline-flex items-center;
+  flex: none;
+  gap: 8px;
+  block-size: 32px;
+  margin: 0 0 0 auto;
+  padding: 0 12px 0 10px;
+  box-sizing: border-box;
+  border-radius: var(--radius-pill);
+  background: var(--speaker-tint-cyan);
+  color: var(--speaker-ink);
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: var(--weight-bold);
+  white-space: nowrap;
+}
+.notes__play::before {
+  content: "";
+  flex: none;
+  inline-size: 8px;
+  block-size: 8px;
+  border-radius: 50%;
+  background: var(--cyan);
+}
+.notes__play[data-status="playing"] {
+  background: var(--speaker-tint-chartreuse);
+}
+.notes__play[data-status="playing"]::before {
+  background: var(--chartreuse);
+}
+.notes__play[data-status="loading"],
+.notes__play[data-status="offline"] {
+  background: var(--speaker-tint-neutral);
+}
+.notes__play[data-status="loading"]::before,
+.notes__play[data-status="offline"]::before {
+  background: var(--speaker-ink-soft);
+}
+.notes__play[data-status="error"],
+.notes__play[data-status="fallback"] {
+  background: var(--speaker-tint-coral);
+  box-shadow: inset 0 0 0 1px var(--coral);
+}
+.notes__play[data-status="error"]::before,
+.notes__play[data-status="fallback"]::before {
+  background: var(--coral);
+}
+
+/* Progress: decoration (aria-hidden); the step label carries the meaning. */
+.speaker__progress {
+  @apply flex;
+  gap: 4px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.speaker__progress li {
+  flex: 1 1 0;
+  max-inline-size: 56px;
+  block-size: 6px;
+  border-radius: 3px;
+  background: rgb(255 255 255 / 0.2);
+}
+.speaker__progress li[data-state="done"] {
+  background: rgb(255 255 255 / 0.56);
+}
+.speaker__progress li[data-state="current"] {
+  background: var(--cyan);
+}
+
+/* Quiet next-step hint, only while the slide has another step. */
+.notes__then {
+  margin: 10px 0 0;
+  font-size: 17px;
+  line-height: 24px;
+  color: var(--speaker-ink-soft);
+}
+.notes__then b {
+  font-weight: var(--weight-bold);
+}
+.notes__then-actions {
+  @apply block;
+  margin-top: 2px;
+  font-size: 15px;
+  line-height: 22px;
+}
+
+/* Notes: the only scroller in the window. The 6 px inline gutter (offset by the negative margin)
+   keeps the References summary's focus ring clear of the scroller's clip. */
+.speaker__notes {
+  @apply flex flex-col;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  min-block-size: 0;
+  margin-inline: -6px;
+}
+.speaker__notes-body {
+  @apply overflow-y-auto;
+  flex: 1 1 auto;
+  min-block-size: 0;
+  padding: 16px 10px 24px 6px;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 255 255 / 0.24) transparent;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 24px), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 24px), transparent);
+}
+.speaker__notes-body > :first-child {
+  margin-top: 0;
+}
+.notes__hands-on {
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  border: 2px solid var(--chartreuse);
+  border-radius: 12px;
+  background: rgb(222 255 77 / 0.1);
+  color: var(--speaker-ink);
+  font-size: calc(var(--notes-size, 40px) * 0.8);
+  line-height: 1.3;
+}
+.notes__intro {
+  margin: 0 0 16px;
+  color: var(--speaker-ink);
+  font-size: calc(var(--notes-size, 40px) * 0.8);
+  line-height: 1.35;
+}
+.notes__bullets {
+  @apply flex flex-col;
+  gap: 0.4em;
+  margin: 0 0 16px;
+  padding-left: 1.1em;
+  list-style: disc outside;
+  color: var(--speaker-ink);
+  font-size: var(--notes-size, 40px);
+  line-height: 1.35;
+  font-weight: var(--weight-regular);
+}
+.notes__bullet::marker {
+  color: var(--cyan);
+}
+.notes__bullet[data-key] {
+  font-weight: var(--weight-bold);
+}
+.notes__cautions {
+  margin: 0 0 16px;
+  color: var(--speaker-ink-body);
+  font-size: calc(var(--notes-size, 40px) * 0.7);
+  line-height: 1.35;
+}
+.notes__cautions-label {
+  margin: 0 0 4px;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: var(--weight-bold);
+  color: var(--chartreuse);
+}
+.notes__cautions ul {
+  @apply flex flex-col;
+  gap: 0.4em;
+  margin: 0;
+  padding-left: 1.1em;
+  list-style: disc outside;
+}
+
+/* References: collapsed, a 44 px summary row, an unblurred card when open (PRD 5.4). */
+.notes__reference {
+  margin: 24px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--speaker-rule);
+  color: var(--speaker-ink-body);
+  font-size: 16px;
+  line-height: 24px;
+}
+.notes__reference > summary {
+  @apply flex items-center;
+  gap: 8px;
+  min-block-size: 44px;
+  padding: 0 10px 0 6px;
+  border-radius: 8px;
+  color: var(--speaker-ink-body);
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: var(--weight-bold);
+  list-style: none;
+  cursor: pointer;
+}
+.notes__reference > summary::-webkit-details-marker {
+  display: none;
+}
+.notes__reference > summary:hover {
+  background: rgb(255 255 255 / 0.06);
+}
+.notes__reference > summary svg {
+  flex: none;
+  inline-size: 18px;
+  block-size: 18px;
+  stroke-width: 1.75;
+  transition: rotate 160ms var(--speaker-ease);
+}
+.notes__reference[open] > summary svg {
+  rotate: 90deg;
+}
+.notes__reference-body {
+  @apply flex flex-col;
+  gap: 12px;
+  margin-top: 8px;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--speaker-card);
+  box-shadow: inset 0 0 0 1px var(--speaker-rule);
+}
+.notes__group {
+  min-inline-size: 0;
+}
+.notes__group-label {
+  margin: 0 0 4px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--weight-bold);
+  color: var(--speaker-ink-soft);
+}
+.notes__support {
+  margin: 0;
+}
+.notes__support + .notes__support {
+  margin-top: 4px;
+}
+.notes__citations {
+  @apply flex flex-col;
+  gap: 4px;
+  margin: 0;
+  padding-left: 1.1em;
+  list-style: disc outside;
+}
+.notes__citations li::marker {
+  color: var(--speaker-ink-soft);
+}
+.notes__citations a {
+  border-radius: 4px;
+  color: var(--speaker-link);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.notes__citations a:hover {
+  text-decoration-thickness: 2px;
 }
 .speaker__steps {
-  @apply flex flex-wrap list-none;
-  gap: var(--space-1);
-  margin: var(--space-3) 0 0;
+  @apply flex flex-wrap;
+  gap: 6px;
+  margin: 0;
   padding: 0;
+  list-style: none;
 }
-.speaker__steps .speaker__button {
-  min-height: 28px;
-  padding: 0 var(--space-2);
+.speaker__step-button {
+  @apply inline-flex items-center;
+  block-size: 32px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--speaker-tint-neutral);
+  box-shadow: inset 0 0 0 1px var(--speaker-rule);
+  color: var(--speaker-ink);
+  font: inherit;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--weight-bold);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.speaker__step-button:hover {
+  background: rgb(255 255 255 / 0.14);
+}
+.speaker__step-button[aria-current="step"],
+.speaker__step-button[aria-current="true"] {
+  background: var(--speaker-tint-cyan);
+  box-shadow: inset 0 0 0 1px var(--cyan);
+}
+.notes__actions {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--speaker-ink-soft);
+}
+.notes__actions + .notes__actions {
+  margin-top: 4px;
+}
+
+/* ----- Footer (PRD 5.5): two pills in the reader pill's look, always opaque. ----- */
+.speaker__bottom {
+  grid-area: footer;
+  @apply flex flex-wrap items-center justify-between;
+  gap: 16px;
+  min-inline-size: 0;
+}
+.speaker__controls,
+.speaker__timer {
+  @apply flex items-center;
+  gap: 2px;
+  padding: 4px;
+  box-sizing: border-box;
+  border: 1px solid var(--speaker-edge);
+  border-radius: var(--radius-pill);
+  background: var(--speaker-pill);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--speaker-highlight);
+  color: var(--speaker-ink);
+}
+.speaker__timer {
+  gap: 12px;
+  margin-inline-start: auto;
+  padding: 4px 4px 4px 16px;
+}
+.speaker__button {
+  @apply inline-flex items-center justify-center;
+  flex: none;
+  gap: 8px;
+  block-size: 40px;
+  padding: 0 14px 0 12px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--speaker-ink);
+  font: inherit;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: var(--weight-bold);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+/* Higher than .nav-drawer-trigger svg (nav-drawer.css loads after this file). */
+.speaker__bottom .speaker__button svg,
+.speaker__icon-button svg {
+  flex: none;
+  inline-size: 18px;
+  block-size: 18px;
+  stroke-width: 1.75;
+}
+.speaker__button:hover {
+  background: var(--speaker-hover);
+}
+.speaker__button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.speaker__button:disabled:hover {
+  background: transparent;
+}
+.speaker__button--primary {
+  min-inline-size: 112px;
+  background: var(--speaker-primary);
+}
+.speaker__button--primary:hover {
+  background: var(--speaker-primary-hover);
+}
+.speaker__button--primary:disabled:hover {
+  background: var(--speaker-primary);
+}
+/* Next puts its chevron after the label. */
+.speaker__button--primary:has(> svg:last-child:not(:first-child)) {
+  padding: 0 12px 0 14px;
+}
+/* Pressed toggles: a tint and an inset edge, never a solid chartreuse fill. */
+.speaker__button[aria-pressed="true"] {
+  background: var(--speaker-tint-chartreuse);
+  box-shadow: inset 0 0 0 1.5px var(--chartreuse);
+}
+.speaker__button[aria-pressed="true"]:hover {
+  background: rgb(222 255 77 / 0.24);
+}
+.speaker__button[aria-pressed="true"] svg {
+  color: var(--chartreuse);
+}
+/* P1: no audience window heard. An 8 px coral dot before the icon; the text says it too. */
+.speaker__button[data-connected="false"]::before {
+  content: "";
+  flex: none;
+  inline-size: 8px;
+  block-size: 8px;
+  margin-inline-end: -2px;
+  border-radius: 50%;
+  background: var(--coral);
+}
+.speaker__divider {
+  flex: none;
+  inline-size: 1px;
+  block-size: 24px;
+  margin: 0 6px;
+  background: rgb(255 255 255 / 0.16);
+}
+
+/* Icon buttons: 40 in the timer pill, 32 in the notes size control. */
+.speaker__icon-button {
+  @apply inline-flex items-center justify-center;
+  flex: none;
+  inline-size: 40px;
+  block-size: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--speaker-ink);
+  cursor: pointer;
+}
+.speaker__icon-button:hover {
+  background: var(--speaker-hover);
+}
+.speaker__icon-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.speaker__icon-button:disabled:hover {
+  background: transparent;
+}
+.speaker__icon-button--primary {
+  background: var(--speaker-primary);
+}
+.speaker__icon-button--primary:hover {
+  background: var(--speaker-primary-hover);
+}
+.speaker__size .speaker__icon-button {
+  inline-size: 32px;
+  block-size: 32px;
+}
+
+/* Timer pill */
+.speaker__elapsed {
+  /* Default figures: Slalom Sans's tabular set opens wide gaps around the colon ("0 : 00", the
+     glass spec's warning) and its proportional set swaps in wide oval zeros. The reserved,
+     end-aligned box keeps the pace text from shifting as the digits change. */
+  min-inline-size: 72px;
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: var(--weight-bold);
+  font-variant-numeric: normal;
+  text-align: end;
+  color: var(--speaker-ink);
+}
+.speaker__pace {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: var(--weight-bold);
+  color: var(--speaker-ink-body);
+  white-space: nowrap;
+}
+.speaker__timer[data-pace="over"] .speaker__pace,
+.speaker__pace[data-pace="over"] {
+  color: var(--speaker-over);
+}
+.speaker__timer[data-pace="idle"] .speaker__pace,
+.speaker__timer[data-pace="none"] .speaker__pace,
+.speaker__timer[data-pace="not-started"] .speaker__pace,
+.speaker__pace[data-pace="idle"],
+.speaker__pace[data-pace="none"],
+.speaker__pace[data-pace="not-started"] {
+  color: var(--speaker-ink-soft);
+}
+
+/* ----- Overlays (PRD 5.6) ----- */
+
+/* Toast: over the timer it describes. */
+.speaker__toast {
+  @apply fixed inline-flex items-center;
+  z-index: 20;
+  right: 16px;
+  bottom: 78px;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 16px 10px 14px;
+  border: 1px solid var(--speaker-edge);
+  border-radius: var(--radius-pill);
+  background: var(--speaker-pill);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--speaker-highlight), var(--speaker-shadow);
+  color: var(--speaker-ink);
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: var(--weight-bold);
+  opacity: 1;
+  translate: 0 0;
+  transition:
+    opacity 160ms var(--speaker-ease),
+    translate 200ms var(--speaker-ease);
+}
+.speaker__toast::before {
+  content: "";
+  flex: none;
+  inline-size: 8px;
+  block-size: 8px;
+  border-radius: 50%;
+  background: var(--chartreuse);
+}
+@starting-style {
+  .speaker__toast {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+/* The toast stays mounted for 400 ms after it hides, so it can fade out. */
+.speaker__toast[data-shown="false"] {
+  opacity: 0;
+  translate: 0 8px;
+}
+
+/* Rehearsal overlay, speaker window only: above the controls pill, as wide as the left column. The
+   audience window's rule below is unchanged. */
+.speaker .stage__rehearsal {
+  left: 16px;
+  right: auto;
+  bottom: 78px;
+  z-index: 20;
+  max-inline-size: calc((100vw - 48px) * 5 / 11);
+  padding: 6px 10px;
+  box-sizing: border-box;
+  border: 1px solid var(--speaker-edge);
+  border-radius: 8px;
+  background: var(--speaker-pill);
+  color: var(--speaker-ink);
   font-size: 12px;
+  line-height: 16px;
 }
-.speaker__steps .speaker__button[aria-current="true"] {
-  background: var(--color-chartreuse);
-  color: var(--color-navy);
-}
-.speaker__blank-eyebrow--hands {
-  left: auto;
-  right: var(--space-3);
-  background: var(--color-chartreuse);
-}
-.speaker__engines[data-health="error"] {
-  color: var(--color-coral);
+.speaker[data-rehearse="true"] .stage__rehearsal {
+  max-inline-size: calc((100vw - 48px) * 6 / 11);
 }
 .stage__rehearsal {
   @apply fixed;
@@ -472,142 +835,301 @@
   font-size: 12px;
 }
 
-/* Notes column, top to bottom (PRD v4, 5.1): header, hands-on box, intro on step 0, bullets,
-   cautions on the now page's last step, Reference (collapsed); Next pinned under the scroller. */
-.notes__header {
-  margin: 0 0 var(--space-4);
+/* Go-to dialog (`g`): clear dark glass, as keyboard help. Markup: components/chrome/GotoDialog.tsx. */
+.goto {
+  /* Preflight zeroes the UA dialog margin; auto centers the modal, as keyboard help does. */
+  margin: auto;
+  padding: 20px 24px;
+  border: 1px solid var(--glass-dark-border-color);
+  border-radius: 20px;
+  background: var(--speaker-clear-tint, rgb(15 28 65 / 0.3));
+  -webkit-backdrop-filter: var(--speaker-clear-filter, blur(16px) saturate(170%) brightness(0.58));
+  backdrop-filter: var(--speaker-clear-filter, blur(16px) saturate(170%) brightness(0.58));
+  box-shadow: var(--glass-dark-highlight), var(--glass-dark-shadow);
+  color: var(--glass-dark-ink);
+  color-scheme: dark;
+  font-family: var(--font-sans);
+}
+.goto::backdrop {
+  background: var(--glass-scrim);
+}
+.goto__form {
+  @apply flex items-center;
+  gap: 12px;
+}
+.goto__label {
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: var(--weight-bold);
+}
+.goto__input {
+  inline-size: 96px;
+  block-size: 44px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  border: 1px solid rgb(255 255 255 / 0.5);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.08);
+  color: var(--glass-dark-ink);
+  font: inherit;
   font-size: 20px;
-  line-height: 1.35;
+  line-height: 28px;
 }
-.notes__page {
-  margin: 0;
-  color: rgb(255 255 255 / 0.75);
-}
-.notes__eyebrow {
-  font-weight: var(--weight-bold);
-}
-.notes__step {
-  @apply flex flex-wrap items-center;
-  gap: var(--space-2);
-  margin: var(--space-1) 0 0;
-  font-weight: var(--weight-bold);
-  color: var(--color-white);
-}
-.notes__chip {
-  padding: 2px 10px;
+.goto__button {
+  @apply inline-flex items-center justify-center;
+  block-size: 44px;
+  min-inline-size: 64px;
+  padding: 0 20px;
+  border: 0;
   border-radius: var(--radius-pill);
-  background: rgb(255 255 255 / 0.18);
-  font-size: 16px;
-  font-weight: var(--weight-bold);
-}
-.notes__chip--key {
-  background: var(--color-chartreuse);
-  color: var(--color-navy);
-}
-.notes__hands-on {
-  margin: 0 0 var(--space-4);
-  padding: var(--space-3) var(--space-4);
-  border: 3px solid var(--color-chartreuse);
-  border-radius: var(--radius-md);
-  background: var(--color-navy);
-  font-size: 32px;
-  line-height: 1.3;
-}
-.notes__intro {
-  margin: 0 0 var(--space-4);
-  font-size: 32px;
-  line-height: 1.35;
-}
-.notes__bullets {
-  @apply flex flex-col;
-  gap: 0.4em;
-  margin: 0 0 var(--space-4);
-  padding-left: 1.1em;
-  list-style: disc outside;
-  font-size: var(--notes-size, 40px);
-  line-height: 1.35;
-}
-.notes__bullet::marker {
-  color: var(--color-slalom-blue);
-}
-.notes__bullet[data-key] {
-  font-weight: var(--weight-bold);
-}
-.notes__cautions {
-  margin: 0 0 var(--space-4);
-  font-size: 28px;
-  line-height: 1.35;
-}
-.notes__cautions ul {
-  @apply flex flex-col;
-  gap: 0.4em;
-  margin: 0;
-  padding-left: 1.1em;
-  list-style: disc outside;
-}
-.notes__cautions-label {
-  margin: 0 0 var(--space-1);
-  font-size: 20px;
-  font-weight: var(--weight-bold);
-  color: var(--color-chartreuse);
-}
-.notes__reference {
-  margin: var(--space-4) 0;
+  background: var(--slalom-blue);
+  color: var(--color-white);
+  font: inherit;
   font-size: 15px;
-  line-height: 1.4;
-  color: rgb(255 255 255 / 0.75);
-}
-.notes__reference summary {
+  font-weight: var(--weight-bold);
   cursor: pointer;
-  font-weight: var(--weight-bold);
 }
-.notes__support,
-.notes__actions {
-  margin: var(--space-2) 0;
+.goto__button:hover {
+  background: var(--slalom-blue-hover);
 }
-.notes__citations {
-  margin: var(--space-2) 0;
-  padding-left: 1.1em;
+.goto :focus-visible {
+  outline: 3px solid var(--glass-dark-focus);
+  outline-offset: 2px;
 }
-.notes__citations a {
-  color: inherit;
+
+/* ----- Responsive (PRD 5.7) ----- */
+/* Below 1280: one column; the page scrolls, the notes do not, the footer sticks. */
+@media (max-width: 1279px) {
+  .speaker,
+  .speaker[data-rehearse="true"] {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas:
+      "slides"
+      "main"
+      "footer";
+    block-size: auto;
+    min-block-size: 100dvh;
+    overflow: visible;
+  }
+  .speaker__main {
+    padding-bottom: 8px;
+  }
+  .speaker__notes-body {
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .speaker__bottom {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    padding-block: 8px;
+  }
+  .speaker .stage__rehearsal,
+  .speaker[data-rehearse="true"] .stage__rehearsal {
+    max-inline-size: calc(100vw - 32px);
+  }
 }
-.notes__next {
-  flex: none;
-  margin: 0;
-  padding: var(--space-3) 0 0;
-  border-top: 1px solid rgb(255 255 255 / 0.2);
-  font-size: 24px;
-  line-height: 1.3;
-  font-weight: var(--weight-bold);
+
+/* 1280 to 1439 in rehearsal: the footer wraps and the timer pill drops to a second line (PRD 5.7),
+   so the toast and the rehearsal overlay rise one row (50 + 16) to stay clear of the controls. */
+@media (min-width: 1280px) and (max-width: 1439px) {
+  .speaker[data-rehearse="true"] .speaker__toast,
+  .speaker[data-rehearse="true"] .stage__rehearsal {
+    bottom: 144px;
+  }
 }
-.notes__next-actions {
-  @apply block;
-  font-size: 15px;
-  font-weight: var(--weight-regular);
-  color: rgb(255 255 255 / 0.7);
+
+/* ----- Fallbacks (PRD 6.4) ----- */
+/* Solid panels and pills where transparency is unwanted or the backdrop filter is missing. The
+   background glow stays: it is not transparency. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .speaker__next::before,
+  .speaker__main::before,
+  .speaker__controls,
+  .speaker__timer,
+  .speaker__toast,
+  .goto {
+    background: var(--speaker-solid, var(--glass-dark-solid));
+    box-shadow: none;
+  }
 }
-.notes__play {
-  @apply inline-flex items-center;
-  gap: 6px;
-  margin-left: auto;
-  padding: 2px 10px;
-  border-radius: var(--radius-pill);
-  font-size: 16px;
-  font-weight: var(--weight-bold);
-  background: rgb(27 225 242 / 0.25);
-  color: var(--color-white);
+@media (prefers-reduced-transparency: reduce) {
+  .speaker__next::before,
+  .speaker__main::before,
+  .speaker__controls,
+  .speaker__timer,
+  .speaker__toast,
+  .speaker .stage__rehearsal,
+  .goto {
+    background: var(--speaker-solid, var(--glass-dark-solid));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
 }
-.notes__play::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--color-cyan);
+:root[data-glass="off"] .speaker__next::before,
+:root[data-glass="off"] .speaker__main::before,
+:root[data-glass="off"] .speaker__controls,
+:root[data-glass="off"] .speaker__timer,
+:root[data-glass="off"] .speaker__toast,
+:root[data-glass="off"] .speaker .stage__rehearsal,
+:root[data-glass="off"] .goto {
+  background: var(--speaker-solid, var(--glass-dark-solid));
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
 }
-.notes__play[data-playing="true"] {
-  background: rgb(222 255 77 / 0.2);
+
+/* Forced colors: system colors, every state keeps its text label. */
+@media (forced-colors: active) {
+  .speaker {
+    background: Canvas;
+    color: CanvasText;
+  }
+  .speaker__next::before,
+  .speaker__main::before {
+    border-color: CanvasText;
+    background: Canvas;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
+  .speaker__current {
+    box-shadow: none;
+    border: 0;
+    outline: 1px solid CanvasText;
+  }
+  .speaker__current[data-blank="true"] {
+    outline: 3px solid Highlight;
+  }
+  .speaker__flag {
+    border: 1px solid CanvasText;
+    background: Canvas;
+    color: CanvasText;
+  }
+  .speaker__label,
+  .speaker__position,
+  .speaker__position b,
+  .speaker__total,
+  .speaker__title,
+  .speaker__title b,
+  .speaker__next-title,
+  .speaker__next-desc,
+  .notes__step,
+  .notes__then,
+  .notes__bullets,
+  .notes__intro,
+  .notes__cautions,
+  .notes__cautions-label,
+  .notes__reference,
+  .notes__reference > summary,
+  .notes__group-label,
+  .notes__actions,
+  .speaker__elapsed,
+  .speaker__pace,
+  .speaker__timer[data-pace] .speaker__pace {
+    color: CanvasText;
+  }
+  .notes__bullet::marker {
+    color: CanvasText;
+  }
+  .speaker__notes-body {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .speaker__heading,
+  .notes__reference {
+    border-color: CanvasText;
+  }
+  .notes__chip,
+  .notes__chip--key,
+  .notes__play,
+  .notes__play[data-status] {
+    border: 1px solid CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+  }
+  .notes__play::before,
+  .notes__play[data-status]::before,
+  .speaker__button[data-connected="false"]::before,
+  .speaker__toast::before {
+    background: CanvasText;
+  }
+  .speaker__progress li,
+  .speaker__progress li[data-state] {
+    background: CanvasText;
+  }
+  .speaker__progress li[data-state="current"] {
+    background: Highlight;
+  }
+  .notes__hands-on,
+  .notes__reference-body {
+    border: 1px solid CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+  }
+  .notes__citations a {
+    color: LinkText;
+  }
+  .speaker__controls,
+  .speaker__timer,
+  .speaker__size,
+  .speaker__toast,
+  .speaker .stage__rehearsal,
+  .goto {
+    border: 1px solid CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
+  .speaker__button,
+  .speaker__button--primary,
+  .speaker__icon-button,
+  .speaker__icon-button--primary,
+  .speaker__step-button,
+  .goto__button,
+  .goto__input {
+    border: 1px solid ButtonText;
+    background: ButtonFace;
+    color: ButtonText;
+    box-shadow: none;
+  }
+  .speaker__button[aria-pressed="true"],
+  .speaker__step-button[aria-current="step"],
+  .speaker__step-button[aria-current="true"] {
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+  }
+  .speaker__button[aria-pressed="true"] svg {
+    color: HighlightText;
+  }
+  .speaker__divider {
+    background: CanvasText;
+  }
+  .speaker :focus-visible,
+  .goto :focus-visible {
+    outline-color: Highlight;
+  }
 }
-.notes__play[data-playing="true"]::before {
-  background: var(--color-chartreuse);
+
+/* Reduced motion: no chevron turn, the toast fades only. */
+@media (prefers-reduced-motion: reduce) {
+  .notes__reference > summary svg {
+    transition: none;
+  }
+  .speaker__toast {
+    transition: opacity 160ms var(--speaker-ease);
+  }
+  @starting-style {
+    .speaker__toast {
+      translate: 0 0;
+    }
+  }
 }

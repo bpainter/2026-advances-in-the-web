@@ -1,0 +1,113 @@
+{
+  "task": "frame",
+  "origin": "http://localhost:3200",
+  "demo": "http://127.0.0.1:3200",
+  "profile": "none",
+  "rows": [
+    {
+      "id": "d1-now",
+      "label": "back-1",
+      "replayMs": 83,
+      "demoRequests": 13,
+      "documents": 1,
+      "notModified": 0,
+      "fromCache": 12,
+      "kb": 5,
+      "statuses": [
+        "200  no-store /demos/01-layered-ui/native/index.html?flags=enhance-css:1&bg=d1",
+        "200 (cache)  public, max-age=31536000, immutable /theme/portal-glass.css?v=6b0627e9",
+        "200 (cache)  public, max-age=31536000, immutable /theme/backgrounds.css?v=c82a3795",
+        "200 (cache)  public, max-age=31536000, immutable /portal/01-layered-ui.css?v=84790ae3",
+        "200 (cache)  public, max-age=31536000, immutable /wrappers/base.css?v=a1009214",
+        "200 (cache)  public, max-age=31536000, immutable /wrappers/order-queue.css?v=e6a0298a",
+        "200 (cache)  public, max-age=31536000, immutable /runtime/demo-runtime.js?v=608709f6",
+        "200 (cache)  public, max-age=300, stale-while-revalidate=86400 /demos/01-layered-ui/native/enhance.css",
+        "200 (cache)  public, max-age=300, stale-while-revalidate=86400 /demos/01-layered-ui/native/app.js",
+        "200 (cache)  public, max-age=300, stale-while-revalidate=86400 /demos/01-layered-ui/native/hooks.js",
+        "200 (cache)  public, max-age=3600, stale-while-revalidate=86400 /fonts/SlalomSans-Regular.otf",
+        "200 (cache)  public, max-age=3600, stale-while-revalidate=86400 /fonts/SlalomSans-Bold.otf",
+        "200 (cache)  public, max-age=31536000, immutable /backgrounds/v5/d1.jpg"
+      ]
+    },
+    {
+      "id": "d1-now",
+      "label": "back-2",
+      "replayMs": 65,
+      "demoRequests": 13,
+      "documents": 1,
+      "notModified": 0,
+      "fromCache": 12,
+      "kb": 5,
+      "statuses": [
+        "200  no-store /demos/01-layered-ui/native/index.html?flags=enhance-css:1&bg=d1",
+        "200 (cache)  public, max-age=31536000, immutable /theme/portal-glass.css?v=6b0627e9",
+        "200 (cache)  public, max-age=31536000, immutable /theme/backgrounds.css?v=c82a3795",
+        "200 (cache)  public, max-age=31536000, immutable /portal/01-layered-ui.css?v=84790ae3",
+        "200 (cache)  public, max-age=31536000, immutable /wrappers/base.css?v=a1009214",
+        "200 (cache)  public, max-age=31536000, immutable /wrappers/order-queue.css?v=e6a0298a",
+        "200 (cache)  public, max-age=31536000, immutable /runtime/demo-runtime.js?v=608709f6",
+        "200 (cache)  public, max-age=300, stale-while-revalidate=86400 /demos/01-layered-ui/native/enhance.css",
+        "200 (cache)  public, max-age=300, stale-while-revalidate=86400 /demos/01-layered-ui/native/app.js",
+        "200 (cache)  public, max-age=300, stale-while-revalidate=86400 /demos/01-layered-ui/native/hooks.js",
+        "200 (cache)  public, max-age=3600, stale-while-revalidate=86400 /fonts/SlalomSans-Regular.otf",
+        "200 (cache)  public, max-age=3600, stale-while-revalidate=86400 /fonts/SlalomSans-Bold.otf",
+        "200 (cache)  public, max-age=31536000, immutable /backgrounds/v5/d1.jpg"
+      ]
+    },
+    {
+      "id": "d4-now",
+      "label": "back-1",
+      "replayMs": 268,
+      "demoRequests": 16,
+      "documents": 1,
+      "notModified": 0,
+      "fromCache": 14,
+      "kb": 24,
+      "statuses": [
+        "200  no-store /orders?flags=enhance-js%3A1&bg=d4",
+        "200 (cache)  public, max-age=31536000, immutable /theme/portal-glass.css?v=6b0627e9",
+        "200 (cache)  public, max-age=31536000, immutable /theme/backgrounds.css?v=c82a3795",
+        "200 (cache)  public, max-age=31536000, immutable /portal/04-navigation-api.css?v=290cae18",
+        "200 (cache)  public, max-age=31536000, immutable /wrappers/base.css?v=a1009214",
+        "200 (cache)  public, max-age=31536000, immutable /wrappers/portal-dashboard.css?v=973e1818",
+        "200 (cache)  public, max-age=31536000, immutable /runtime/demo-runtime.js?v=608709f6",
+        "200 (cache)  public, max-age=300, stale-while-revalidate=86400 /app.css",
+        "200 (cache)  public, max-age=300, stale-while-revalidate=86400 /demo/log.js",
+        "200 (cache)  public, max-age=300, stale-while-revalidate=86400 /app.js",
+        "200 (cache)  public, max-age=300, stale-while-revalidate=86400 /demo/hooks.js",
+        "200 (cache)  public, max-age=3600, stale-while-revalidate=86400 /fonts/SlalomSans-Regular.otf",
+        "200 (cache)  public, max-age=3600, stale-while-revalidate=86400 /fonts/SlalomSans-Bold.otf",
+        "200 (cache)  public, max-age=31536000, immutable /backgrounds/v5/d4.jpg",
+        "200 (cache)  public, max-age=300, stale-while-revalidate=86400 /demo/log.js",
+        "200  no-store /orders/418"
+      ]
+    },
+    {
+      "id": "d4-now",
+      "label": "back-2",
+      "replayMs": 76,
+      "demoRequests": 15,
+      "documents": 1,
+      "notModified": 0,
+      "fromCache": 14,
+      "kb": 16,
+      "statuses": [
+        "200  no-store /orders?flags=enhance-js%3A1&bg=d4",
+        "200 (cache)  public, max-age=31536000, immutable /theme/portal-glass.css?v=6b0627e9",
+        "200 (cache)  public, max-age=31536000, immutable /theme/backgrounds.css?v=c82a3795",
+        "200 (cache)  public, max-age=31536000, immutable /portal/04-navigation-api.css?v=290cae18",
+        "200 (cache)  public, max-age=31536000, immutable /wrappers/base.css?v=a1009214",
+        "200 (cache)  public, max-age=31536000, immutable /wrappers/portal-dashboard.css?v=973e1818",
+        "200 (cache)  public, max-age=31536000, immutable /runtime/demo-runtime.js?v=608709f6",
+        "200 (cache)  public, max-age=300, stale-while-revalidate=86400 /app.css",
+        "200 (cache)  public, max-age=300, stale-while-revalidate=86400 /demo/log.js",
+        "200 (cache)  public, max-age=300, stale-while-revalidate=86400 /app.js",
+        "200 (cache)  public, max-age=300, stale-while-revalidate=86400 /demo/hooks.js",
+        "200 (cache)  public, max-age=3600, stale-while-revalidate=86400 /fonts/SlalomSans-Regular.otf",
+        "200 (cache)  public, max-age=3600, stale-while-revalidate=86400 /fonts/SlalomSans-Bold.otf",
+        "200 (cache)  public, max-age=31536000, immutable /backgrounds/v5/d4.jpg",
+        "200 (cache)  public, max-age=300, stale-while-revalidate=86400 /demo/log.js"
+      ]
+    }
+  ]
+}

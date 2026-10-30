@@ -6,6 +6,34 @@ import type { BuildDef } from "./types";
 import { wrapperDef } from "./wrappers";
 import { isBackgroundId, type BackgroundId } from "@/content/backgrounds";
 
+/**
+ * Production builds only (docs/PRD-perf.md, P1-CACHE and P1-FRAMEFILES): shell links carry `?v=`
+ * and build files are cached. `pnpm dev` and the walks keep plain links and `no-store`.
+ */
+const PRODUCTION = process.env.NODE_ENV === "production";
+
+let versions: Record<string, string> | null | undefined;
+
+/**
+ * `?v=<first 8 hex of the SHA-256>` for a file under public/theme, public/runtime,
+ * public/wrappers or public/portal, from content/.generated/asset-versions.json (written by
+ * `pnpm build`'s prebuild, scripts/asset-versions.mts). next.config.ts makes those URLs immutable
+ * for a year. Development, an unknown file or a missing list leave the href as it is; the
+ * unversioned URL then gets the hour-long rule. Shown markup never goes through here.
+ */
+export function versioned(href: string): string {
+  if (!PRODUCTION) return href;
+  if (versions === undefined) {
+    try {
+      versions = JSON.parse(readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), "content", ".generated", "asset-versions.json"), "utf8")) as Record<string, string>;
+    } catch {
+      versions = null;
+    }
+  }
+  const v = versions?.[href];
+  return v ? `${href}?v=${v}` : href;
+}
+
 /** The shared portal theme (PRD v4, 6.2), copied from styles/glass-tokens.css by pnpm theme:sync. */
 export const THEME_HREF = "/theme/portal-glass.css";
 /** Per-section frame images (PRD v5, 4.2), written from content/backgrounds.ts by pnpm theme:sync. */
@@ -98,7 +126,7 @@ export function composeFrame(def: BuildDef, opts: ComposeOptions): string {
   }
   // Instrumentation and hooks the manifest lists are injected after the shown markup; they are
   // never part of the code on screen (Part A, 8.4).
-  const instrumentation = [...wrapScripts, ...manifest.instrumentation].map((f) => `<script type="module" src="${escapeAttr(f)}"></script>`).join("\n");
+  const instrumentation = [...wrapScripts, ...manifest.instrumentation].map((f) => `<script type="module" src="${escapeAttr(versioned(f))}"></script>`).join("\n");
   const flagsAttr = Object.entries(opts.flags)
     .map(([k, v]) => `${k}:${v ? 1 : 0}`)
     .join(",");
@@ -112,17 +140,17 @@ export function composeFrame(def: BuildDef, opts: ComposeOptions): string {
     "<head>",
     // The theme comes first, so every build's own CSS (shown CSS is unlayered) wins over it. The
     // enhance-css flag never touches it: it is not tagged.
-    `<link rel="stylesheet" href="${THEME_HREF}">`,
-    `<link rel="stylesheet" href="${BACKGROUNDS_HREF}">`,
-    ...(manifest.styles ?? []).map((href) => `<link rel="stylesheet" href="${escapeAttr(href)}">`),
-    ...wrapStyles.map((href) => `<link rel="stylesheet" href="${escapeAttr(href)}">`),
+    `<link rel="stylesheet" href="${versioned(THEME_HREF)}">`,
+    `<link rel="stylesheet" href="${versioned(BACKGROUNDS_HREF)}">`,
+    ...(manifest.styles ?? []).map((href) => `<link rel="stylesheet" href="${escapeAttr(versioned(href))}">`),
+    ...wrapStyles.map((href) => `<link rel="stylesheet" href="${escapeAttr(versioned(href))}">`),
     ...headLinks,
     '<meta charset="utf-8">',
     '<meta name="viewport" content="width=device-width, initial-scale=1">',
     '<meta name="color-scheme" content="light">',
     `<meta name="presenter-origin" content="${escapeAttr(PRESENTER_ORIGIN)}">`,
     `<title>${escapeAttr(opts.title ?? def.title)}</title>`,
-    '<script src="/runtime/demo-runtime.js"></script>',
+    `<script src="${versioned("/runtime/demo-runtime.js")}"></script>`,
     "</head>",
     "<body>",
     body.replace(/\n$/, ""),
@@ -208,6 +236,30 @@ const TYPES: Record<string, string> = {
   woff2: "font/woff2",
 };
 
+/**
+ * Cache headers for a file that is fixed for the life of a deployment: a build's own CSS and JS,
+ * vendored scripts, instrumentation, photos served beside a document (P1-FRAMEFILES). The browser
+ * keeps it 5 minutes and may use it stale for a day while it rechecks; the CDN keeps it for the
+ * deployment (each deployment starts with an empty CDN cache). `Vercel-CDN-Cache-Control` is read
+ * by Vercel's CDN only and never reaches the browser. Development keeps `no-store`.
+ */
+export const BUILD_FILE_CACHE: Record<string, string> = PRODUCTION
+  ? { "Cache-Control": "public, max-age=300, stale-while-revalidate=86400", "Vercel-CDN-Cache-Control": "public, max-age=31536000" }
+  : { "Cache-Control": "no-store" };
+
+/**
+ * Re-labels a successful GET response as a build file (above). For the root-level routes that
+ * serve files a demo folder registers (/vendor, /demo, photos), whose handlers live in demos/**,
+ * which this PRD does not change. Anything but a 200 keeps its own headers.
+ */
+export function asBuildFile(res: Response): Response {
+  if (res.status !== 200) return res;
+  const headers = new Headers(res.headers);
+  for (const [k, v] of Object.entries(BUILD_FILE_CACHE)) headers.set(k, v);
+  for (const [k, v] of Object.entries(ROBOTS_HEADERS)) headers.set(k, v);
+  return new Response(res.body, { status: res.status, statusText: res.statusText, headers });
+}
+
 /** A file of a build, served from its directory; null when it is not there or escapes the directory. */
 export function buildFile(def: BuildDef, file: string): Response | null {
   const dirs = [def.dir, ...(def.extraDir ? [def.extraDir] : [])];
@@ -224,6 +276,6 @@ export function buildFile(def: BuildDef, file: string): Response | null {
   const ext = abs.split(".").pop() ?? "";
   return new Response(readFileSync(/*turbopackIgnore: true*/ abs), {
     status: 200,
-    headers: { "Content-Type": TYPES[ext] ?? "application/octet-stream", "X-Content-Type-Options": "nosniff", "Cache-Control": "no-store", ...ROBOTS_HEADERS },
+    headers: { "Content-Type": TYPES[ext] ?? "application/octet-stream", "X-Content-Type-Options": "nosniff", ...BUILD_FILE_CACHE, ...ROBOTS_HEADERS },
   });
 }

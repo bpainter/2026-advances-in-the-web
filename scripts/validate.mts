@@ -32,6 +32,7 @@ import { BACKGROUND_BY_DEMO } from "@/lib/frames/compose";
 import { DEMO_FOLDERS } from "@/lib/frames/registry";
 import { WRAPPERS } from "@/lib/frames/wrappers";
 import { validateWrappers, type WrappedBuild } from "@/lib/validate/wrappers";
+import { assetIssues } from "@/lib/validate/assets";
 
 const args = process.argv.slice(2);
 const strict = args.includes("--strict");
@@ -163,7 +164,7 @@ const r7Issues = validateR7({
   nav: navLinks(),
 });
 
-const issues: Issue[] = [...all, ...(only ? [] : [...themeIssues(root), ...v5Issues, ...wrapperIssues, ...slideIssues, ...r7Issues, ...(await seoIssues(root))])];
+const issues: Issue[] = [...all, ...(only ? [] : [...themeIssues(root), ...v5Issues, ...wrapperIssues, ...slideIssues, ...r7Issues, ...(await seoIssues(root)), ...assetIssues(root, sections)])];
 
 const inScope = (i: Issue) => !only || i.where.startsWith(only.split("-")[0]) || i.where === only;
 let errors = 0;
