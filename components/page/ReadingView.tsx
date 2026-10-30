@@ -10,6 +10,7 @@ import { supportEntry } from "@/lib/support";
 import { meterValue } from "@/lib/meters";
 import { lineRuns, stepCodeSentence } from "@/lib/code-description";
 import { NewTabLink } from "@/components/layouts/glass/NewTabLink";
+import { NotesInlineText, NotesText } from "@/components/presenter/NotesText";
 
 /**
  * The reader's text view of a slide (docs/PRD-perf.md, P2-TEXT; a11y H4 and L6). The stage is a
@@ -263,7 +264,7 @@ function WalkText({ page }: { page: FramePage }) {
   );
 }
 
-/** The speaker notes, as the speaker window shows them: the page's opening line and each step's bullets, or the slide's notes. */
+/** The speaker notes, as the speaker window shows them: the page's opening notes and each step's paragraphs, or the slide's notes. */
 function Notes({ slide }: { slide: Slide }) {
   const page = slide.page;
   const section = slide.demoSection;
@@ -276,13 +277,15 @@ function Notes({ slide }: { slide: Slide }) {
       <h2 id="reading-view-notes">Speaker notes</h2>
       {page ? (
         <>
-          {page.intro ? <p>{page.intro}</p> : null}
+          {page.intro ? <NotesText text={page.intro} /> : null}
           {steps.map((s) => (
             <div key={s.id}>
               {page.steps.length > 1 ? <h3>{s.label}</h3> : null}
               <ul>
                 {s.bullets.map((b) => (
-                  <li key={b}>{b}</li>
+                  <li key={b}>
+                    <NotesInlineText text={b} />
+                  </li>
                 ))}
               </ul>
             </div>
@@ -299,7 +302,7 @@ function Notes({ slide }: { slide: Slide }) {
           ) : null}
         </>
       ) : (
-        <p>{slide.speakerNotes}</p>
+        <NotesText text={slide.speakerNotes} />
       )}
     </section>
   );

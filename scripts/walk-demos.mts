@@ -290,7 +290,8 @@ async function checkTheme(page: Page, where: string, stepId: string) {
 
 /**
  * Speaker window at 1440 by 900 (PRD v4, 5.1 and 7.6; speaker view PRD, 12.1): on every step the
- * title and steps block sits fully in the viewport, the current bullets sit inside the notes body,
+ * title and steps block sits fully in the viewport, the current bullets start inside the notes body
+ * (verified notes run long, so the body scrolls; the first line must be readable without scrolling),
  * "Next step" shows when the page has another step and not on its last, no selector shows outside
  * References, and the cautions show on the now page's last step.
  */
@@ -313,7 +314,7 @@ async function checkSpeaker(where: string, demoPage: DemoPage, section: DemoSect
   const v = (await speaker.evaluate(`(() => {
     const body = document.querySelector(".speaker__notes-body");
     const br = body.getBoundingClientRect();
-    const inView = (el) => { if (!el) return true; const r = el.getBoundingClientRect(); return r.top >= br.top - 1 && r.bottom <= br.bottom + 1 && r.bottom <= innerHeight; };
+    const inView = (el) => { if (!el) return true; const r = el.getBoundingClientRect(); return r.top >= br.top - 1 && r.top + 48 <= Math.min(br.bottom, innerHeight) + 1; };
     const header = document.querySelector(".notes__header");
     const hr = header.getBoundingClientRect();
     const then = document.querySelector(".notes__then");
@@ -325,7 +326,7 @@ async function checkSpeaker(where: string, demoPage: DemoPage, section: DemoSect
   })()`)) as { header: boolean; bullets: boolean; then: boolean; selector: string | null; cautions: boolean };
   const problems = [!v.header && "title and steps block", !v.bullets && "bullets"].filter(Boolean);
   if (problems.length) fail(where, `speaker ${step.id}: ${problems.join(", ")} not visible at 1440 by 900`);
-  else pass(`speaker ${step.id}: title and steps block, bullets visible`);
+  else pass(`speaker ${step.id}: title and steps block, bullets start in view`);
   const wantThen = i < demoPage.steps.length - 1;
   if (wantThen !== v.then) fail(where, `speaker ${step.id}: "Next step" ${v.then ? "shown on the last step" : "missing"}`);
   if (v.selector) fail(where, `speaker ${step.id}: selector text "${v.selector}" outside References`);

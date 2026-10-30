@@ -17,7 +17,7 @@ export const section: DemoSection = {
       id: "d5-intro",
       stage: "intro",
       intro:
-        "Our fifth demo is a product page with rich text from a CMS. Some of that text could carry a script. We want the browser to stop it.",
+        "A CMS gives us rich text. Reviews and promotions may bring in more HTML.\n\nSomewhere, that content gets inserted into the page. The question is whether every path goes through the same checks.\n\nTrusted Types can help us enforce a rule at those insertion points. It doesn’t clean the content by itself.",
       description:
         "Trusted Types lets the browser refuse HTML that skipped your reviewed code.",
       visual: {
@@ -35,7 +35,7 @@ export const section: DemoSection = {
       title: "What we used to do",
       split: "60/40",
       intro:
-        "This product page shows CMS content in three places. Each place writes HTML its own way.",
+        "We have a product description, a review, and a promotion.\n\nThey look like three bits of content. In the code, they may be three different routes into the page.",
       frame: {
         build: "today",
         route: "/demos/05-trusted-types/today",
@@ -72,7 +72,10 @@ export const section: DemoSection = {
             ],
           },
           spotlight: ["#t-description", "#t-reviews", "#t-promo"],
-          bullets: ["CMS content lands in three places. Three people wrote the code for them."],
+          bullets: [
+            "Here’s one call to `innerHTML`, then another.",
+            "Maybe we have a sanitizing helper. But everyone has to remember to use it, every time, including the person who adds a feature next month.",
+          ],
         },
         {
           id: "s2",
@@ -85,7 +88,9 @@ export const section: DemoSection = {
           code: { file: "reviews.js", lines: [[2, 4], 14] },
           spotlight: ["#t-reviews", ".injected-banner"],
           bullets: [
-            "A review arrives with an event handler. This path skipped the helper, so the script ran.",
+            "Now try content with an unwanted event handler.",
+            "The problem isn’t whether the text came from a familiar system. It’s what the browser is being asked to interpret as HTML.",
+            "One missed path can undo the care we took elsewhere.",
           ],
         },
         {
@@ -108,8 +113,8 @@ export const section: DemoSection = {
               "innerHTML and insertAdjacentHTML calls in /demos/05-trusted-types/today, counted by hand from the build",
           },
           bullets: [
-            "The safety helper exists, but nothing makes a path call it.",
-            "Reviewers have to remember 7 places that write HTML.",
+            "The demo identifies seven places where strings are inserted as HTML.",
+            "That’s seven places to review and keep consistent. A comment saying “sanitize first” is useful, but it isn’t enforcement.",
           ],
         },
       ],
@@ -122,7 +127,7 @@ export const section: DemoSection = {
       title: "What we can do today",
       split: "60/40",
       intro:
-        "This is the same page with one rule in the header. All three places write HTML through one policy we review.",
+        "Start in report-only mode.\n\nWe want to see where the application breaks the proposed rule before we enforce it for users.",
       frame: {
         build: "native",
         route: "/demos/05-trusted-types/native",
@@ -157,8 +162,9 @@ export const section: DemoSection = {
           spotlight: ["#console", ".injected-banner"],
           proof: "Show one report-only violation before switching the local demo to enforcement.",
           bullets: [
-            "In report-only mode the browser logs the unsafe write and still lets it run.",
-            "These reports list every place that writes HTML. That is our inventory.",
+            "Exercise the content paths and look at the reports.",
+            "Report-only mode tells us about violations. It doesn’t block them. And it only tells us about the paths we’ve actually run.",
+            "That makes it a discovery step, not a clean bill of health.",
           ],
         },
         {
@@ -172,8 +178,8 @@ export const section: DemoSection = {
           code: { file: "csp-header.http", lines: [[9, 12]] },
           spotlight: ["#description"],
           bullets: [
-            "The same rule now enforces. The description, reviews and promo still render.",
-            "Only the two policies named in the header may create HTML.",
+            "Once those paths are ready, enforce the policy through Content Security Policy.",
+            "Now the protected HTML insertion points require the right trusted value instead of an ordinary string. We also limit which policies the page can create.",
           ],
         },
         {
@@ -199,9 +205,9 @@ export const section: DemoSection = {
             source: "non-blank, non-comment lines in content/sections/d5-rich-content/files/*.js",
           },
           bullets: [
-            "Content with an event handler goes through our one policy. The handler is gone.",
-            "A policy is a named function the browser trusts to create HTML.",
-            "This one runs the sanitizer first. It is the only way in.",
+            "Our policy uses DOMPurify to clean the content before producing that value.",
+            "Trusted Types makes the application follow the policy. DOMPurify does the sanitizing. We still need both jobs done correctly.",
+            "We’re removing scattered checks, not removing the sanitizer.",
           ],
         },
         {
@@ -216,8 +222,9 @@ export const section: DemoSection = {
           spotlight: ["#console"],
           proof: "Try a direct string assignment and show the browser exception.",
           bullets: [
-            "A plain string write now throws a TypeError. The banner stays hidden.",
-            "The browser enforces this, so a forgotten code path cannot slip through.",
+            "Try inserting a raw string at a protected insertion point.",
+            "With enforcement active, the browser rejects it. That’s stronger than hoping every caller remembers the helper.",
+            "It doesn’t solve every kind of cross-site scripting. It gives us an enforceable rule for an important set of risky operations.",
           ],
         },
       ],
@@ -252,6 +259,14 @@ export const section: DemoSection = {
     {
       text: "Safari 26.0 shipped Trusted Types",
       url: "https://webkit.org/blog/17333/webkit-features-in-safari-26-0/",
+    },
+    {
+      text: "MDN compatibility: TrustedTypePolicyFactory",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/api/TrustedTypePolicyFactory.json",
+    },
+    {
+      text: "MDN compatibility: Content-Security-Policy",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/http/headers/Content-Security-Policy.json",
     },
   ],
   cautions: [

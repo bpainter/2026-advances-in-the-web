@@ -18,7 +18,7 @@ export const section: DemoSection = {
       id: "d1-intro",
       stage: "intro",
       intro:
-        "Our first demo is an order list where each order has an Actions menu. Cancel order asks you to confirm first. We build it the old way, then the way browsers allow now.",
+        "Let’s start with an order screen. Open the actions, choose cancel, and ask the user to confirm.\n\nNothing unusual. But a custom version needs positioning, keyboard handling, focus management, and rules for what happens behind the dialog.\n\nThe dialog element, popovers, and declarative button commands can take over a lot of that work. They’re separate features, so their support needs to be checked separately too.",
       description:
         "The dialog element gives you a confirm box, with focus and Escape handled for you.",
       visual: {
@@ -35,7 +35,7 @@ export const section: DemoSection = {
       eyebrow: "Dialog element",
       title: "What we used to do",
       intro:
-        "This is an order list, and Cancel order asks you to confirm first. Here is how teams commonly build it. The code lights up as the demo plays.",
+        "Here’s the order. The actions are hidden until we need them.\n\nThe interaction looks small. The work behind it is less small.",
       frame: {
         build: "today",
         route: "/demos/01-layered-ui/today",
@@ -78,7 +78,9 @@ export const section: DemoSection = {
           code: { file: "index.html", lines: [[7, 15], 19] },
           spotlight: ["#t-actions", "#t-menu"],
           bullets: [
-            "The Actions button opens the menu. Script builds it in an empty box at the end of the page.",
+            "Open the actions.",
+            "Our code moves the menu outside the table so it doesn’t get clipped. Then it has to keep the menu lined up with the button.",
+            "We haven’t canceled anything yet. We’re still working on where the menu goes.",
           ],
         },
         {
@@ -92,7 +94,9 @@ export const section: DemoSection = {
           code: { file: "styles.css", lines: [5, 11, 18, 23] },
           spotlight: ["#t-modal", "#t-backdrop"],
           bullets: [
-            "Cancel order opens a confirm box over a dark backdrop. The CSS needs four z-index numbers to stack it.",
+            "Now choose cancel.",
+            "We need a backdrop, a dialog, and the right stacking order. The dialog has to sit above the menu and the rest of the page.",
+            "That’s where the increasingly large `z-index` numbers tend to appear.",
           ],
         },
         {
@@ -116,8 +120,9 @@ export const section: DemoSection = {
             source: "non-blank, non-comment lines in /demos/01-layered-ui/today/*.js",
           },
           bullets: [
-            "Escape closes the box, and focus goes back to Actions.",
-            "Script handles Escape, keeps Tab inside the box and returns focus. That is 404 lines to maintain.",
+            "Now add the keyboard behavior. Escape should close the right thing. Focus should stay in the modal, then return to a useful place when it closes.",
+            "The background shouldn’t remain interactive either.",
+            "The demo counts 404 lines of JavaScript in this version. That’s a count for this example, not every dialog. But it shows how much code can sit behind a familiar interaction.",
           ],
           ifKeyboard: "Press Escape. Then press Next once to sync the frame.",
         },
@@ -130,7 +135,7 @@ export const section: DemoSection = {
       eyebrow: "Dialog element",
       title: "What we can do today",
       intro:
-        "This is the same order row, built from HTML the browser understands. The menu is a popover. The confirm box is a dialog.",
+        "Same order. Same task. We’re changing how the interaction is built, not what the user has to learn.\n\nStart with the HTML.",
       frame: {
         build: "native",
         route: "/demos/01-layered-ui/native",
@@ -163,9 +168,9 @@ export const section: DemoSection = {
           code: { file: "index.html", lines: [[6, 10]] },
           spotlight: ["#actions-418", "#order-actions-418"],
           bullets: [
-            "The Actions button opens the menu again.",
-            "A popover is a layer that shows above the page. The popover attribute makes this menu one.",
-            "We need no z-index and no empty box at the end of the page.",
+            "The button points to a popover with `popovertarget`.",
+            "The browser puts the open popover in the top layer, above normal page content. We don’t need to move it to the end of the document just to escape a clipped container.",
+            "A popover still isn’t a complete menu pattern by itself. We need the right content and keyboard behavior for the control we’re building.",
           ],
         },
         {
@@ -180,9 +185,9 @@ export const section: DemoSection = {
           code: { file: "index.html", lines: [[11, 16], 28] },
           spotlight: ['[commandfor="cancel-418"]', "#cancel-418"],
           bullets: [
-            "Cancel order opens the dialog. Focus lands on Keep order, the safe choice.",
-            "The command attribute tells the button what to do. Here it opens the dialog.",
-            "The page behind waits until you answer. That is what modal means.",
+            "The cancel button uses `commandfor` and `show-modal` to open the dialog.",
+            "The browser handles the modal behavior. The rest of the page becomes inert, and we choose the initial focus. Here, “Keep order” is the safer first choice.",
+            "We still provide the label and clear actions.",
           ],
         },
         {
@@ -209,9 +214,9 @@ export const section: DemoSection = {
           spotlight: ["#cancel-418 form", "#actions-418"],
           proof: "Close and return focus with the keyboard only.",
           bullets: [
-            "Enter picks Keep order. Escape closes the menu. Focus is back on the Actions button.",
-            "The form uses method dialog, so its buttons close the dialog.",
-            "The browser moves focus back for us. We wrote no code for it.",
+            "Now keep the order, then close the actions.",
+            "Watch where focus goes. The interaction should leave you somewhere useful, not at the top of the page wondering what happened.",
+            "Native behavior gives us a better starting point. We still test the full keyboard path.",
           ],
           ifKeyboard: "Press Enter, then Escape. Press Next once to sync the frame.",
         },
@@ -252,9 +257,8 @@ export const section: DemoSection = {
             source: "non-blank, non-comment lines in content/sections/d1-order-actions/files/*.js",
           },
           bullets: [
-            "This time we confirm. The row and the status line say canceled.",
-            "This is the only JavaScript on the page. It waits for the dialog to close.",
-            "On confirm it calls the server. That is 22 lines.",
+            "The JavaScript that’s left handles the actual cancellation request and the response.",
+            "The demo counts 22 lines here. We removed interface plumbing, not the business rules. The server still checks whether this user can cancel this order.",
           ],
         },
         {
@@ -279,8 +283,9 @@ export const section: DemoSection = {
           ifKeyboard: "Press Enter to open the menu, then Escape. Press Next once to sync the frame.",
           proof: "Remove the enhancement CSS and show that the controls remain semantic and usable.",
           bullets: [
-            "The CSS file is off. The menu loses its place under the button.",
-            "Escape still closes it, and focus returns to Actions. The CSS only sets place and motion.",
+            "Now remove the styling.",
+            "It isn’t winning a design award, but the controls still have their basic behavior.",
+            "That’s the useful part. The interaction doesn’t depend on us rebuilding every detail in JavaScript.",
           ],
         },
       ],
@@ -335,6 +340,26 @@ export const section: DemoSection = {
     {
       text: "Interop 2026 names dialogs and popovers and anchor positioning as focus areas",
       url: "https://web.dev/blog/interop-2026",
+    },
+    {
+      text: "MDN compatibility: button commands",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/html/elements/button.json",
+    },
+    {
+      text: "MDN compatibility: :open",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/css/selectors/open.json",
+    },
+    {
+      text: "MDN compatibility: dialog",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/html/elements/dialog.json",
+    },
+    {
+      text: "MDN compatibility: discrete transitions",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/css/properties/transition-behavior.json",
+    },
+    {
+      text: "MDN compatibility: overlay",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/css/properties/overlay.json",
     },
   ],
   cautions: [

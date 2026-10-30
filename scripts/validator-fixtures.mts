@@ -137,16 +137,15 @@ const CASES: [string, Mut][] = [
   ["proof", (s) => now(s).steps.forEach((st) => (st.proof = "Proof."))],
   ["key-step", (s) => (now(s).steps[2].key = true)],
   ["bullets", (s) => (now(s).steps[1].bullets = [])],
-  ["bullets", (s) => (usedTo(s).steps[1].bullets = ["One.", "Two.", "Three."])],
-  ["budget", (s) => (intro(s).intro = Array.from({ length: 6 }, () => "This sentence has nine words in it, all told.").join(" "))],
-  ["budget", (s) => (usedTo(s).steps[2].bullets = Array.from({ length: 2 }, () => "Ten words sit in this bullet for the budget test now.")) && (usedTo(s).intro = Array.from({ length: 3 }, () => "Here we have a sentence of exactly fifteen words in it for the test.").join(" "))],
-  ["step-words", (s) => (now(s).steps[1].bullets = Array.from({ length: 3 }, () => "Fourteen words here make up one bullet of this long step on the page."))],
+  ["bullets", (s) => (usedTo(s).steps[1].bullets = ["One.", "Two.", "Three.", "Four."])],
+  ["budget", (s) => (intro(s).intro = Array.from({ length: 8 }, () => "This sentence has nine words in it, all told.").join(" "))],
+  ["step-words", (s) => (now(s).steps[1].bullets = Array.from({ length: 3 }, () => "Fourteen words here make up one bullet of this long step on the page. Ten more words follow it here, and they all count."))],
   ["dash", (s) => (now(s).steps[1].bullets[0] = "The button — the blue one — opens it.")],
   ["exclaim", (s) => (now(s).steps[1].bullets[0] = "The button opens the dialog!")],
-  ["sentence", (s) => (now(s).steps[1].bullets[0] = "This one sentence keeps going on and on with many more words than anyone in the room could ever follow on the stage.")],
-  ["bullet-length", (s) => (now(s).steps[1].bullets[0] = "The button opens it. Then the page waits for you. Then the dialog asks a question. Then you answer it and it closes again right away.")],
-  ["banned", (s) => (now(s).steps[1].bullets[0] = "The button just opens the dialog.")],
-  ["x-not-y", (s) => (now(s).steps[1].bullets = ["The browser does it, not us.", "The page waits, not the dialog."])],
+  // Notes (intro and bullets) take long sentences, banned words and repeated "X, not Y" as warnings (WARN_CASES); the scenario stays strict.
+  ["sentence", (s) => (s.scenario = "This one sentence keeps going on and on with many more words than anyone in the room could ever follow on the stage.")],
+  ["bullet-length", (s) => (now(s).steps[1].bullets[0] = "The button opens it. Then the page waits for you. Then the dialog asks a question. Then you answer it and it closes again right away. The focus moves back to the button. The row says the order is canceled now, and the server agrees with it all.")],
+  ["banned", (s) => (s.scenario = "The row just opens a dialog.")],
   ["x-not-y", (s) => (now(s).steps[1].label = "Browser, not script")],
   ["case", (s) => (now(s).steps[1].label = "open the dialog")],
   ["intro-sentences", (s) => (now(s).intro = "One sentence only.")],
@@ -207,6 +206,26 @@ for (const [rule, mutate] of CASES) {
   else {
     failed++;
     console.log(`✖ ${rule}: not reported (got ${issues.map((i) => i.rule).join(", ") || "nothing"})`);
+  }
+}
+
+// The speaker's notes (docs/speaker-notes-verified.md): these rules warn on notes instead of failing.
+const WARN_CASES: [string, Mut][] = [
+  ["budget", (s) => (usedTo(s).steps[2].bullets = Array.from({ length: 2 }, () => "Ten words sit in this bullet for the budget test now.")) && (usedTo(s).intro = Array.from({ length: 3 }, () => "Here we have a sentence of exactly fifteen words in it for the test.").join(" "))],
+  ["sentence", (s) => (now(s).steps[1].bullets[0] = "This one sentence keeps going on and on with many more words than anyone in the room could ever follow on the stage.")],
+  ["banned", (s) => (now(s).steps[1].bullets[0] = "The button just opens the dialog.")],
+  ["x-not-y", (s) => (now(s).steps[1].bullets = ["The browser does it, not us.", "The page waits, not the dialog."])],
+];
+for (const [rule, mutate] of WARN_CASES) {
+  const s = base();
+  const ctx = context([s]);
+  mutate(s);
+  const issues = validate([s], { ...ctx, support: computeSupportSafe(s, ctx) }).filter((i) => i.rule === rule);
+  const hit = issues.find((i) => i.level === "warning");
+  if (hit && !issues.some((i) => i.level === "error")) console.log(`✓ ${rule} (notes, warning): ${hit.message}`);
+  else {
+    failed++;
+    console.log(`✖ ${rule} (notes): expected a warning only (got ${issues.map((i) => i.level).join(", ") || "nothing"})`);
   }
 }
 
@@ -343,7 +362,7 @@ const WRAP_CASES: [string, (b: WrappedBuild) => void][] = [
 // Native slides (PRD v5, 4.7): writing rules on slide text and notes, no uppercase or tracking.
 const SLIDE_CASES: [string, Parameters<typeof slideCopyIssues>[0], string][] = [
   ["dash", [{ id: "s", glass: { kind: "statement", lines: ["Keep humanity — at the center"] }, speakerNotes: "Pause." }], ""],
-  ["sentence", [{ id: "s", glass: { kind: "statement", lines: ["Keep"] }, speakerNotes: Array.from({ length: 22 }, () => "word").join(" ") + "." }], ""],
+  ["sentence", [{ id: "s", glass: { kind: "statement", lines: [Array.from({ length: 22 }, () => "word").join(" ") + "."] }, speakerNotes: "Pause." }], ""],
   ["slide-case", [{ id: "s", glass: { kind: "statement", lines: ["Keep"] }, speakerNotes: "Pause." }], ".sg-eyebrow { text-transform: uppercase; letter-spacing: 0.1em; }"],
 ];
 {

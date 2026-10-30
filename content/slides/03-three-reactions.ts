@@ -44,7 +44,7 @@ export const slide: Slide = {
   },
   citations: [],
   speakerNotes:
-    "Three people sit in every room. The greybeards want to know what problem AI solves. The line toers use it because leadership expects it. The new luddites worry about jobs, society and the planet. All three are here today, so speak to each once.",
+    "I’ve started thinking about these reactions in three groups. These are people I’ve worked with, not a scientific study. You may recognize more than one.\n\nFirst, the Greybeards. They’ve seen a few revolutions already. Their question is, “Why? What problem are we solving?” They’re not against a new tool. They just want a reason beyond the fact that we bought it.\n\nThen we have the Line Toers. Their question is, “How?” Leadership wants AI, so they’re working out where it can help and how to fit it into the job.\n\nAnd then the New Luddites. They’re asking, “Should we?” They’re worried about the effects on jobs, society, and the environment. The hesitation isn’t always about the technology. It’s about what comes with it.\n\nWhy, how, and should we. Honestly, we need all three questions.",
   timing: { minutes: 1.5, cumulative: 3 },
   background: "three-reactions",
 };

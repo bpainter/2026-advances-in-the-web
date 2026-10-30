@@ -3,6 +3,7 @@ import type { GlassContent, Slide } from "@/content/schema";
 import type { DemoSection } from "@/content/demo-schema";
 import { deck, sections, slides } from "@/lib/content";
 import { PRESENTER_ORIGIN } from "@/lib/frames/origins";
+import { notesPlain } from "@/lib/notes";
 import og from "@/public/og/cover.json";
 
 /**
@@ -106,13 +107,23 @@ function glassDescription(g: GlassContent): string {
 }
 
 /**
+ * A walk or single page's intro is the speaker's opening notes (lib/notes.ts): the description
+ * takes its plain text, and its short sentences when it has any, as the glass ledes do.
+ */
+function spokenDescription(intro: string): string {
+  const all = notesPlain(intro).split(/(?<=[.?!])\s+/).map((s) => s.trim()).filter(Boolean);
+  const short = all.filter((s) => s.split(/\s+/).length <= SHORT_SENTENCE);
+  return (short.length ? short : all).join(" ");
+}
+
+/**
  * The slide's description, 160 characters at most (PRD r7, 10.1): the section's description on
  * intro pages, the page intro on walk and single pages, the lede or card titles on glass slides.
  */
 export function slideDescription(slide: Slide): string {
   const page = slide.page;
   let text: string;
-  if (page) text = page.stage === "intro" ? page.description : page.intro;
+  if (page) text = page.stage === "intro" ? page.description : spokenDescription(page.intro);
   else if (slide.glass) text = glassDescription(slide.glass);
   else text = slide.body?.join(" ") ?? slide.title;
   return clampSentences(text);

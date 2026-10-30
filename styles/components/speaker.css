@@ -436,6 +436,42 @@
 .notes__bullet[data-key] {
   font-weight: var(--weight-bold);
 }
+/* The notes' light markdown (lib/notes.ts): a quotation and a list at the intro's size, inline
+   code in the mono face, stage directions softer than the spoken words. */
+.notes__quote {
+  margin: 0 0 16px;
+  padding-left: 0.8em;
+  border-left: 3px solid var(--cyan);
+  color: var(--speaker-ink);
+  font-size: calc(var(--notes-size, 40px) * 0.8);
+  line-height: 1.35;
+}
+.notes__quote p {
+  margin: 0;
+}
+.notes__list {
+  @apply flex flex-col;
+  gap: 0.3em;
+  margin: 0 0 16px;
+  padding-left: 1.1em;
+  list-style: disc outside;
+  color: var(--speaker-ink);
+  font-size: calc(var(--notes-size, 40px) * 0.8);
+  line-height: 1.35;
+}
+.notes__list li::marker {
+  color: var(--cyan);
+}
+.speaker__notes-body code {
+  padding: 0 0.2em;
+  border-radius: 6px;
+  background: var(--speaker-panel-strong);
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+.speaker__notes-body em {
+  color: var(--speaker-ink-soft);
+}
 .notes__cautions {
   margin: 0 0 16px;
   color: var(--speaker-ink-body);
@@ -1021,6 +1057,9 @@
   .notes__then,
   .notes__bullets,
   .notes__intro,
+  .notes__quote,
+  .notes__list,
+  .speaker__notes-body em,
   .notes__cautions,
   .notes__cautions-label,
   .notes__reference,
@@ -1032,8 +1071,12 @@
   .speaker__timer[data-pace] .speaker__pace {
     color: CanvasText;
   }
-  .notes__bullet::marker {
+  .notes__bullet::marker,
+  .notes__list li::marker {
     color: CanvasText;
+  }
+  .notes__quote {
+    border-color: CanvasText;
   }
   .speaker__notes-body {
     -webkit-mask-image: none;

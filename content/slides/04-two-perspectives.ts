@@ -21,9 +21,14 @@ export const slide: Slide = {
       },
     ],
   },
-  citations: [],
+  citations: [
+    {
+      text: "W3C Strategy Team: the web in the AI era",
+      url: "https://www.w3.org/2026/10/w3c-and-state-of-web-in-ai-era.html",
+    },
+  ],
   speakerNotes:
-    "Two quotes, nine years apart. Berners-Lee wanted a neutral space where everyone could create and share. The W3C strategy team wants humanity at the center while agents act for us. Read both slowly.",
+    "Tim Berners-Lee described what he wanted the web to be:\n\n> “I aimed to create a neutral space where everyone could create, share, debate, innovate, learn and dream.”\n\nThat’s a much bigger idea than a place to consume content. It’s a place where any of us can contribute.\n\nThe W3C perspective on this slide brings us back to people as AI becomes part of the web. The tools should work for us. They shouldn’t decide what the web is allowed to become.\n\nThose ideas belong together. Keep the web open to new tools, but keep people in control.",
   timing: { minutes: 1, cumulative: 4 },
   background: "two-perspectives",
 };

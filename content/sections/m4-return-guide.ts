@@ -27,7 +27,7 @@ export const section: DemoSection = {
       id: "m4-intro",
       stage: "intro",
       intro:
-        "Next is a help article about returns. A bar shows how far you have read. Each step slides in as it arrives.",
+        "Here’s a help article with a reading-progress bar and a few small reveals.\n\nThe animation follows how far we’ve scrolled, not how many seconds have passed.\n\nCSS scroll-driven animations let us describe that relationship directly. The article still needs to work with no animation at all.",
       description:
         "Scroll-driven animations link an animation to scrolling, so progress bars and reveals need no script.",
       visual: {
@@ -44,7 +44,7 @@ export const section: DemoSection = {
       stage: "used-to",
       eyebrow: "Scroll-driven animations",
       title: "What we used to do",
-      intro: "This help article tracks reading progress. Script listens to every scroll.",
+      intro: "The article loads, and our script starts watching the scroll position.\n\nIt has one job for the progress bar and another for the content reveals.",
       frame: {
         build: "today",
         route: "/demos/15-scroll-driven/today",
@@ -85,7 +85,10 @@ export const section: DemoSection = {
             ],
           },
           spotlight: ["#t-progress"],
-          bullets: ["The bar grows as we scroll. Script sets its width on every scroll event."],
+          bullets: [
+            "Scroll partway down.",
+            "For the progress bar, we calculate how far the user has traveled through the scrollable area. Then we update the bar through an animation frame.",
+          ],
         },
         {
           id: "s2",
@@ -97,7 +100,10 @@ export const section: DemoSection = {
           code: { file: "styles.css", lines: [[8, 19]] },
           spotlight: ["#t-step-3"],
           // Used-to pages take no callouts; the bullet sends eyes to the bar before s3 (review r6 H4).
-          bullets: ["Step 3 fades in. CSS waits for script to add a class.", "Watch the bar next."],
+          bullets: [
+            "Keep scrolling.",
+            "An intersection observer adds classes when the article sections enter view. We also decide when to stop observing each one.",
+          ],
         },
         {
           id: "s3",
@@ -122,8 +128,8 @@ export const section: DemoSection = {
             source: "non-blank, non-comment lines in /demos/15-scroll-driven/today/*.js",
           },
           bullets: [
-            "Now the page is busy. The bar stalls, then jumps.",
-            "Every frame of progress waits for script: 33 lines.",
+            "Now give the main thread some extra work.",
+            "The scripted updates can fall behind. The demo counts 33 lines of scroll-related JavaScript, and all of it depends on our code getting time to run.",
           ],
         },
       ],
@@ -136,7 +142,7 @@ export const section: DemoSection = {
       eyebrow: "Scroll-driven animations",
       title: "What we can do today",
       intro:
-        "This is the same article with no scroll script. CSS links each animation to the scroll position.",
+        "The base page is readable, with the content visible.\n\nWe add animation only when the browser supports it and the user’s motion preferences allow it.",
       frame: {
         build: "native",
         route: "/demos/15-scroll-driven/native",
@@ -172,9 +178,8 @@ export const section: DemoSection = {
           },
           spotlight: ["#progress"],
           bullets: [
-            "The bar grows as we scroll.",
-            "Animation timeline scroll ties the bar to the article's scroll position.",
-            "The top of the article is 0 percent. The bottom is 100.",
+            "Scroll down again.",
+            "`animation-timeline: scroll()` connects the progress animation to scrolling. We describe the start and end states in CSS instead of updating the bar on every scroll.",
           ],
         },
         {
@@ -195,9 +200,8 @@ export const section: DemoSection = {
           // The room is on the bar before s3 starts the busy scroll (review r6 motion H4).
           callouts: [{ target: "#progress", text: "Watch the bar", side: "bottom" }],
           bullets: [
-            "Step 3 fades in as it enters the pane.",
-            "The view function tracks one element. Animation range sets the start and end.",
-            "With reduced motion, the steps appear without moving.",
+            "The reveals use a view timeline, so each animation follows the element’s position in the viewport.",
+            "Reduced-motion handling is part of the design. Removing movement shouldn’t remove the information.",
           ],
         },
         {
@@ -216,9 +220,9 @@ export const section: DemoSection = {
             source: "non-blank, non-comment lines in content/sections/m4-return-guide/files/*.js",
           },
           bullets: [
-            "The page is busy again. The bar keeps up.",
-            "The browser can run this animation apart from page script. Busy script cannot stall it.",
-            "We wrote no scroll code.",
+            "Add the extra main-thread work again.",
+            "Animations using suitable properties can keep running more smoothly because they don’t depend on our scroll callback. In this version, we’ve removed the scroll JavaScript.",
+            "That isn’t a guarantee that CSS animation can never stall. The properties, browser, and rest of the page still matter.",
           ],
         },
       ],
@@ -250,6 +254,14 @@ export const section: DemoSection = {
     {
       text: "web-features scroll-driven-animations (3.44.0 predates Firefox 159; the intro uses a fallback until the bump)",
       url: "https://webstatus.dev/features/scroll-driven-animations",
+    },
+    {
+      text: "MDN compatibility: animation-timeline",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/css/properties/animation-timeline.json",
+    },
+    {
+      text: "MDN compatibility: animation-range",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/css/properties/animation-range.json",
     },
   ],
   cautions: [

@@ -26,7 +26,7 @@ export const section: DemoSection = {
       id: "m5-intro",
       stage: "intro",
       intro:
-        "Next is a store category page. Pick a product, and its photo grows into the product page. These are two separate pages.",
+        "Let’s go from a product list to a product page and keep the image visually connected between them.\n\nWe often associate that effect with a single-page app. Cross-document view transitions let supporting browsers animate between separate pages too.\n\nThe navigation can stay a normal link. The movement is the enhancement.",
       description: "Cross-document view transitions animate the move between pages, with no single-page app.",
       visual: {
         src: "/intro/m5-trail-gear-pages.png",
@@ -41,7 +41,7 @@ export const section: DemoSection = {
       stage: "used-to",
       eyebrow: "Cross-document view transitions",
       title: "What we used to do",
-      intro: "Picking a product grows its photo into the product page. We built a single-page app for that.",
+      intro: "This version keeps the list and product view inside one document.\n\nOur code decides which view is visible and handles the movement between them.",
       split: "60/40",
       frame: {
         build: "today",
@@ -83,7 +83,10 @@ export const section: DemoSection = {
             ],
           },
           spotlight: ["#t-hero"],
-          bullets: ["The photo grows into the product page. The whole store is one HTML page."],
+          bullets: [
+            "Open the trail shoe.",
+            "The animation measures the image before and after the layout change. It then uses those measurements to move and scale between the two positions.",
+          ],
         },
         {
           id: "s2",
@@ -95,7 +98,10 @@ export const section: DemoSection = {
           ],
           code: { file: "styles.css", lines: [[6, 14]] },
           spotlight: ["#t-card-trail"],
-          bullets: ["Back shrinks the photo into its card. CSS animates moves that script measures."],
+          bullets: [
+            "Go back.",
+            "We do the process again in reverse. We also need the URL, title, focus, and history to match the view the user sees.",
+          ],
         },
         {
           id: "s3",
@@ -121,7 +127,11 @@ export const section: DemoSection = {
             value: "63 lines",
             source: "non-blank, non-comment lines in /demos/16-cross-document-vt/today/*.js",
           },
-          bullets: ["A second product works the same way.", "Script routes, fetches, renders and moves focus: 63 lines."],
+          bullets: [
+            "Now open the daypack.",
+            "The demo counts 63 lines of JavaScript for this approach. It’s a valid technique, but the animation has brought navigation work along with it.",
+            "It wasn’t the only way to build the site. It was one way to get this effect.",
+          ],
         },
       ],
       timing: { minutes: 0.5 },
@@ -131,7 +141,7 @@ export const section: DemoSection = {
       stage: "now",
       eyebrow: "Cross-document view transitions",
       title: "What we can do today",
-      intro: "These are two plain HTML pages with no router. One CSS rule asks for a transition between them.",
+      intro: "Now the category and product are separate pages connected by real links.\n\nBoth pages opt into view transitions. The relevant elements have matching, unique transition names.",
       split: "60/40",
       frame: {
         build: "native",
@@ -173,9 +183,8 @@ export const section: DemoSection = {
           },
           spotlight: ["#hero"],
           bullets: [
-            "The photo grows into the product page. This is a real page load.",
-            "A view transition animates between two states. This rule opts both pages in.",
-            "The browser captures the old page and animates to the new one.",
+            "Open the trail shoe.",
+            "The browser captures the outgoing and incoming views and animates between them. We’re navigating to another document, not swapping a hidden panel into place.",
           ],
         },
         {
@@ -190,9 +199,9 @@ export const section: DemoSection = {
           code: { file: "index.html", lines: [[8, 15]] },
           spotlight: ["#card-trail"],
           bullets: [
-            "Back shrinks the photo into its card.",
-            "Both pages give the photo the same name. That pairs old and new.",
-            "Back and forward work, because these are real pages.",
+            "Go back.",
+            "The matching names help connect the product image across the two pages. History remains browser history.",
+            "We also honor reduced-motion preferences rather than making the effect mandatory.",
           ],
         },
         {
@@ -219,9 +228,9 @@ export const section: DemoSection = {
             source: "non-blank, non-comment lines in content/sections/m5-trail-gear-pages/files/*.js",
           },
           bullets: [
-            "A second product works the same way.",
-            "Without support, the page loads with no animation.",
-            "We deleted the router. We wrote no JavaScript.",
+            "Open the daypack.",
+            "The demo uses no JavaScript for this transition. A browser without support follows the link normally.",
+            "A smooth transition doesn’t fix a slow response, though. Page performance still matters underneath the effect.",
           ],
         },
       ],
@@ -256,6 +265,10 @@ export const section: DemoSection = {
     {
       text: "Keith, Reasoning, 14 Oct 2025 (also in D4; say it aloud in one demo only)",
       url: "https://adactio.com/journal/22188",
+    },
+    {
+      text: "MDN compatibility: @view-transition",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/css/at-rules/view-transition.json",
     },
   ],
   cautions: [

@@ -25,7 +25,7 @@ export const section: DemoSection = {
       id: "f3-intro",
       stage: "intro",
       intro:
-        "Package managers changed their defaults this year. We follow one package from install to release. Each step is a recorded terminal session.",
+        "Now let’s look at something we do without much ceremony: install a package.\n\nThat can bring code into our project and run code on our machine or build server. Publishing has its own risks too.\n\nThis section uses a recorded workflow so we can look at the decisions without publishing anything from the stage.",
       description:
         "Package managers now ask before a package runs code, and a person approves each release.",
       visual: {
@@ -42,7 +42,7 @@ export const section: DemoSection = {
       eyebrow: "Package trust",
       title: "What we used to do",
       intro:
-        "This timeline shows npm attacks from August 2025 to October 2026. Here is how teams defended.",
+        "The timeline illustrates the risk: a package release appears, an automated update picks it up, and the new code reaches our build.\n\nThe incident list gives us examples of that risk. Keep the dates and counts tied to each source. A vulnerable package isn’t the same as a package that was actually compromised.",
       frame: {
         build: "static",
         route: "/demos/07-package-workflow/timeline",
@@ -77,7 +77,8 @@ export const section: DemoSection = {
           code: { file: ".npmrc", lines: [[1, 3]] },
           spotlight: ["#incident-1", "#incident-4"],
           bullets: [
-            "In 2025, install scripts ran malware. Teams turned off every script in one file.",
+            "We can turn off install scripts globally.",
+            "That blocks a useful path for unwanted code, but it can also break packages that need a build step. The application may install successfully and still not work.",
           ],
         },
         {
@@ -95,7 +96,8 @@ export const section: DemoSection = {
           code: { file: "ci.yml", lines: [[11, 15]] },
           spotlight: ["#incident-6", "#incident-7"],
           bullets: [
-            "Each attack was live for hours. CI blocked scripts, then rebuilt trusted packages by hand.",
+            "Now we’re making an explicit exception for the packages we’ve reviewed, then rebuilding those packages. Leaving `ignore-scripts=true` in effect would still block their lifecycle scripts.",
+            "The exceptions need review too. Otherwise, “block everything” slowly turns into “allow whatever made the build fail.”",
           ],
         },
         {
@@ -106,8 +108,8 @@ export const section: DemoSection = {
           code: { file: "publish.yml", lines: [[16, 20]] },
           spotlight: ["#incident-8"],
           bullets: [
-            "Releases used a long-lived token stored in CI.",
-            "Anyone who stole it could publish to every user.",
+            "Publishing often adds a long-lived registry token to the mix.",
+            "If that credential leaks, someone may be able to publish as us. A token hidden in a build setting is still a credential we have to protect and rotate.",
           ],
         },
       ],
@@ -119,7 +121,7 @@ export const section: DemoSection = {
       eyebrow: "Package trust",
       title: "What we can do today",
       intro:
-        "The install steps were recorded on this laptop against a test registry. The release steps are an example. The policy and workflow files are on the right.",
+        "Start with a policy in the repository.\n\nPin the package manager, keep the lockfile, and make install-script permissions explicit. The team should be able to review the policy alongside the dependency change.",
       frame: {
         build: "terminal",
         route: "/demos/07-package-workflow/terminal/session",
@@ -146,8 +148,8 @@ export const section: DemoSection = {
           ifKeyboard:
             "Run pnpm add -w report-exporter, then ls .marker. Press Next once to sync the frame.",
           bullets: [
-            "Adding the package stops at its install script. Nothing ran.",
-            "The workspace file lists what each package may run. This one starts at no.",
+            "Now an unapproved build script is blocked.",
+            "That doesn’t tell us the package is malicious. It tells us the package is asking to run something we haven’t approved.",
           ],
         },
         {
@@ -160,8 +162,9 @@ export const section: DemoSection = {
           ifKeyboard:
             "Run pnpm permissions, pnpm approve and git diff, then pnpm install. Press Next once to sync.",
           bullets: [
-            "We check what the package asks for and approve it. Now the script runs.",
-            "The approval is one line in a committed file, so it gets code review.",
+            "Inspect the package and its build step before approving it.",
+            "Then commit the decision and rerun the install. Clicking approve isn’t the review. It’s the result of the review.",
+            "These controls also don’t sandbox the package when our application runs it later.",
           ],
         },
         {
@@ -170,9 +173,9 @@ export const section: DemoSection = {
           actions: [T(31, 49)],
           code: { file: "pnpm-workspace.yaml", lines: [[4, 5]] },
           bullets: [
-            "Version 1.3.0 is minutes old, so pnpm refuses it until it is a day old.",
-            "Attacks were live for hours, so a one-day wait skips most of them.",
-            "npm refuses a package from a plain web address.",
+            "The release-age rule holds back versions that are less than a day old in this example.",
+            "That gives us a delay before adopting a brand-new release. It can reduce exposure to some quickly discovered problems, but age doesn’t prove a package is safe.",
+            "Urgent fixes still need a deliberate exception process.",
           ],
         },
         {
@@ -187,9 +190,9 @@ export const section: DemoSection = {
             ],
           },
           bullets: [
-            "This part is an example, not a recording. CI stops at a staged release.",
-            "CI signs in with a short-lived token. No long-lived token is stored.",
-            "A maintainer downloads the exact package and reads its files.",
+            "For publishing, the recorded workflow uses trusted publishing and a short-lived identity rather than a stored, long-lived registry token.",
+            "It also shows a staged release for inspection before promotion. In npm, staging and approval are separate actions. `npm stage publish` stages the package. `npm stage approve` publishes it after the required human authentication.",
+            "We’re reviewing the recorded process here, not sending a new package to the registry.",
           ],
         },
         {
@@ -200,8 +203,9 @@ export const section: DemoSection = {
           proof:
             "Inspect the staged tarball before approval and show the provenance or trusted-publishing record.",
           bullets: [
-            "Approval asks for a one-time password, then the version goes live.",
-            "The signature check ties the release to the workflow that built it.",
+            "Finally, look at provenance.",
+            "It can help show where a package came from and how it was built. It doesn’t prove the code is correct or harmless.",
+            "Lockfiles, script controls, release delays, trusted publishing, and provenance do different jobs. None of them removes the need to understand what we’re adding.",
           ],
         },
       ],
@@ -272,6 +276,10 @@ export const section: DemoSection = {
     {
       text: "Aikido: about 21% of the top 51,370 packages use trusted publishing (Q&A only)",
       url: "https://www.aikido.dev/blog/shai-hulud-trusted-publishing",
+    },
+    {
+      text: "Snyk: TanStack compromise",
+      url: "https://snyk.io/blog/tanstack-npm-packages-compromised/",
     },
   ],
   cautions: [

@@ -44,7 +44,7 @@ export type SupportSource =
 interface PageBase {
   id: string;                      // "d1-intro", "d1-used-to", "d1-now"
   stage: Stage;
-  intro: string;                   // 2 or 3 sentences, 50 words at most, said on arrival
+  intro: string;                   // the notes said on arrival (step 1 of docs/speaker-notes-verified.md): 2 to 8 sentences, 70 words at most, paragraphs split by a blank line (lib/notes.ts)
   steps: Step[];                   // step 0 is the entry state; now pages 5 steps after s0 at most (CX 2)
   /**
    * `minutes` is authored. `cumulative` is never typed in content: content/sections/index.ts
@@ -144,7 +144,7 @@ export interface Step {
   callouts?: { target: string; text: string; side: "top" | "right" | "bottom" | "left" }[];   // now pages, 1 at most (CX 4)
   meter?: { label: string; value: string; source: string };   // used-to: last step; now: the JavaScript step (CX 4), one per page
   key?: boolean;                   // CX 3: the one step per page to emphasise; the speaker window marks its bullets
-  bullets: string[];               // s0: 0 to 3; other steps: 1 to 3; 25 words each at most
+  bullets: string[];               // the step's spoken notes, one paragraph per entry (lib/notes.ts): s0: 0 to 3 (the intro carries s0's notes); other steps: 1 to 3; 45 words each at most
   ifKeyboard?: string;             // kept: what to do by hand in hands-on mode
   proof?: string;                  // kept: the plan's proof item this step satisfies
   poster?: string;                 // kept: speaker-mirror image on framework and terminal pages

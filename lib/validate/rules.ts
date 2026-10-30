@@ -3,6 +3,7 @@ import { SPLITS, VIA_VOCABULARY, hasFrame } from "@/content/demo-schema";
 import { elisionLines, excerptLayout, lineSet } from "@/lib/excerpt";
 import { computeSupport, type SupportFile, type WebFeaturesData } from "@/lib/support-data";
 import { ceilingMs, nominalMs } from "@/lib/engine/steps";
+import { notesPlain } from "@/lib/notes";
 
 /**
  * The demo content rules (docs/PRD-demos-v4.md 7.5, with the caps of docs/design/demo-flow-cx.md
@@ -48,19 +49,22 @@ export interface ValidateContext {
 
 export const LIMITS = {
   stepCap: { intro: 0, "used-to": 3, now: 5, single: 5 } as Record<DemoPage["stage"], number>,
-  bullets: { intro: [0, 0], "used-to": [1, 2], now: [1, 3], single: [1, 3] } as Record<DemoPage["stage"], [number, number]>,
+  /** Each bullet is one paragraph of the speaker's notes (docs/speaker-notes-verified.md); used-to was [1, 2]. */
+  bullets: { intro: [0, 0], "used-to": [1, 3], now: [1, 3], single: [1, 3] } as Record<DemoPage["stage"], [number, number]>,
   s0Bullets: 3,
   proofs: 2,
-  bulletWords: 25,
+  /** One paragraph of spoken notes; was 25 for the CX 2 bullets, raised for the verified notes (October 2026). */
+  bulletWords: 45,
   sentenceWords: 20,
   sentenceWarnWords: 15,
-  introWords: 50,
-  introSentences: [2, 3] as [number, number],
+  /** The page's opening notes, said on s0; were 50 words and 2 or 3 sentences, raised for the verified notes. */
+  introWords: 70,
+  introSentences: [2, 8] as [number, number],
   descriptionWords: 20,
   wordsPerMinute: 130,
-  /** CX 2: words per step (bullets). */
-  stepWords: { "used-to": 20, usedToMeter: 30, now: 40, single: 40 } as Record<string, number>,
-  /** CX 2: words per now page, intro plus bullets. */
+  /** Words per step (bullets); CX 2 had used-to 20 (30 with the meter) and now 40, raised for the verified notes. */
+  stepWords: { "used-to": 70, usedToMeter: 70, now: 70, single: 70 } as Record<string, number>,
+  /** CX 2: words per now page, intro plus bullets. Over it, or over the page's minutes at wordsPerMinute, is a warning. */
   nowPageWords: 220,
   highlight: 12,
   highlightSpan: 20,
@@ -120,10 +124,14 @@ export const isTodo = (s: string | undefined) => Boolean(s && /\bTODO\b/.test(s)
 export function words(s: string): number {
   return s.trim() ? s.trim().split(/\s+/).length : 0;
 }
-/** Sentences end at ".", "?" or "!" followed by space (decimals and file names like "app.js" stay whole). */
+/**
+ * Sentences end at ".", "?" or "!" followed by space (decimals and file names like "app.js" stay
+ * whole), also after a closing quote or markup (`."`, `.”`, `.*`), and at every line break, so a
+ * note's paragraphs and list items never run together.
+ */
 export function sentences(s: string): string[] {
   return s
-    .split(/(?<=[.?!])\s+/)
+    .split(/(?<=[.?!]["”’)*`]*)[ \t]+|\s*\n\s*/)
     .map((x) => x.trim())
     .filter(Boolean);
 }
@@ -134,17 +142,24 @@ export function validate(sections: DemoSection[], ctx: ValidateContext): Issue[]
   const issues: Issue[] = [];
   const add = (rule: string, where: string, message: string, level: Level = "error") => issues.push({ rule, where, message, level });
 
-  /** Writing rules (PRD 5.2) on one piece of copy. TODO text is reported once and not checked further. */
-  function copy(where: string, field: string, text: string | undefined, opts: { label?: boolean; sentenceCheck?: boolean } = {}) {
-    if (text === undefined) return;
-    if (isTodo(text)) {
-      add("todo", where, `${field} still has a TODO: "${text.slice(0, 70)}${text.length > 70 ? "…" : ""}"`);
+  /**
+   * Writing rules (PRD 5.2) on one piece of copy. TODO text is reported once and not checked
+   * further. `spoken` marks the speaker's notes (the intro and the bullets), checked on their plain
+   * text: dashes, exclamation points and TODOs stay errors; banned words and sentences over the
+   * hard limit are warnings, so the speaker's verified wording stands (docs/speaker-notes-verified.md).
+   */
+  function copy(where: string, field: string, raw: string | undefined, opts: { label?: boolean; sentenceCheck?: boolean; spoken?: boolean } = {}) {
+    if (raw === undefined) return;
+    if (isTodo(raw)) {
+      add("todo", where, `${field} still has a TODO: "${raw.slice(0, 70)}${raw.length > 70 ? "…" : ""}"`);
       return;
     }
+    const text = opts.spoken ? notesPlain(raw) : raw;
+    const soft: Level = opts.spoken ? "warning" : "error";
     if (/[–—]/.test(text)) add("dash", where, `${field} has an en or em dash`);
     if (text.includes("!")) add("exclaim", where, `${field} has an exclamation point`);
     const lower = ` ${text.toLowerCase().replace(/[^a-z' ]+/g, " ")} `;
-    for (const w of BANNED) if (lower.includes(` ${w} `)) add("banned", where, `${field} uses "${w}"`);
+    for (const w of BANNED) if (lower.includes(` ${w} `)) add("banned", where, `${field} uses "${w}"`, soft);
     if (opts.label) {
       if (/^[a-z]/.test(text) && !/^(pnpm|npm|popover|dialog|select)\b/.test(text)) add("case", where, `${field} "${text}" should start with a capital (sentence case)`);
       if (/, not /.test(text)) add("x-not-y", where, `${field} "${text}" uses "X, not Y"; never in a label`);
@@ -152,7 +167,7 @@ export function validate(sections: DemoSection[], ctx: ValidateContext): Issue[]
     if (opts.sentenceCheck !== false) {
       for (const s of sentences(text)) {
         const n = words(s);
-        if (n > LIMITS.sentenceWords) add("sentence", where, `${field}: a sentence of ${n} words (at most ${LIMITS.sentenceWords}): "${s.slice(0, 60)}…"`);
+        if (n > LIMITS.sentenceWords) add("sentence", where, `${field}: a sentence of ${n} words (${opts.spoken ? "aim for" : "at most"} ${LIMITS.sentenceWords}): "${s.slice(0, 60)}…"`, soft);
         else if (n > LIMITS.sentenceWarnWords) add("sentence", where, `${field}: a sentence of ${n} words (aim for ${LIMITS.sentenceWarnWords}): "${s.slice(0, 60)}…"`, "warning");
       }
     }
@@ -232,9 +247,9 @@ export function validate(sections: DemoSection[], ctx: ValidateContext): Issue[]
   function checkPage(section: DemoSection, page: DemoPage) {
     const where = page.id;
     const stage = page.stage;
-    copy(where, "intro", page.intro);
+    copy(where, "intro", page.intro, { spoken: true });
     if (!isTodo(page.intro)) {
-      const n = sentences(page.intro).length;
+      const n = sentences(notesPlain(page.intro)).length;
       if (words(page.intro) > LIMITS.introWords) add("budget", where, `intro has ${words(page.intro)} words; at most ${LIMITS.introWords}`);
       if (n < LIMITS.introSentences[0] || n > LIMITS.introSentences[1]) add("intro-sentences", where, `intro has ${n} sentence(s); write ${LIMITS.introSentences[0]} or ${LIMITS.introSentences[1]}`);
     }
@@ -256,12 +271,13 @@ export function validate(sections: DemoSection[], ctx: ValidateContext): Issue[]
     if (!allText.some(isTodo) && stage !== "intro") {
       const total = allText.reduce((n, t) => n + words(t), 0);
       const budget = Math.round(LIMITS.wordsPerMinute * page.timing.minutes);
-      if (total > budget) add("budget", where, `${total} words of notes; the budget at ${page.timing.minutes} min is ${budget}`);
-      if (stage === "now" && total > LIMITS.nowPageWords) add("budget", where, `${total} words of notes; a now page has ${LIMITS.nowPageWords} at most`);
+      // Warnings: the speaker's verified notes run past the timing table on several pages (October 2026).
+      if (total > budget) add("budget", where, `${total} words of notes; the budget at ${page.timing.minutes} min is ${budget}`, "warning");
+      if (stage === "now" && total > LIMITS.nowPageWords) add("budget", where, `${total} words of notes; a now page has ${LIMITS.nowPageWords} at most`, "warning");
     }
-    // "X, not Y" at most once per page.
+    // "X, not Y" at most once per page: a warning, since these are the speaker's own words.
     const xNotY = allText.filter((t) => !isTodo(t)).join(" ").match(/, not /g)?.length ?? 0;
-    if (xNotY > 1) add("x-not-y", where, `"X, not Y" appears ${xNotY} times; at most once per page`);
+    if (xNotY > 1) add("x-not-y", where, `"X, not Y" appears ${xNotY} times; aim for once per page`, "warning");
 
     if (stage === "intro") {
       copy(where, "description", page.description);
@@ -355,7 +371,7 @@ export function validate(sections: DemoSection[], ctx: ValidateContext): Issue[]
     copy(where, "label", step.label, { label: true });
     if (!isTodo(step.label) && words(step.label) > 5) add("label", where, `label "${step.label}" has ${words(step.label)} words; aim for 2 to 4`, "warning");
     step.bullets.forEach((b, i) => {
-      copy(where, `bullet ${i + 1}`, b);
+      copy(where, `bullet ${i + 1}`, b, { spoken: true });
       if (!isTodo(b) && words(b) > LIMITS.bulletWords) add("bullet-length", where, `bullet ${i + 1} has ${words(b)} words; at most ${LIMITS.bulletWords}`);
     });
     copy(where, "ifKeyboard", step.ifKeyboard);
@@ -364,7 +380,7 @@ export function validate(sections: DemoSection[], ctx: ValidateContext): Issue[]
     if (!todoBullets) {
       const [lo, hi] = index === 0 ? [0, LIMITS.s0Bullets] : LIMITS.bullets[stage];
       const n = step.bullets.length;
-      const max = stage === "used-to" && step.meter ? 2 : hi;
+      const max = hi;
       if (n < lo || n > max) add("bullets", where, `${n} bullets; ${index === 0 ? "s0 takes" : `${stage} steps take`} ${lo} to ${max}`);
       const sw = step.bullets.reduce((t, b) => t + words(b), 0);
       const cap = stage === "used-to" ? (step.meter ? LIMITS.stepWords.usedToMeter : LIMITS.stepWords["used-to"]) : LIMITS.stepWords[stage];

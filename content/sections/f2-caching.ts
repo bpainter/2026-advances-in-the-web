@@ -21,7 +21,7 @@ export const section: DemoSection = {
       id: "f2-intro",
       stage: "intro",
       intro:
-        "Frameworks are changing too. This product page has copy everyone shares and stock that is different for each user. The question is what to cache.",
+        "Let’s move from browser features to framework decisions.\n\nA product page has information everyone shares, like the name and description. Stock may depend on the user’s region or account. Those pieces don’t need the same caching rules.\n\nWe’ll use Next.js Cache Components to make that difference explicit. The useful question isn’t just, “Can we cache this page?” It’s, “Which work can we safely reuse?”",
       description:
         "Cache Components let you mark in code exactly which parts of a page are cached.",
       visual: {
@@ -38,7 +38,7 @@ export const section: DemoSection = {
       eyebrow: "Cache Components",
       title: "What we used to do",
       intro:
-        "This is the same page in Next.js 16 with Cache Components off. The log below it lists every query.",
+        "Here’s the page with Cache Components turned off.\n\nThe request log will show which queries run each time. We’ll watch the work, not just whether the page looks fast.",
       frame: {
         build: "framework",
         route: "/framework-today/products/ridgeline-trail",
@@ -68,7 +68,8 @@ export const section: DemoSection = {
           code: { file: "page.tsx", lines: [[2, 6]] },
           spotlight: ["#request-log"],
           bullets: [
-            "The route says regenerate hourly and work it out. Those two settings cover the whole page.",
+            "The route has an hourly revalidation setting and an automatic rendering setting.",
+            "Those are useful controls, but they don’t explain the whole page on their own. We also need to look at what the data functions do.",
           ],
         },
         {
@@ -78,7 +79,9 @@ export const section: DemoSection = {
           code: { file: "inventory.ts", lines: [9, [14, 16]] },
           spotlight: ["#request-log"],
           bullets: [
-            "Each load runs the catalog query again. Reading a cookie for stock made the whole route dynamic.",
+            "Load the page again.",
+            "The stock function reads cookies, so the route needs request-time rendering. The catalog is a plain database read without its own cache, so that query runs again too.",
+            "Reading a cookie doesn’t erase every possible data cache. The repeated work here comes from this particular combination.",
           ],
         },
         {
@@ -94,8 +97,9 @@ export const section: DemoSection = {
             source: "counted by scripts/count-cache-flags.mjs in apps/f2-today",
           },
           bullets: [
-            "The catalog has no setting of its own, so it follows the route.",
-            "Five freshness settings in four files decide what caches.",
+            "The demo counts five freshness settings across four files.",
+            "To understand what gets reused, we have to follow those settings through the application.",
+            "The problem isn’t that caching was impossible before. It’s that the intended behavior can be hard to see where the data is loaded.",
           ],
         },
       ],
@@ -107,7 +111,7 @@ export const section: DemoSection = {
       eyebrow: "Cache Components",
       title: "What we can do today",
       intro:
-        "This is the same page with one flag on in the config. Now nothing is cached unless the code asks.",
+        "Now Cache Components is enabled.\n\nWe’ll mark the shared catalog read for caching and leave the request-specific stock read outside that shared cache.",
       frame: {
         build: "framework",
         route: "/framework/products/ridgeline-trail",
@@ -143,9 +147,9 @@ export const section: DemoSection = {
               "use cache, cacheLife and cacheTag in content/sections/f2-caching/files/catalog.ts, counted by hand",
           },
           bullets: [
-            "Two more loads. The catalog query ran once, and only inventory repeats.",
-            "The use cache line caches this function. cacheLife says for how long.",
-            "cacheTag gives the result a name, so we can expire it later.",
+            "Load the page a couple more times and watch the log.",
+            "`use cache` marks the catalog function for reuse. `cacheLife` sets its cache policy, and `cacheTag` gives us a way to target that cached result later.",
+            "In this example, the catalog query stops repeating while the stock query still runs for each request. The three controls are together where we can find them.",
           ],
         },
         {
@@ -161,8 +165,9 @@ export const section: DemoSection = {
           },
           spotlight: [".stock"],
           bullets: [
-            "We slowed inventory down. The name and copy arrive first, then the stock line.",
-            "Suspense lets the cached part show while the stock is still loading.",
+            "Slow the stock request down.",
+            "The product name and description can appear first. The stock section shows its fallback until the result is ready.",
+            "`Suspense` lets us wait for that part without holding back the whole page.",
           ],
         },
         {
@@ -178,8 +183,9 @@ export const section: DemoSection = {
           proof:
             "Change the product copy, fire the product tag invalidation, and show the next request receiving fresh content.",
           bullets: [
-            "We save new copy. The next load runs the catalog query once and shows it.",
-            "The save calls updateTag with this tag, so nobody sees the old copy.",
+            "Save a new product description.",
+            "The save action calls `updateTag` for the product’s cache tag. The next read gets fresh catalog data instead of waiting for the normal cache policy.",
+            "That doesn’t mean every already-open page updates itself. Cache invalidation and updating an existing screen are separate jobs.",
           ],
         },
         {
@@ -199,8 +205,9 @@ export const section: DemoSection = {
           },
           spotlight: [".stock", "#request-log"],
           bullets: [
-            "A different user in another region. The stock changes, and the catalog stays cached.",
-            "Inventory reads cookies and is never cached, so one user's data never reaches another.",
+            "Switch the user and region.",
+            "The stock result changes, while the shared catalog can stay cached.",
+            "Keeping user-specific reads out of a shared cache helps avoid mixing results between users. It isn’t the whole privacy story. We still need authorization and careful cache keys wherever private data is involved.",
           ],
         },
       ],

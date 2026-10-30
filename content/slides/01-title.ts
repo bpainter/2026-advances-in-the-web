@@ -17,7 +17,7 @@ export const slide: Slide = {
     lines: ["2026 advances", "in the web"],
   },
   citations: [],
-  speakerNotes: `Title slide. ${deck.event.label}. Say it: ${deck.speaker.name}, ${deck.speaker.title} at ${deck.speaker.org}. Say the thesis: in 2026 the browser shipped more than the frameworks on it.`,
+  speakerNotes: "While everyone was watching AI, the web kept moving.\n\nBrowsers can handle more of the work we used to hand to libraries. Frameworks are changing how we load pages and cache data. Even installing a package deserves another look.\n\nWe’re going to look at those changes through things we actually build: forms, product pages, navigation, and the tools behind them.\n\nBut first, a little context.",
   timing: { minutes: 0.5, cumulative: 0.5 },
   background: "title",
 };

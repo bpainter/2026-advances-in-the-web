@@ -22,9 +22,14 @@ export const slide: Slide = {
       { icon: "DoorOpen", title: "Innovation without permission", body: "Publish without asking" },
     ],
   },
-  citations: [],
+  citations: [
+    {
+      text: "W3C Ethical Web Principles",
+      url: "https://www.w3.org/TR/ethical-web-principles/",
+    },
+  ],
   speakerNotes:
-    "Agents will browse, buy and build on the web next. Six properties keep it worth building on. Give each one sentence, and do not read the subtitles.",
+    "There are six reasons I care about this.\n\n- **Choice.** A website shouldn’t require everyone to use one company’s browser, app, or assistant.\n- **Control.** People should understand what a service does and have a say in what it can access.\n- **Lasting access.** A link should take you to something you can read, share, and return to. It shouldn’t depend on one feed deciding to show it.\n- **Access for more people.** Good HTML gives us a starting point for different devices, keyboards, and assistive tools.\n- **Trust.** Open standards give us shared rules we can inspect, test, and improve.\n- **Room to create.** You can publish a useful tool, a strange little experiment, or something nobody has thought of yet.\n\nOpen standards don’t guarantee every site does those things well. But they give us a foundation that isn’t controlled by one product.",
   timing: { minutes: 1.5, cumulative: 6 },
   background: "open-web",
 };

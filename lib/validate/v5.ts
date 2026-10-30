@@ -1,4 +1,5 @@
 import { BANNED, LIMITS, sentences, words, type Issue } from "./rules";
+import { notesPlain } from "@/lib/notes";
 import type { GlassContent } from "@/content/schema";
 import type { Background } from "@/content/backgrounds";
 
@@ -163,18 +164,21 @@ export function slideCopyIssues(slides: { id: string; glass?: GlassContent; spea
   const out: Issue[] = [];
   const add = (rule: string, where: string, message: string, level: "error" | "warning" = "error") => out.push({ rule, where, message, level });
   for (const s of slides) {
-    const fields = [...(s.glass ? glassText(s.glass) : []), { field: "notes", text: s.speakerNotes }];
-    for (const { field, text, label } of fields) {
+    // The notes are the speaker's verified script (docs/speaker-notes-verified.md), checked on their
+    // plain text: banned words, "X, not Y" and long sentences are warnings there; the slide's own text stays strict.
+    const fields: { field: string; text: string; label?: boolean; spoken?: boolean }[] = [...(s.glass ? glassText(s.glass) : []), { field: "notes", text: notesPlain(s.speakerNotes), spoken: true }];
+    for (const { field, text, label, spoken } of fields) {
+      const soft = spoken ? "warning" : "error";
       if (/[–—]/.test(text)) add("dash", s.id, `${field} has an en or em dash`);
       if (text.includes("!")) add("exclaim", s.id, `${field} has an exclamation point`);
       if (/\bTODO\b/.test(text)) add("todo", s.id, `${field} still has a TODO`);
       const lower = ` ${text.toLowerCase().replace(/[^a-z' ]+/g, " ")} `;
-      for (const w of BANNED) if (lower.includes(` ${w} `)) add("banned", s.id, `${field} uses "${w}"`);
+      for (const w of BANNED) if (lower.includes(` ${w} `)) add("banned", s.id, `${field} uses "${w}"`, soft);
       if (label && /^[a-z]/.test(text)) add("case", s.id, `${field} "${text}" should start with a capital (sentence case)`);
-      if (/, not /.test(text)) add("x-not-y", s.id, `${field} uses "X, not Y"`);
+      if (/, not /.test(text)) add("x-not-y", s.id, `${field} uses "X, not Y"`, soft);
       for (const sentence of sentences(text)) {
         const n = words(sentence);
-        if (n > LIMITS.sentenceWords) add("sentence", s.id, `${field}: a sentence of ${n} words (at most ${LIMITS.sentenceWords}): "${sentence.slice(0, 60)}…"`);
+        if (n > LIMITS.sentenceWords) add("sentence", s.id, `${field}: a sentence of ${n} words (${spoken ? "aim for" : "at most"} ${LIMITS.sentenceWords}): "${sentence.slice(0, 60)}…"`, soft);
         else if (n > LIMITS.sentenceWarnWords) add("sentence", s.id, `${field}: a sentence of ${n} words (aim for ${LIMITS.sentenceWarnWords}): "${sentence.slice(0, 60)}…"`, "warning");
       }
     }

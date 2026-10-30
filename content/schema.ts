@@ -118,7 +118,7 @@ export interface Slide {
   demos?: Demo[];          // demo-grid (exactly 4)
   image?: { prompt: string; alt: string; model: "higgsfield/nano-banana-2"; placement: "full-bleed" | "right-half" | "background" };
   citations: { text: string; url: string }[];
-  speakerNotes: string;    // 3-5 sentences
+  speakerNotes: string;    // the spoken notes (docs/speaker-notes-verified.md): paragraphs split by a blank line, light markdown (lib/notes.ts)
   timing: { minutes: number; cumulative: number };
   cutPriority?: number;    // 1 = cut first if running long
   background: BackgroundId; // PRD v5, 4.1: the registry file behind the slide; demo pages take their section's

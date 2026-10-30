@@ -15,7 +15,7 @@ export const section: DemoSection = {
       badge: { text: "Vite 7 and Vite 8, measured here" },
       title: "Vite 8 locally",
       intro:
-        "Vite 8 uses one bundler, Rolldown, for development and builds. We measured one fixture app on this laptop.",
+        "Here’s a local build-tool comparison using the same project.\n\nThe useful question is what changes for this codebase, not which tool has the biggest number on its website.",
       frame: {
         build: "static",
         route: "/demos/09-vite-8/static",
@@ -39,14 +39,21 @@ export const section: DemoSection = {
           ],
           spotlight: ["#row-cold", "#row-warm"],
           ifKeyboard: "If asked, run pnpm measure:vite and show the JSON.",
-          bullets: ["Cold and warm builds. On this laptop, Vite 8 takes less than half the time."],
+          bullets: [
+            "Look at the recorded cold and warm runs.",
+            "The newer setup is faster in this fixture. That’s a result for this project and machine, not a promise that every build will improve by the same amount.",
+          ],
         },
         {
           id: "s2",
           label: "Output size",
           actions: [{ type: "reveal", target: "#row-size" }],
           spotlight: ["#row-size"],
-          bullets: ["The output is about the same size."],
+          bullets: [
+            "Now compare the output.",
+            "The bundle size is about the same in this example. Faster build tooling doesn’t automatically mean less JavaScript for the user.",
+            "Those are separate measurements.",
+          ],
         },
         {
           id: "s3",
@@ -59,8 +66,9 @@ export const section: DemoSection = {
           ],
           spotlight: ["#row-warnings", "#row-plugins"],
           bullets: [
-            "No warnings and no failing plugins with these three plugins.",
-            "These are our numbers on one small app. Your plugins decide yours.",
+            "The three plugins in this fixture complete without warnings.",
+            "That’s useful, but it isn’t a compatibility test for every plugin. A practical upgrade still checks the project’s plugins, tests, output, and deployment.",
+            "The win is less waiting without changing what the application is meant to do.",
           ],
         },
       ],

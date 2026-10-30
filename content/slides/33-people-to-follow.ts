@@ -26,7 +26,7 @@ export const slide: Slide = {
     ],
   },
   citations: [],
-  speakerNotes: "Twelve people whose writing covers everything in this talk. Point at two or three you read every week. The closing slide follows with the QR code.",
+  speakerNotes: "None of this progress happened on its own.\n\nThese are some of the people I keep learning from: Chris Coyier, Dave Rupert, Tab Atkins, Lea Verou, Aaron Gustafson, Val Head, Jen Simmons, Miriam Suzanne, Tim Berners-Lee, Rachel Andrew, Eric Meyer, and Jeremy Keith.\n\nThey contribute in different ways, from standards and browser work to teaching, writing, and showing what the web can do.\n\nYou don’t have to follow every proposal or read every specification. But staying close to people who explain the work makes it much easier to keep learning.\n\n*Pause so the audience can read or photograph the names.*",
   timing: { minutes: 1, cumulative: 41.75 },
   background: "people-to-follow",
 };

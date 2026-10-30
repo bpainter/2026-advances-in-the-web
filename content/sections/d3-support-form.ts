@@ -19,7 +19,7 @@ export const section: DemoSection = {
       id: "d3-intro",
       stage: "intro",
       intro:
-        "Our third demo is a support form. The agent types a subject and pastes the details. Both fields should fit what is typed.",
+        "A support form needs a short subject and a longer description.\n\nWe want the fields to grow as someone types, without taking over the page.\n\nThat’s a common reason to add a small JavaScript helper. `field-sizing` gives CSS a way to handle it instead, where it’s supported.",
       description: "Field sizing lets a text field grow and shrink to fit what the user types.",
       visual: {
         src: "/intro/d3-support-form.png",
@@ -34,7 +34,7 @@ export const section: DemoSection = {
       stage: "used-to",
       eyebrow: "Field sizing",
       title: "What we used to do",
-      intro: "An agent fills in a subject and the details. Both fields grow by script.",
+      intro: "Here’s the form with our resizing code attached.\n\nThe user sees two fields. We see a few extra jobs.",
       frame: {
         build: "today",
         route: "/demos/03-content-sized-form/today",
@@ -78,7 +78,10 @@ export const section: DemoSection = {
             ],
           },
           spotlight: ["#t-subject"],
-          bullets: ["Script measures a hidden copy of the subject to size the field."],
+          bullets: [
+            "Type a subject.",
+            "A hidden copy measures the text so we can set the input’s width. Now that copy has to match the real field’s font, spacing, and padding.",
+          ],
         },
         {
           id: "s2",
@@ -93,7 +96,8 @@ export const section: DemoSection = {
           },
           spotlight: ["#t-details"],
           bullets: [
-            "The CSS turns off resizing and hides the copy off screen. Script does the sizing.",
+            "Paste a longer description.",
+            "For the textarea, we read `scrollHeight` and set the height ourselves. We also need limits so it doesn’t keep growing down the page.",
           ],
         },
         {
@@ -112,8 +116,8 @@ export const section: DemoSection = {
             source: "non-blank, non-comment lines in /demos/03-content-sized-form/today/*.js",
           },
           bullets: [
-            "Reset needs its own handler to shrink the box again.",
-            "Script measures after every edit, paste and reset: 113 lines.",
+            "Reset the form. The fields need to shrink again too.",
+            "The demo counts 113 lines of JavaScript for this version. None of that helps us resolve the customer’s problem. It’s just keeping the fields the right size.",
           ],
         },
       ],
@@ -125,7 +129,7 @@ export const section: DemoSection = {
       eyebrow: "Field sizing",
       title: "What we can do today",
       intro:
-        "This is the same form with no sizing script. The fields fit their text with one CSS property.",
+        "The HTML is still a normal form with labels, required fields, and a submit button.\n\nThe sizing enhancement lives in CSS. Browsers that don’t support it keep a usable form.",
       frame: {
         build: "native",
         route: "/demos/03-content-sized-form/native",
@@ -154,9 +158,8 @@ export const section: DemoSection = {
           code: { file: "form.css", lines: [[5, 11]] },
           spotlight: ["#subject"],
           bullets: [
-            "The subject field grows as the text gets longer.",
-            "Field sizing content tells a field to fit its text.",
-            "The width stays between 18 characters and the full row.",
+            "Type the subject again.",
+            "`field-sizing: content` lets the input grow with its content. A minimum width keeps it usable when it’s empty, and a maximum stops it spilling out of the form.",
           ],
         },
         {
@@ -170,9 +173,9 @@ export const section: DemoSection = {
           code: { file: "form.css", lines: [7, 12] },
           spotlight: ["#details"],
           bullets: [
-            "The details box starts at six lines and grows to fit the pasted text.",
-            "One lh is one line of text, so the size follows the font.",
-            "The browser does the sizing. We wrote no measuring code.",
+            "Paste the description.",
+            "The textarea grows within the limits we’ve set: six to twelve line heights in this example. After that, it scrolls.",
+            "No hidden measuring element. No height calculation in our JavaScript.",
           ],
         },
         {
@@ -193,8 +196,9 @@ export const section: DemoSection = {
             source: "non-blank, non-comment lines in content/sections/d3-support-form/files/*.js",
           },
           bullets: [
-            "Open case sends the form. The box shrinks back to six lines.",
-            "The only script submits in place. It never measures a field.",
+            "Submit and reset.",
+            "The fields resize with their content. The remaining JavaScript sends the request and handles the result.",
+            "The demo counts nine lines for that request handling, with no resizing code.",
           ],
         },
         {
@@ -223,8 +227,8 @@ export const section: DemoSection = {
           callouts: [{ target: "#subject", text: "No script", side: "right" }],
           proof: "Submit an empty form and show that native focus and validation still work.",
           bullets: [
-            "Submitting the empty form moves focus to Subject. Both empty fields get a red outline.",
-            "The required attribute does the checking. No request leaves the page.",
+            "Try submitting without the required information.",
+            "Browser validation still helps the user fix the form. We still validate on the server, because browser checks aren’t a security boundary.",
           ],
         },
         {
@@ -240,8 +244,8 @@ export const section: DemoSection = {
             "Toggle the @supports block in developer tools to reveal the ordinary textarea fallback.",
           ifKeyboard: "Turn off field sizing in DevTools. Then press Next once to sync the frame.",
           bullets: [
-            "With the field sizing block off, this is what an older browser gets.",
-            "The box keeps a fixed size and scrolls. The form still works.",
+            "Turn off the sizing enhancement.",
+            "The form is less polished, but it still works. That’s the fallback we want: a different presentation, not a broken task.",
           ],
         },
       ],
@@ -280,6 +284,10 @@ export const section: DemoSection = {
     {
       text: "MDN: field-sizing",
       url: "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/field-sizing",
+    },
+    {
+      text: "MDN compatibility: field-sizing",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/css/properties/field-sizing.json",
     },
   ],
   cautions: [

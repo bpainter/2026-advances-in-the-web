@@ -28,7 +28,7 @@ export const section: DemoSection = {
       id: "m3-intro",
       stage: "intro",
       intro:
-        "Next is the product editor's pricing tab. Another team's pricing app plugs into it. Both use our price field, in different versions.",
+        "A product editor uses one version of a price-field component. An embedded pricing tool uses another version with the same element name.\n\nA single global registry makes that awkward. Both versions want to register the same name.\n\nScoped registries let a part of the page use its own component definitions. That can help when teams or products can’t upgrade everything at once.",
       description: "Scoped registries let two versions of the same custom element run on one page.",
       visual: {
         src: "/intro/m3-pricing-app.png",
@@ -44,7 +44,7 @@ export const section: DemoSection = {
       stage: "used-to",
       eyebrow: "Scoped custom element registries",
       title: "What we used to do",
-      intro: "The editor and a pricing app both use the price field. They need different versions.",
+      intro: "Here’s the product editor and its embedded pricing tool.\n\nWe’ve put the tool in an iframe so it can use its own component definitions.",
       frame: {
         build: "today",
         route: "/demos/14-scoped-registries/today",
@@ -75,7 +75,10 @@ export const section: DemoSection = {
           ],
           code: { file: "index.html", lines: [[13, 19]] },
           spotlight: ["#t-app-frame"],
-          bullets: ["A tag name can be defined once per page. So the app runs in an iframe."],
+          bullets: [
+            "That separates the registries, but it also gives us a separate document to manage.",
+            "Now the host and the tool need a way to share state and coordinate their sizes.",
+          ],
         },
         {
           id: "s2",
@@ -86,7 +89,10 @@ export const section: DemoSection = {
           ],
           code: { file: "styles.css", lines: [[4, 8]] },
           spotlight: ["#t-app-frame"],
-          bullets: ["Add tier grows the app. The iframe keeps its fixed height and scrolls."],
+          bullets: [
+            "Add a pricing tier.",
+            "The tool grows, but the iframe doesn’t automatically grow with its contents. We either get nested scrolling or write more code to resize it.",
+          ],
         },
         {
           id: "s3",
@@ -116,8 +122,9 @@ export const section: DemoSection = {
               "lines that connect the app to the editor in /demos/14-scoped-registries/today: the message bridge in bridge.js and app-bridge.js at printWidth 80, counted by hand",
           },
           bullets: [
-            "A new base price reaches the app as a message.",
-            "Script sends messages both ways and checks each origin: 26 lines.",
+            "Change the price.",
+            "The editor sends the new base price to the embedded tool with `postMessage`. The tool checks the message origin and source, then updates its pricing tiers. A ready message travels back the other way. The demo counts 26 lines of integration code.",
+            "An iframe can be the right boundary. But sometimes we’re using it mainly to avoid a naming conflict.",
           ],
         },
       ],
@@ -129,7 +136,7 @@ export const section: DemoSection = {
       stage: "now",
       eyebrow: "Scoped custom element registries",
       title: "What we can do today",
-      intro: "This is the same editor with no iframe. The app brings its own registry.",
+      intro: "The editor and pricing tool are now part of the same page.\n\nWe still have two component versions. We’re changing where their definitions apply.",
       frame: {
         build: "native",
         route: "/demos/14-scoped-registries/native",
@@ -160,9 +167,8 @@ export const section: DemoSection = {
           code: { file: "pricing-app.js", lines: [[8, 17]] },
           spotlight: ["#pricing-app"],
           bullets: [
-            "The pricing app loads inside the page with version 3 fields.",
-            "A registry maps tag names to components. The app creates its own.",
-            "The editor's price field is still version 2.",
+            "The pricing tool gets its own `CustomElementRegistry` attached to its shadow root.",
+            "Inside that root, the shared tag name points to the tool’s version. Outside it, the host keeps its version.",
           ],
         },
         {
@@ -175,9 +181,8 @@ export const section: DemoSection = {
           code: { file: "pricing-app.js", lines: [[19, 24]] },
           spotlight: ["#pricing-app"],
           bullets: [
-            "Add tier grows the app, and the page makes room.",
-            "A shadow root is a component's private markup.",
-            "This one uses the app's registry. Both versions work side by side.",
+            "Add another tier.",
+            "The tool grows with the page layout. We don’t need an iframe-height message just to make room for the new field.",
           ],
         },
         {
@@ -202,9 +207,9 @@ export const section: DemoSection = {
               "lines that connect the app to the editor in content/sections/m3-pricing-app/files/pricing-app.js: the registry, the shadow root and the event listener at printWidth 80, counted by hand",
           },
           bullets: [
-            "A new base price updates every tier.",
-            "The app hears a normal DOM event. No messages, no origin checks.",
-            "Two versions share one page. We deleted the iframe and the bridge.",
+            "Change the price again.",
+            "The editor’s price field fires a DOM event. The pricing tool listens for it and updates its tiers. We no longer need the cross-document message bridge. The demo’s integration code is down to nine lines.",
+            "One important limit: a shadow root is not a security boundary. This is for code we trust, not a replacement for isolating an untrusted application.",
           ],
         },
       ],
@@ -236,6 +241,10 @@ export const section: DemoSection = {
     {
       text: "webstatus.dev, scoped custom element registries (3.44.0 predates Firefox 159; the intro uses a fallback until the bump)",
       url: "https://webstatus.dev/features/scoped-custom-element-registries",
+    },
+    {
+      text: "MDN compatibility: scoped registry constructor",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/api/CustomElementRegistry.json",
     },
   ],
   cautions: [

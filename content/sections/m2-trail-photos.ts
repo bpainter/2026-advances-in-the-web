@@ -37,7 +37,7 @@ export const section: DemoSection = {
       id: "m2-intro",
       stage: "intro",
       intro:
-        "Next is a product page with customer photos. Photos and quotes have different heights. We want them packed with no gaps.",
+        "Here’s a wall of customer photos and quotes. They aren’t all the same height, and we’d rather not crop them into identical boxes.\n\nGrid Lanes is aimed at layouts like this, where items can pack into lanes without sharing every row boundary.\n\nTreat the native layout as an enhancement here. The fallback still needs a sensible reading order.",
       description: "Grid Lanes packs items of different heights into columns, like a masonry wall.",
       visual: {
         src: "/intro/m2-trail-photos.png",
@@ -53,7 +53,7 @@ export const section: DemoSection = {
       stage: "used-to",
       eyebrow: "Grid Lanes",
       title: "What we used to do",
-      intro: "Customer photos sit in a packed wall. Script places every item.",
+      intro: "We start with a set of photos and quotes from the server.\n\nJavaScript takes over their positions after the page loads.",
       split: "60/40",
       frame: {
         build: "today",
@@ -94,7 +94,10 @@ export const section: DemoSection = {
             ],
           },
           spotlight: ["#t-wall"],
-          bullets: ["The photos load in a stack. Then script moves each one into place."],
+          bullets: [
+            "For each item, the script finds a short column and places the item there.",
+            "That means measuring the items and keeping track of how tall each column has become.",
+          ],
         },
         {
           id: "s2",
@@ -110,7 +113,10 @@ export const section: DemoSection = {
           code: { file: "styles.css", lines: [[7, 15]] },
           // The wall overflows its scrolling pane, so the box goes on the pane (review r6 motion H2).
           spotlight: [".photos"],
-          bullets: ["Show more adds six photos. Every item is absolute, so CSS cannot place it."],
+          bullets: [
+            "Load six more items.",
+            "The new content has to go through the same process. If an image changes size after loading, that may mean more work too.",
+          ],
         },
         {
           id: "s3",
@@ -134,8 +140,9 @@ export const section: DemoSection = {
             source: "non-blank, non-comment lines in /demos/13-grid-lanes/today/*.js",
           },
           bullets: [
-            "The page narrows. The wall rebuilds after a pause.",
-            "Script measures every item and tracks each column: 55 lines.",
+            "Now narrow the wall.",
+            "The script waits briefly, measures again, and places everything for the new width. The demo counts 55 lines of layout JavaScript.",
+            "We’re maintaining our own layout system alongside the browser’s.",
           ],
         },
       ],
@@ -147,7 +154,7 @@ export const section: DemoSection = {
       stage: "now",
       eyebrow: "Grid Lanes",
       title: "What we can do today",
-      intro: "This is the same wall with no layout script. It starts as a regular grid. Browsers without lanes get columns.",
+      intro: "Start with a regular layout that keeps the content readable.\n\nThe photos and quotes shouldn’t disappear just because the browser doesn’t support the newer option.",
       split: "60/40",
       frame: {
         build: "native",
@@ -186,9 +193,8 @@ export const section: DemoSection = {
           },
           spotlight: ["#wall"],
           bullets: [
-            "One display value packs the photos into lanes. The gaps close.",
-            "Browsers without lanes get CSS columns. Still packed, read top to bottom.",
-            "Each photo goes to the lane with the most room.",
+            "Where supported, `display: grid-lanes` lets the browser handle the variable-height layout.",
+            "The fallback in this example uses columns. That’s not identical: columns read down before they read across. The content needs to make sense in that order.",
           ],
         },
         {
@@ -212,8 +218,9 @@ export const section: DemoSection = {
             source: "non-blank, non-comment lines in content/sections/m2-trail-photos/files/*.js",
           },
           bullets: [
-            "Show more adds six photos. They fill the shortest lanes.",
-            "The only script fetches the photos. It never measures them.",
+            "Load six more items again.",
+            "The JavaScript adds the content. CSS handles its placement. The demo counts seven lines of request handling rather than another layout routine.",
+            "We still need to handle loading errors and any untrusted content we insert.",
           ],
         },
         {
@@ -226,9 +233,9 @@ export const section: DemoSection = {
           code: { file: "wall.css", lines: [[4, 5]] },
           spotlight: [".photos"],
           bullets: [
-            "The page narrows, and the wall reflows with no pause.",
-            "Auto fill picks the number of lanes from the width.",
-            "The browser does the packing. We deleted the layout script.",
+            "Narrow the wall.",
+            "The layout responds without our measuring loop. The benefit is less positioning code, not a promise that every browser will arrange every item the same way.",
+            "Use the supported layout, then check reading order and keyboard access in the fallback too.",
           ],
         },
       ],
@@ -272,6 +279,10 @@ export const section: DemoSection = {
     {
       text: "Masonry.js documentation: the layout library the used-to page is modeled on",
       url: "https://masonry.desandro.com/",
+    },
+    {
+      text: "MDN compatibility: display / grid-lanes",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/css/properties/display.json",
     },
   ],
   cautions: [

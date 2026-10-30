@@ -26,7 +26,7 @@ export const slide: Slide = {
   },
   citations: [],
   speakerNotes:
-    "Every enterprise got the same two-word mandate this year: use AI. The reaction was a list of questions. Which tools? Which licenses? What training? Who reviews it? Who is accountable? What’s the impact? Name the mandate plainly before taking any position on it.",
+    "I work at a large digital consultancy with somewhere north of 3,000 software engineers. I’ve lost count.\n\nLike a lot of large organizations, we have a mandate from the executive team: use AI.\n\nUse it for what? That part can be less clear. Sometimes the training hasn’t caught up. Sometimes the licenses haven’t either. Apparently, the first thing we’re automating is the purchase request.\n\nI’m not against the tools. But handing someone a tool and telling them to be more productive isn’t much of a plan.\n\nAnd the reactions are pretty interesting.",
   timing: { minutes: 1, cumulative: 1.5 },
   background: "the-mandate",
 };

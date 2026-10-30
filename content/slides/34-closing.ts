@@ -19,7 +19,7 @@ export const slide: Slide = {
     caption: "Scan to open LinkedIn",
   },
   citations: [],
-  speakerNotes: "Leave this up during questions.",
+  speakerNotes: "I’ll leave you with one ask: go build something.\n\nTry one of these features on a real problem. Look at the code. Test it. Publish what you learn.\n\nUse AI when it helps. But don’t let it replace your judgment or your curiosity. You’re still responsible for understanding what you ship.\n\nI don’t want to experience everything the web has to offer through a chat window. I still enjoy finding a site and seeing how someone else thinks. The design, the writing, the strange little interaction they didn’t have to add but did anyway.\n\nThat’s part of what makes the web worth keeping open.\n\nGo make something worth visiting.\n\n*Leave the closing slide visible during questions.*",
   timing: { minutes: 0.25, cumulative: 42 },
   background: "closing",
 };

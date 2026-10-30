@@ -10,6 +10,7 @@ import { speakerSlideName } from "@/lib/presenter/titles";
 import { frameUrl } from "@/lib/frames/origins";
 import { SpeakerTimer } from "./Timer";
 import { NavTrigger, isNavOpen } from "@/components/chrome/NavDrawer";
+import { NotesInlineText, NotesText } from "./NotesText";
 
 const NOTES_KEY = "deck:notes-size";
 const NOTES_MIN = 28;
@@ -312,7 +313,9 @@ export function SpeakerView({ slide, next, total, current, nextPreview, sectionP
   const status = framed && page ? frameStatus(audienceConnected, demoHealth[page.id], playing) : null;
   const supportLine = section?.support ? (section.support.kind === "tooling" ? `Tools: ${section.support.packages.map((p) => `${p.name} ${p.version}`).join(", ")}.` : `web-features: ${section.support.id}${section.support.alsoUses?.length ? `; also uses ${section.support.alsoUses.join(", ")}` : ""}.`) : null;
   const hasSupport = Boolean(supportLine || step?.proof);
-  const hasCitations = Boolean(section?.citations.length);
+  // Demo pages carry their section's citations; glass slides carry their own (docs/speaker-notes-verified.md).
+  const citations = slide.citations;
+  const hasCitations = citations.length > 0;
   const hasReferences = Boolean(step) || hasSupport || hasCitations;
 
   return (
@@ -419,12 +422,12 @@ export function SpeakerView({ slide, next, total, current, nextPreview, sectionP
             {page && step ? (
               <>
                 {state.handsOn && step.ifKeyboard ? <p className="notes__hands-on">{step.ifKeyboard}</p> : null}
-                {stepIndex === 0 && page.intro ? <p className="notes__intro">{page.intro}</p> : null}
+                {stepIndex === 0 && page.intro ? <NotesText text={page.intro} paragraph="notes__intro" quote="notes__quote" list="notes__list" /> : null}
                 {step.bullets.length ? (
                   <ul className="notes__bullets" data-key={step.key || undefined}>
                     {step.bullets.map((b, i) => (
                       <li key={b} className="notes__bullet" data-key={(step.key && i === step.bullets.length - 1) || undefined}>
-                        {b}
+                        <NotesInlineText text={b} />
                       </li>
                     ))}
                   </ul>
@@ -441,7 +444,7 @@ export function SpeakerView({ slide, next, total, current, nextPreview, sectionP
                 ) : null}
               </>
             ) : (
-              <p className="notes__intro">{slide.speakerNotes}</p>
+              <NotesText text={slide.speakerNotes} paragraph="notes__intro" quote="notes__quote" list="notes__list" />
             )}
             {hasReferences ? (
               // Keyed by slide, so it is closed again on every slide change (8.4).
@@ -458,11 +461,11 @@ export function SpeakerView({ slide, next, total, current, nextPreview, sectionP
                       {step?.proof ? <p className="notes__support">Proof item: {step.proof}</p> : null}
                     </div>
                   ) : null}
-                  {section && hasCitations ? (
+                  {hasCitations ? (
                     <div className="notes__group">
                       <p className="notes__group-label">Sources</p>
                       <ul className="notes__citations">
-                        {section.citations.map((c) => (
+                        {citations.map((c) => (
                           <li key={c.url + c.text}>
                             <a href={c.url} target="_blank" rel="noopener">
                               {c.text}

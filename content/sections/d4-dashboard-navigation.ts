@@ -20,7 +20,7 @@ export const section: DemoSection = {
       id: "d4-intro",
       stage: "intro",
       intro:
-        "Our fourth demo is an order dashboard. Clicking an order should feel instant. Back, focus and scroll still have to work.",
+        "Now an order list. Open an order, filter the list, go back, and keep your place.\n\nA client-side router can do that, but we often end up managing clicks, history, canceled requests, focus, and scroll in separate places.\n\nThe Navigation API gives us a more direct way to handle supported navigations. It doesn’t remove the need for good routing decisions.",
       description:
         "The Navigation API lets one event handle every link, form and Back press.",
       visual: {
@@ -38,7 +38,7 @@ export const section: DemoSection = {
       title: "What we used to do",
       split: "60/40",
       intro:
-        "This dashboard uses a router written by hand. Links, Back and slow networks each need code.",
+        "Here’s the list with a small custom router.\n\nIt starts with normal links. Then our code takes over when someone clicks one.",
       frame: {
         build: "today",
         route: "/demos/04-navigation-api/today",
@@ -75,7 +75,10 @@ export const section: DemoSection = {
           ],
           code: { file: "index.html", lines: [[2, 6]] },
           spotlight: [LINK_418, "#content"],
-          bullets: ["These are real links. A click handler stops each one and loads by script."],
+          bullets: [
+            "Open order 418.",
+            "We stop the link, load content, update the page, and push a history entry. We also need to update the title and move focus somewhere useful.",
+          ],
         },
         {
           id: "s2",
@@ -87,7 +90,8 @@ export const section: DemoSection = {
           code: { file: "app.css", lines: [[2, 5]] },
           spotlight: ["#content"],
           bullets: [
-            "Back fires a separate event. A loading class dims the page while script fetches.",
+            "Now go back.",
+            "That’s a different event path. We need to load the right view and restore the user’s place, not just change the URL.",
           ],
         },
         {
@@ -116,8 +120,9 @@ export const section: DemoSection = {
             source: "non-blank, non-comment lines in /demos/04-navigation-api/today/*.js",
           },
           bullets: [
-            "On a slow network we click two orders. Script cancels the first.",
-            "Links, Back, scroll and focus take 134 lines.",
+            "Open a slow order, then quickly open another.",
+            "Without cancellation, the first response can arrive last and replace the page with the wrong order.",
+            "This example uses 134 lines of routing JavaScript. A lot of it coordinates work the browser already knows is navigation.",
           ],
         },
       ],
@@ -130,7 +135,7 @@ export const section: DemoSection = {
       title: "What we can do today",
       split: "60/40",
       intro:
-        "This is the same dashboard. Every page is a normal server page. One listener makes the moves between them smooth.",
+        "The server still provides a complete order list. The links work before we add the enhancement.\n\nThat gives us a fallback instead of an empty screen waiting for the router.",
       frame: {
         build: "native",
         route: "/orders",
@@ -180,9 +185,9 @@ export const section: DemoSection = {
               "non-blank, non-comment lines in content/sections/d4-dashboard-navigation/files/*.js",
           },
           bullets: [
-            "Order 418 opens without a full page load. The address and the title change.",
-            "One navigate event handles every link. Intercept says we render the page.",
-            "Focus moves to the new content, where keyboard users need it.",
+            "Open an order.",
+            "The `navigate` handler checks whether this is a navigation we should intercept. Downloads, different origins, and other special cases shouldn’t be pulled into our page loader.",
+            "We then load the content and handle the title and focus. The demo’s routing code is down to 33 lines.",
           ],
         },
         {
@@ -205,8 +210,9 @@ export const section: DemoSection = {
           ifKeyboard:
             "Choose Shipped in the filter and press Apply. Then press Next once to sync the frame.",
           bullets: [
-            "The status filter is a normal form. Apply shows the shipped orders.",
-            "The same navigate event handles the form. We added no code for it.",
+            "Use the filter.",
+            "It’s a GET form, so the filter state belongs in the URL. That makes the result easier to share and revisit.",
+            "We’re demonstrating this navigation path, not claiming every form submission should be intercepted.",
           ],
         },
         {
@@ -231,9 +237,8 @@ export const section: DemoSection = {
           ifKeyboard:
             "Press Alt and Left Arrow twice inside the frame. Then press Next once to sync the frame.",
           bullets: [
-            "Back returns to order 418, then to the list at the same scroll position.",
-            "Back and Forward run through the same navigate event.",
-            "The browser restores the scroll position for us.",
+            "Go back through the list and detail views.",
+            "The goal is to preserve the user’s place. A back button that returns you to the top of a long list technically works, but it doesn’t feel finished.",
           ],
         },
         {
@@ -260,8 +265,9 @@ export const section: DemoSection = {
           proof:
             "Slow the network and quickly choose another order to show cancellation of stale work.",
           bullets: [
-            "On a slow network we pick order 418, then 419. The first request stops.",
-            "The event carries a signal. Passing it to fetch cancels the stale request.",
+            "Try the slow-order case again.",
+            "We pass the navigation’s abort signal to the fetch. When that navigation is canceled, the request can be canceled too.",
+            "We still handle errors. The API helps coordinate the work; it doesn’t write the error screen for us.",
           ],
         },
         {
@@ -280,8 +286,9 @@ export const section: DemoSection = {
           ifKeyboard:
             "Disable JavaScript in DevTools and reload. Then click a link and press Back.",
           bullets: [
-            "With the script off, each click is a full page load.",
-            "Every address is a real page, so the task still works.",
+            "Remove the enhancement.",
+            "The links load full pages. The GET form still submits. The task still works.",
+            "That’s the difference between enhancing navigation and making navigation depend on our JavaScript.",
           ],
         },
       ],
@@ -312,6 +319,10 @@ export const section: DemoSection = {
     {
       text: "page (page.js) and react-router weekly downloads (mid-2026 window; refresh)",
       url: "https://api.npmjs.org/downloads/point/last-week/react-router",
+    },
+    {
+      text: "MDN compatibility: NavigateEvent",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/api/NavigateEvent.json",
     },
   ],
   cautions: [

@@ -17,7 +17,7 @@ export const section: DemoSection = {
       id: "d2-intro",
       stage: "intro",
       intro:
-        "Our second demo is a product card. The same card sits in a featured slot, a search grid and a narrow rail. Each place needs a different layout.",
+        "Here’s a product card we want to reuse in a wide section, a search result, and a narrow sidebar.\n\nThe browser window might be the same size in all three cases. The space around the card isn’t.\n\nContainer queries let the card respond to that space. We’ll also use `@scope` and `:has()` to keep the styles easier to manage.",
       description:
         "Container queries let a component change its layout based on the space it is given.",
       visual: {
@@ -33,7 +33,7 @@ export const section: DemoSection = {
       stage: "used-to",
       eyebrow: "Container queries",
       title: "What we used to do",
-      intro: "One card sits in three places. Each place tells it how to look.",
+      intro: "We’ve got the same card in a few different slots.\n\nEach slot needs a slightly different layout, so the parent starts telling the card how to look.",
       frame: {
         build: "today",
         route: "/demos/02-container-card/today",
@@ -79,7 +79,10 @@ export const section: DemoSection = {
             "#t-grid .c-product-card",
             "#t-rail .c-product-card",
           ],
-          bullets: ["Script fills three empty slots with the same card and a different prop."],
+          bullets: [
+            "Now we have variants: compact, wide, sidebar, and whatever comes next.",
+            "The card isn’t just receiving product data. It’s receiving instructions about the page around it.",
+          ],
         },
         {
           id: "s2",
@@ -93,7 +96,10 @@ export const section: DemoSection = {
             ],
           },
           spotlight: ["#t-merch .c-product-card"],
-          bullets: ["The wide layout uses a viewport query. CSS cannot ask about the slot."],
+          bullets: [
+            "Those variants turn into more CSS and more breakpoints.",
+            "A viewport query tells us how wide the browser is. It doesn’t tell us how much of that width the card actually gets.",
+          ],
         },
         {
           id: "s3",
@@ -116,8 +122,9 @@ export const section: DemoSection = {
             source: "non-blank, non-comment lines in /demos/02-container-card/today/*.js",
           },
           bullets: [
-            "The page narrowed, and the featured card stacked in a slot that kept its width.",
-            "Props, classes and a resize observer take 126 lines of script.",
+            "Shrink the page and watch the mismatch.",
+            "We can patch it with `ResizeObserver`, measure the card, and switch classes ourselves. The demo counts 126 lines of layout JavaScript in this version.",
+            "It works, but we’re writing code to tell CSS how much room it has.",
           ],
         },
       ],
@@ -129,7 +136,7 @@ export const section: DemoSection = {
       eyebrow: "Container queries",
       title: "What we can do today",
       intro:
-        "This is the same card with no layout script. Its slot is a container the card can measure. Watch the card as the slot changes width.",
+        "The wrapper is now a named container with `container-type: inline-size`.\n\nThat gives the card a useful question to ask: how much horizontal space do I have?",
       frame: {
         build: "native",
         route: "/demos/02-container-card/native",
@@ -167,8 +174,8 @@ export const section: DemoSection = {
           },
           spotlight: [".product-card"],
           bullets: [
-            "The slot shrinks to rail width, and the card stays stacked.",
-            "The slot is the part the page controls. The card markup never changes.",
+            "Make the slot narrow.",
+            "The card stacks its content because its container is narrow. We don’t need the parent to pass a compact-layout flag.",
           ],
         },
         {
@@ -182,9 +189,9 @@ export const section: DemoSection = {
           code: { file: "card.css", lines: [4, [21, 23]] },
           spotlight: [".product-card"],
           bullets: [
-            "The slot widens, and the card turns horizontal.",
-            "The container line makes the slot something the card can measure.",
-            "A container query asks how wide the slot is, not how wide the page is.",
+            "Now give it more room.",
+            "Once the container reaches the breakpoint, the card switches to three columns. The same component handles both layouts.",
+            "Container units also let us size parts of the card relative to the space around it.",
           ],
         },
         {
@@ -203,9 +210,9 @@ export const section: DemoSection = {
           },
           spotlight: [".product-card", ".product-card .name"],
           bullets: [
-            "Back to grid width. The product name shrinks with the card.",
-            "The @scope rule limits these short selectors to the card. Page styles cannot reach them.",
-            "The cqi unit sizes the name by the card's width.",
+            "Here’s `@scope`.",
+            "It limits where these rules apply, so we can write simpler selectors for the card.",
+            "It doesn’t create a sealed box. Outside styles can still affect elements inside it. Think of it as a way to target rules, not complete style isolation.",
           ],
         },
         {
@@ -218,8 +225,8 @@ export const section: DemoSection = {
           code: { file: "card.css", lines: [[10, 11]] },
           spotlight: [".product-card"],
           bullets: [
-            "The low-stock line goes away, and the warning border goes with it.",
-            "The has selector checks whether the card holds a stock line. No state class is needed.",
+            "Remove the stock message.",
+            "The `:has()` rule responds to what’s in the card. We don’t need JavaScript to add another class just to say the stock element exists.",
           ],
         },
         {
@@ -243,8 +250,9 @@ export const section: DemoSection = {
             source: "non-blank, non-comment lines in content/sections/d2-product-card/files/*.js",
           },
           bullets: [
-            "The page gets narrower, but the slot keeps its width. The card stays horizontal.",
-            "No script measures anything. The JavaScript file holds only a comment.",
+            "Now change the page width again.",
+            "The card follows its own container, not a guess based on the whole window. We’ve removed the layout JavaScript from this version.",
+            "The form is still a form. Layout changes don’t have to change how the user buys the product.",
           ],
         },
       ],
@@ -283,6 +291,22 @@ export const section: DemoSection = {
     {
       text: "MDN: @scope",
       url: "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope",
+    },
+    {
+      text: "MDN compatibility: container-type",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/css/properties/container-type.json",
+    },
+    {
+      text: "MDN compatibility: container units",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/css/types/length.json",
+    },
+    {
+      text: "MDN compatibility: @scope",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/css/at-rules/scope.json",
+    },
+    {
+      text: "MDN compatibility: :has()",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/css/selectors/has.json",
     },
   ],
   cautions: [

@@ -31,7 +31,7 @@ export const section: DemoSection = {
       stage: "intro",
       // Said on arrival; it carries the framing of the removed F1 opener (PRD r7, 8.3).
       intro:
-        "The next five features are still in motion. Prototype now, and check Baseline before you ship. First, a store photo where each pin opens a product card.",
+        "Now we’re into features where we need to pay closer attention to the exact parts supported by each browser.\n\nHere’s a product photo with clickable hotspots. Each one opens a card beside the item.\n\nKeeping that card close to its hotspot, and inside the visible area, has usually meant a positioning library or our own measurements. CSS anchor positioning takes over much of that work.",
       description: "Anchor positioning places an element beside another one and moves it when space runs out.",
       visual: {
         src: "/intro/m1-shop-the-look.png",
@@ -47,7 +47,7 @@ export const section: DemoSection = {
       stage: "used-to",
       eyebrow: "Anchor positioning",
       title: "What we used to do",
-      intro: "Each pin opens a product card. Script decides where it fits.",
+      intro: "The photo has a few product hotspots.\n\nEach card needs to follow its hotspot as the layout changes.",
       split: "60/40",
       frame: {
         build: "today",
@@ -92,7 +92,10 @@ export const section: DemoSection = {
             lines: [[13, 15], [21, 23], 29],
           },
           spotlight: ["#t-pin-shell", "#t-card-shell"],
-          bullets: ["The shell pin opens its card. The card sits in a box at the page end."],
+          bullets: [
+            "Open the shell jacket.",
+            "Our code measures the hotspot and the card, then decides where to place the card. Moving it elsewhere in the document can avoid clipping, but now the connection is something we maintain ourselves.",
+          ],
         },
         {
           id: "s2",
@@ -111,7 +114,10 @@ export const section: DemoSection = {
           },
           // The card alone: a pin ring beside it fuses into one shape and hides the arrow (review r6 M2).
           spotlight: ["#t-card-shoe"],
-          bullets: ["The shoe pin is near the edge, so the card flips left. CSS keeps a class per side."],
+          bullets: [
+            "Open the shoe near the edge.",
+            "The card doesn’t fit on the usual side, so our code moves it to the other side. The arrow needs to follow that decision too.",
+          ],
         },
         {
           id: "s3",
@@ -132,8 +138,9 @@ export const section: DemoSection = {
             source: "non-blank, non-comment lines in /demos/12-anchor-hotspots/today/*.js",
           },
           bullets: [
-            "The photo narrows, and the card follows.",
-            "Script checks each edge and reacts to every scroll and resize: 71 lines.",
+            "Make the photo narrower.",
+            "Now we measure again. Resize listeners and observers keep the card in place. The demo counts 71 lines of positioning JavaScript.",
+            "It’s a familiar problem, which is exactly why it’s useful for the platform to handle more of it.",
           ],
         },
       ],
@@ -145,7 +152,7 @@ export const section: DemoSection = {
       stage: "now",
       eyebrow: "Anchor positioning",
       title: "What we can do today",
-      intro: "This is the same photo with no positioning script. Each card is a popover tied to its pin.",
+      intro: "Same photo and hotspots.\n\nIn CSS, we name the anchor and tell the card which anchor it belongs to.",
       split: "60/40",
       frame: {
         build: "native",
@@ -178,9 +185,9 @@ export const section: DemoSection = {
           spotlight: ["#pin-shell", "#card-shell"],
           ifKeyboard: "Click the pin. Then press Next once to sync the frame.",
           bullets: [
-            "The shell pin opens its card on the right.",
-            "Anchor name marks the pin. Position anchor ties the card to it.",
-            "Position area picks the side of the pin.",
+            "Open the jacket.",
+            "`position-anchor` connects the card to the hotspot. `position-area` describes where we’d like it to go.",
+            "We describe the relationship instead of calculating the coordinates ourselves.",
           ],
         },
         {
@@ -196,9 +203,9 @@ export const section: DemoSection = {
           spotlight: ["#card-shoe"],
           ifKeyboard: "Click the pin. Then press Next once to sync the frame.",
           bullets: [
-            "The shoe pin is near the edge, so the card opens on the left.",
-            "Position try fallbacks lists other sides to try when one does not fit.",
-            "Chrome flips the arrow too. Other browsers hide it for now.",
+            "Now open the shoe.",
+            "The preferred position doesn’t fit, so the browser tries the fallback positions we’ve supplied.",
+            "The arrow is an extra enhancement in this demo. Support for that part is narrower than support for the basic anchored card.",
           ],
         },
         {
@@ -217,9 +224,9 @@ export const section: DemoSection = {
             source: "non-blank, non-comment lines in content/sections/m1-shop-the-look/files/*.js",
           },
           bullets: [
-            "The photo narrows. The open card stays beside its pin.",
-            "The browser places it again after every layout change.",
-            "We wrote no measuring code and no listeners.",
+            "Make the photo narrower again.",
+            "The browser updates the position without our positioning listeners. In a browser without the needed anchor support, this example uses a simpler centered card.",
+            "The card still opens. It just loses the more precise placement.",
           ],
         },
       ],
@@ -259,6 +266,18 @@ export const section: DemoSection = {
     {
       text: "Whole feature: not yet Baseline in web-features 3.44.0 (two position-visibility values ship only in Safari 27; position-anchor from Chrome 151, Firefox 151, Safari 27). The tiles show anchor-name, position-area and position-try-fallbacks.",
       url: "https://webstatus.dev/features/anchor-positioning",
+    },
+    {
+      text: "MDN compatibility: position-anchor",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/css/properties/position-anchor.json",
+    },
+    {
+      text: "MDN compatibility: position-area",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/css/properties/position-area.json",
+    },
+    {
+      text: "MDN compatibility: container-type",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/css/properties/container-type.json",
     },
   ],
   cautions: [

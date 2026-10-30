@@ -22,7 +22,7 @@ export const section: DemoSection = {
       id: "d6-intro",
       stage: "intro",
       intro:
-        "Our last core demo is a product editor. The Color field shows a photo beside each name. Firefox does not support this yet, and it still gets a working form.",
+        "A customer needs to choose a color. We’d like to show the color name and a small image.\n\nThat design request often sends us straight to a custom dropdown. Then we inherit all the behavior of a select control too.\n\nCustomizable select lets us keep more of the native control while changing its appearance. Support still needs care, so the ordinary select remains important.",
       description:
         "Customizable select lets you style a real select, with any content inside each option.",
       visual: {
@@ -39,7 +39,7 @@ export const section: DemoSection = {
       eyebrow: "Customizable select",
       title: "What we used to do",
       intro:
-        "The Color field shows a photo beside each name. Teams built their own select for that.",
+        "Here’s the custom color picker.\n\nIt looks like a select, but underneath it, we’ve built our own control.",
       frame: {
         build: "today",
         route: "/demos/11-customizable-select/today",
@@ -65,7 +65,10 @@ export const section: DemoSection = {
           actions: [{ type: "pointer", to: "#t-color" }],
           code: { file: "index.html", lines: [6, 16, [20, 24]] },
           spotlight: ["#t-color"],
-          bullets: ["The select is a div with a combobox role, a list and a hidden input."],
+          bullets: [
+            "We have a combobox, a list of options, and a hidden input to carry the selected value into the form.",
+            "Now those pieces have to agree about what’s selected.",
+          ],
         },
         {
           id: "s2",
@@ -82,7 +85,10 @@ export const section: DemoSection = {
             ],
           },
           spotlight: ["#t-color", "#t-color-list"],
-          bullets: ["CSS lifts the list above the page and hides it when closed."],
+          bullets: [
+            "Open the picker.",
+            "We handle its position, size, open state, and what happens when it gets close to the edge of the screen.",
+          ],
         },
         {
           id: "s3",
@@ -118,8 +124,9 @@ export const section: DemoSection = {
             source: "non-blank, non-comment lines in /demos/11-customizable-select/today/*.js",
           },
           bullets: [
-            "Arrow Down and Enter pick Moss.",
-            "Script handles every key, the outside click and the form value: 128 lines.",
+            "Choose a color with the keyboard.",
+            "Arrow keys, Enter, focus, and typing to find an option all need attention. The demo counts 128 lines of JavaScript in this version.",
+            "The picture in the option was the easy part.",
           ],
         },
       ],
@@ -131,7 +138,7 @@ export const section: DemoSection = {
       eyebrow: "Customizable select",
       title: "What we can do today",
       intro:
-        "This is a real select with the same photos. It starts plain, the way every browser draws it.",
+        "Start with a real `select` and real options.\n\nWithout the enhanced styling, the user still has a working color field. The form still has a value to submit.",
       frame: {
         build: "native",
         route: "/demos/11-customizable-select/native",
@@ -159,9 +166,8 @@ export const section: DemoSection = {
           code: { file: "select.css", lines: [[1, 4]] },
           spotlight: ["#color"],
           bullets: [
-            "Four lines of CSS turn the plain select into a custom one.",
-            "Appearance base-select lets us style the select and its picker.",
-            "The button now shows the photo beside the name.",
+            "Now opt into the customizable appearance with `base-select`.",
+            "We can style the control and its picker rather than replacing the whole interaction with separate elements.",
           ],
         },
         {
@@ -182,8 +188,8 @@ export const section: DemoSection = {
           ifKeyboard:
             "Click the select to open the live picker. Then press Next once to sync the frame.",
           bullets: [
-            "The picker opens, and each option shows a photo beside its name.",
-            "The selectedcontent element copies the chosen option into the button.",
+            "The options can include the color image and label. `selectedcontent` displays the chosen option’s content in the button.",
+            "The text still needs to make sense on its own. The image shouldn’t be the only way someone can tell the options apart.",
           ],
         },
         {
@@ -204,8 +210,9 @@ export const section: DemoSection = {
           spotlight: ["#color"],
           ifKeyboard: "Tab to Color and press Arrow Down. Then press Next once to sync the frame.",
           bullets: [
-            "Arrow Down picks Moss, and the button shows its photo.",
-            "The keyboard works because this is still a select. We wrote no key handling.",
+            "Choose Moss and watch the selected content update.",
+            "The browser manages the selection. We still test actual keyboard and assistive-technology behavior on the browsers we support.",
+            "A scripted selection in a demo isn’t a substitute for that test.",
           ],
         },
         {
@@ -225,8 +232,9 @@ export const section: DemoSection = {
             source: "non-blank, non-comment lines in content/sections/d6-variant-picker/files/*.js",
           },
           bullets: [
-            "Save posts the form. The server got color equals moss.",
-            "The select is a real form control, so the value posts with no extra code.",
+            "Check the submitted form data.",
+            "We get the value `moss`, just as we’d expect from a normal select. We don’t need a hidden field to keep a separate custom control in sync.",
+            "The remaining JavaScript handles the request, not the picker.",
           ],
         },
         {
@@ -239,8 +247,9 @@ export const section: DemoSection = {
           ifKeyboard:
             "Open the frame in Firefox on the laptop instead, choose Moss and press Save.",
           bullets: [
-            "This is the same form in Firefox. It shows a normal select.",
-            "Save still posts the color. Every browser gets a working form.",
+            "*Show the Firefox capture identified in the deck.*",
+            "Here’s the Firefox capture for this example, rather than a live browser switch.",
+            "The important fallback is still the ordinary select. We can add the richer appearance where it works without making color selection depend on it.",
           ],
         },
       ],
@@ -279,6 +288,14 @@ export const section: DemoSection = {
     {
       text: "Simmons, Grid Lanes demo",
       url: "https://webkit.org/demos/grid3/",
+    },
+    {
+      text: "MDN compatibility: base-select",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/css/properties/appearance.json",
+    },
+    {
+      text: "MDN compatibility: selectedcontent",
+      url: "https://raw.githubusercontent.com/mdn/browser-compat-data/main/html/elements/selectedcontent.json",
     },
   ],
   cautions: [
