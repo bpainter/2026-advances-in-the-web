@@ -1,52 +1,55 @@
 /*
-  Self-hosted brand faces from the Slalom design system (public/fonts/). "Slalom Sans" carries the
-  weights the deck's tokens use; the single-weight family names stay for older layouts.
+  Self-hosted brand faces from the Slalom design system. Each face loads its Latin WOFF2 subset
+  from public/fonts/v2/, written by `pnpm fonts` from the masters in public/fonts/ (docs/PRD-perf.md,
+  P1-FONTS); app/layout.tsx preloads Regular and Bold. "Slalom Sans" carries the weights the deck's
+  tokens use; the single-weight family names stay for older layouts. The frames declare Regular and
+  Bold again in styles/glass-tokens.css, at the same URLs.
 */
 @font-face {
   font-family: "Slalom Sans";
-  src: url("/fonts/SlalomSans-Regular.otf") format("opentype");
+  src: url("/fonts/v2/SlalomSans-Regular.latin.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Slalom Sans";
-  src: url("/fonts/SlalomSans-Bold.otf") format("opentype");
+  src: url("/fonts/v2/SlalomSans-Bold.latin.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Slalom Sans";
-  src: url("/fonts/SlalomSans-Black.otf") format("opentype");
+  src: url("/fonts/v2/SlalomSans-Black.latin.woff2") format("woff2");
   font-weight: 900;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Lora";
-  src: url("/fonts/Lora-Italic.ttf") format("truetype");
+  src: url("/fonts/v2/Lora-Italic.latin.woff2") format("woff2");
   font-weight: 400;
   font-style: italic;
   font-display: swap;
 }
 @font-face {
   font-family: "Slalom Sans Bold";
-  src: url("/fonts/SlalomSans-Bold.otf") format("opentype");
+  src: url("/fonts/v2/SlalomSans-Bold.latin.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Slalom Sans Black";
-  src: url("/fonts/SlalomSans-Black.otf") format("opentype");
+  src: url("/fonts/v2/SlalomSans-Black.latin.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Lora Italic";
-  src: url("/fonts/Lora-Italic.ttf") format("truetype");
+  src: url("/fonts/v2/Lora-Italic.latin.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;

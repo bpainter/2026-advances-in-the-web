@@ -9,6 +9,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import type { Frame, Page } from "@playwright/test";
 import { BACKGROUNDS, backgroundUrl, type BackgroundId } from "@/content/backgrounds";
+import imageManifest from "@/content/.generated/images.json";
 import type { Slide } from "@/content/schema";
 import type { Report } from "./walk-spotlight.mts";
 
@@ -34,6 +35,11 @@ export function checkDistinct(report: Report) {
     }
   if (close.length) report.fail("backgrounds", `thumbnails too similar: ${close.join(", ")}`);
   else report.pass(`backgrounds: all ${(ids.length * (ids.length - 1)) / 2} pairs differ by 12 or more per channel (closest ${worst.pair}, ${worst.d.toFixed(1)})`);
+}
+
+/** The file the stage decodes ahead for a background: its AVIF (lib/assets.ts backgroundImage), else the JPEG. */
+function decodeUrlOf(url: string): string {
+  return (imageManifest as Record<string, { avif?: { src: string }[] } | undefined>)[url]?.avif?.[0]?.src ?? url;
 }
 
 /** Walks the deck slide by slide with Shift+ArrowRight and checks each slide's background and grain. */
@@ -64,7 +70,7 @@ export async function walkDeck(page: Page, base: string, slides: Slide[], report
       if (!v.image.includes(want)) problems.push(`${slide.id}: background is ${v.image.slice(0, 80)}, not ${want}`);
       if (v.grain === null) problems.push(`${slide.id}: no grain layer`);
       else if (Math.abs(v.grain - tokenOpacity) > 0.001 || v.blend !== "overlay") problems.push(`${slide.id}: grain at ${v.grain} ${v.blend}; the token says ${tokenOpacity} overlay`);
-      if (i > 0 && !v.decoded.includes(want)) problems.push(`${slide.id}: ${want} was not decoded before arrival`);
+      if (i > 0 && !v.decoded.includes(decodeUrlOf(want))) problems.push(`${slide.id}: ${decodeUrlOf(want)} was not decoded before arrival`);
       if (slide.id === "closing") await checkClosing(page, report);
       // Round 7 checks per slide (scripts/walk-r7.mts), on the slide as it arrived.
       if (perSlide) await perSlide(slide);

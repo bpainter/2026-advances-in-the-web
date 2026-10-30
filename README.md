@@ -113,7 +113,12 @@ server-sent events) and `POST /__demo/reset`. The today app's meter is printed b
 ## Fonts
 
 Slalom Sans (Regular, Bold, Black) and Lora Italic are in `public/fonts/`, from the Slalom design
-system, and loaded by `styles/fonts.css`. The deck uses "Slalom Sans" with weights.
+system. The deck uses "Slalom Sans" with weights. `pnpm fonts` subsets each master to a Latin WOFF2
+under `public/fonts/v2/` (`lib/fonts.ts`), and `styles/fonts.css` and the frames' theme load only
+those; the layout and the frame shell preload Regular (and the layout Bold). The subset keeps every
+character the deck's text uses, and `pnpm check` fails when new copy needs one it lacks. The folder
+is write-once (it is served immutable): a change goes in a new folder version. The masters stay for
+the F2 apps and the OG cover.
 
 ## Opening and closing slides
 

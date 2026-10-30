@@ -42,10 +42,16 @@ const HOOKS = `
 
 const PROBE = `(({ n, k }) => {
   const swap = window.__swaps[n] ?? null;
+  // The file the stage paints: --slide-bg-image is image-set(AVIF, JPEG) since P1-IMG, so the
+  // first URL in it with a resource entry, else the plain URL in data-background.
   let bgEnd = null;
   if (swap && swap.bg) {
-    const e = performance.getEntriesByName(new URL(swap.bg, location.href).href).pop();
-    if (e) bgEnd = e.responseEnd;
+    const layer = document.querySelector('#stage .stage__bg');
+    const urls = layer ? [...getComputedStyle(layer).backgroundImage.matchAll(/url\\("?([^")]+)"?\\)/g)].map((m) => m[1]) : [];
+    for (const u of [...urls, swap.bg]) {
+      const e = performance.getEntriesByName(new URL(u, location.href).href).pop();
+      if (e) { bgEnd = e.responseEnd; break; }
+    }
   }
   const img = document.querySelector('.stage__slide .intro__image, .stage__slide .intro img');
   if (img && img.complete && img.naturalWidth && !img.__done) img.__done = performance.now();

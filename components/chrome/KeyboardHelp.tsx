@@ -1,14 +1,18 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { KEY_HELP } from "@/lib/keys";
+import { keyHelpFor } from "@/lib/keys";
+import type { Mode } from "@/lib/mode";
 
 interface Props {
   open: boolean;
   onClose: () => void;
+  /** The window's mode: reader mode lists only the keys that work there (PRD-perf P0-4, a11y L7). */
+  mode: Mode;
 }
 
-export function KeyboardHelp({ open, onClose }: Props) {
+export function KeyboardHelp({ open, onClose, mode }: Props) {
+  const rows = keyHelpFor(mode === "reader" ? "reader" : "presenter");
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     const el = ref.current;
@@ -23,7 +27,7 @@ export function KeyboardHelp({ open, onClose }: Props) {
         Keyboard
       </h2>
       <dl className="keyboard-help__list">
-        {KEY_HELP.map((row) => (
+        {rows.map((row) => (
           <div key={row.action} style={{ display: "contents" }}>
             <dt className="keyboard-help__keys">
               {row.keys.map((k) => (

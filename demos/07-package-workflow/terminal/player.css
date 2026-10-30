@@ -23,6 +23,12 @@
   scrollbar-width: none;
 }
 
+/* The scroller takes focus, so keyboard users can scroll the output (a11y L5). */
+.term__scroll:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: -2px;
+}
+
 .term__lines {
   margin: 0;
   padding: 0;

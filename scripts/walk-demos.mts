@@ -10,6 +10,7 @@
  *   pnpm walk m2 --no-lanes                       Chromium without the Grid Lanes switch (r7 7.1)
  *   pnpm walk drawer | links                      the drawer's keyboard contract (9.8), link focus (5.3)
  *   pnpm walk focus | underlay | keys             PRD-perf P0-1 to P0-4 (walk-perf.mts; also --origin=<url>)
+ *   pnpm walk a11y                                PRD-perf P2-A11Y and P2-TEXT (walk-a11y.mts)
  *
  * Needs `pnpm dev` at DECK_URL (default http://localhost:3000) with the demo origin reachable.
  */
@@ -26,6 +27,7 @@ import { slides as deckSlides } from "@/lib/content";
 import { PROTOCOL_WATCH, checkProtocol, finishDeckSampler, startDeckSampler, walkFixture } from "./walk-spotlight.mts";
 import { VT_WATCH, checkM2Fallback, checkPageTitle, checkSelect, checkSlideR7, finishDeckR7, walkAdvance, walkDrawer, walkLinkFocus, walkTransitions } from "./walk-r7.mts";
 import { walkPerf } from "./walk-perf.mts";
+import { walkA11y } from "./walk-a11y.mts";
 
 const BASE = process.env.DECK_URL ?? "http://localhost:3000";
 const args = process.argv.slice(2);
@@ -532,6 +534,7 @@ async function checkGeometry(page: Page, demoPage: DemoPage, where: string) {
 async function main() {
   // PRD-perf stage checks (walk-perf.mts) run on their own, also against a deployment (--origin).
   if (only === "focus" || only === "underlay" || only === "keys") process.exit(await walkPerf(only, args));
+  if (only === "a11y") process.exit(await walkA11y(args));
   const health = await fetch(`${BASE}/_health`).catch(() => null);
   if (!health?.ok) {
     console.error(`No deck at ${BASE}. Start it with \`pnpm dev\` and run the walk again.`);

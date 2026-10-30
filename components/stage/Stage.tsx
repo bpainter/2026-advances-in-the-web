@@ -8,7 +8,8 @@ import type { Mode } from "@/lib/mode";
 import type { NavGroup } from "@/lib/nav";
 import { usePresenter } from "@/lib/presenter/context";
 import { readerHref, slideHref } from "@/lib/presenter/url";
-import { frameUrl } from "@/lib/frames/origins";
+import { frameLive, frameUrl } from "@/lib/frames/origins";
+import { rememberPillFocus, restorePillFocus } from "@/lib/focus-restore";
 import type { StepResult } from "@/lib/engine/frame";
 import { StageContext, type DemoStatus, type Playback, type StageState } from "@/lib/stage-context";
 import { ReaderControls } from "@/components/chrome/ReaderControls";
@@ -52,9 +53,13 @@ function fadeAllowed(): boolean {
  * The last scale each kind of stage measured in this window. A stage that mounts on a slide change
  * starts at it, so its first paint is already scaled: the crossfade snapshots the new slide in that
  * paint, and an unscaled first frame would zoom for the length of the fade (r7 design review).
- * The first stage of a window starts at 1, as the server rendered it, and measures before paint.
+ * The first stage of a window writes no scale until it has measured, so the server's markup paints
+ * at the CSS estimate in stage.css (docs/PRD-perf.md, P2-SCALE), and it measures before paint.
  */
 const lastScale = new Map<string, number>();
+
+/** Keys the page keeps for scrolling while the reader's text view replaces the stage. */
+const TEXT_VIEW_SCROLL_KEYS = new Set([" ", "PageUp", "PageDown", "Home", "End"]);
 
 /** Set by a drawer jump: the stage that mounts next takes focus (PRD r7, 9.5). */
 let focusOnArrival = false;
@@ -100,7 +105,6 @@ function decodeBackground(src: string): Promise<void> {
 
 interface Props {
   slideId: string;
-  slideTitle: string;
   slideIndex: number;
   total: number;
   prevId?: string;
@@ -154,18 +158,17 @@ function stepFromUrl(stepCount: number): number {
  * here. Remounted per slide (keyed on slide id).
  */
 export function Stage(props: Props) {
-  const { slideId, slideTitle, slideIndex, total, prevId, nextId, prevHasSteps, firstId, lastId, slideIds, slideSteps = [], background, backgroundCss, neighbourBackgrounds, neighbourAssets = [], nav, steps, frameRoute, mode, canonicalPath, embedded, passive, children } = props;
+  const { slideId, slideIndex, total, prevId, nextId, prevHasSteps, firstId, lastId, slideIds, slideSteps = [], background, backgroundCss, neighbourBackgrounds, neighbourAssets = [], nav, steps, frameRoute, mode, canonicalPath, embedded, passive, children } = props;
   const router = useRouter();
   const presenter = usePresenter();
   const shared = Boolean(presenter) && !passive;
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
-  const announcerRef = useRef<HTMLDivElement>(null);
   const touched = useRef(false);
   const playback = useRef<Playback | null>(null);
   const scaleKey = `${mode}:${embedded ? "embedded" : "full"}:${passive ? "passive" : "live"}`;
-  const [scale, setScale] = useState(() => lastScale.get(scaleKey) ?? 1);
+  const [scale, setScale] = useState<number | null>(() => lastScale.get(scaleKey) ?? null);
   const [local, setLocal] = useState<LocalState>({ stepIndex: 0, blank: false, handsOn: false, live: false });
   const localRef = useRef(local);
   const [reloadToken, setReloadToken] = useState(0);
@@ -334,15 +337,6 @@ export function Stage(props: Props) {
     window.history.replaceState(null, "", url);
   }, [passive, shared, stepIndex]);
 
-  // Announce the page title 150ms after a page change (Part A, 13).
-  useEffect(() => {
-    if (passive) return;
-    const t = window.setTimeout(() => {
-      if (announcerRef.current) announcerRef.current.textContent = slideTitle;
-    }, 150);
-    return () => window.clearTimeout(t);
-  }, [passive, slideTitle]);
-
   // Reader controls fade out after a short idle period. Keys a frame forwards and the pointer
   // reaching the pill wake them too (PRD r7, 6.4): events inside a frame never reach this window.
   const wakeRef = useRef<() => void>(() => {});
@@ -384,6 +378,8 @@ export function Stage(props: Props) {
         p.update({ slideId: id, stepIndex: step === "last" ? -1 : 0, ...(startTimer ? { startedAt: Date.now(), pausedAt: null } : {}) });
       } else {
         // Back lands on the last step; a slide with one step has no other, and the bare URL is the prefetched one.
+        // The pill button that had focus gets it back on the next slide (a11y M2).
+        rememberPillFocus();
         router.push(readerHref(id, { last: step === "last" && (id !== prevId || prevHasSteps) }));
       }
     },
@@ -535,6 +531,9 @@ export function Stage(props: Props) {
       // Reader mode: character shortcuts act only from the stage or the page itself (WCAG 2.1.4,
       // a11y H2). Arrows, PageUp, PageDown, Space, Backspace, Home and End work from anywhere.
       if (mode === "reader" && isCharacterKey(e.key) && e.target !== document.body && e.target !== canvasRef.current) return;
+      // Reader text view (PRD-perf P2-TEXT): the stage is hidden and the page scrolls, so the keys
+      // that scroll a page do that; the arrows still move the deck.
+      if (mode === "reader" && TEXT_VIEW_SCROLL_KEYS.has(e.key) && canvasRef.current?.checkVisibility?.() === false) return;
       const action = actionForKey(e, mode);
       if (!action) return;
       e.preventDefault();
@@ -571,10 +570,13 @@ export function Stage(props: Props) {
 
   // A drawer jump hands the keyboard to the stage that shows the target slide.
   useEffect(() => {
-    if (passive || !focusOnArrival) return;
+    if (passive) return;
+    // A move from a pill button refocuses the same button in this stage's pill (a11y M2).
+    if (mode === "reader" && restorePillFocus(() => canvasRef.current?.focus({ preventScroll: true }))) return;
+    if (!focusOnArrival) return;
     focusOnArrival = false;
     canvasRef.current?.focus({ preventScroll: true });
-  }, [passive]);
+  }, [passive, mode]);
   const jump = useCallback(
     (id: string) => {
       if (id !== slideId) focusOnArrival = true;
@@ -654,15 +656,17 @@ export function Stage(props: Props) {
     };
   }, []);
 
-  // Decode the neighbours' backgrounds ahead of time (PRD v5, 1.6). Kept in a module cache so a
-  // decoded image is never fetched twice.
+  // Decode the neighbours' backgrounds ahead of time (PRD v5, 1.6), in the audience window and in
+  // reader mode (docs/PRD-perf.md, P1-READ). Kept in a module cache so a decoded image is never
+  // fetched twice.
   const neighbourKey = neighbourBackgrounds.join("|");
   useEffect(() => {
-    if (mode !== "audience" || passive) return;
+    if ((mode !== "audience" && mode !== "reader") || passive) return;
     for (const src of neighbourKey.split("|").filter(Boolean)) decodeBackground(src);
   }, [neighbourKey, mode, passive]);
-  // The next slide's still or first poster (audience), or the posters the speaker's previews show
-  // after the next press (PRD r7, 9.2). Once the slide has settled, so they never compete with it.
+  // The next slide's still or first poster and the poster Back lands on (audience and reader), or
+  // the posters the speaker's previews show after the next press (PRD r7, 9.2). Once the slide has
+  // settled, so they never compete with it.
   const assetKey = neighbourAssets.join("|");
   useEffect(() => {
     if (passive || !assetKey) return;
@@ -672,7 +676,8 @@ export function Stage(props: Props) {
     return () => window.clearTimeout(t);
   }, [assetKey, passive]);
 
-  const style = { "--stage-scale": scale, "--dpr": dpr } as CSSProperties;
+  // No inline scale until the first measurement: the server's markup paints at stage.css's estimate.
+  const style = { ...(scale === null ? {} : { "--stage-scale": scale }), "--dpr": dpr } as CSSProperties;
   const canvasStyle = { "--slide-bg-image": backgroundCss ?? `url("${background}")` } as CSSProperties;
   // The grain is the audience window's alone: previews and other modes draw none (PRD v5, 1.2).
   const grain = mode === "audience" && !embedded && !passive;
@@ -701,7 +706,6 @@ export function Stage(props: Props) {
         ) : (
           canvas
         )}
-        {passive ? null : <div className="stage__announcer" aria-live="polite" aria-atomic="true" ref={announcerRef} />}
         {rehearsal && !passive ? (
           <p className="stage__rehearsal">
             {slideId} · step {stepIndex + 1}/{Math.max(stepCount, 1)} · {last?.digest ?? "no digest"} · {last?.ms ?? 0}ms · {last?.asserts.filter((a) => !a.pass).length ?? 0} failed assert(s) · p95 frame {p95 ?? "…"} ms{p95 !== null && p95 > 20 ? " (over 20)" : ""}
@@ -709,11 +713,11 @@ export function Stage(props: Props) {
         ) : null}
       </div>
       {mode === "reader" ? (
-        <ReaderControls slideIndex={slideIndex} total={total} hasPrev={Boolean(prevId)} hasNext={Boolean(nextId)} onPrev={() => perform({ type: "retreat" })} onNext={() => perform({ type: "advance" })} onHelp={() => setHelpOpen(true)} onWake={wake} />
+        <ReaderControls slideIndex={slideIndex} total={total} hasPrev={Boolean(prevId)} hasNext={Boolean(nextId)} onPrev={() => perform({ type: "retreat" })} onNext={() => perform({ type: "advance" })} onHelp={() => setHelpOpen(true)} onWake={wake} demo={frameRoute && frameLive(frameRoute) ? { on: handsOn, toggle: () => perform({ type: "toggle-hands-on" }) } : undefined} />
       ) : null}
       {/* One drawer per window, outside the canvas and the pill, so no capture includes it (PRD r7, 9.4). */}
       {nav && !passive && mode !== "print" ? <NavDrawer groups={nav.groups} currentId={nav.currentId} onJump={jump} focusStage={focusStage} returnFocusToStage={mode === "audience"} /> : null}
-      {mode !== "audience" && !passive ? <KeyboardHelp open={helpOpen} onClose={() => setHelpOpen(false)} /> : null}
+      {mode !== "audience" && !passive ? <KeyboardHelp open={helpOpen} onClose={() => setHelpOpen(false)} mode={mode} /> : null}
       {presenter?.mode === "speaker" && !passive ? <GotoDialog open={gotoOpen} total={total} onGo={(n) => go(slideIds[n - 1])} onClose={() => setGotoOpen(false)} /> : null}
     </StageContext.Provider>
   );

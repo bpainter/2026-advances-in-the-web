@@ -6,11 +6,13 @@
  *                     each section's AVIF from content/.generated/images.json in image-set()
  *                     (docs/PRD-perf.md, P1-IMG), and copies the theme, a JPEG-only
  *                     backgrounds.css, the F2 section background and the two Slalom Sans faces
- *                     into each F2 app's public/
+ *                     (the OTF masters and the WOFF2 subsets the theme's @font-face loads,
+ *                     docs/PRD-perf.md, P1-FONTS) into each F2 app's public/
  *   pnpm theme:lint   lints the theme (lib/validate/theme.ts)
  */
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { subsetPath } from "@/lib/fonts";
 import { BACKGROUNDS_PUBLIC, F2_APPS, F2_BACKGROUND, F2_WRAPPER_CSS, FONTS, THEME_PUBLIC, THEME_SOURCE, backgroundsCss, lintTheme } from "@/lib/validate/theme";
 
 const root = process.cwd();
@@ -29,7 +31,11 @@ if (cmd === "sync") {
     writeFileSync(path.join(root, app, BACKGROUNDS_PUBLIC), backgroundsCss({ avif: false }));
     copy(`public/backgrounds/v5/${F2_BACKGROUND}`, `${app}/public/backgrounds/v5/${F2_BACKGROUND}`);
     for (const f of F2_WRAPPER_CSS) copy(`public/wrappers/${f}`, `${app}/public/wrappers/${f}`);
-    for (const f of FONTS) copy(`public/fonts/${f}`, `${app}/public/fonts/${f}`);
+    for (const f of FONTS) {
+      copy(`public/fonts/${f}`, `${app}/public/fonts/${f}`);
+      // The copied theme loads the subset, at the same URL as on the demo origin.
+      copy(`public${subsetPath(f)}`, `${app}/public${subsetPath(f)}`);
+    }
   }
   console.log(`synced ${THEME_SOURCE} to ${THEME_PUBLIC} and ${F2_APPS.length} F2 apps`);
 } else if (cmd === "lint") {

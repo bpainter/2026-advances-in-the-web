@@ -1,3 +1,4 @@
+import { preload } from "react-dom";
 import { hasFrame } from "@/content/demo-schema";
 import type { Slide } from "@/content/schema";
 import type { Mode } from "@/lib/mode";
@@ -45,16 +46,20 @@ const groups = navGroups();
 export function SlidePage({ slide, mode, canonicalPath, embedded, passive }: Props) {
   const { prev, next, position } = neighbours(slide.id);
   const afterNext = slides[position + 2];
-  // Decoded ahead, through the stage's module cache. The audience window takes the next slide's
-  // first image. The speaker window takes what its previews show after the next press: the current
+  const background = backgroundImage(slide.background);
+  // The slide's background is its LCP image: in the head at parse, not found after the CSS and the
+  // inline style (docs/PRD-perf.md, P1-READ). Not for the speaker's next-slide preview.
+  if (!passive && background.decodeUrl.endsWith(".avif")) preload(background.decodeUrl, { as: "image", type: "image/avif", fetchPriority: "high" });
+  // Decoded ahead, through the stage's module cache. The audience window and reader mode take the
+  // next slide's first image and, when Back lands on the previous page's last step, that step's
+  // poster. The speaker window takes what its previews show after the next press: the current
   // page's step posters, and the next two slides' first images.
-  const audienceAssets = slideImages(next);
+  const audienceAssets = [...slideImages(next), ...(prev?.page && prev.page.steps.length > 1 ? slideImages(prev, [prev.page.steps.at(-1)!.id]) : [])];
   const speakerAssets = [...new Set([...slideImages(slide, slide.page?.steps.map((s) => s.id)), ...slideImages(next), ...slideImages(afterNext)])];
   return (
     <Stage
       key={slide.id}
       slideId={slide.id}
-      slideTitle={slide.title}
       slideIndex={slide.index}
       total={slides.length}
       prevId={prev?.id}
@@ -65,9 +70,9 @@ export function SlidePage({ slide, mode, canonicalPath, embedded, passive }: Pro
       slideIds={slides.map((s) => s.id)}
       slideSteps={slides.map((s) => s.page?.steps.length ?? 0)}
       background={backgroundUrl(slide.background)}
-      backgroundCss={backgroundImage(slide.background).css}
-      neighbourBackgrounds={[prev, next].flatMap((n) => (n ? [backgroundUrl(n.background)] : []))}
-      neighbourAssets={mode === "audience" ? audienceAssets : mode === "speaker-preview" && !passive ? speakerAssets : []}
+      backgroundCss={background.css}
+      neighbourBackgrounds={[prev, next].flatMap((n) => (n ? [backgroundImage(n.background).decodeUrl] : []))}
+      neighbourAssets={mode === "audience" || mode === "reader" ? audienceAssets : mode === "speaker-preview" && !passive ? speakerAssets : []}
       nav={passive ? null : { groups, currentId: navCurrent(slide.id) }}
       steps={slide.page?.steps.map((s) => ({ label: s.label })) ?? []}
       frameRoute={slide.page && hasFrame(slide.page) ? slide.page.frame.route : undefined}

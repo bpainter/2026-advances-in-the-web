@@ -132,6 +132,35 @@ for (const id of SECTION_IDS) {
 const code = token("--chrome-code-surface");
 for (const [name, hex] of Object.entries(CODE_COLORS)) expect(`code ${name} on the code card`, parse(hex), [code, WASH_CHROME], 7, FRAME_BASES);
 expect("code ink on a highlighted line", parse(CODE_COLORS.ink), [token("--chrome-code-highlight-bg"), code, WASH_CHROME], 7, FRAME_BASES);
+// Dimmed lines (a11y M5): the lines a step does not highlight, and every line of an "off" file, are
+// drawn at --chrome-code-dim-opacity over the card. WCAG has no exemption for de-emphasized text.
+{
+  const m = /--chrome-code-dim-opacity:\s*([\d.]+);/.exec(tokenBlock);
+  if (!m) throw new Error("token --chrome-code-dim-opacity not found");
+  const dim = Number(m[1]);
+  for (const [name, hex] of Object.entries(CODE_COLORS)) {
+    const [r, g, b] = parse(hex);
+    expect(`code ${name}, dimmed to ${dim}, on the code card`, [r, g, b, dim], [code, WASH_CHROME], 4.5, FRAME_BASES);
+  }
+}
+
+// The reader pill's focus ring (a11y M4, WCAG 1.4.11): cyan, inside the button, against the pill's
+// fill over any slide, a hovered button and a pressed toggle. Values from reader-controls.css.
+{
+  const rc = readFileSync(path.join(process.cwd(), "styles", "components", "reader-controls.css"), "utf8");
+  const block = (sel: string) => {
+    const start = rc.indexOf(`${sel} {`);
+    if (start < 0) throw new Error(`reader-controls.css: no ${sel} rule`);
+    return rc.slice(start, rc.indexOf("}", start));
+  };
+  const pillFill = parse(/background:\s*(rgb\([^)]+\))/.exec(block(".reader-controls"))?.[1] ?? "");
+  const hover = parse(/background:\s*(rgb\([^)]+\))/.exec(block(".reader-controls__button:hover"))?.[1] ?? "");
+  const bases = { ...PALETTE, black: [0, 0, 0, 1] as RGBA };
+  const ring = token("--glass-dark-focus");
+  expect("reader pill: focus ring on the pill", ring, [pillFill], 3, bases);
+  expect("reader pill: focus ring on a hovered button", ring, [hover, pillFill], 3, bases);
+  expect("reader pill: focus ring on a pressed toggle (Slalom Blue)", ring, [token("--slalom-blue")], 3);
+}
 
 // Intro slides (PRD v5, 1.6): the text sits in one dark glass panel (navy 0.72, blurred) over the
 // section background; tiles add navy 0.56 on top of the panel.

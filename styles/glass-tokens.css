@@ -16,7 +16,7 @@
 
 @font-face {
   font-family: "Slalom Sans";
-  src: url("/fonts/SlalomSans-Regular.otf") format("opentype");
+  src: url("/fonts/v2/SlalomSans-Regular.latin.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -24,7 +24,7 @@
 
 @font-face {
   font-family: "Slalom Sans";
-  src: url("/fonts/SlalomSans-Bold.otf") format("opentype");
+  src: url("/fonts/v2/SlalomSans-Bold.latin.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -257,7 +257,9 @@
     --chrome-code-property: #005a73;
     --chrome-code-highlight-bg: rgb(12 98 251 / 0.12);
     --chrome-code-highlight-bar: #0c62fb;
-    --chrome-code-dim-opacity: 0.55;
+    /* The lowest opacity that keeps the lightest token (comment) at 4.5:1 over the code card on
+       every section background (a11y M5; pnpm test:contrast checks it). 0.81 gives 4.48:1. */
+    --chrome-code-dim-opacity: 0.82;
     --chrome-callout-bg: #0f1c41;
     --chrome-callout-ink: #ffffff;
     --chrome-callout-leader: #0c62fb;

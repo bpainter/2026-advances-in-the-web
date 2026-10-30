@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { bySlideId, slideIdByNumber, slides } from "@/lib/content";
 import { SlidePage } from "@/components/stage/SlidePage";
+import { ReadingView } from "@/components/page/ReadingView";
+import { TextViewBoot } from "@/components/page/TextViewBoot";
 import { baseMetadata, jsonLdHtml, slideJsonLd, slideMetadata } from "@/lib/seo";
 
 interface Params {
@@ -33,6 +35,9 @@ export default async function SlideRoute({ params }: Params) {
       {/* Per-slide JSON-LD (PRD r7, 10.3): lands at the top of <body>; crawlers read it anywhere. */}
       {/* eslint-disable-next-line react/no-danger -- JSON-LD needs raw JSON; jsonLdHtml builds it from content and escapes "<" (Next's documented pattern). */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml(slideJsonLd(slide)) }} />
+      {/* The reader's text view (PRD-perf P2-TEXT): the session's switch applies before the stage paints. */}
+      <TextViewBoot />
+      <ReadingView slide={slide} total={slides.length} />
       <SlidePage slide={slide} mode="reader" />
     </>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import type { FramePage } from "@/content/demo-schema";
 import type { Mode } from "@/lib/mode";
 import type { RenderedFile } from "@/lib/highlight";
@@ -9,6 +9,8 @@ export type PanelFile = RenderedFile & { elisions: number[] };
 import type { StepResult } from "@/lib/engine/frame";
 import { useStage } from "@/lib/stage-context";
 import { frameLive } from "@/lib/frames/origins";
+import { announce, ensureAnnouncer } from "@/lib/announce";
+import { stepAnnouncement, stepCodeSentence } from "@/lib/code-description";
 import { PageFrame } from "./PageFrame";
 import { PageCodePanel } from "./PageCodePanel";
 
@@ -48,6 +50,29 @@ export function PageBody({ page, files, sandbox, sideEffects, mode, slot, meters
   const meter = meterStep?.meter;
   const onStatus = useCallback((s: "loading" | "ready" | "error") => setDemoStatus(page.id, s === "ready" ? "ready" : s === "error" ? "error" : "loading"), [page.id, setDemoStatus]);
   const onStepResult = useCallback((stepId: string, result: StepResult) => setStepResult(page.id, stepId, result), [page.id, setStepResult]);
+
+  // Reader mode: a step the reader moves to is announced once, with what the code highlights
+  // (PRD-perf P2-A11Y M3 and M6). The step a page opens on (`?step=`, or Back landing on the last
+  // step) is not: Next's route announcer has just read the page's title.
+  const announcedStep = useRef<number | null>(null);
+  useEffect(() => {
+    if (mode !== "reader") return;
+    ensureAnnouncer();
+    const count = page.steps.length;
+    if (announcedStep.current === null) {
+      const raw = new URLSearchParams(window.location.search).get("step");
+      const n = raw === "last" ? count - 1 : Number.parseInt(raw ?? "0", 10);
+      // The stage restores this step from the URL right after mount; that move is not announced.
+      announcedStep.current = Number.isFinite(n) ? Math.min(Math.max(n, 0), Math.max(count - 1, 0)) : 0;
+      return;
+    }
+    if (announcedStep.current === stepIndex) return;
+    announcedStep.current = stepIndex;
+    const s = page.steps[stepIndex];
+    if (!s || count < 2) return;
+    const shown = files.find((f) => f.file === s.code?.file);
+    announce(stepAnnouncement(stepIndex, count, s.label, stepCodeSentence(s.code, shown?.elisions)));
+  }, [mode, stepIndex, page.steps, files]);
 
   const preview = mode === "speaker-preview";
   const poster = step ? posters[step.id] : null;

@@ -3,6 +3,7 @@ import { bySlideId, slides, deck } from "@/lib/content";
 import { SlidePage } from "@/components/stage/SlidePage";
 import { slideMetadata } from "@/lib/seo";
 import { RenderedSlide } from "@/components/presenter/RenderedSlide";
+import { speakerSlideName } from "@/lib/presenter/titles";
 
 /**
  * The audience window, prerendered once per slide (docs/PRD-perf.md, P1-PRERENDER), so every open,
@@ -28,8 +29,10 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const slide = bySlideId(id) ?? slides[0];
-  // The title slide's title is the deck's; it is not repeated.
-  const title = slide.title === deck.title ? `Audience · ${deck.title}` : `Audience · ${slide.title} · ${deck.title}`;
+  // The slide's distinct name (the 13 "What we used to do" pages carry their feature), as the
+  // speaker window names it; the title slide's name is the deck's, so it is not repeated.
+  const name = speakerSlideName(slide);
+  const title = name === deck.title ? `Audience · ${deck.title}` : `Audience · ${name} · ${deck.title}`;
   return { ...slideMetadata(slide), title, robots: { index: false, follow: true } };
 }
 

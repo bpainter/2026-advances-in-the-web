@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 import type { Step } from "@/content/demo-schema";
 import type { Mode } from "@/lib/mode";
 import { lineSet } from "@/lib/excerpt";
+import { highlightSentence } from "@/lib/code-description";
 import type { PanelFile } from "./PageBody";
 
 interface Props {
@@ -18,6 +19,12 @@ interface Props {
  * that never wraps, no line numbers. The highlighted band dims the rest and scrolls into view.
  * Elision lines of excerpts are dimmed and italic and never highlighted. On an enhancement-off step
  * (`code.off`) the file is dimmed and its tab carries an "Off" chip.
+ *
+ * Where the panel is interactive (reader mode), the file tabs follow the APG tabs pattern
+ * (docs/PRD-perf.md, P2-A11Y H3): one tab stop, ArrowLeft, ArrowRight, Home and End move between
+ * files without moving the deck, and the code is the tab panel. The highlight is also text
+ * (M6): the code points to a visually hidden sentence naming the highlighted lines, and an off
+ * file's tab says so. The audience window and the speaker's previews keep no tab stops.
  */
 export function PageCodePanel({ files, code, mode }: Props) {
   const stepFile = code?.file ?? files[0]?.file;
@@ -29,7 +36,15 @@ export function PageCodePanel({ files, code, mode }: Props) {
   const highlighted = code && !code.off && file?.file === code.file ? new Set([...lineSet(code.lines)].filter((n) => !elided.has(n))) : new Set<number>();
   const off = Boolean(code?.off && file?.file === code.file);
   const preRef = useRef<HTMLPreElement>(null);
+  const tabsRef = useRef<HTMLDivElement>(null);
   const interactive = mode !== "audience" && mode !== "speaker-preview";
+  const baseId = useId();
+  const tabId = (i: number) => `${baseId}-tab-${i}`;
+  const panelId = `${baseId}-panel`;
+  const descId = `${baseId}-desc`;
+  const activeIndex = Math.max(0, files.findIndex((f) => f.file === file?.file));
+  // Reader mode only: the audience window and the previews have no screen reader user to tell.
+  const description = interactive && file ? highlightSentence(file.file, highlighted) : null;
 
   useEffect(() => {
     const pre = preRef.current;
@@ -56,25 +71,60 @@ export function PageCodePanel({ files, code, mode }: Props) {
     pre.scrollTo({ top: target, behavior: reduced ? "auto" : "smooth" });
   }, [activeFile, key]);
 
+  // APG tabs, automatic activation. The keys stop here, so the deck never sees them: ArrowRight on
+  // a tab changes the file, not the step, and Home and End stay in the tab list.
+  const onTabKey = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (!interactive || files.length === 0) return;
+    const at = activeIndex;
+    const next = e.key === "ArrowRight" ? (at + 1) % files.length : e.key === "ArrowLeft" ? (at - 1 + files.length) % files.length : e.key === "Home" ? 0 : e.key === "End" ? files.length - 1 : null;
+    if (next === null || e.altKey || e.ctrlKey || e.metaKey) return;
+    e.preventDefault();
+    e.stopPropagation();
+    setOverride({ step: key, file: files[next].file });
+    tabsRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[next]?.focus();
+  };
+
   return (
     <div className="code code--page chrome-card" data-has-highlight={highlighted.size > 0} data-off={off}>
-      <div className="code__tabs" role="tablist" aria-label="Files">
-        {files.map((f) => (
-          <button
-            key={f.file}
-            type="button"
-            role="tab"
-            className="code__tab"
-            aria-selected={f.file === file?.file}
-            tabIndex={interactive && f.file === file?.file ? 0 : -1}
-            onClick={interactive ? () => setOverride({ step: key, file: f.file }) : undefined}
-          >
-            {f.file}
-            {code?.off && code.file === f.file ? <span className="code__off-chip">Off</span> : null}
-          </button>
-        ))}
+      <div className="code__tabs" role="tablist" aria-label="Files" ref={tabsRef} onKeyDown={interactive ? onTabKey : undefined}>
+        {files.map((f, i) => {
+          const selected = f.file === file?.file;
+          const isOff = Boolean(code?.off && code.file === f.file);
+          return (
+            <button
+              key={f.file}
+              type="button"
+              role="tab"
+              className="code__tab"
+              id={interactive ? tabId(i) : undefined}
+              aria-controls={interactive ? panelId : undefined}
+              aria-selected={selected}
+              tabIndex={interactive && selected ? 0 : -1}
+              data-interactive={interactive || undefined}
+              onClick={interactive ? () => setOverride({ step: key, file: f.file }) : undefined}
+            >
+              {f.file}
+              {isOff ? (
+                <>
+                  <span className="code__off-chip" aria-hidden="true">
+                    Off
+                  </span>
+                  <span className="visually-hidden"> (turned off in this step)</span>
+                </>
+              ) : null}
+            </button>
+          );
+        })}
       </div>
-      <pre className="code__pre code__pre--plain" ref={preRef} tabIndex={interactive ? 0 : -1}>
+      <pre
+        className="code__pre code__pre--plain"
+        ref={preRef}
+        tabIndex={interactive ? 0 : -1}
+        id={interactive ? panelId : undefined}
+        role={interactive ? "tabpanel" : undefined}
+        aria-labelledby={interactive && files.length ? tabId(activeIndex) : undefined}
+        aria-describedby={description ? descId : undefined}
+      >
         <code className="code__code" data-lang={file?.lang}>
           {file?.lines.map((node, i) => (
             <span className="code__line" data-line={i + 1} data-highlighted={highlighted.has(i + 1)} data-elision={elided.has(i + 1) || undefined} key={i}>
@@ -83,6 +133,11 @@ export function PageCodePanel({ files, code, mode }: Props) {
           ))}
         </code>
       </pre>
+      {description ? (
+        <p className="visually-hidden" id={descId}>
+          {description}
+        </p>
+      ) : null}
     </div>
   );
 }

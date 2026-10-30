@@ -33,7 +33,8 @@
   border-bottom-color: var(--color-slalom-blue);
   font-weight: var(--weight-bold);
 }
-.code__tab[tabindex="-1"] {
+/* Static tabs (the audience window, the speaker's previews); reader tabs are all pressable. */
+.code__tab:not([data-interactive]) {
   cursor: default;
 }
 .code__pre {
@@ -47,8 +48,14 @@
   counter-reset: line;
   scrollbar-width: thin;
 }
+/* The code card sits in the scaled canvas: its rings keep their on-screen size (a11y L2). */
 .code__pre:focus-visible {
-  outline-offset: calc(-1 * var(--focus-ring-width));
+  outline-width: calc(var(--focus-ring-width) / var(--stage-scale, 1));
+  outline-offset: calc(-1 * var(--focus-ring-width) / var(--stage-scale, 1));
+}
+.code__tab:focus-visible {
+  outline-width: calc(var(--focus-ring-width) / var(--stage-scale, 1));
+  outline-offset: calc(-1 * var(--focus-ring-width) / var(--stage-scale, 1));
 }
 .code__code {
   @apply block;

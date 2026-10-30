@@ -3,7 +3,9 @@
  * document on the demo origin with the `glass:0` flag (solid surfaces), runs axe-core for WCAG 2.2
  * A and AA, and lists violations. The contrast unit test covers the blurred surfaces.
  *
- *   pnpm axe [section-id]
+ *   pnpm axe [section-id]   every frame document at its first step, then every framed page at its
+ *                           last step, replayed by the audience window (needs `pnpm dev`; PRD-perf
+ *                           P2-A11Y L5: a step can leave a scroller or a state axe never saw)
  *   pnpm axe --presenter    presenter pages (PRD r7 5.3 and 9.8): /s/title, /s/closing, /s/d1-intro
  *                           with the drawer closed and open, /speaker with it open
  */
@@ -101,6 +103,47 @@ for (const t of targets) {
     console.log(`✖ ${t.where}: ${v.id} (${v.impact}) ${v.help}: ${v.nodes.map((n) => n.target.join(" ")).slice(0, 4).join(", ")}`);
   }
 }
+// Last steps (PRD-perf P2-A11Y L5): the audience window replays each framed page to its last step
+// with blur off, then axe runs inside the shown frame. Framework frames are skipped, as above.
+const base = process.env.DECK_URL ?? "http://localhost:3000";
+const deckUp = (await fetch(`${base}/_health`).catch(() => null))?.ok ?? false;
+let lastPages = 0;
+if (!deckUp) {
+  console.log(`\n✖ No deck at ${base} for the last-step scans. Start it with \`pnpm dev\`.`);
+  violations++;
+} else {
+  for (const s of sections) {
+    if (only && s.id !== only) continue;
+    for (const p of s.pages) {
+      if (!hasFrame(p) || p.frame.route.startsWith("/framework") || p.steps.length < 2) continue;
+      const last = p.steps[p.steps.length - 1];
+      const where = `${p.id} at ${last.id} (last step)`;
+      // A fresh context per page: the audience window takes ?s= and ?step= only on a navigate load.
+      const ctx = await browser.newContext({ viewport: { width: 1920, height: 1080 } });
+      const deck = await ctx.newPage();
+      await deck.goto(`${base}/present?s=${p.id}&step=${p.steps.length - 1}&glass=off`);
+      const done = await deck.waitForFunction(`Boolean((window.__stepResults || {})[${JSON.stringify(`${p.id}:${last.id}`)}])`, null, { timeout: 30000 }).then(() => true, () => false);
+      const handle = await deck.$('.page-frame__iframe[data-visible="true"]');
+      const frame = await handle?.contentFrame();
+      if (!done || !frame) {
+        violations++;
+        console.log(`✖ ${where}: the frame did not reach its last step`);
+        await ctx.close();
+        continue;
+      }
+      lastPages++;
+      await frame.evaluate(axeSource);
+      const result = (await frame.evaluate(`axe.run(document, { runOnly: { type: "tag", values: ${JSON.stringify(TAGS)} } })`)) as AxeResult;
+      if (result.violations.length === 0) console.log(`✓ ${where}: no violations`);
+      for (const v of result.violations) {
+        violations++;
+        console.log(`✖ ${where}: ${v.id} (${v.impact}) ${v.help}: ${v.nodes.map((n) => n.target.join(" ")).slice(0, 4).join(", ")}`);
+      }
+      await ctx.close();
+    }
+  }
+}
+
 await browser.close();
-console.log(`\n${targets.length} frame(s), ${violations} violation(s)`);
+console.log(`\n${targets.length} frame(s) at their first step, ${lastPages} page(s) at their last step, ${violations} violation(s)`);
 process.exit(violations ? 1 : 0);

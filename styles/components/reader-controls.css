@@ -53,6 +53,13 @@
 .reader-controls__button[aria-pressed="true"] {
   background: var(--color-slalom-blue);
 }
+/* Focus ring (a11y M4): cyan inside the always-navy pill, so it never lands on the slide or the
+   next button. The global Slalom Blue ring measured 2.45:1 here; cyan is 6.6:1 on the pill and
+   3.2:1 on a pressed toggle (pnpm test:contrast). */
+.reader-controls__button:focus-visible {
+  outline: 2px solid var(--glass-dark-focus);
+  outline-offset: -2px;
+}
 .reader-controls__button:disabled {
   opacity: 0.35;
   cursor: default;
@@ -98,6 +105,18 @@
     color: CanvasText;
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
+  }
+  .reader-controls__button:focus-visible {
+    outline-color: Highlight;
+  }
+  .reader-controls__button[aria-pressed="true"] {
+    background: Highlight;
+    color: HighlightText;
+  }
+  /* A pressed toggle is filled with Highlight: its ring sits just outside, on the pill. */
+  .reader-controls__button[aria-pressed="true"]:focus-visible {
+    outline-color: CanvasText;
+    outline-offset: 0;
   }
 }
 /* Audience window (PRD r7 9.4): the same pill holding only the menu button, a mouse fallback. It

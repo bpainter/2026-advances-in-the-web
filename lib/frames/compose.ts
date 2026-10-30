@@ -5,6 +5,7 @@ import { PRESENTER_ORIGIN } from "./origins";
 import type { BuildDef } from "./types";
 import { wrapperDef } from "./wrappers";
 import { isBackgroundId, type BackgroundId } from "@/content/backgrounds";
+import { FRAME_PRELOAD_FONT } from "@/lib/fonts";
 
 /**
  * Production builds only (docs/PRD-perf.md, P1-CACHE and P1-FRAMEFILES): shell links carry `?v=`
@@ -138,6 +139,8 @@ export function composeFrame(def: BuildDef, opts: ComposeOptions): string {
     "<!doctype html>",
     `<html lang="en" data-demo="${escapeAttr(manifest.demo)}" data-build="${manifest.build}" data-flags="${escapeAttr(flagsAttr)}" data-enhance-css-mode="${mode}"${bg ? ` data-section-bg="${bg}"` : ""}${def.pages?.length ? " data-pages" : ""}${wrapAttrs(manifest)}>`,
     "<head>",
+    // The theme's body face starts at parse, not after the theme CSS (docs/PRD-perf.md, P1-FONTS).
+    `<link rel="preload" href="${FRAME_PRELOAD_FONT}" as="font" type="font/woff2" crossorigin>`,
     // The theme comes first, so every build's own CSS (shown CSS is unlayered) wins over it. The
     // enhance-css flag never touches it: it is not tagged.
     `<link rel="stylesheet" href="${versioned(THEME_HREF)}">`,

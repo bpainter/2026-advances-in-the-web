@@ -3,6 +3,15 @@
   @apply fixed grid place-items-center overflow-hidden;
   inset: 0;
   background: var(--color-black);
+  /* The fit scale before Stage measures it (docs/PRD-perf.md, P2-SCALE): the server's markup paints
+     at its final size in any window, not at 1 and then snapped. tan(atan2(a, b)) is a / b as a
+     number. Stage writes the measured value inline after its first layout effect, and that wins. */
+  --stage-scale: min(tan(atan2(100vw, 1920px)), tan(atan2(100dvh, 1080px)));
+}
+/* A speaker preview fits its own box, 16 by 9 and as wide as its column: container units against it. */
+.stage--embedded {
+  container-type: inline-size;
+  --stage-scale: tan(atan2(100cqw, 1920px));
 }
 /* Centred by its own box, then scaled, so a 1920px canvas never pushes layout wider than the viewport. */
 .stage__canvas {
@@ -17,12 +26,6 @@
 }
 .stage__canvas:focus {
   outline: none;
-}
-.stage__announcer {
-  @apply absolute overflow-hidden;
-  width: 1px;
-  height: 1px;
-  clip-path: inset(50%);
 }
 .stage[data-blank="true"] .stage__canvas {
   visibility: hidden;

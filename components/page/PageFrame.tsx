@@ -43,6 +43,7 @@ function documentUrl(page: FramePage, flags: Record<string, boolean>, background
 export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, onStepResult, background, poster }: Props) {
   const { stepIndex, handsOn, live, reloadToken, rehearsal, registerPlayback, dispatchKey, reportPlaying } = useStage();
   const slotRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const [handle, setHandle] = useState<FrameHandle | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   /** A document has been shown; until then the step's poster fills the slot (PRD-perf P0-2). */
@@ -110,6 +111,9 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
   const show = useCallback(
     (h: FrameHandle, idx: number, flags: Record<string, boolean>) => {
       const old = current.current?.handle;
+      // Reader hands-on (PRD-perf P2-A11Y H1b): turning it on replaces the document the keyboard
+      // was just handed to; the replacement takes focus, so it never falls to <body>.
+      const refocus = mode === "reader" && handsOn && (document.activeElement === document.body || (old !== undefined && document.activeElement === old.iframe));
       h.iframe.dataset.visible = "true";
       // The poster leaves in the task that reveals the first document, so no frame shows both
       // and none shows neither (a narrowed frame would show the poster beside it).
@@ -125,14 +129,32 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
         requestAnimationFrame(() => old.dispose());
       }
       if (mode === "audience" && !handsOn) h.focus();
+      if (refocus) h.focus();
     },
     [mode, handsOn],
   );
 
   useEffect(() => installInputRelay(), []);
 
+  // Reader text view (PRD-perf P2-TEXT): while the stage is hidden, no frame mounts, so a phone in
+  // text view downloads no demo. The first time the frame gets a box (the text view turned off, a
+  // wider window), it mounts and replays the step. Other windows mount at once, as before.
+  const [stageShown, setStageShown] = useState(mode !== "reader");
+  useLayoutEffect(() => {
+    const el = rootRef.current;
+    if (stageShown || !el) return;
+    const check = () => {
+      if (typeof el.checkVisibility === "function" ? el.checkVisibility() : el.getClientRects().length > 0) setStageShown(true);
+    };
+    check();
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [stageShown]);
+
   // Enter the step: animate from the previous one, or reset and replay.
   useEffect(() => {
+    if (!stageShown) return;
     const gen = ++generation.current;
     const target = step;
     // Spotlights for this entry wait until its playback has finished (PRD v5, 3.2 rule 5).
@@ -266,7 +288,7 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
     return () => window.clearTimeout(timeout);
     // `status` is read for the report only; it must not retrigger entry.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, stepIndex, handsOn, reloadToken, mount, show, report, onStepResult, reportPlaying]);
+  }, [page, stepIndex, handsOn, reloadToken, mount, show, report, onStepResult, reportPlaying, stageShown]);
 
   // Terminal pages: `l` hides the recording for a real terminal.
   useEffect(() => {
@@ -346,7 +368,7 @@ export function PageFrame({ page, sandbox, sideEffects, mode, slot, onStatus, on
   } as CSSProperties;
 
   return (
-    <div className="page-frame" data-status={status} data-build={frame.build} style={frameStyle}>
+    <div className="page-frame" ref={rootRef} data-status={status} data-build={frame.build} style={frameStyle}>
       <div className="page-frame__scaled">
         {/* Decoration under the slot: the iframe's title names the demo. A static file from public/. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}

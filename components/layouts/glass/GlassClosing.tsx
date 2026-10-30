@@ -10,6 +10,8 @@ import { Wordmark } from "./Wordmark";
 export function GlassClosing({ slide, content, mode }: { slide: Slide; content: Extract<GlassContent, { kind: "closing" }>; mode: Mode }) {
   return (
     <section className="sg sg--closing" data-tone="dark" aria-label={slide.title}>
+      {/* Every slide has one h1 (a11y L1); the closing slide's visible text has no title line. */}
+      <h1 className="visually-hidden">{slide.title}</h1>
       <div className="sg-card sg-card--dark sg-closing">
         <div className="sg-closing__text">
           <p className="sg-eyebrow">{content.eyebrow}</p>

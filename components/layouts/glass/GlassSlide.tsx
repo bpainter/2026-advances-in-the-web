@@ -67,7 +67,9 @@ function Footer({ slide, tone, mode }: { slide: Slide; tone: "light" | "dark"; m
         </NewTabLink>
       </p>
       <p className="sg-pill">
-        FITC Web Unleashed 2026, Bermon Painter, Slalom <span className="sg-pill__num">{slide.index}</span>
+        {/* The number is named for screen readers (a11y L3): "…, Slalom, slide 48". */}
+        FITC Web Unleashed 2026, Bermon Painter, Slalom<span className="visually-hidden">, slide </span>
+        <span className="sg-pill__num">{slide.index}</span>
       </p>
     </footer>
   );
