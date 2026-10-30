@@ -1,0 +1,7 @@
+/                      score 99 FCP 384 LCP 901 TBT 0 CLS 0.000 SI 502 TTFB 55 bytes 719KB LCPel body > div.stage > div#stage > div.stage__bg
+/s/title               score 99 FCP 342 LCP 862 TBT 0 CLS 0.000 SI 387 TTFB 47 bytes 715KB LCPel body > div.stage > div#stage > div.stage__bg
+/s/d1-now              score 95 FCP 310 LCP 1476 TBT 0 CLS 0.000 SI 797 TTFB 50 bytes 2749KB LCPel body > div.stage > div#stage > div.stage__bg
+/s/m2-now              score 99 FCP 306 LCP 749 TBT 0 CLS 0.001 SI 743 TTFB 50 bytes 3720KB LCPel body > div.stage > div#stage > div.stage__bg
+/s/m2-intro            score 80 FCP 362 LCP 3928 TBT 0 CLS 0.002 SI 445 TTFB 57 bytes 4519KB LCPel body > div.stage > div#stage > div.stage__bg
+/s/people-to-follow    score 100 FCP 392 LCP 806 TBT 0 CLS 0.000 SI 433 TTFB 68 bytes 698KB LCPel body > div.stage > div#stage > div.stage__bg
+/present?s=d4-now      score 98 FCP 305 LCP 1091 TBT 0 CLS 0.000 SI 748 TTFB 53 bytes 3137KB LCPel div.audience > div.stage > div#stage > div.stage__

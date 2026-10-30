@@ -1,0 +1,1774 @@
+{
+ "the-mandate": [
+  {
+   "tag": "a",
+   "cls": "",
+   "name": "thefutureiscomposable.com, opens in a new tab",
+   "rect": [
+    67,
+    848,
+    222,
+    23
+   ],
+   "outline": "none 0px rgb(62, 74, 107) off 4px",
+   "pill": "0.75"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button nav-drawer-trigger",
+   "name": "Sections",
+   "rect": [
+    697,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "0.997886"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Previous",
+   "rect": [
+    735,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Next",
+   "rect": [
+    829,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Keyboard help",
+   "rect": [
+    867,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "body",
+   "cls": "",
+   "name": "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type",
+   "rect": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   "outline": "none 0px rgb(0, 0, 0) off 0px",
+   "pill": "0.752103"
+  },
+  {
+   "tag": "a",
+   "cls": "",
+   "name": "thefutureiscomposable.com, opens in a new tab",
+   "rect": [
+    67,
+    848,
+    222,
+    23
+   ],
+   "outline": "none 0px rgb(62, 74, 107) off 4px",
+   "pill": "0.75"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button nav-drawer-trigger",
+   "name": "Sections",
+   "rect": [
+    697,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "0.999265"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Previous",
+   "rect": [
+    735,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Next",
+   "rect": [
+    829,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Keyboard help",
+   "rect": [
+    867,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "body",
+   "cls": "",
+   "name": "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type",
+   "rect": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   "outline": "none 0px rgb(0, 0, 0) off 0px",
+   "pill": "0.752103"
+  },
+  {
+   "tag": "a",
+   "cls": "",
+   "name": "thefutureiscomposable.com, opens in a new tab",
+   "rect": [
+    67,
+    848,
+    222,
+    23
+   ],
+   "outline": "none 0px rgb(62, 74, 107) off 4px",
+   "pill": "0.75"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button nav-drawer-trigger",
+   "name": "Sections",
+   "rect": [
+    697,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "0.997889"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Previous",
+   "rect": [
+    735,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Next",
+   "rect": [
+    829,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Keyboard help",
+   "rect": [
+    867,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "body",
+   "cls": "",
+   "name": "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type",
+   "rect": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   "outline": "none 0px rgb(0, 0, 0) off 0px",
+   "pill": "0.752106"
+  },
+  {
+   "tag": "a",
+   "cls": "",
+   "name": "thefutureiscomposable.com, opens in a new tab",
+   "rect": [
+    67,
+    848,
+    222,
+    23
+   ],
+   "outline": "none 0px rgb(62, 74, 107) off 4px",
+   "pill": "0.75"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button nav-drawer-trigger",
+   "name": "Sections",
+   "rect": [
+    697,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "0.997897"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Previous",
+   "rect": [
+    735,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Next",
+   "rect": [
+    829,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  }
+ ],
+ "people-to-follow": [
+  {
+   "tag": "a",
+   "cls": "",
+   "name": "thefutureiscomposable.com, opens in a new tab",
+   "rect": [
+    67,
+    848,
+    222,
+    23
+   ],
+   "outline": "none 0px rgb(62, 74, 107) off 4px",
+   "pill": "0.75"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button nav-drawer-trigger",
+   "name": "Sections",
+   "rect": [
+    693,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "0.999248"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Previous",
+   "rect": [
+    731,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Next",
+   "rect": [
+    833,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Keyboard help",
+   "rect": [
+    871,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "body",
+   "cls": "",
+   "name": "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type",
+   "rect": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   "outline": "none 0px rgb(0, 0, 0) off 0px",
+   "pill": "0.750727"
+  },
+  {
+   "tag": "a",
+   "cls": "",
+   "name": "thefutureiscomposable.com, opens in a new tab",
+   "rect": [
+    67,
+    848,
+    222,
+    23
+   ],
+   "outline": "none 0px rgb(62, 74, 107) off 4px",
+   "pill": "0.75"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button nav-drawer-trigger",
+   "name": "Sections",
+   "rect": [
+    693,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "0.999224"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Previous",
+   "rect": [
+    731,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Next",
+   "rect": [
+    833,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Keyboard help",
+   "rect": [
+    871,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "body",
+   "cls": "",
+   "name": "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type",
+   "rect": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   "outline": "none 0px rgb(0, 0, 0) off 0px",
+   "pill": "0.752105"
+  },
+  {
+   "tag": "a",
+   "cls": "",
+   "name": "thefutureiscomposable.com, opens in a new tab",
+   "rect": [
+    67,
+    848,
+    222,
+    23
+   ],
+   "outline": "none 0px rgb(62, 74, 107) off 4px",
+   "pill": "0.75"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button nav-drawer-trigger",
+   "name": "Sections",
+   "rect": [
+    693,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "0.997898"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Previous",
+   "rect": [
+    731,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Next",
+   "rect": [
+    833,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Keyboard help",
+   "rect": [
+    871,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "body",
+   "cls": "",
+   "name": "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type",
+   "rect": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   "outline": "none 0px rgb(0, 0, 0) off 0px",
+   "pill": "0.752105"
+  },
+  {
+   "tag": "a",
+   "cls": "",
+   "name": "thefutureiscomposable.com, opens in a new tab",
+   "rect": [
+    67,
+    848,
+    222,
+    23
+   ],
+   "outline": "none 0px rgb(62, 74, 107) off 4px",
+   "pill": "0.75"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button nav-drawer-trigger",
+   "name": "Sections",
+   "rect": [
+    693,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "0.999227"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Previous",
+   "rect": [
+    731,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Next",
+   "rect": [
+    833,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  }
+ ],
+ "closing": [
+  {
+   "tag": "a",
+   "cls": "sg-closing__link",
+   "name": "linkedin.com/in/bermonpainter, opens in a new tab",
+   "rect": [
+    108,
+    548,
+    510,
+    42
+   ],
+   "outline": "solid 3px rgb(27, 225, 242) off 4px",
+   "pill": "0.75"
+  },
+  {
+   "tag": "a",
+   "cls": "",
+   "name": "slalomSlalom, opens in a new tab",
+   "rect": [
+    108,
+    753,
+    129,
+    48
+   ],
+   "outline": "solid 3px rgb(27, 225, 242) off 4px",
+   "pill": "0.75"
+  },
+  {
+   "tag": "a",
+   "cls": "",
+   "name": ", opens in a new tab",
+   "rect": [
+    1058,
+    209,
+    432,
+    432
+   ],
+   "outline": "solid 3px rgb(12, 98, 251) off 4px",
+   "pill": "0.75"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button nav-drawer-trigger",
+   "name": "Sections",
+   "rect": [
+    693,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "0.997892"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Previous",
+   "rect": [
+    731,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Keyboard help",
+   "rect": [
+    871,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "body",
+   "cls": "",
+   "name": "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type",
+   "rect": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   "outline": "none 0px rgb(0, 0, 0) off 0px",
+   "pill": "0.752099"
+  },
+  {
+   "tag": "a",
+   "cls": "sg-closing__link",
+   "name": "linkedin.com/in/bermonpainter, opens in a new tab",
+   "rect": [
+    108,
+    548,
+    510,
+    42
+   ],
+   "outline": "solid 3px rgb(27, 225, 242) off 4px",
+   "pill": "0.75"
+  },
+  {
+   "tag": "a",
+   "cls": "",
+   "name": "slalomSlalom, opens in a new tab",
+   "rect": [
+    108,
+    753,
+    129,
+    48
+   ],
+   "outline": "solid 3px rgb(27, 225, 242) off 4px",
+   "pill": "0.75"
+  },
+  {
+   "tag": "a",
+   "cls": "",
+   "name": ", opens in a new tab",
+   "rect": [
+    1058,
+    209,
+    432,
+    432
+   ],
+   "outline": "solid 3px rgb(12, 98, 251) off 4px",
+   "pill": "0.75"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button nav-drawer-trigger",
+   "name": "Sections",
+   "rect": [
+    693,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "0.997898"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Previous",
+   "rect": [
+    731,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Keyboard help",
+   "rect": [
+    871,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "body",
+   "cls": "",
+   "name": "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type",
+   "rect": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   "outline": "none 0px rgb(0, 0, 0) off 0px",
+   "pill": "0.752103"
+  },
+  {
+   "tag": "a",
+   "cls": "sg-closing__link",
+   "name": "linkedin.com/in/bermonpainter, opens in a new tab",
+   "rect": [
+    108,
+    548,
+    510,
+    42
+   ],
+   "outline": "solid 3px rgb(27, 225, 242) off 4px",
+   "pill": "0.75"
+  },
+  {
+   "tag": "a",
+   "cls": "",
+   "name": "slalomSlalom, opens in a new tab",
+   "rect": [
+    108,
+    753,
+    129,
+    48
+   ],
+   "outline": "solid 3px rgb(27, 225, 242) off 4px",
+   "pill": "0.75"
+  },
+  {
+   "tag": "a",
+   "cls": "",
+   "name": ", opens in a new tab",
+   "rect": [
+    1058,
+    209,
+    432,
+    432
+   ],
+   "outline": "solid 3px rgb(12, 98, 251) off 4px",
+   "pill": "0.75"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button nav-drawer-trigger",
+   "name": "Sections",
+   "rect": [
+    693,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "0.997906"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Previous",
+   "rect": [
+    731,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Keyboard help",
+   "rect": [
+    871,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "body",
+   "cls": "",
+   "name": "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type",
+   "rect": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   "outline": "none 0px rgb(0, 0, 0) off 0px",
+   "pill": "0.7521"
+  },
+  {
+   "tag": "a",
+   "cls": "sg-closing__link",
+   "name": "linkedin.com/in/bermonpainter, opens in a new tab",
+   "rect": [
+    108,
+    548,
+    510,
+    42
+   ],
+   "outline": "solid 3px rgb(27, 225, 242) off 4px",
+   "pill": "0.75"
+  }
+ ],
+ "d1-used-to": [
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0.75",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0.75",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0.75",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0.75",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0.75",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0.75",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0.75",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0.75",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0.0139983",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button#t-actions Actions"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we used to do",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button#t-actions Actions"
+  }
+ ],
+ "d2-now": [
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0.75",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0.75",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0.75",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0.75",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0.75",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0.75",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0.75",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0.0549326",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button# Add to order"
+  },
+  {
+   "tag": "iframe",
+   "cls": "page-frame__iframe",
+   "name": "Live demo: What we can do today",
+   "rect": [
+    54,
+    148,
+    732,
+    718
+   ],
+   "outline": "none 0px rgb(15, 28, 65) off 0px",
+   "pill": "0",
+   "inner": "button# Add to order"
+  }
+ ],
+ "d1-intro": [
+  {
+   "tag": "button",
+   "cls": "reader-controls__button nav-drawer-trigger",
+   "name": "Sections",
+   "rect": [
+    697,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "0.999223"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Previous",
+   "rect": [
+    735,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Next",
+   "rect": [
+    829,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Keyboard help",
+   "rect": [
+    867,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "body",
+   "cls": "",
+   "name": "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type",
+   "rect": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   "outline": "none 0px rgb(0, 0, 0) off 0px",
+   "pill": "0.752099"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button nav-drawer-trigger",
+   "name": "Sections",
+   "rect": [
+    697,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "0.999249"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Previous",
+   "rect": [
+    735,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Next",
+   "rect": [
+    829,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Keyboard help",
+   "rect": [
+    867,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "body",
+   "cls": "",
+   "name": "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type",
+   "rect": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   "outline": "none 0px rgb(0, 0, 0) off 0px",
+   "pill": "0.752106"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button nav-drawer-trigger",
+   "name": "Sections",
+   "rect": [
+    697,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "0.997891"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Previous",
+   "rect": [
+    735,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Next",
+   "rect": [
+    829,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Keyboard help",
+   "rect": [
+    867,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "body",
+   "cls": "",
+   "name": "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type",
+   "rect": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   "outline": "none 0px rgb(0, 0, 0) off 0px",
+   "pill": "0.750776"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button nav-drawer-trigger",
+   "name": "Sections",
+   "rect": [
+    697,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "0.997907"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Previous",
+   "rect": [
+    735,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Next",
+   "rect": [
+    829,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Keyboard help",
+   "rect": [
+    867,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  },
+  {
+   "tag": "body",
+   "cls": "",
+   "name": "{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type",
+   "rect": [
+    0,
+    0,
+    1600,
+    900
+   ],
+   "outline": "none 0px rgb(0, 0, 0) off 0px",
+   "pill": "0.750745"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button nav-drawer-trigger",
+   "name": "Sections",
+   "rect": [
+    697,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "0.997897"
+  },
+  {
+   "tag": "button",
+   "cls": "reader-controls__button",
+   "name": "Previous",
+   "rect": [
+    735,
+    853,
+    36,
+    36
+   ],
+   "outline": "solid 2px rgb(12, 98, 251) off 2px",
+   "pill": "1"
+  }
+ ]
+}

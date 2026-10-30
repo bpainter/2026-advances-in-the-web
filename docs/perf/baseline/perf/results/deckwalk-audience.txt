@@ -1,0 +1,27 @@
+audience slides walked 50; requests 771 total 40275 KB; 304 237
+  presenter:img        90 31667KB
+  demo:img             112 7833KB
+  demo:js              156 191KB
+  presenter:js         10 164KB
+  presenter:rsc        49 91KB
+  demo:font            80 76KB
+  presenter:font       2 76KB
+  demo:css             225 74KB
+  demo:doc             40 72KB
+  presenter:css        1 22KB
+  presenter:doc        1 5KB
+  demo:fetch           5 3KB
+  other:img            3 0KB
+  fetched on both origins: 15 files, 4756 KB extra on the demo origin
+3954KB /intro/m2-trail-photos.png
+3401KB /intro/m1-shop-the-look.png
+1735KB /intro/m5-trail-gear-pages.png
+1426KB /intro/d5-rich-content.png
+1167KB /intro/f3-package-trust.png
+1151KB /intro/f2-caching.png
+1075KB /images/design/7a3f47c0216f32a9a3c35bc46ca6e398.png
+1022KB /intro/m3-pricing-app.png
+989KB /intro/d2-product-card.png
+976KB /images/design/41c92a3370c2ea5a19e31664dfb3f880.png
+896KB /images/design/c18ba5ceb5f4a9a2dc228deb4d240a17.png
+794KB /intro/d1-order-actions.png

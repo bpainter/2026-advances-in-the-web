@@ -1,0 +1,13 @@
+import { launch, P } from "./lib.mjs";
+const b = await launch();
+const ctx = await b.newContext({ viewport: { width: 1920, height: 1080 } });
+const page = await ctx.newPage();
+const t0 = Date.now();
+page.on("request", (r) => { const u = r.url(); if (u.startsWith(P) && !/_next\/static|\.(png|jpg|svg|otf|css|js)/.test(u)) { const h = r.headers(); console.log(Date.now() - t0, r.method(), u.replace(P, ""), JSON.stringify(Object.fromEntries(Object.entries(h).filter(([k]) => /^(rsc|next-)/i.test(k) && k !== "next-router-state-tree")))); } });
+page.on("response", (r) => { const u = r.url(); if (u.startsWith(P) && /present/.test(u)) console.log(Date.now() - t0, "<-", r.status(), u.replace(P, ""), r.headers()["content-length"] ?? "", r.headers()["cache-control"] ?? ""); });
+await page.goto(P + "/present?s=d1-used-to", { waitUntil: "load" });
+await page.waitForTimeout(4000);
+console.log("PRESS");
+await page.keyboard.press("Shift+ArrowRight");
+await page.waitForTimeout(3000);
+await b.close();

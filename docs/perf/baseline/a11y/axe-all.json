@@ -1,0 +1,6257 @@
+[
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/",
+  "survey": {
+   "title": "2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "2026 advancesin the web",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "section\"2026 advances in the web\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [],
+   "links": [
+    {
+     "text": "Bermon Painter, opens in a new tab",
+     "target": "_blank",
+     "tabIndex": 0
+    },
+    {
+     "text": "slalomSlalom, opens in a new tab",
+     "target": "_blank",
+     "tabIndex": 0
+    }
+   ],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "2026 advances in the web"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "A tour of what browsers shipped in 2026, with live demos. FITC Web Unleashed 2026, Toronto."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 8,
+     "nodes": [
+      ".sg-eyebrow",
+      "h1 > span:nth-child(1)",
+      "h1 > span:nth-child(2)"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/the-mandate",
+  "survey": {
+   "title": "The mandate · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Use AI",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "section\"The mandate\"",
+    "footer",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [],
+   "links": [
+    {
+     "text": "thefutureiscomposable.com, opens in a new tab",
+     "target": "_blank",
+     "tabIndex": 0
+    }
+   ],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "The mandate"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Use AI. Which tools? Which licenses? What training? Who reviews it? Who is accountable? What’s the impact?"
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 14,
+     "nodes": [
+      ".sg-eyebrow:nth-child(1)",
+      "h1",
+      ".sg-cards-eyebrow"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/title",
+  "survey": {
+   "title": "2026 advances in the web · FITC Web Unleashed 2026, Toronto",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "2026 advancesin the web",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "section\"2026 advances in the web\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [],
+   "links": [
+    {
+     "text": "Bermon Painter, opens in a new tab",
+     "target": "_blank",
+     "tabIndex": 0
+    },
+    {
+     "text": "slalomSlalom, opens in a new tab",
+     "target": "_blank",
+     "tabIndex": 0
+    }
+   ],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "2026 advances in the web"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "A tour of what browsers shipped in 2026, with live demos. FITC Web Unleashed 2026, Toronto."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 8,
+     "nodes": [
+      ".sg-eyebrow",
+      "h1 > span:nth-child(1)",
+      "h1 > span:nth-child(2)"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/three-reactions",
+  "survey": {
+   "title": "Three reactions · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Three reactions",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "section\"Three reactions\"",
+    "footer",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [
+    {
+     "src": "/images/design/c18ba5ceb5f4a9a2dc228deb4d240a17.png",
+     "alt": "Caricature of a seasoned engineer with a grey beard and glasses, arms folded, one eyebrow raised.",
+     "hidden": false
+    },
+    {
+     "src": "/images/design/41c92a3370c2ea5a19e31664dfb3f880.png",
+     "alt": "Caricature of a mid-career Asian woman engineer with a laptop under one arm and a lanyard, calm and ready.",
+     "hidden": false
+    },
+    {
+     "src": "/images/design/7a3f47c0216f32a9a3c35bc46ca6e398.png",
+     "alt": "Caricature of an early-career Latina developer in a hoodie with headphones, glancing sideways, phone in hand.",
+     "hidden": false
+    }
+   ],
+   "iframes": [],
+   "links": [
+    {
+     "text": "thefutureiscomposable.com, opens in a new tab",
+     "target": "_blank",
+     "tabIndex": 0
+    }
+   ],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "Three reactions"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "The Greybeards. The Line Toers. The New Luddites."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 15,
+     "nodes": [
+      "h1",
+      ".sg-card:nth-child(1) > .sg-card__text > .sg-card__title",
+      ".sg-card:nth-child(1) > .sg-card__text > .sg-card__body"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/keep-humanity",
+  "survey": {
+   "title": "Keep humanity at the center · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Keep humanityat the center",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "section\"Keep humanity at the center\"",
+    "footer",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [],
+   "links": [
+    {
+     "text": "thefutureiscomposable.com, opens in a new tab",
+     "target": "_blank",
+     "tabIndex": 0
+    }
+   ],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "Keep humanity at the center"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Keep humanity at the center."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 7,
+     "nodes": [
+      "h1 > span:nth-child(1)",
+      "h1 > span:nth-child(2)",
+      "a[target=\"_blank\"]"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/two-perspectives",
+  "survey": {
+   "title": "Two perspectives · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Two perspectives",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "section\"Two perspectives\"",
+    "footer",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [],
+   "links": [
+    {
+     "text": "thefutureiscomposable.com, opens in a new tab",
+     "target": "_blank",
+     "tabIndex": 0
+    }
+   ],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "Two perspectives"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Two perspectives: Sir Tim Berners-Lee, 2017 and W3C Strategy Team, October 2026."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 10,
+     "nodes": [
+      "h1",
+      "figure:nth-child(1) > blockquote",
+      "figure:nth-child(1) > figcaption"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/open-web",
+  "survey": {
+   "title": "Why the open web matters · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Why the open web matters",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "section\"Why the open web matters\"",
+    "footer",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [],
+   "links": [
+    {
+     "text": "thefutureiscomposable.com, opens in a new tab",
+     "target": "_blank",
+     "tabIndex": 0
+    }
+   ],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "Why the open web matters"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Agents will browse, buy, and build on the web next. Interoperability. User control. Durable access. Accessibility. Security and trust."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 19,
+     "nodes": [
+      "h1",
+      ".sg-body",
+      ".sg-card:nth-child(1) > .sg-card__text > .sg-card__title"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/what-we-cover",
+  "survey": {
+   "title": "What we’ll cover · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we’ll cover",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "section\"What we’ll cover\"",
+    "footer",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [],
+   "links": [
+    {
+     "text": "thefutureiscomposable.com, opens in a new tab",
+     "target": "_blank",
+     "tabIndex": 0
+    }
+   ],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we’ll cover"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "HTML, CSS, and JavaScript. Frameworks and metaframeworks. Build tools and package managers."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 13,
+     "nodes": [
+      ".sg-eyebrow",
+      "h1",
+      ".sg-card.sg-card--dark:nth-child(1) > .sg-num"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/d1-intro",
+  "survey": {
+   "title": "Dialog element · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Dialog element",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Dialog element\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [
+    {
+     "src": "/intro/d1-order-actions.png",
+     "alt": "The order portal with the cancel dialog open.",
+     "hidden": false
+    },
+    {
+     "src": "/logos/chrome.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/edge.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/firefox.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/safari.svg",
+     "alt": "",
+     "hidden": false
+    }
+   ],
+   "iframes": [],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "Dialog element"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "The dialog element gives you a confirm box, with focus and Escape handled for you."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 13,
+     "nodes": [
+      "h1",
+      ".intro__description",
+      ".support-row__tile[data-supported=\"true\"]:nth-child(1) > .support-row__version[aria-hidden=\"true\"]"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/d2-intro",
+  "survey": {
+   "title": "Container queries · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Container queries",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Container queries\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [
+    {
+     "src": "/intro/d2-product-card.png",
+     "alt": "The same product card at three widths: featured, search results and recommended.",
+     "hidden": false
+    },
+    {
+     "src": "/logos/chrome.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/edge.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/firefox.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/safari.svg",
+     "alt": "",
+     "hidden": false
+    }
+   ],
+   "iframes": [],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "Container queries"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Container queries let a component change its layout based on the space it is given."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 13,
+     "nodes": [
+      "h1",
+      ".intro__description",
+      ".support-row__tile[data-supported=\"true\"]:nth-child(1) > .support-row__version[aria-hidden=\"true\"]"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/d1-now",
+  "survey": {
+   "title": "Dialog element: What we can do today · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we can do today",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Dialog element: What we can do today\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we can do today",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we can do today"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "This is the same order row, built from HTML the browser understands. The menu is a popover. The confirm box is a dialog."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 62,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 94,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 102,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/d1-used-to",
+  "survey": {
+   "title": "Dialog element: What we used to do · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we used to do",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Dialog element: What we used to do\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we used to do",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we used to do"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "This is an order list, and Cancel order asks you to confirm first. Here is how teams commonly build it. The code lights up as the demo plays."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 62,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 94,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 102,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/d3-intro",
+  "survey": {
+   "title": "Field sizing · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Field sizing",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Field sizing\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [
+    {
+     "src": "/intro/d3-support-form.png",
+     "alt": "The support form with a long pasted message in a grown details box.",
+     "hidden": false
+    },
+    {
+     "src": "/logos/chrome.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/edge.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/firefox.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/safari.svg",
+     "alt": "",
+     "hidden": false
+    }
+   ],
+   "iframes": [],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "Field sizing"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Field sizing lets a text field grow and shrink to fit what the user types."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 12,
+     "nodes": [
+      "h1",
+      ".intro__description",
+      ".support-row__tile[data-supported=\"true\"]:nth-child(1) > .support-row__version[aria-hidden=\"true\"]"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/d3-used-to",
+  "survey": {
+   "title": "Field sizing: What we used to do · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we used to do",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Field sizing: What we used to do\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we used to do",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we used to do"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "An agent fills in a subject and the details. Both fields grow by script."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 44,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 76,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 84,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/d2-now",
+  "survey": {
+   "title": "Container queries: What we can do today · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we can do today",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Container queries: What we can do today\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we can do today",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we can do today"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "This is the same card with no layout script. Its slot is a container the card can measure. Watch the card as the slot changes width."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 73,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 105,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 113,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/d2-used-to",
+  "survey": {
+   "title": "Container queries: What we used to do · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we used to do",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Container queries: What we used to do\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we used to do",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we used to do"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "One card sits in three places. Each place tells it how to look."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 39,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 71,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 79,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/d4-intro",
+  "survey": {
+   "title": "Navigation API · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Navigation API",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Navigation API\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [
+    {
+     "src": "/intro/d4-dashboard-navigation.png",
+     "alt": "The order dashboard showing order 418 with the address and focus readout below.",
+     "hidden": false
+    },
+    {
+     "src": "/logos/chrome.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/edge.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/firefox.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/safari.svg",
+     "alt": "",
+     "hidden": false
+    }
+   ],
+   "iframes": [],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "Navigation API"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "The Navigation API lets one event handle every link, form and Back press."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 12,
+     "nodes": [
+      "h1",
+      ".intro__description",
+      ".support-row__tile[data-supported=\"true\"]:nth-child(1) > .support-row__version[aria-hidden=\"true\"]"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/d4-used-to",
+  "survey": {
+   "title": "Navigation API: What we used to do · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we used to do",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Navigation API: What we used to do\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we used to do",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we used to do"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "This dashboard uses a router written by hand. Links, Back and slow networks each need code."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 61,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 93,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 101,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/d3-now",
+  "survey": {
+   "title": "Field sizing: What we can do today · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we can do today",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Field sizing: What we can do today\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we can do today",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we can do today"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "This is the same form with no sizing script. The fields fit their text with one CSS property."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 65,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 97,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 105,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/d4-now",
+  "survey": {
+   "title": "Navigation API: What we can do today · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we can do today",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Navigation API: What we can do today\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we can do today",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we can do today"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "This is the same dashboard. Every page is a normal server page. One listener makes the moves between them smooth."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 79,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 111,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 119,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/d5-intro",
+  "survey": {
+   "title": "Trusted Types · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Trusted Types",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Trusted Types\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [
+    {
+     "src": "/intro/d5-rich-content.png",
+     "alt": "The product page with the security console showing a blocked write.",
+     "hidden": false
+    },
+    {
+     "src": "/logos/chrome.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/edge.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/firefox.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/safari.svg",
+     "alt": "",
+     "hidden": false
+    }
+   ],
+   "iframes": [],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "Trusted Types"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Trusted Types lets the browser refuse HTML that skipped your reviewed code."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 12,
+     "nodes": [
+      "h1",
+      ".intro__description",
+      ".support-row__tile[data-supported=\"true\"]:nth-child(1) > .support-row__version[aria-hidden=\"true\"]"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/d5-now",
+  "survey": {
+   "title": "Trusted Types: What we can do today · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we can do today",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Trusted Types: What we can do today\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we can do today",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we can do today"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "This is the same page with one rule in the header. All three places write HTML through one policy we review."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 20,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 52,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 60,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/d6-intro",
+  "survey": {
+   "title": "Customizable select · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Customizable select",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Customizable select\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [
+    {
+     "src": "/intro/d6-variant-picker.png",
+     "alt": "The product editor with the color picker open, showing a photo beside each color.",
+     "hidden": false
+    },
+    {
+     "src": "/logos/chrome.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/edge.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/firefox.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/safari.svg",
+     "alt": "",
+     "hidden": false
+    }
+   ],
+   "iframes": [],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "Customizable select"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Customizable select lets you style a real select, with any content inside each option."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 12,
+     "nodes": [
+      "h1",
+      ".intro__description",
+      ".support-row__tile[data-supported=\"true\"]:nth-child(1) > .support-row__version[aria-hidden=\"true\"]"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/d5-used-to",
+  "survey": {
+   "title": "Trusted Types: What we used to do · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we used to do",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Trusted Types: What we used to do\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we used to do",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we used to do"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "This product page shows CMS content in three places. Each place writes HTML its own way."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 38,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 70,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 78,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/d6-used-to",
+  "survey": {
+   "title": "Customizable select: What we used to do · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we used to do",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Customizable select: What we used to do\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we used to do",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we used to do"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "The Color field shows a photo beside each name. Teams built their own select for that."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 46,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 78,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 86,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/m1-intro",
+  "survey": {
+   "title": "Anchor positioning · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Anchor positioning",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Anchor positioning\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [
+    {
+     "src": "/intro/m1-shop-the-look.png",
+     "alt": "The look photo with a product card open to the left of the shoe pin.",
+     "hidden": false
+    },
+    {
+     "src": "/logos/chrome.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/edge.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/firefox.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/safari.svg",
+     "alt": "",
+     "hidden": false
+    }
+   ],
+   "iframes": [],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "Anchor positioning"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Anchor positioning places an element beside another one and moves it when space runs out."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 14,
+     "nodes": [
+      ".intro__group",
+      "h1",
+      ".intro__description"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/d6-now",
+  "survey": {
+   "title": "Customizable select: What we can do today · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we can do today",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Customizable select: What we can do today\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we can do today",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we can do today"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "This is a real select with the same photos. It starts plain, the way every browser draws it."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 67,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 99,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 107,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/m1-used-to",
+  "survey": {
+   "title": "Anchor positioning: What we used to do · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we used to do",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Anchor positioning: What we used to do\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we used to do",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we used to do"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Each pin opens a product card. Script decides where it fits."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 51,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 83,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 91,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/m1-now",
+  "survey": {
+   "title": "Anchor positioning: What we can do today · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we can do today",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Anchor positioning: What we can do today\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we can do today",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we can do today"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "This is the same photo with no positioning script. Each card is a popover tied to its pin."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 82,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 114,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 122,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/m2-intro",
+  "survey": {
+   "title": "Grid Lanes · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Grid Lanes",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Grid Lanes\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [
+    {
+     "src": "/intro/m2-trail-photos.png",
+     "alt": "A packed wall of customer trail photos and quotes in six lanes.",
+     "hidden": false
+    },
+    {
+     "src": "/logos/chrome.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/edge.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/firefox.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/safari.svg",
+     "alt": "",
+     "hidden": false
+    }
+   ],
+   "iframes": [],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "Grid Lanes"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Grid Lanes packs items of different heights into columns, like a masonry wall."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 13,
+     "nodes": [
+      ".intro__group",
+      "h1",
+      ".intro__description"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/m2-used-to",
+  "survey": {
+   "title": "Grid Lanes: What we used to do · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we used to do",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Grid Lanes: What we used to do\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we used to do",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we used to do"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Customer photos sit in a packed wall. Script places every item."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 46,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 78,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 86,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/m2-now",
+  "survey": {
+   "title": "Grid Lanes: What we can do today · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we can do today",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Grid Lanes: What we can do today\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we can do today",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we can do today"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "This is the same wall with no layout script. It starts as a regular grid. Browsers without lanes get columns."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 39,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 71,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 79,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/m3-intro",
+  "survey": {
+   "title": "Scoped custom element registries · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Scoped custom element registries",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Scoped custom element registries\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [
+    {
+     "src": "/intro/m3-pricing-app.png",
+     "alt": "The product editor pricing tab with the tiered pricing app inline below the base price.",
+     "hidden": false
+    },
+    {
+     "src": "/logos/chrome.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/edge.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/firefox.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/safari.svg",
+     "alt": "",
+     "hidden": false
+    }
+   ],
+   "iframes": [],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "Scoped custom element registries"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Scoped registries let two versions of the same custom element run on one page."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 13,
+     "nodes": [
+      ".intro__group",
+      "h1",
+      ".intro__description"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/m3-used-to",
+  "survey": {
+   "title": "Scoped custom element registries: What we used to do · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we used to do",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Scoped custom element registries: What we used to do\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we used to do",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we used to do"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "The editor and a pricing app both use the price field. They need different versions."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 48,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 80,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 88,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/m4-intro",
+  "survey": {
+   "title": "Scroll-driven animations · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Scroll-driven animations",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Scroll-driven animations\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [
+    {
+     "src": "/intro/m4-return-guide.png",
+     "alt": "The return guide with the reading bar part way and step 3 sliding in.",
+     "hidden": false
+    },
+    {
+     "src": "/logos/chrome.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/edge.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/firefox.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/safari.svg",
+     "alt": "",
+     "hidden": false
+    }
+   ],
+   "iframes": [],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "Scroll-driven animations"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Scroll-driven animations link an animation to scrolling, so progress bars and reveals need no script."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 13,
+     "nodes": [
+      ".intro__group",
+      "h1",
+      ".intro__description"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/m3-now",
+  "survey": {
+   "title": "Scoped custom element registries: What we can do today · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we can do today",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Scoped custom element registries: What we can do today\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we can do today",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we can do today"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "This is the same editor with no iframe. The app brings its own registry."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 39,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 71,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 79,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/m4-used-to",
+  "survey": {
+   "title": "Scroll-driven animations: What we used to do · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we used to do",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Scroll-driven animations: What we used to do\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we used to do",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we used to do"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "This help article tracks reading progress. Script listens to every scroll."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 42,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 74,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 82,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/m4-now",
+  "survey": {
+   "title": "Scroll-driven animations: What we can do today · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we can do today",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Scroll-driven animations: What we can do today\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we can do today",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we can do today"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "This is the same article with no scroll script. CSS links each animation to the scroll position."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 76,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 108,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 116,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/m5-intro",
+  "survey": {
+   "title": "Cross-document view transitions · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Cross-document view transitions",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Cross-document view transitions\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [
+    {
+     "src": "/intro/m5-trail-gear-pages.png",
+     "alt": "The Ridgeline Trail product page with its large hero photo.",
+     "hidden": false
+    },
+    {
+     "src": "/logos/chrome.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/edge.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/firefox.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/safari.svg",
+     "alt": "",
+     "hidden": false
+    }
+   ],
+   "iframes": [],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "Cross-document view transitions"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Cross-document view transitions animate the move between pages, with no single-page app."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 13,
+     "nodes": [
+      ".intro__group",
+      "h1",
+      ".intro__description"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/m5-used-to",
+  "survey": {
+   "title": "Cross-document view transitions: What we used to do · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we used to do",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Cross-document view transitions: What we used to do\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we used to do",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we used to do"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Picking a product grows its photo into the product page. We built a single-page app for that."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 70,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 102,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 110,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/m5-now",
+  "survey": {
+   "title": "Cross-document view transitions: What we can do today · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we can do today",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Cross-document view transitions: What we can do today\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we can do today",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we can do today"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "These are two plain HTML pages with no router. One CSS rule asks for a transition between them."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 54,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 86,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 94,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/f2-intro",
+  "survey": {
+   "title": "Cache Components · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Cache Components",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Cache Components\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [
+    {
+     "src": "/intro/f2-caching.png",
+     "alt": "The product page above its request log, where only inventory queries repeat.",
+     "hidden": false
+    },
+    {
+     "src": "/logos/nextjs.svg",
+     "alt": "",
+     "hidden": false
+    }
+   ],
+   "iframes": [],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "Cache Components"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Cache Components let you mark in code exactly which parts of a page are cached."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 6,
+     "nodes": [
+      "h1",
+      ".intro__description",
+      ".support-row__version"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/f2-used-to",
+  "survey": {
+   "title": "Cache Components: What we used to do · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we used to do",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Cache Components: What we used to do\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [
+    {
+     "src": "/posters/f2-used-to/s0.jpg",
+     "alt": "Captured still of the live demo: Empty log",
+     "hidden": false
+    }
+   ],
+   "iframes": [],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we used to do"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "This is the same page in Next.js 16 with Cache Components off. The log below it lists every query."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 65,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/f2-now",
+  "survey": {
+   "title": "Cache Components: What we can do today · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we can do today",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Cache Components: What we can do today\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [
+    {
+     "src": "/posters/f2-now/s0.jpg",
+     "alt": "Captured still of the live demo: Page loaded",
+     "hidden": false
+    }
+   ],
+   "iframes": [],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we can do today"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "This is the same page with one flag on in the config. Now nothing is cached unless the code asks."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 41,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/f3-intro",
+  "survey": {
+   "title": "Package trust · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Package trust",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Package trust\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [
+    {
+     "src": "/intro/f3-package-trust.png",
+     "alt": "The terminal listing a denied install script, then its one-line approval.",
+     "hidden": false
+    },
+    {
+     "src": "/logos/pnpm.svg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/logos/npm.svg",
+     "alt": "",
+     "hidden": false
+    }
+   ],
+   "iframes": [],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "Package trust"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Package managers now ask before a package runs code, and a person approves each release."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 8,
+     "nodes": [
+      "h1",
+      ".intro__description",
+      ".support-row__tile[data-supported=\"true\"]:nth-child(1) > .support-row__version[aria-hidden=\"true\"]"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/f3-used-to",
+  "survey": {
+   "title": "Package trust: What we used to do · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we used to do",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Package trust: What we used to do\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we used to do",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we used to do"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "This timeline shows npm attacks from August 2025 to October 2026. Here is how teams defended."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 12,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 44,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 52,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/f3-now",
+  "survey": {
+   "title": "Package trust: What we can do today · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we can do today",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Package trust: What we can do today\"",
+    "header",
+    "section\"Code\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we can do today",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we can do today"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "The install steps were recorded on this laptop against a test registry. The release steps are an example. The policy and workflow files are on the right."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 16,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 48,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 56,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/f4-single",
+  "survey": {
+   "title": "Vite 8 locally · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Vite 8 locally",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Vite 8 locally\"",
+    "header",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: Vite 8 locally",
+     "tabIndex": 0,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "Vite 8 locally"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Vite 8 uses one bundler, Rolldown, for development and builds. We measured one fixture app on this laptop."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 5,
+     "nodes": [
+      "h1",
+      ".page__badge",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 37,
+     "nodes": [
+      "h1",
+      ".page__badge",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 45,
+     "nodes": [
+      "h1",
+      ".page__badge",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/present?s=title",
+  "survey": {
+   "title": "Audience · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "2026 advancesin the web",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "section\"2026 advances in the web\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [],
+   "links": [
+    {
+     "text": "Bermon Painter, opens in a new tab",
+     "target": "_blank",
+     "tabIndex": -1
+    },
+    {
+     "text": "slalomSlalom, opens in a new tab",
+     "target": "_blank",
+     "tabIndex": -1
+    }
+   ],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "2026 advances in the web"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "A tour of what browsers shipped in 2026, with live demos. FITC Web Unleashed 2026, Toronto."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 6,
+     "nodes": [
+      ".sg-eyebrow",
+      "h1 > span:nth-child(1)",
+      "h1 > span:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/what-changed",
+  "survey": {
+   "title": "What changed in 2026 · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What changed in 2026",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "section\"What changed in 2026\"",
+    "footer",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [],
+   "links": [
+    {
+     "text": "thefutureiscomposable.com, opens in a new tab",
+     "target": "_blank",
+     "tabIndex": 0
+    }
+   ],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What changed in 2026"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "The browser does more. Baseline and Interop settle support. Frameworks rethink rendering and caching. Build tools go native. Installs are a security decision."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 24,
+     "nodes": [
+      "h1",
+      ".sg-card:nth-child(1) > .sg-num",
+      ".sg-card:nth-child(1) > .sg-card__text > .sg-card__title"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/people-to-follow",
+  "survey": {
+   "title": "People to follow · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "People to follow",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "section\"People to follow\"",
+    "footer",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [
+    {
+     "src": "/people/chris-coyier.webp",
+     "alt": "",
+     "hidden": true
+    },
+    {
+     "src": "/people/dave-rupert.webp",
+     "alt": "",
+     "hidden": true
+    },
+    {
+     "src": "/people/tab-atkins.webp",
+     "alt": "",
+     "hidden": true
+    },
+    {
+     "src": "/people/lea-verou.webp",
+     "alt": "",
+     "hidden": true
+    },
+    {
+     "src": "/people/aaron-gustafson.webp",
+     "alt": "",
+     "hidden": true
+    },
+    {
+     "src": "/people/val-head.webp",
+     "alt": "",
+     "hidden": true
+    },
+    {
+     "src": "/people/jen-simmons.webp",
+     "alt": "",
+     "hidden": true
+    },
+    {
+     "src": "/people/miriam-suzanne.webp",
+     "alt": "",
+     "hidden": true
+    },
+    {
+     "src": "/people/tim-berners-lee.webp",
+     "alt": "",
+     "hidden": true
+    },
+    {
+     "src": "/people/rachel-andrew.webp",
+     "alt": "",
+     "hidden": true
+    },
+    {
+     "src": "/people/eric-meyer.webp",
+     "alt": "",
+     "hidden": true
+    },
+    {
+     "src": "/people/jeremy-keith.webp",
+     "alt": "",
+     "hidden": true
+    }
+   ],
+   "iframes": [],
+   "links": [
+    {
+     "text": "thefutureiscomposable.com, opens in a new tab",
+     "target": "_blank",
+     "tabIndex": 0
+    }
+   ],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "People to follow"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "People to follow: Chris Coyier, Dave Rupert, Tab Atkins Jr., Lea Verou and more."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 30,
+     "nodes": [
+      "h1",
+      ".sg-person:nth-child(1) > .sg-person__text > .sg-person__name",
+      ".sg-person:nth-child(1) > .sg-person__text > .sg-person__role"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/s/closing",
+  "survey": {
+   "title": "Thank you · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 0,
+   "headings": [
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "section\"Thank you\"",
+    "nav\"Deck controls\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [
+    {
+     "src": "/logos/linkedin.svg",
+     "alt": "LinkedIn",
+     "hidden": false
+    },
+    {
+     "src": "/qr/linkedin.svg",
+     "alt": "QR code for https://www.linkedin.com/in/bermonpainter",
+     "hidden": false
+    }
+   ],
+   "iframes": [],
+   "links": [
+    {
+     "text": "linkedin.com/in/bermonpainter, opens in a new tab",
+     "target": "_blank",
+     "tabIndex": 0
+    },
+    {
+     "text": "slalomSlalom, opens in a new tab",
+     "target": "_blank",
+     "tabIndex": 0
+    },
+    {
+     "text": ", opens in a new tab",
+     "target": "_blank",
+     "tabIndex": 0
+    }
+   ],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "Thank you"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "Thank you from Bermon Painter, Head of DXP and Commerce, Slalom. Connect on LinkedIn."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 7,
+     "nodes": [
+      ".sg-eyebrow",
+      ".sg-closing__name",
+      ".sg-closing__role"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 32,
+     "nodes": [
+      "#deck-nav-title",
+      ".nav-drawer__close",
+      "a[href$=\"title\"] > .nav-drawer__label"
+     ]
+    }
+   ]
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 40,
+     "nodes": [
+      "#keyboard-help-title",
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(1) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/present?s=d1-used-to",
+  "survey": {
+   "title": "Audience · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 1,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we used to do",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    }
+   ],
+   "landmarks": [
+    "div[role=main]",
+    "article\"Dialog element: What we used to do\"",
+    "header",
+    "section\"Code\"",
+    "header",
+    "nav\"Sections\""
+   ],
+   "imgs": [],
+   "iframes": [
+    {
+     "title": "Live demo: What we used to do",
+     "tabIndex": -1,
+     "cls": "page-frame__iframe",
+     "hidden": null,
+     "inert": false,
+     "visible": "true"
+    }
+   ],
+   "links": [],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we used to do"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "This is an order list, and Cancel order asks you to confirm first. Here is how teams commonly build it. The code lights up as the demo plays."
+  },
+  "closed": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 60,
+     "nodes": [
+      ".page__eyebrow",
+      "h1",
+      ".page__steps > span:nth-child(1)"
+     ]
+    },
+    {
+     "id": "frame-tested",
+     "n": 1,
+     "nodes": [
+      "iframe"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/speaker?s=d1-used-to",
+  "survey": {
+   "title": "Speaker · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 2,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "What we used to do",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    },
+    {
+     "tag": "H1",
+     "text": "What we can do today",
+     "inDialog": false
+    }
+   ],
+   "landmarks": [
+    "section\"Slides\"",
+    "article\"Dialog element: What we used to do\"",
+    "header",
+    "section\"Code\"",
+    "header",
+    "nav\"Sections\"",
+    "aside\"Next\"",
+    "article\"Dialog element: What we can do today\"",
+    "header",
+    "section\"Code\"",
+    "section\"Notes\"",
+    "header",
+    "footer",
+    "nav\"Presenter controls\""
+   ],
+   "imgs": [
+    {
+     "src": "/posters/d1-used-to/s0.jpg",
+     "alt": "",
+     "hidden": false
+    },
+    {
+     "src": "/posters/d1-now/s0.jpg",
+     "alt": "",
+     "hidden": false
+    }
+   ],
+   "iframes": [],
+   "links": [
+    {
+     "text": "Coyier, 6 Jan 2025: \"No JavaScript is required to make the opening and closing of a popover work.\"",
+     "target": "_blank",
+     "tabIndex": 0
+    },
+    {
+     "text": "shopify.com view-source, 26 Oct 2026: popoverTarget plus popover=\"auto\" on the region picker (recapture the week of the talk)",
+     "target": "_blank",
+     "tabIndex": 0
+    },
+    {
+     "text": "vercel.com view-source, 26 Oct 2026: popover=\"manual\" menu",
+     "target": "_blank",
+     "tabIndex": 0
+    },
+    {
+     "text": "GitHub Primer: ActionList uses popover (PR #2378); Dialog uses <dialog> internally (PR #2496)",
+     "target": "_blank",
+     "tabIndex": 0
+    },
+    {
+     "text": "MDN: Invoker Commands API",
+     "target": "_blank",
+     "tabIndex": 0
+    },
+    {
+     "text": "Popover Baseline 27 Jan 2025",
+     "target": "_blank",
+     "tabIndex": 0
+    },
+    {
+     "text": "Invoker commands Baseline 12 Dec 2025 (Chrome 135, Firefox 144, Safari 26.2)",
+     "target": "_blank",
+     "tabIndex": 0
+    },
+    {
+     "text": ":open Baseline 11 May 2026",
+     "target": "_blank",
+     "tabIndex": 0
+    },
+    {
+     "text": "dialog Baseline Widely, 14 Sep 2024 (web-features 3.44.0)",
+     "target": "_blank",
+     "tabIndex": 0
+    },
+    {
+     "text": "@headlessui/react 2.2.10: 209 KB min / 63 KB gzipped (mid-2026 pull; refresh)",
+     "target": "_blank",
+     "tabIndex": 0
+    },
+    {
+     "text": "@radix-ui/react-popover 1.3.1: 68 KB min / 23 KB gzipped (mid-2026 pull; refresh)",
+     "target": "_blank",
+     "tabIndex": 0
+    },
+    {
+     "text": "Interop 2026 names dialogs and popovers and anchor positioning as focus areas",
+     "target": "_blank",
+     "tabIndex": 0
+    }
+   ],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "What we used to do"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "This is an order list, and Cancel order asks you to confirm first. Here is how teams commonly build it. The code lights up as the demo plays."
+  },
+  "closed": {
+   "violations": [
+    {
+     "id": "landmark-one-main",
+     "impact": "moderate",
+     "help": "Document should have one main landmark",
+     "nodes": [
+      {
+       "target": "html",
+       "summary": "Fix all of the following:\n  Document does not have a main landmark"
+      }
+     ]
+    },
+    {
+     "id": "landmark-unique",
+     "impact": "moderate",
+     "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+     "nodes": [
+      {
+       "target": "article[data-stage=\"used-to\"] > .page__body > .page__code[aria-label=\"Code\"]",
+       "summary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      }
+     ]
+    }
+   ],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 123,
+     "nodes": [
+      "article[data-stage=\"used-to\"] > .page__header > .page__eyebrow",
+      "article[data-stage=\"used-to\"] > .page__header > h1",
+      "article[data-stage=\"used-to\"] > .page__body > .page__frame > .page__poster[data-has-poster=\"true\"] > .page__poster-label"
+     ]
+    },
+    {
+     "id": "label-content-name-mismatch",
+     "n": 2,
+     "nodes": [
+      "button[aria-label=\"Smaller notes\"]",
+      "button[aria-label=\"Larger notes\"]"
+     ]
+    },
+    {
+     "id": "target-size",
+     "n": 2,
+     "nodes": [
+      "article[data-stage=\"now\"] > .page__body > .page__code[aria-label=\"Code\"] > .code.code--page.chrome-card > .code__tabs[role=\"tablist\"][aria-label=\"Files\"] > .code__tab[role=\"tab\"][type=\"button\"]:nth-child(2)",
+      "article[data-stage=\"now\"] > .page__body > .page__code[aria-label=\"Code\"] > .code.code--page.chrome-card > .code__tabs[role=\"tablist\"][aria-label=\"Files\"] > .code__tab[role=\"tab\"][type=\"button\"]:nth-child(3)"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": []
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 4,
+     "nodes": [
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(2) > dt > kbd:nth-child(1)",
+      "div:nth-child(3) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "url": "https://2026-advances-in-the-web.vercel.app/speaker?s=title",
+  "survey": {
+   "title": "Speaker · 2026 advances in the web",
+   "lang": "en-CA",
+   "h1": 2,
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "2026 advancesin the web",
+     "inDialog": false
+    },
+    {
+     "tag": "H2",
+     "text": "Sections",
+     "inDialog": true
+    },
+    {
+     "tag": "H2",
+     "text": "Keyboard",
+     "inDialog": true
+    },
+    {
+     "tag": "H1",
+     "text": "Use AI",
+     "inDialog": false
+    }
+   ],
+   "landmarks": [
+    "section\"Slides\"",
+    "section\"2026 advances in the web\"",
+    "header",
+    "nav\"Sections\"",
+    "aside\"Next\"",
+    "section\"The mandate\"",
+    "footer",
+    "section\"Notes\"",
+    "footer",
+    "nav\"Presenter controls\""
+   ],
+   "imgs": [],
+   "iframes": [],
+   "links": [
+    {
+     "text": "Bermon Painter, opens in a new tab",
+     "target": "_blank",
+     "tabIndex": -1
+    },
+    {
+     "text": "slalomSlalom, opens in a new tab",
+     "target": "_blank",
+     "tabIndex": -1
+    },
+    {
+     "text": "thefutureiscomposable.com, opens in a new tab",
+     "target": "_blank",
+     "tabIndex": -1
+    }
+   ],
+   "live": [
+    {
+     "cls": "stage__announcer",
+     "live": "polite",
+     "text": "2026 advances in the web"
+    }
+   ],
+   "skip": false,
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "description": "A tour of what browsers shipped in 2026, with live demos. FITC Web Unleashed 2026, Toronto."
+  },
+  "closed": {
+   "violations": [
+    {
+     "id": "landmark-one-main",
+     "impact": "moderate",
+     "help": "Document should have one main landmark",
+     "nodes": [
+      {
+       "target": "html",
+       "summary": "Fix all of the following:\n  Document does not have a main landmark"
+      }
+     ]
+    }
+   ],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 19,
+     "nodes": [
+      ".sg--title > .sg-eyebrow",
+      ".sg-title-lines > span:nth-child(1)",
+      ".sg-title-lines > span:nth-child(2)"
+     ]
+    },
+    {
+     "id": "label-content-name-mismatch",
+     "n": 2,
+     "nodes": [
+      "button[aria-label=\"Smaller notes\"]",
+      "button[aria-label=\"Larger notes\"]"
+     ]
+    }
+   ]
+  },
+  "drawer": {
+   "violations": [],
+   "incomplete": []
+  },
+  "helpOpen": true,
+  "help": {
+   "violations": [],
+   "incomplete": [
+    {
+     "id": "color-contrast",
+     "n": 4,
+     "nodes": [
+      "div:nth-child(1) > dt > kbd:nth-child(1)",
+      "div:nth-child(2) > dt > kbd:nth-child(1)",
+      "div:nth-child(3) > dt > kbd:nth-child(2)"
+     ]
+    }
+   ]
+  }
+ }
+]

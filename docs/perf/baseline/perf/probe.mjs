@@ -1,0 +1,13 @@
+import { launch, P } from "./lib.mjs";
+const b = await launch();
+const ctx = await b.newContext({ viewport: { width: 1920, height: 1080 } });
+const page = await ctx.newPage();
+const seen = [];
+page.on("request", (r) => { if (/_rsc=|\.png|\.jpg/.test(r.url())) seen.push({ url: r.url().replace(P, ""), h: Object.fromEntries(Object.entries(r.headers()).filter(([k]) => /rsc|router|next|priority|purpose/i.test(k))), init: r.frame()?.url()?.slice(0, 60) }); });
+await page.goto(P + "/s/d1-now", { waitUntil: "load" });
+await page.waitForTimeout(4000);
+console.log(JSON.stringify(seen, null, 1));
+console.log(await page.evaluate(() => ({ imgs: [...document.querySelectorAll("img")].map((i) => i.src), hidden: document.querySelectorAll("[hidden], template").length, links: [...document.querySelectorAll("link")].map((l) => l.rel + " " + l.href + " " + (l.as || "")) })));
+const init = await page.evaluate(() => performance.getEntriesByType("resource").filter((e) => /png|jpg/.test(e.name)).map((e) => ({ n: e.name, it: e.initiatorType, s: Math.round(e.startTime) })));
+console.log(init);
+await b.close();

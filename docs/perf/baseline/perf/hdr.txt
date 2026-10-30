@@ -1,0 +1,20 @@
+HTTP/2 200 
+accept-ranges: bytes
+access-control-allow-origin: *
+age: 0
+cache-control: public, max-age=0, must-revalidate
+content-disposition: inline; filename="d4.jpg"
+content-type: image/jpeg
+date: Thu, 29 Oct 2026 22:43:38 GMT
+etag: "a7c2bd58b9e4babb2a2fcd2586e75b71"
+last-modified: Thu, 29 Oct 2026 22:43:38 GMT
+referrer-policy: strict-origin-when-cross-origin
+server: Vercel
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+x-content-type-options: nosniff
+x-matched-path: /backgrounds/v5/d4.jpg
+x-robots-tag: noindex, nofollow
+x-vercel-cache: MISS
+x-vercel-id: iad1::579vv-1793313818814-97cde1c31207
+content-length: 477910
+

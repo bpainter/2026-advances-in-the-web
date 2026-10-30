@@ -1,0 +1,121 @@
+file | pass | transition | n | paint med/p90 | bg ready med/max | intro img med/max | step0 med/p90 | lost
+audience-control-none-3000 | cold | ->intro | 5 | 42/47 | 0/574 | 198/582 | - | 0
+audience-control-none-3000 | cold | intro->used-to | 4 | 31/36 | 0/0 | - | 415/1072 | 
+audience-control-none-3000 | cold | used-to->now | 3 | 38/39 | 0/0 | - | 346/536 | 
+audience-control-none-3000 | cold | ->glass | 2 | 21/29 | 0/0 | - | - | 
+audience-control-none-3000 | warm | ->intro | 5 | 49/52 | 0/0 | 700/1788 | - | 0
+audience-control-none-3000 | warm | intro->used-to | 4 | 24/35 | 0/0 | - | 399/470 | 
+audience-control-none-3000 | warm | used-to->now | 3 | 46/47 | 0/0 | - | 494/598 | 
+audience-control-none-3000 | warm | ->glass | 2 | 20/45 | 0/0 | - | - | 
+audience-control-venue-3000 | cold | ->intro | 5 | 44/46 | 0/451 | 607/1937 | - | 0
+audience-control-venue-3000 | cold | intro->used-to | 4 | 26/36 | 0/0 | - | 369/469 | 
+audience-control-venue-3000 | cold | used-to->now | 3 | 43/48 | 0/0 | - | 460/690 | 
+audience-control-venue-3000 | cold | ->glass | 2 | 24/29 | 0/0 | - | - | 
+audience-control-venue-3000 | warm | ->intro | 5 | 45/50 | 0/450 | 739/1934 | - | 0
+audience-control-venue-3000 | warm | intro->used-to | 4 | 25/28 | 0/0 | - | 369/779 | 
+audience-control-venue-3000 | warm | used-to->now | 3 | 40/47 | 0/0 | - | 482/775 | 
+audience-control-venue-3000 | warm | ->glass | 2 | 17/30 | 0/0 | - | - | 
+audience-noprefetch-none-3000 | cold | ->intro | 5 | 174/295 | 194/500 | 413/504 | - | 0
+audience-noprefetch-none-3000 | cold | intro->used-to | 4 | 140/152 | 0/0 | - | 468/507 | 
+audience-noprefetch-none-3000 | cold | used-to->now | 3 | 144/147 | 0/0 | - | 431/553 | 
+audience-noprefetch-none-3000 | cold | ->glass | 2 | 107/122 | 0/0 | - | - | 
+audience-noprefetch-none-3000 | warm | ->intro | 5 | 122/133 | 0/0 | 248/475 | - | 0
+audience-noprefetch-none-3000 | warm | intro->used-to | 4 | 122/168 | 0/0 | - | 449/558 | 
+audience-noprefetch-none-3000 | warm | used-to->now | 3 | 168/179 | 0/0 | - | 517/522 | 
+audience-noprefetch-none-3000 | warm | ->glass | 2 | 115/121 | 0/0 | - | - | 
+audience-noprefetch-venue-3000 | cold | ->intro | 5 | 112/161 | 580/889 | 898/2049 | - | 0
+audience-noprefetch-venue-3000 | cold | intro->used-to | 4 | 120/140 | 0/0 | - | 505/524 | 
+audience-noprefetch-venue-3000 | cold | used-to->now | 3 | 150/154 | 0/0 | - | 506/767 | 
+audience-noprefetch-venue-3000 | cold | ->glass | 2 | 98/110 | 0/0 | - | - | 
+audience-noprefetch-venue-3000 | warm | ->intro | 5 | 105/132 | 774/1073 | 933/2022 | - | 0
+audience-noprefetch-venue-3000 | warm | intro->used-to | 4 | 124/143 | 0/0 | - | 461/640 | 
+audience-noprefetch-venue-3000 | warm | used-to->now | 3 | 137/152 | 0/0 | - | 552/755 | 
+audience-noprefetch-venue-3000 | warm | ->glass | 2 | 99/104 | 0/0 | - | - | 
+audience-nowarm-none-3000.INFLATED | cold | ->intro | 5 | 40/43 | 0/411 | 360/468 | - | 0
+audience-nowarm-none-3000.INFLATED | cold | intro->used-to | 4 | 31/32 | 0/0 | - | 529/748 | 
+audience-nowarm-none-3000.INFLATED | cold | used-to->now | 3 | 37/44 | 0/0 | - | 588/790 | 
+audience-nowarm-none-3000.INFLATED | cold | ->glass | 2 | 24/34 | 0/0 | - | - | 
+audience-nowarm-none-3000.INFLATED | warm | ->intro | 5 | 45/51 | 0/240 | 305/463 | - | 0
+audience-nowarm-none-3000.INFLATED | warm | intro->used-to | 4 | 20/35 | 0/0 | - | 612/1205 | 
+audience-nowarm-none-3000.INFLATED | warm | used-to->now | 3 | 46/49 | 0/0 | - | 550/560 | 
+audience-nowarm-none-3000.INFLATED | warm | ->glass | 2 | 28/34 | 0/0 | - | - | 
+audience-nowarm-venue-3000.INFLATED | cold | ->intro | 5 | 46/46 | 384/707 | 616/1767 | - | 0
+audience-nowarm-venue-3000.INFLATED | cold | intro->used-to | 4 | 33/40 | 0/0 | - | 467/663 | 
+audience-nowarm-venue-3000.INFLATED | cold | used-to->now | 3 | 41/52 | 0/0 | - | 786/858 | 
+audience-nowarm-venue-3000.INFLATED | cold | ->glass | 2 | 24/32 | 0/0 | - | - | 
+audience-nowarm-venue-3000.INFLATED | warm | ->intro | 5 | 40/43 | 0/513 | 616/1779 | - | 0
+audience-nowarm-venue-3000.INFLATED | warm | intro->used-to | 4 | 22/42 | 0/0 | - | 537/731 | 
+audience-nowarm-venue-3000.INFLATED | warm | used-to->now | 3 | 46/52 | 0/0 | - | 1154/1580 | 
+audience-nowarm-venue-3000.INFLATED | warm | ->glass | 2 | 23/33 | 0/0 | - | - | 
+audience-nowarm2-none-3000 | cold | ->intro | 5 | 45/48 | 120/194 | 140/531 | - | 0
+audience-nowarm2-none-3000 | cold | intro->used-to | 4 | 24/35 | 0/0 | - | 406/519 | 
+audience-nowarm2-none-3000 | cold | used-to->now | 3 | 44/44 | 0/0 | - | 328/338 | 
+audience-nowarm2-none-3000 | cold | ->glass | 2 | 20/28 | 0/0 | - | - | 
+audience-nowarm2-none-3000 | warm | ->intro | 5 | 38/49 | 0/0 | 256/664 | - | 0
+audience-nowarm2-none-3000 | warm | intro->used-to | 4 | 29/31 | 0/0 | - | 397/639 | 
+audience-nowarm2-none-3000 | warm | used-to->now | 3 | 48/50 | 0/0 | - | 383/417 | 
+audience-nowarm2-none-3000 | warm | ->glass | 2 | 21/30 | 0/0 | - | - | 
+audience-nowarm2-venue-3000 | cold | ->intro | 5 | 42/52 | 0/460 | 648/1935 | - | 0
+audience-nowarm2-venue-3000 | cold | intro->used-to | 4 | 25/32 | 0/0 | - | 399/443 | 
+audience-nowarm2-venue-3000 | cold | used-to->now | 3 | 43/43 | 0/0 | - | 451/723 | 
+audience-nowarm2-venue-3000 | cold | ->glass | 2 | 33/37 | 0/0 | - | - | 
+audience-nowarm2-venue-3000 | warm | ->intro | 5 | 47/51 | 316/407 | 754/1923 | - | 0
+audience-nowarm2-venue-3000 | warm | intro->used-to | 4 | 23/34 | 0/0 | - | 418/686 | 
+audience-nowarm2-venue-3000 | warm | used-to->now | 3 | 42/47 | 0/0 | - | 454/715 | 
+audience-nowarm2-venue-3000 | warm | ->glass | 2 | 15/40 | 0/0 | - | - | 
+audience-prefetch-none-3000 | cold | ->intro | 5 | 38/52 | 0/55 | 32/35 | - | 0
+audience-prefetch-none-3000 | cold | intro->used-to | 4 | 19/40 | 0/0 | - | 352/357 | 
+audience-prefetch-none-3000 | cold | used-to->now | 3 | 50/52 | 0/0 | - | 251/307 | 
+audience-prefetch-none-3000 | cold | ->glass | 2 | 18/37 | 0/0 | - | - | 
+audience-prefetch-none-3000 | warm | ->intro | 5 | 45/46 | 46/57 | 31/33 | - | 0
+audience-prefetch-none-3000 | warm | intro->used-to | 4 | 26/33 | 0/0 | - | 325/504 | 
+audience-prefetch-none-3000 | warm | used-to->now | 3 | 44/45 | 0/0 | - | 245/264 | 
+audience-prefetch-none-3000 | warm | ->glass | 2 | 25/38 | 0/0 | - | - | 
+audience-prefetch-venue-3000 | cold | ->intro | 5 | 43/46 | 0/0 | 33/39 | - | 0
+audience-prefetch-venue-3000 | cold | intro->used-to | 4 | 25/47 | 0/0 | - | 273/519 | 
+audience-prefetch-venue-3000 | cold | used-to->now | 3 | 38/52 | 0/0 | - | 273/304 | 
+audience-prefetch-venue-3000 | cold | ->glass | 2 | 28/30 | 0/0 | - | - | 
+audience-prefetch-venue-3000 | warm | ->intro | 5 | 43/52 | 0/0 | 31/31 | - | 0
+audience-prefetch-venue-3000 | warm | intro->used-to | 4 | 27/30 | 0/0 | - | 269/463 | 
+audience-prefetch-venue-3000 | warm | used-to->now | 3 | 40/41 | 0/0 | - | 255/273 | 
+audience-prefetch-venue-3000 | warm | ->glass | 2 | 28/39 | 0/0 | - | - | 
+audience-prefetch-venue-800 | cold | ->intro | 4 | 45/51 | 0/0 | 31/45 | - | 2
+audience-prefetch-venue-800 | cold | intro->used-to | 3 | 29/33 | 0/0 | - | 359/394 | 
+audience-prefetch-venue-800 | cold | used-to->now | 3 | 43/51 | 0/0 | - | 239/312 | 
+audience-prefetch-venue-800 | cold | ->glass | 2 | 26/40 | 0/0 | - | - | 
+audience-prefetch-venue-800 | warm | ->intro | 3 | 42/43 | 0/0 | 31/31 | - | 3
+audience-prefetch-venue-800 | warm | intro->used-to | 3 | 30/44 | 0/0 | - | 371/532 | 
+audience-prefetch-venue-800 | warm | used-to->now | 3 | 42/44 | 0/0 | - | 246/959 | 
+audience-prefetch-venue-800 | warm | ->glass | 2 | 27/35 | 0/0 | - | - | 
+reader-noprefetch-none-3000 | cold | ->intro | 5 | 102/135 | 700/1013 | 669/868 | - | 0
+reader-noprefetch-none-3000 | cold | intro->used-to | 4 | 77/101 | 0/0 | - | 382/578 | 
+reader-noprefetch-none-3000 | cold | used-to->now | 3 | 99/155 | 0/0 | - | 431/617 | 
+reader-noprefetch-none-3000 | cold | ->glass | 2 | 76/87 | 215/226 | - | - | 
+reader-noprefetch-none-3000 | warm | ->intro | 5 | 92/96 | 403/536 | 343/780 | - | 0
+reader-noprefetch-none-3000 | warm | intro->used-to | 4 | 102/112 | 0/0 | - | 472/621 | 
+reader-noprefetch-none-3000 | warm | used-to->now | 3 | 84/102 | 0/0 | - | 393/420 | 
+reader-noprefetch-none-3000 | warm | ->glass | 2 | 78/158 | 314/520 | - | - | 
+reader-noprefetch-venue-3000 | cold | ->intro | 5 | 104/125 | 673/1636 | 1286/1839 | - | 0
+reader-noprefetch-venue-3000 | cold | intro->used-to | 4 | 104/133 | 0/0 | - | 468/571 | 
+reader-noprefetch-venue-3000 | cold | used-to->now | 3 | 108/109 | 0/0 | - | 575/644 | 
+reader-noprefetch-venue-3000 | cold | ->glass | 2 | 97/109 | 303/346 | - | - | 
+reader-noprefetch-venue-3000 | warm | ->intro | 5 | 113/139 | 533/1730 | 847/1853 | - | 0
+reader-noprefetch-venue-3000 | warm | intro->used-to | 4 | 108/112 | 0/0 | - | 525/597 | 
+reader-noprefetch-venue-3000 | warm | used-to->now | 3 | 111/116 | 0/0 | - | 506/612 | 
+reader-noprefetch-venue-3000 | warm | ->glass | 2 | 90/105 | 273/344 | - | - | 
+reader-prefetch-none-3000 | cold | ->intro | 5 | 43/48 | 132/336 | 30/33 | - | 0
+reader-prefetch-none-3000 | cold | intro->used-to | 4 | 50/60 | 0/0 | - | 631/995 | 
+reader-prefetch-none-3000 | cold | used-to->now | 3 | 44/49 | 0/0 | - | 243/280 | 
+reader-prefetch-none-3000 | cold | ->glass | 2 | 48/48 | 149/173 | - | - | 
+reader-prefetch-none-3000 | warm | ->intro | 5 | 47/51 | 54/55 | 28/29 | - | 0
+reader-prefetch-none-3000 | warm | intro->used-to | 4 | 51/59 | 0/0 | - | 315/530 | 
+reader-prefetch-none-3000 | warm | used-to->now | 3 | 37/50 | 0/0 | - | 204/309 | 
+reader-prefetch-none-3000 | warm | ->glass | 2 | 46/47 | 48/55 | - | - | 
+reader-prefetch-venue-3000 | cold | ->intro | 5 | 40/52 | 311/628 | 31/35 | - | 0
+reader-prefetch-venue-3000 | cold | intro->used-to | 4 | 48/58 | 0/0 | - | 309/599 | 
+reader-prefetch-venue-3000 | cold | used-to->now | 3 | 50/52 | 0/0 | - | 304/305 | 
+reader-prefetch-venue-3000 | cold | ->glass | 2 | 48/50 | 202/204 | - | - | 
+reader-prefetch-venue-3000 | warm | ->intro | 5 | 40/59 | 75/100 | 30/37 | - | 0
+reader-prefetch-venue-3000 | warm | intro->used-to | 4 | 48/53 | 0/0 | - | 381/571 | 
+reader-prefetch-venue-3000 | warm | used-to->now | 3 | 45/50 | 0/0 | - | 218/228 | 
+reader-prefetch-venue-3000 | warm | ->glass | 2 | 56/59 | 87/96 | - | - | 

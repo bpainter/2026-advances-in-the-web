@@ -1,0 +1,4733 @@
+{
+  "summary": {
+    "requests": 771,
+    "bytes": 41241919,
+    "by": {
+      "doc": {
+        "n": 41,
+        "bytes": 78817
+      },
+      "css": {
+        "n": 226,
+        "bytes": 98292
+      },
+      "js": {
+        "n": 166,
+        "bytes": 364364
+      },
+      "img": {
+        "n": 202,
+        "bytes": 40447734
+      },
+      "font": {
+        "n": 82,
+        "bytes": 155728
+      },
+      "rsc": {
+        "n": 49,
+        "bytes": 93611
+      },
+      "fetch": {
+        "n": 5,
+        "bytes": 3373
+      }
+    },
+    "notModified": 237,
+    "fromCache": 78,
+    "presenter": 153,
+    "demo": 618
+  },
+  "byOriginKind": {
+    "presenter:doc": {
+      "n": 1,
+      "bytes": 5130
+    },
+    "presenter:css": {
+      "n": 1,
+      "bytes": 22371
+    },
+    "presenter:js": {
+      "n": 10,
+      "bytes": 168420
+    },
+    "presenter:img": {
+      "n": 90,
+      "bytes": 32427228
+    },
+    "presenter:font": {
+      "n": 2,
+      "bytes": 77835
+    },
+    "presenter:rsc": {
+      "n": 49,
+      "bytes": 93611
+    },
+    "demo:doc": {
+      "n": 40,
+      "bytes": 73687
+    },
+    "demo:css": {
+      "n": 225,
+      "bytes": 75921
+    },
+    "demo:js": {
+      "n": 156,
+      "bytes": 195944
+    },
+    "demo:img": {
+      "n": 112,
+      "bytes": 8020506
+    },
+    "demo:font": {
+      "n": 80,
+      "bytes": 77893
+    },
+    "other:img": {
+      "n": 3,
+      "bytes": 0
+    },
+    "demo:fetch": {
+      "n": 5,
+      "bytes": 3373
+    }
+  },
+  "both": [
+    "/fonts/SlalomSans-Bold.otf",
+    "/fonts/SlalomSans-Regular.otf",
+    "/backgrounds/v5/d1.jpg",
+    "/backgrounds/v5/d2.jpg",
+    "/backgrounds/v5/d3.jpg",
+    "/backgrounds/v5/d4.jpg",
+    "/backgrounds/v5/d5.jpg",
+    "/backgrounds/v5/d6.jpg",
+    "/backgrounds/v5/m1.jpg",
+    "/backgrounds/v5/m2.jpg",
+    "/backgrounds/v5/m3.jpg",
+    "/backgrounds/v5/m4.jpg",
+    "/backgrounds/v5/m5.jpg",
+    "/backgrounds/v5/f3.jpg",
+    "/backgrounds/v5/f4.jpg"
+  ],
+  "list": [
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=title",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 5130
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/_next/static/immutable/chunks/41lokf3pr8vat.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 22371
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/_next/static/immutable/chunks/25tjve498_-aj.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 2325
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/_next/static/immutable/chunks/3hhfd6uw8zfdv.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 9366
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/_next/static/immutable/chunks/1oz4r_pw959zk.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 73815
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/_next/static/immutable/chunks/01uq64ii2hu-y.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 46263
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/_next/static/immutable/chunks/turbopack-1byz1flvc-bu1.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 4801
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/_next/static/immutable/chunks/161yrgcz8n7e6.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 5496
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/_next/static/immutable/chunks/1dpyyo1h7y1aw.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 3632
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/_next/static/immutable/chunks/00ylofj4mef28.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1035
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/_next/static/immutable/chunks/1z99gv22q7ny4.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 9371
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/_next/static/immutable/chunks/3ol5rjub3vi0b.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 12316
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/title.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 449426
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/theme/grain.png",
+      "kind": "img",
+      "status": 200,
+      "bytes": 62725
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 39888
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 37947
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/o2.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 238501
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=the-mandate&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/o3.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 278743
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=three-reactions&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 3080
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/images/design/c18ba5ceb5f4a9a2dc228deb4d240a17.png",
+      "kind": "img",
+      "status": 200,
+      "bytes": 917168
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/images/design/41c92a3370c2ea5a19e31664dfb3f880.png",
+      "kind": "img",
+      "status": 200,
+      "bytes": 999588
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/images/design/7a3f47c0216f32a9a3c35bc46ca6e398.png",
+      "kind": "img",
+      "status": 200,
+      "bytes": 1100652
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/o4.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 484236
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=two-perspectives&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 2699
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/o5.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 305458
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=keep-humanity&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 2631
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/o6.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 593814
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=open-web&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 3675
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/o7.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 329078
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=what-we-cover&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 3017
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/d1.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 691029
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=d1-intro&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 2871
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/intro/d1-order-actions.png",
+      "kind": "img",
+      "status": 200,
+      "bytes": 813350
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/logos/chrome.svg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 741
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/logos/edge.svg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 1249
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/logos/firefox.svg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 2786
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/logos/safari.svg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 2290
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=d1-used-to&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 7290
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/d1-used-to/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 53218
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/01-layered-ui/today/index.html?bg=d1",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 2030
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 9859
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 588
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/01-layered-ui.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 892
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 2046
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/order-queue.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 698
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 17946
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/01-layered-ui/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 634
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/01-layered-ui/today/app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 892
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/d1.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 690946
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 39824
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 38069
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/01-layered-ui/today/menu.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1931
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/01-layered-ui/today/modal.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1691
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/01-layered-ui/today/focus-trap.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1197
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/01-layered-ui/today/scroll-lock.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 642
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/01-layered-ui/today/index.html?bg=d1",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1841
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=d1-now&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/01-layered-ui.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 111
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/order-queue.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 87
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/01-layered-ui/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 661
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/01-layered-ui/today/app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 885
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/01-layered-ui/today/menu.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1882
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/01-layered-ui/today/modal.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1664
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/d1.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 73
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/01-layered-ui/today/focus-trap.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1201
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/01-layered-ui/today/scroll-lock.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 708
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/d1-now/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 54879
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/01-layered-ui/native/index.html?flags=enhance-css:1&bg=d1",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1518
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/d2.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 540875
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=d2-intro&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 2836
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 55
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/01-layered-ui.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/order-queue.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/01-layered-ui/native/enhance.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 436
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/01-layered-ui/native/app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 504
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/01-layered-ui/native/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 270
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/d1.jpg",
+      "kind": "img",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/intro/d2-product-card.png",
+      "kind": "img",
+      "status": 200,
+      "bytes": 1013033
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=d2-used-to&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/d2-used-to/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 53965
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/02-container-card/today/index.html?bg=d2",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1718
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/02-container-card.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 483
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 87
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/storefront-merch.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 1043
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/02-container-card/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 1354
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/02-container-card/today/app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1516
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/d2.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 540835
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/02-container-card/today/card.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1097
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/02-container-card/today/resize-classes.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 599
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/02-container-card/today/shoe.avif",
+      "kind": "img",
+      "status": 200,
+      "bytes": 7593
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/02-container-card/today/index.html?bg=d2",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1709
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=d2-now&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 60
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/02-container-card.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 108
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 86
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/storefront-merch.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/02-container-card/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 1363
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/02-container-card/today/app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1465
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/d2.jpg",
+      "kind": "img",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/02-container-card/today/card.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1097
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/02-container-card/today/resize-classes.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 535
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/02-container-card/today/shoe.avif",
+      "kind": "img",
+      "status": 200,
+      "bytes": 7640
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/d2-now/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 38784
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/02-container-card/native/index.html?flags=enhance-js:1&bg=d2",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1257
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/d3.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 310797
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=d3-intro&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 2996
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/intro/d3-support-form.png",
+      "kind": "img",
+      "status": 200,
+      "bytes": 650889
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/storefront-merch.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/02-container-card/native/card.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 613
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/02-container-card/native/shoe.avif",
+      "kind": "img",
+      "status": 200,
+      "bytes": 7593
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/02-container-card/native/app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 251
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/storefront-merch.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1063
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/02-container-card/native/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1139
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/d2.jpg",
+      "kind": "img",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=d3-used-to&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/d3-used-to/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 38615
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/03-content-sized-form/today/index.html?bg=d3",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1666
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/03-content-sized-form.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 691
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/support-case.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 668
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 113
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/03-content-sized-form/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 611
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/03-content-sized-form/today/app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1230
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/d3.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 310778
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/03-content-sized-form/today/input-width.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 838
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/03-content-sized-form/today/autosize.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 892
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/03-content-sized-form/today/index.html?bg=d3",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1218
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=d3-now&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/03-content-sized-form.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 53
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/support-case.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/03-content-sized-form/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 614
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/03-content-sized-form/today/app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1237
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/d3.jpg",
+      "kind": "img",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/03-content-sized-form/today/input-width.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 806
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/03-content-sized-form/today/autosize.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 840
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/d3-now/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 39597
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/03-content-sized-form/native/index.html?flags=enhance-css:1,enhance-js:1&bg=d3",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1601
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/d4.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 478422
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=d4-intro&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 2819
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 53
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/03-content-sized-form.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/support-case.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 83
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/03-content-sized-form/native/form.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 360
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/03-content-sized-form/native/app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 395
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/03-content-sized-form/native/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 701
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/d3.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 73
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/intro/d4-dashboard-navigation.png",
+      "kind": "img",
+      "status": 200,
+      "bytes": 728145
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=d4-used-to&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/d4-used-to/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 67681
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/04-navigation-api/today/index.html?bg=d4",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 2686
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/04-navigation-api.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 3077
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/portal-dashboard.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 1334
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo/d4/app.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 288
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo/d4/router.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 2269
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo/log.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1870
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 417
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/d4.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 478438
+    },
+    {
+      "url": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230f1c41' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E",
+      "kind": "img",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/04-navigation-api/today/index.html?bg=d4",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 3203
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=d4-now&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/04-navigation-api.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 80
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 80
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/portal-dashboard.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 87
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo/d4/app.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 316
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo/d4/router.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 2269
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo/log.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1889
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 378
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/d4.jpg",
+      "kind": "img",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230f1c41' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E",
+      "kind": "img",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/d4-now/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 68591
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/orders?flags=enhance-js%3A1&bg=d4",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 2636
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/d5.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 312357
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=d5-intro&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 2822
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/intro/d5-rich-content.png",
+      "kind": "img",
+      "status": 200,
+      "bytes": 1459948
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/04-navigation-api.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/portal-dashboard.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 60
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/app.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 326
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo/log.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1895
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 635
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 369
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/d4.jpg",
+      "kind": "img",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230f1c41' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E",
+      "kind": "img",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo/log.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1879
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=d5-used-to&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/d5-used-to/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 79676
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/today/index.html?bg=d5",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1920
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/05-trusted-types.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 2163
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/product-page.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 1167
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 88
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 464
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo/console.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 707
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/today/app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 947
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/today/description.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 327
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/today/reviews.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 760
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/today/promo.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 339
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/d5.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 312321
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/shoe.avif",
+      "kind": "img",
+      "status": 200,
+      "bytes": 7709
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/today/sanitize.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 325
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/vendor/purify.es.mjs",
+      "kind": "js",
+      "status": 200,
+      "bytes": 24516
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/today/fixtures/cms-content.json",
+      "kind": "fetch",
+      "status": 200,
+      "bytes": 771
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/today/index.html?bg=d5",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1871
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=d5-now&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 6082
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 104
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 107
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/05-trusted-types.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/product-page.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 86
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 537
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo/console.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 723
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/today/app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 938
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/d5.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 45
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/shoe.avif",
+      "kind": "img",
+      "status": 200,
+      "bytes": 73
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/today/description.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 327
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/today/reviews.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 760
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/today/promo.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 363
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/today/sanitize.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 301
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/d5-now/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 81456
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/vendor/purify.es.mjs",
+      "kind": "js",
+      "status": 200,
+      "bytes": 24516
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/today/fixtures/cms-content.json",
+      "kind": "fetch",
+      "status": 200,
+      "bytes": 684
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/native/index.html?flags=csp-enforce:0&bg=d5",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1871
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/d6.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 349883
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=d6-intro&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 61
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/05-trusted-types.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/product-page.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/native/content.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 282
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo/console.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 706
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/native/app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 476
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/native/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1185
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/intro/d6-variant-picker.png",
+      "kind": "img",
+      "status": 200,
+      "bytes": 642123
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/d5.jpg",
+      "kind": "img",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/shoe.avif",
+      "kind": "img",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/vendor/purify.es.mjs",
+      "kind": "js",
+      "status": 200,
+      "bytes": 24625
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/cms/ridgeline.json",
+      "kind": "fetch",
+      "status": 200,
+      "bytes": 661
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/05-trusted-types/native/fixtures/cms-content.json",
+      "kind": "fetch",
+      "status": 200,
+      "bytes": 660
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=d6-used-to&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/d6-used-to/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 39327
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/today/index.html?bg=d6",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1830
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 110
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/11-customizable-select.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 1094
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/product-editor.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 956
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 88
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 605
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/today/app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 700
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/trail-runner-2-black.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 28052
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/product-editor.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 787
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/d6.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 349911
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/today/combobox.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1359
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/today/black.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 1945
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/today/moss.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 2172
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/today/sand.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 1913
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/trail-runner-2-moss.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 46313
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/trail-runner-2-sand.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 35215
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/today/index.html?bg=d6",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1861
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=d6-now&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/11-customizable-select.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 108
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/product-editor.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 755
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/today/app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 569
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/trail-runner-2-black.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/product-editor.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/d6.jpg",
+      "kind": "img",
+      "status": 304,
+      "bytes": 86
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/today/combobox.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1358
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/today/black.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 1956
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/today/moss.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 2171
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/today/sand.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 1913
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/trail-runner-2-moss.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/trail-runner-2-sand.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/d6-now/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 37992
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/native/index.html?flags=enhance-css:0&bg=d6",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1322
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/m1.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 298232
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=m1-intro&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/11-customizable-select.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/product-editor.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/native/select.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 302
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/native/black.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 1945
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/native/moss.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 2202
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/native/sand.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 1913
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/native/app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 365
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/trail-runner-2-black.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 45
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/product-editor.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/native/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1298
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/intro/m1-shop-the-look.png",
+      "kind": "img",
+      "status": 200,
+      "bytes": 3483048
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/trail-runner-2-moss.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 45
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/trail-runner-2-sand.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 98
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/d6.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 45
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/native/black.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 1955
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/11-customizable-select/native/moss.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 2171
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/posters/d6-firefox.png",
+      "kind": "img",
+      "status": 200,
+      "bytes": 82215
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=m1-used-to&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/m1-used-to/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 115468
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/12-anchor-hotspots/today/index.html?bg=m1",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 2233
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 87
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/12-anchor-hotspots.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 1500
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/lookbook.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 952
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 108
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-03.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 44008
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-06.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 158344
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-07.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 161198
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/12-anchor-hotspots/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 367
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/12-anchor-hotspots/today/hiker-ridge.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 326677
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/12-anchor-hotspots/today/hotspots.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 844
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/12-anchor-hotspots/today/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 272
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/m1.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 298267
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/12-anchor-hotspots/today/position.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 827
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/12-anchor-hotspots/today/index.html?bg=m1",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 2155
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=m1-now&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 87
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/12-anchor-hotspots.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/lookbook.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-03.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-06.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-07.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/12-anchor-hotspots/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 386
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/12-anchor-hotspots/today/hiker-ridge.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 326678
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/12-anchor-hotspots/today/hotspots.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 843
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/12-anchor-hotspots/today/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 305
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/m1.jpg",
+      "kind": "img",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/12-anchor-hotspots/today/position.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 791
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/m1-now/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 117354
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/12-anchor-hotspots/native/index.html?flags=enhance-css:1&bg=m1",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1570
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/m2.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 276091
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=m2-intro&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/12-anchor-hotspots.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/lookbook.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-03.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-06.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-07.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/12-anchor-hotspots/native/look.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 482
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/12-anchor-hotspots/native/hiker-ridge.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 326693
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/12-anchor-hotspots/native/rain-shell.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 21494
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/12-anchor-hotspots/native/day-pack-22.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 30645
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/12-anchor-hotspots/native/ridgeline-trail.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 37838
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/12-anchor-hotspots/native/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 298
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/intro/m2-trail-photos.png",
+      "kind": "img",
+      "status": 200,
+      "bytes": 4048617
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/m1.jpg",
+      "kind": "img",
+      "status": 304,
+      "bytes": 87
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=m2-used-to&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 6152
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/m2-used-to/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 35177
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/13-grid-lanes/today/index.html?bg=m2",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 2244
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/13-grid-lanes.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 1415
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/product-photos.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 954
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 113
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/13-grid-lanes/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 342
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/13-grid-lanes/today/masonry.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 976
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/13-grid-lanes/today/app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 445
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/13-grid-lanes/today/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 976
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/m2.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 276116
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/ridgeline-trail.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 37982
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/13-grid-lanes/today/index.html?bg=m2",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 2262
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=m2-now&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 113
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/13-grid-lanes.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/product-photos.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/13-grid-lanes/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 379
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/13-grid-lanes/today/masonry.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 970
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/13-grid-lanes/today/app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 507
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/13-grid-lanes/today/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 985
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/m2.jpg",
+      "kind": "img",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/ridgeline-trail.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/m2-now/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 101619
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/13-grid-lanes/native/index.html?flags=enhance-css:0,enhance-js:1&bg=m2",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1797
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/m3.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 288710
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=m3-intro&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 3015
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/13-grid-lanes.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 61
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/product-photos.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 53
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 55
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/13-grid-lanes/native/wall.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 413
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-01.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 237912
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-02.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 308167
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-03.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 103
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-04.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 75152
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-05.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 47268
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-06.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 73
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-07.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 73
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-08.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 109719
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-09.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 212219
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-10.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 187709
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-11.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 151319
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/trail/photo-12.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 60515
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/13-grid-lanes/native/app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 378
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/13-grid-lanes/native/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1407
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/intro/m3-pricing-app.png",
+      "kind": "img",
+      "status": 200,
+      "bytes": 1046611
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/m2.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 73
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/ridgeline-trail.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 72
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=m3-used-to&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/m3-used-to/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 37572
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/index.html?bg=m3",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1784
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 113
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/14-scoped-registries.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 987
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/editor-pricing.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 714
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 83
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 238
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/bridge.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 489
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/ridge-ui-v2.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 907
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 843
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/m3.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 288695
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/app.html",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 783
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/14-scoped-registries-app.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 809
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/app-bridge.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 534
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/ridge-ui-v3.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1127
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/tiers.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1634
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/tiers.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 736
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/index.html?bg=m3",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1683
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=m3-now&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 87
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/14-scoped-registries.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/editor-pricing.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 83
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 239
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/bridge.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 498
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/ridge-ui-v2.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 883
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 876
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/app.html",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 841
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/m3.jpg",
+      "kind": "img",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/14-scoped-registries-app.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 108
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/app-bridge.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 535
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/m3-now/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 38504
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/ridge-ui-v3.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1158
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/tiers.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1633
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/tiers.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 717
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/native/index.html?flags=enhance-js:1&bg=m3",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1614
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/m4.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 275504
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=m4-intro&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 2855
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 87
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/14-scoped-registries.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/editor-pricing.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/native/pricing-app.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 604
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/native/ridge-ui-v2.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 906
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/native/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 847
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/intro/m4-return-guide.png",
+      "kind": "img",
+      "status": 200,
+      "bytes": 644129
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/m3.jpg",
+      "kind": "img",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/native/ridge-ui-v3.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1128
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/native/tiers.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1633
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/app.html",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 887
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/14-scoped-registries-app.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 114
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/app-bridge.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 509
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/ridge-ui-v3.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1127
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/tiers.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1633
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/14-scoped-registries/today/tiers.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 685
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=m4-used-to&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 6744
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/m4-used-to/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 63487
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/15-scroll-driven/today/index.html?bg=m4",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 2265
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 87
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/15-scroll-driven.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 1419
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 80
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/help-center.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 849
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/15-scroll-driven/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 373
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/15-scroll-driven/today/progress.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 561
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/15-scroll-driven/today/reveal.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 403
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/15-scroll-driven/today/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1387
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/m4.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 275534
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/15-scroll-driven/today/index.html?bg=m4",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1824
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=m4-now&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/15-scroll-driven.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/help-center.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/15-scroll-driven/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 374
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/15-scroll-driven/today/progress.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 465
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/15-scroll-driven/today/reveal.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 403
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/15-scroll-driven/today/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1388
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/m4.jpg",
+      "kind": "img",
+      "status": 304,
+      "bytes": 60
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/m4-now/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 65015
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/15-scroll-driven/native/index.html?flags=enhance-css:1&bg=m4",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 2170
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/m5.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 326853
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=m5-intro&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 2850
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 108
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/15-scroll-driven.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/help-center.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/15-scroll-driven/native/article.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 383
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/15-scroll-driven/native/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1506
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/intro/m5-trail-gear-pages.png",
+      "kind": "img",
+      "status": 200,
+      "bytes": 1776559
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/m4.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 79
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=m5-used-to&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 6631
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/16-cross-document-vt/today/index.html?bg=m5",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1663
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/m5-used-to/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 62771
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/16-cross-document-vt.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 1508
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/storefront-catalog.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 667
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 53
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/16-cross-document-vt/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 320
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/ridgeline-trail.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 72
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/trail-jacket.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 27813
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/rain-shell.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 21616
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/day-pack-22.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 30736
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/trekking-poles.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 24577
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/headlamp.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 14967
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/16-cross-document-vt/today/router.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 852
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/16-cross-document-vt/today/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 199
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/16-cross-document-vt/today/flip.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 471
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/m5.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 326729
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/16-cross-document-vt/today/index.html?bg=m5",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 2141
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=m5-now&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 87
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/16-cross-document-vt.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/storefront-catalog.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/16-cross-document-vt/today/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 362
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/ridgeline-trail.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/trail-jacket.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 107
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/rain-shell.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/day-pack-22.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/trekking-poles.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/headlamp.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/16-cross-document-vt/today/router.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 852
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/16-cross-document-vt/today/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 272
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/m5.jpg",
+      "kind": "img",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/16-cross-document-vt/today/flip.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 482
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/m5-now/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 63497
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/16-cross-document-vt/native/index.html?flags=enhance-css:1&bg=m5",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1882
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/f2.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 289189
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=f2-intro&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 2872
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 87
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 53
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/portal/16-cross-document-vt.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/storefront-catalog.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/16-cross-document-vt/native/transitions.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 384
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/ridgeline-trail.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/trail-jacket.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/rain-shell.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/day-pack-22.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/trekking-poles.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 55
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demo-assets/catalog/headlamp.webp",
+      "kind": "img",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/16-cross-document-vt/native/hooks.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 234
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/intro/f2-caching.png",
+      "kind": "img",
+      "status": 200,
+      "bytes": 1178485
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/logos/nextjs.svg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 878
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/m5.jpg",
+      "kind": "img",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/f2.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 74
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=f2-used-to&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/f2-used-to/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 49136
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=f2-now&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/f2-now/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 60989
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/f3.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 358056
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=f3-intro&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 2745
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/intro/f3-package-trust.png",
+      "kind": "img",
+      "status": 200,
+      "bytes": 1194503
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/logos/pnpm.svg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 768
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/logos/npm.svg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 635
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=f3-used-to&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/f3-used-to/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 57428
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/07-package-workflow/timeline/index.html?bg=f3",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1820
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/report.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 817
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/07-package-workflow/timeline/timeline.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 2118
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/07-package-workflow/timeline/timeline.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 358
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/f3.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 358077
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/07-package-workflow/timeline/index.html?bg=f3",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 2152
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=f3-now&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 4638
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 60
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/report.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 114
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/07-package-workflow/timeline/timeline.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 2169
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/07-package-workflow/timeline/timeline.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 430
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/f3.jpg",
+      "kind": "img",
+      "status": 304,
+      "bytes": 53
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/f3-now/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 33467
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/07-package-workflow/terminal/session/index.html?bg=f3",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 2873
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/f4.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 284099
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=f4-single&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 2945
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/terminal-window.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 893
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/07-package-workflow/terminal/session/player.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 1101
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/07-package-workflow/terminal/session/player.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 575
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/f3.jpg",
+      "kind": "img",
+      "status": 304,
+      "bytes": 81
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/posters/f4-single/s0.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 59045
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/09-vite-8/static/index.html?bg=f4",
+      "kind": "doc",
+      "status": 200,
+      "bytes": 1286
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/c1.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 547553
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=what-changed&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 3223
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/portal-glass.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/theme/backgrounds.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 82
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/base.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/wrappers/report.css",
+      "kind": "css",
+      "status": 304,
+      "bytes": 53
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/runtime/demo-runtime.js",
+      "kind": "js",
+      "status": 304,
+      "bytes": 54
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/09-vite-8/static/styles.css",
+      "kind": "css",
+      "status": 200,
+      "bytes": 1000
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/09-vite-8/static/measure.js",
+      "kind": "js",
+      "status": 200,
+      "bytes": 1690
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Regular.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/fonts/SlalomSans-Bold.otf",
+      "kind": "font",
+      "status": 200,
+      "bytes": 0
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/backgrounds/v5/f4.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 284100
+    },
+    {
+      "url": "https://2026-advances-in-the-web-demos.vercel.app/demos/09-vite-8/static/measurements.json",
+      "kind": "fetch",
+      "status": 200,
+      "bytes": 597
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/c2.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 306268
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=people-to-follow&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 3383
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/people/chris-coyier.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 7463
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/people/dave-rupert.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 9770
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/people/tab-atkins.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 8256
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/people/lea-verou.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 8724
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/people/aaron-gustafson.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 13725
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/people/val-head.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 18198
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/people/jen-simmons.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 10709
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/people/miriam-suzanne.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 11738
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/people/tim-berners-lee.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 5620
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/people/rachel-andrew.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 7159
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/people/eric-meyer.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 9085
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/people/jeremy-keith.webp",
+      "kind": "img",
+      "status": 200,
+      "bytes": 8632
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/backgrounds/v5/closing.jpg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 310061
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/present?s=closing&_rsc=czpkCkqe-KrOSTUX",
+      "kind": "rsc",
+      "status": 200,
+      "bytes": 2740
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/logos/linkedin.svg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 536
+    },
+    {
+      "url": "https://2026-advances-in-the-web.vercel.app/qr/linkedin.svg",
+      "kind": "img",
+      "status": 200,
+      "bytes": 1074
+    }
+  ]
+}

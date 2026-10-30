@@ -1,0 +1,263 @@
+[
+  {
+    "id": "d1-now",
+    "profile": "none",
+    "label": "back-1",
+    "replayMs": 263,
+    "demoRequests": 13,
+    "notModified": 7,
+    "bytes": 3765,
+    "docs": [
+      "200 /demos/01-layered-ui/native/index.html?flags=enhance-css:1&bg=d1"
+    ],
+    "statuses": [
+      "200 no-store /demos/01-layered-ui/native/index.html?flags=enhance-css:1&bg=d1",
+      "304 public, max-age=0, must-revalidate /theme/portal-glass.css",
+      "304 public, max-age=0, must-revalidate /theme/backgrounds.css",
+      "304 public, max-age=0, must-revalidate /portal/01-layered-ui.css",
+      "304 public, max-age=0, must-revalidate /wrappers/base.css",
+      "304 public, max-age=0, must-revalidate /wrappers/order-queue.css",
+      "304 public, max-age=0, must-revalidate /runtime/demo-runtime.js",
+      "200 no-store /demos/01-layered-ui/native/enhance.css",
+      "200 no-store /demos/01-layered-ui/native/app.js",
+      "200 no-store /demos/01-layered-ui/native/hooks.js",
+      "200(cache) public, max-age=0, must-revalidate /fonts/SlalomSans-Regular.otf",
+      "200(cache) public, max-age=0, must-revalidate /fonts/SlalomSans-Bold.otf",
+      "304 public, max-age=0, must-revalidate /backgrounds/v5/d1.jpg"
+    ]
+  },
+  {
+    "id": "d1-now",
+    "profile": "none",
+    "label": "back-2",
+    "replayMs": 243,
+    "demoRequests": 13,
+    "notModified": 7,
+    "bytes": 3092,
+    "docs": [
+      "200 /demos/01-layered-ui/native/index.html?flags=enhance-css:1&bg=d1"
+    ],
+    "statuses": [
+      "200 no-store /demos/01-layered-ui/native/index.html?flags=enhance-css:1&bg=d1",
+      "304 public, max-age=0, must-revalidate /theme/portal-glass.css",
+      "304 public, max-age=0, must-revalidate /theme/backgrounds.css",
+      "304 public, max-age=0, must-revalidate /portal/01-layered-ui.css",
+      "304 public, max-age=0, must-revalidate /wrappers/base.css",
+      "304 public, max-age=0, must-revalidate /wrappers/order-queue.css",
+      "304 public, max-age=0, must-revalidate /runtime/demo-runtime.js",
+      "200 no-store /demos/01-layered-ui/native/enhance.css",
+      "200 no-store /demos/01-layered-ui/native/app.js",
+      "200 no-store /demos/01-layered-ui/native/hooks.js",
+      "200(cache) public, max-age=0, must-revalidate /fonts/SlalomSans-Regular.otf",
+      "200(cache) public, max-age=0, must-revalidate /fonts/SlalomSans-Bold.otf",
+      "304 public, max-age=0, must-revalidate /backgrounds/v5/d1.jpg"
+    ]
+  },
+  {
+    "id": "d4-now",
+    "profile": "none",
+    "label": "back-1",
+    "replayMs": 583,
+    "demoRequests": 16,
+    "notModified": 7,
+    "bytes": 10587,
+    "docs": [
+      "200 /orders?flags=enhance-js%3A1&bg=d4"
+    ],
+    "statuses": [
+      "200 no-store /orders?flags=enhance-js%3A1&bg=d4",
+      "304 public, max-age=0, must-revalidate /theme/portal-glass.css",
+      "304 public, max-age=0, must-revalidate /theme/backgrounds.css",
+      "304 public, max-age=0, must-revalidate /portal/04-navigation-api.css",
+      "304 public, max-age=0, must-revalidate /wrappers/base.css",
+      "304 public, max-age=0, must-revalidate /wrappers/portal-dashboard.css",
+      "304 public, max-age=0, must-revalidate /runtime/demo-runtime.js",
+      "200 no-store /app.css",
+      "200 no-store /demo/log.js",
+      "200 no-store /app.js",
+      "200 no-store /demo/hooks.js",
+      "200(cache) public, max-age=0, must-revalidate /fonts/SlalomSans-Regular.otf",
+      "200(cache) public, max-age=0, must-revalidate /fonts/SlalomSans-Bold.otf",
+      "304 public, max-age=0, must-revalidate /backgrounds/v5/d4.jpg",
+      "200 no-store /demo/log.js",
+      "200 no-store /orders/418"
+    ]
+  },
+  {
+    "id": "d4-now",
+    "profile": "none",
+    "label": "back-2",
+    "replayMs": 363,
+    "demoRequests": 15,
+    "notModified": 7,
+    "bytes": 8442,
+    "docs": [
+      "200 /orders?flags=enhance-js%3A1&bg=d4"
+    ],
+    "statuses": [
+      "200 no-store /orders?flags=enhance-js%3A1&bg=d4",
+      "304 public, max-age=0, must-revalidate /theme/portal-glass.css",
+      "304 public, max-age=0, must-revalidate /theme/backgrounds.css",
+      "304 public, max-age=0, must-revalidate /portal/04-navigation-api.css",
+      "304 public, max-age=0, must-revalidate /wrappers/base.css",
+      "304 public, max-age=0, must-revalidate /wrappers/portal-dashboard.css",
+      "304 public, max-age=0, must-revalidate /runtime/demo-runtime.js",
+      "200 no-store /app.css",
+      "200 no-store /demo/log.js",
+      "200 no-store /app.js",
+      "200 no-store /demo/hooks.js",
+      "200(cache) public, max-age=0, must-revalidate /fonts/SlalomSans-Regular.otf",
+      "200(cache) public, max-age=0, must-revalidate /fonts/SlalomSans-Bold.otf",
+      "304 public, max-age=0, must-revalidate /backgrounds/v5/d4.jpg",
+      "200 no-store /demo/log.js"
+    ]
+  },
+  {
+    "id": "m2-now",
+    "profile": "none",
+    "label": "back-1",
+    "replayMs": 230,
+    "demoRequests": 26,
+    "notModified": 20,
+    "bytes": 6226,
+    "docs": [
+      "200 /demos/13-grid-lanes/native/index.html?flags=enhance-css:1,enhance-js:1&bg=m2"
+    ],
+    "statuses": [
+      "200 no-store /demos/13-grid-lanes/native/index.html?flags=enhance-css:1,enhance-js:1&bg=m2",
+      "304 public, max-age=0, must-revalidate /theme/portal-glass.css",
+      "304 public, max-age=0, must-revalidate /theme/backgrounds.css",
+      "304 public, max-age=0, must-revalidate /portal/13-grid-lanes.css",
+      "304 public, max-age=0, must-revalidate /wrappers/base.css",
+      "304 public, max-age=0, must-revalidate /wrappers/product-photos.css",
+      "304 public, max-age=0, must-revalidate /runtime/demo-runtime.js",
+      "200 no-store /demos/13-grid-lanes/native/wall.css",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-01.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-02.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-03.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-04.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-05.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-06.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-07.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-08.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-09.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-10.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-11.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-12.webp",
+      "200 no-store /demos/13-grid-lanes/native/app.js",
+      "200 no-store /demos/13-grid-lanes/native/hooks.js",
+      "200(cache) public, max-age=0, must-revalidate /fonts/SlalomSans-Regular.otf",
+      "200(cache) public, max-age=0, must-revalidate /fonts/SlalomSans-Bold.otf",
+      "304 public, max-age=0, must-revalidate /backgrounds/v5/m2.jpg",
+      "304 public, max-age=0, must-revalidate /demo-assets/catalog/ridgeline-trail.webp"
+    ]
+  },
+  {
+    "id": "m2-now",
+    "profile": "none",
+    "label": "back-2",
+    "replayMs": 227,
+    "demoRequests": 26,
+    "notModified": 20,
+    "bytes": 6293,
+    "docs": [
+      "200 /demos/13-grid-lanes/native/index.html?flags=enhance-css:0,enhance-js:1&bg=m2"
+    ],
+    "statuses": [
+      "200 no-store /demos/13-grid-lanes/native/index.html?flags=enhance-css:0,enhance-js:1&bg=m2",
+      "304 public, max-age=0, must-revalidate /theme/portal-glass.css",
+      "304 public, max-age=0, must-revalidate /theme/backgrounds.css",
+      "304 public, max-age=0, must-revalidate /portal/13-grid-lanes.css",
+      "304 public, max-age=0, must-revalidate /wrappers/base.css",
+      "304 public, max-age=0, must-revalidate /wrappers/product-photos.css",
+      "304 public, max-age=0, must-revalidate /runtime/demo-runtime.js",
+      "200 no-store /demos/13-grid-lanes/native/wall.css",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-01.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-02.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-03.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-04.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-05.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-06.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-07.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-08.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-09.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-10.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-11.webp",
+      "304 public, max-age=0, must-revalidate /demo-assets/trail/photo-12.webp",
+      "200 no-store /demos/13-grid-lanes/native/app.js",
+      "200 no-store /demos/13-grid-lanes/native/hooks.js",
+      "200(cache) public, max-age=0, must-revalidate /fonts/SlalomSans-Regular.otf",
+      "200(cache) public, max-age=0, must-revalidate /fonts/SlalomSans-Bold.otf",
+      "304 public, max-age=0, must-revalidate /backgrounds/v5/m2.jpg",
+      "304 public, max-age=0, must-revalidate /demo-assets/catalog/ridgeline-trail.webp"
+    ]
+  },
+  {
+    "id": "d5-used-to",
+    "profile": "none",
+    "label": "back-1",
+    "replayMs": 483,
+    "demoRequests": 20,
+    "notModified": 8,
+    "bytes": 31718,
+    "docs": [
+      "200 /demos/05-trusted-types/today/index.html?bg=d5"
+    ],
+    "statuses": [
+      "200 no-store /demos/05-trusted-types/today/index.html?bg=d5",
+      "304 public, max-age=0, must-revalidate /theme/portal-glass.css",
+      "304 public, max-age=0, must-revalidate /theme/backgrounds.css",
+      "304 public, max-age=0, must-revalidate /portal/05-trusted-types.css",
+      "304 public, max-age=0, must-revalidate /wrappers/base.css",
+      "304 public, max-age=0, must-revalidate /wrappers/product-page.css",
+      "304 public, max-age=0, must-revalidate /runtime/demo-runtime.js",
+      "200 no-store /demos/05-trusted-types/today/styles.css",
+      "200 no-store /demo/console.js",
+      "200 no-store /demos/05-trusted-types/today/app.js",
+      "200 no-store /demos/05-trusted-types/today/description.js",
+      "200 no-store /demos/05-trusted-types/today/reviews.js",
+      "200 no-store /demos/05-trusted-types/today/promo.js",
+      "200(cache) public, max-age=0, must-revalidate /fonts/SlalomSans-Regular.otf",
+      "200(cache) public, max-age=0, must-revalidate /fonts/SlalomSans-Bold.otf",
+      "304 public, max-age=0, must-revalidate /backgrounds/v5/d5.jpg",
+      "304 public, max-age=0, must-revalidate /wrappers/shoe.avif",
+      "200 no-store /demos/05-trusted-types/today/sanitize.js",
+      "200 no-store /vendor/purify.es.mjs",
+      "200 no-store /demos/05-trusted-types/today/fixtures/cms-content.json"
+    ]
+  },
+  {
+    "id": "d5-used-to",
+    "profile": "none",
+    "label": "back-2",
+    "replayMs": 463,
+    "demoRequests": 20,
+    "notModified": 8,
+    "bytes": 30823,
+    "docs": [
+      "200 /demos/05-trusted-types/today/index.html?bg=d5"
+    ],
+    "statuses": [
+      "200 no-store /demos/05-trusted-types/today/index.html?bg=d5",
+      "304 public, max-age=0, must-revalidate /theme/portal-glass.css",
+      "304 public, max-age=0, must-revalidate /theme/backgrounds.css",
+      "304 public, max-age=0, must-revalidate /portal/05-trusted-types.css",
+      "304 public, max-age=0, must-revalidate /wrappers/base.css",
+      "304 public, max-age=0, must-revalidate /wrappers/product-page.css",
+      "304 public, max-age=0, must-revalidate /runtime/demo-runtime.js",
+      "200 no-store /demos/05-trusted-types/today/styles.css",
+      "200 no-store /demo/console.js",
+      "200 no-store /demos/05-trusted-types/today/app.js",
+      "200(cache) public, max-age=0, must-revalidate /fonts/SlalomSans-Regular.otf",
+      "200(cache) public, max-age=0, must-revalidate /fonts/SlalomSans-Bold.otf",
+      "304 public, max-age=0, must-revalidate /backgrounds/v5/d5.jpg",
+      "304 public, max-age=0, must-revalidate /wrappers/shoe.avif",
+      "200 no-store /demos/05-trusted-types/today/description.js",
+      "200 no-store /demos/05-trusted-types/today/reviews.js",
+      "200 no-store /demos/05-trusted-types/today/promo.js",
+      "200 no-store /demos/05-trusted-types/today/sanitize.js",
+      "200 no-store /vendor/purify.es.mjs",
+      "200 no-store /demos/05-trusted-types/today/fixtures/cms-content.json"
+    ]
+  }
+]

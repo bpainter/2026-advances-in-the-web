@@ -1,0 +1,10 @@
+import { readFileSync } from "node:fs";
+import { coverCss, titleBranch, cssRules } from "/Users/bermonpainter/Sites/web-unleashed-talk-2026/lib/validate/seo.ts";
+const src = readFileSync("components/layouts/glass/GlassSlide.tsx", "utf8");
+const branch = titleBranch(src);
+console.log(branch);
+const css = readFileSync("styles/components/slides-glass.css", "utf8");
+console.log("rules total", cssRules(css).length);
+const classes = [...new Set([...branch.matchAll(/className=(?:"([^"]+)"|\{`([^`]+)`\})/g)].flatMap((m) => (m[1] ?? m[2]).split(/\s+/)))];
+console.log("classes", classes);
+console.log(coverCss(css, ["sg--title", ...classes.filter((c) => /^sg[\w-]*$/.test(c))]).split("\n").map((l) => l.slice(0, 110)).join("\n"));
