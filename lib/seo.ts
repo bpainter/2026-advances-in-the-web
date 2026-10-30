@@ -4,6 +4,7 @@ import type { DemoSection } from "@/content/demo-schema";
 import { deck, sections, slides } from "@/lib/content";
 import { PRESENTER_ORIGIN } from "@/lib/frames/origins";
 import { notesPlain } from "@/lib/notes";
+import { pageDescriptions, SITE_DESCRIPTION } from "@/content/descriptions";
 import og from "@/public/og/cover.json";
 
 /**
@@ -28,7 +29,11 @@ export const OG_IMAGE = {
 } as const;
 export const OG_IMAGE_URL = `${ORIGIN}${OG_IMAGE.path}`;
 
-export const SITE_DESCRIPTION = `A tour of what browsers shipped in 2026, with live demos. ${deck.event.label}.`;
+export { SITE_DESCRIPTION };
+
+/** Appended to every page title: the event and the speaker. */
+export const TITLE_SUFFIX = `FITC Web Unleashed | ${deck.speaker.name}`;
+export const SITE_TITLE = `${deck.title} | ${TITLE_SUFFIX}`;
 
 const ID = {
   talk: `${ORIGIN}/#talk`,
@@ -50,14 +55,17 @@ export function slidePath(slide: Pick<Slide, "id">): string {
 export function slideTitle(slide: Slide): string {
   const page = slide.page;
   if (page && (page.stage === "used-to" || page.stage === "now")) return `${page.eyebrow}: ${page.title}`;
-  if (slide.layout === "glass-title") return `${deck.title} · ${deck.event.label}`;
+  if (slide.layout === "glass-title") return deck.title;
   return slide.title;
 }
 
-/** The document and share title of `/s/<id>`. */
+/**
+ * The document and share title of `/s/<id>`: the slide's own title, then the event and speaker.
+ * The cover is the talk itself, so it shares the site title; og:site_name carries the talk name
+ * on every other card.
+ */
 export function slidePageTitle(slide: Slide): string {
-  const own = slideTitle(slide);
-  return own.startsWith(deck.title) ? own : `${own} · ${deck.title}`;
+  return `${slideTitle(slide)} | ${TITLE_SUFFIX}`;
 }
 
 /** Whole sentences up to `max` characters; a first sentence that is too long is cut at a word. */
@@ -117,10 +125,12 @@ function spokenDescription(intro: string): string {
 }
 
 /**
- * The slide's description, 160 characters at most (PRD r7, 10.1): the section's description on
- * intro pages, the page intro on walk and single pages, the lede or card titles on glass slides.
+ * The slide's description, 160 characters at most (PRD r7, 10.1): the one written for it in
+ * content/descriptions.ts, else the section's description on intro pages, the page intro on walk and single pages, the lede or card titles on glass slides.
  */
 export function slideDescription(slide: Slide): string {
+  const written = pageDescriptions[slide.id];
+  if (written) return clampSentences(written);
   const page = slide.page;
   let text: string;
   if (page) text = page.stage === "intro" ? page.description : spokenDescription(page.intro);
@@ -158,12 +168,12 @@ function shared(title: string, description: string, url?: string): Metadata {
 
 /** The root layout's base: every page that sets nothing else (404s) shares the talk's card, with no canonical. */
 export function baseMetadata(): Metadata {
-  return shared(deck.title, SITE_DESCRIPTION);
+  return shared(SITE_TITLE, SITE_DESCRIPTION);
 }
 
 /** `/`: the talk. */
 export function siteMetadata(): Metadata {
-  return shared(deck.title, SITE_DESCRIPTION, "/");
+  return shared(SITE_TITLE, SITE_DESCRIPTION, "/");
 }
 
 /** `/s/<id>`, and the slide named by `?s=` on `/present` and `/speaker`. */

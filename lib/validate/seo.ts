@@ -216,14 +216,25 @@ export async function seoIssues(root = process.cwd()): Promise<Issue[]> {
 
   const seo = await import("@/lib/seo");
 
-  // Metadata titles (10.5): unique per slide page, and not the root's.
+  // Metadata titles (10.5): unique per slide page, and not the root's (the cover is the talk, so it may share it).
   const titles = new Map<string, string>();
   for (const s of slides) {
     const m = seo.slideMetadata(s);
     const t = String(m.title);
     if (titles.has(t)) add("seo-title", s.id, `title "${t}" repeats ${titles.get(t)}`);
     titles.set(t, s.id);
-    if (t === String(seo.siteMetadata().title)) add("seo-title", s.id, `title "${t}" equals the site title`);
+    if (s.layout !== "glass-title" && t === String(seo.siteMetadata().title)) add("seo-title", s.id, `title "${t}" equals the site title`);
+  }
+
+  // Written descriptions (content/descriptions.ts): one per page except feature intros, none for an unknown id.
+  const { pageDescriptions } = await import("@/content/descriptions");
+  const ids = new Set(slides.map((s) => s.id));
+  for (const id of Object.keys(pageDescriptions)) if (!ids.has(id)) add("seo-description", id, "is written in content/descriptions.ts but no slide has this id");
+  for (const s of slides) {
+    if (s.page?.stage === "intro") continue;
+    const d = pageDescriptions[s.id];
+    // The JSON-LD check below runs the writing rules on the description itself.
+    if (!d) add("seo-description", s.id, "has no description in content/descriptions.ts");
   }
   out.push(...copyIssues("deck", "site description", seo.SITE_DESCRIPTION));
   out.push(...copyIssues("deck", "image alt", seo.OG_IMAGE.alt));
